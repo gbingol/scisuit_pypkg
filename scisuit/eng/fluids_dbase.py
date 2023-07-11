@@ -7,6 +7,13 @@ from ..core import linearinterp as _linearinterp
 __all__ = ['ThermoPhysical', 'Refrigerant', 'SaturatedRefrigerant', 'SuperHeatedRefrigerant']
 
 
+"""
+This module depends on existence of the two databases: refrigerants.db and thermophysical.db
+
+Properties are searched in the above-mentioned respective database, bracketed and then 
+the intended value is computed using linear-interpolation(s).
+"""
+
 
 
 class Refrigerant():
@@ -358,6 +365,8 @@ def _GetFieldNames(connection, TableName: str)->list:
 		return retList
 
 	
+
+
 
 def _searchOrderedTable(connection, TableName:str, PropertyName:str, QueryValue:float, Sort:bool = True)->dict:
 	"""
