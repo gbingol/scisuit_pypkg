@@ -4,7 +4,33 @@ import numbers as _numbers
 from numpy.polynomial import polynomial as _Polynomial
 
 
-__all__ = ['lagrange', 'spline', 'expfit', 'logfit', 'logistfit', 'polyfit', 'powfit']
+__all__ = ['linearinterp', 'lagrange', 'spline', 'expfit', 'logfit', 'logistfit', 'polyfit', 'powfit']
+
+
+
+def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
+	"""
+	Linear interpolation
+
+	## Inputs:
+	x1, y1: First point \n
+	x2, y2: Second point \n
+	xval: x-value in [x1, x2] 
+
+	## Returns:
+	y-value in [y1, y2] corresponding to xval
+	"""
+
+	if(x1 == x2): 
+		return y1 
+	
+	m,n=0, 0
+	m = (y2 - y1) / (x2 - x1)
+	n = y2 - m * x2
+
+	return m * xval + n
+
+
 
 
 
