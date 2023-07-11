@@ -8,14 +8,3 @@ from scisuit.eng import psychrometry
 
 res1 = psychrometry(P=101, Tdb=30, Twb=20)
 print(res1)
-
-def h():
-    return None
-
-def prt():
-    return h()
-
-def h():
-    return "hi there"
-
-print(prt())
