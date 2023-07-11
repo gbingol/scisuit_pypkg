@@ -122,11 +122,23 @@ class PsychrometryResult:
 def psychrometry(**kwargs):
 		
 	"""
-	<p>Compute thermodynamic properties of humid-air. </p>
+	Computes thermodynamic properties of humid-air.
 
-	<p><b>Example</b>:</p>
-	>>p=psychrometry(P=100, Tdb=50, RH=60) <br>
-	>>p.H # access to enthalpy
+	## Input: 
+	3 keyword arguments containing only the following keys: \n
+	1) P: Pressure (kPa)
+	2) Tdb: Dry-bulb temperature (Celcius)
+	3) Twb: Wet-bulb temperature (Celcius)
+	4) Tdb: Wet-bulb temperature (Celcius)
+	5) W: Absolute humidity (kg/kg da)
+	6) RH: Relative humidity (%)
+	7) H: Enthalpy (kJ/kg da)
+	8) V: Specific Volume (m3/ kg da)
+
+	## Example
+	p=psychrometry(P=100, Tdb=50, RH=60) \n
+	print(p) # prints all properties \n
+	p.H # access only to enthalpy
 
 	"""
 	return PsychrometryResult(_ctcore.c_eng_psychrometry(kwargs))
