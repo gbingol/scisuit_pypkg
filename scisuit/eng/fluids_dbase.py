@@ -1,25 +1,22 @@
-import os
-import sqlite3 as sql
+import sqlite3 as _sql
 
-from ..fluids.fluid import Fluid
-from ...util import parent_path
-
+from ..util import parent_path as _parent_path
+from ..core import linearinterp as _linearinterp
 
 
-__all__ = ['Refrigerant', 'SaturatedRefrigerant', 'SuperHeatedRefrigerant']
+__all__ = ['ThermoPhysical', 'Refrigerant', 'SaturatedRefrigerant', 'SuperHeatedRefrigerant']
 
 
 
 
-class Refrigerant(Fluid):
+class Refrigerant():
 	"""
 	Base class for thermodynamic properties of refrigerants
 	"""
-	s_DataBasePath = parent_path(__file__) + os.sep + "refrigerants.db"
+	s_DataBasePath = _parent_path(__file__) / "refrigerants.db"
 	
 	def __init__(self) -> None: 
-		super().__init__()
-		self.m_Connection = sql.connect(self.s_DataBasePath) 
+		self.m_Connection = _sql.connect(self.s_DataBasePath) 
 
 		#-1:Compressed, 0:saturated, 1:superheated
 		self.m_FluidState = None
@@ -89,7 +86,7 @@ class SaturatedRefrigerant(Refrigerant):
 		
 
 	def search(self, PropertyName:str, QueryValue:float, Sort = True): 
-		return self.searchOrderedTable(self.m_DBTable, PropertyName, QueryValue, Sort) 
+		return _searchOrderedTable(self.m_Connection, self.m_DBTable, PropertyName, QueryValue, Sort) 
 
 
 
@@ -171,7 +168,7 @@ class SuperHeatedRefrigerant(Refrigerant):
 
 		PropLow, PropHigh = self._BracketProperty(P, Name, Value)
 
-		AllFieldNames:list = self.GetFieldNames(self.m_DBTable)
+		AllFieldNames:list = _GetFieldNames(self.m_Connection, self.m_DBTable)
 		AllFieldNames.remove("P") #P is always known
 		AllFieldNames.remove(Name.capitalize()) #property is known as well
 
@@ -194,9 +191,9 @@ class SuperHeatedRefrigerant(Refrigerant):
 		row = cursor.execute(strQuery , [P, PropHigh]).fetchall()
 		Aup, Bup, Cup =row[0][0], row[0][1], row[0][2]
 
-		A = self.Interpolation(PropLow, Alow, PropHigh, Aup, Value)
-		B = self.Interpolation(PropLow, Blow, PropHigh, Bup, Value)
-		C = self.Interpolation(PropLow, Clow, PropHigh, Cup, Value)
+		A = _linearinterp(PropLow, Alow, PropHigh, Aup, Value)
+		B = _linearinterp(PropLow, Blow, PropHigh, Bup, Value)
+		C = _linearinterp(PropLow, Clow, PropHigh, Cup, Value)
 
 		return A, B, C
 
@@ -212,9 +209,9 @@ class SuperHeatedRefrigerant(Refrigerant):
 		Vlow, Hlow, Slow = self._FindProperties(PL, "T", T)
 		Vup, Hup, Sup = self._FindProperties(PH, "T", T)
 
-		V = self.Interpolation(PL, Vlow, PH, Vup, P)
-		H = self.Interpolation(PL, Hlow, PH, Hup, P)
-		S = self.Interpolation(PL, Slow, PH, Sup, P)
+		V = _linearinterp(PL, Vlow, PH, Vup, P)
+		H = _linearinterp(PL, Hlow, PH, Hup, P)
+		S = _linearinterp(PL, Slow, PH, Sup, P)
 		
 		
 
@@ -232,9 +229,9 @@ class SuperHeatedRefrigerant(Refrigerant):
 		Tlow, Hlow, Slow = self._FindProperties(PL, "V", V)
 		Tup, Hup, Sup = self._FindProperties(PH, "V", V)
 
-		T = self.Interpolation(PL, Tlow, PH, Tup, P)
-		H = self.Interpolation(PL, Hlow, PH, Hup, P)
-		S = self.Interpolation(PL, Slow, PH, Sup, P)
+		T = _linearinterp(PL, Tlow, PH, Tup, P)
+		H = _linearinterp(PL, Hlow, PH, Hup, P)
+		S = _linearinterp(PL, Slow, PH, Sup, P)
 
 		return {'T':T, 'H':H, 'S':S}
 		
@@ -250,9 +247,9 @@ class SuperHeatedRefrigerant(Refrigerant):
 		Tlow, Vlow, Slow = self._FindProperties(PL, "H", H)
 		Tup, Vup, Sup = self._FindProperties(PH, "H", H)
 
-		T = self.Interpolation(PL, Tlow, PH, Tup, P)
-		V = self.Interpolation(PL, Vlow, PH,Vup, P)
-		S = self.Interpolation(PL, Slow, PH, Sup, P)
+		T = _linearinterp(PL, Tlow, PH, Tup, P)
+		V = _linearinterp(PL, Vlow, PH,Vup, P)
+		S = _linearinterp(PL, Slow, PH, Sup, P)
 
 		return {'T':T, 'V':V, 'S':S}
 	
@@ -268,9 +265,9 @@ class SuperHeatedRefrigerant(Refrigerant):
 		Tlow, Vlow, Hlow = self._FindProperties(PL, "S",S)
 		Tup, Vup, Hup = self._FindProperties(PH, "S", S)
 
-		T = self.Interpolation(PL, Tlow, PH, Tup, P)
-		V = self.Interpolation(PL, Vlow, PH,Vup, P)
-		H = self.Interpolation(PL, Hlow, PH, Hup, P)
+		T = _linearinterp(PL, Tlow, PH, Tup, P)
+		V = _linearinterp(PL, Vlow, PH,Vup, P)
+		H = _linearinterp(PL, Hlow, PH, Hup, P)
 
 		return {'T':T, 'V':V, 'H':H} 
 		
@@ -291,3 +288,159 @@ class SuperHeatedRefrigerant(Refrigerant):
 		
 		else:
 			raise ValueError("name must be T, V, H or S")
+		
+
+
+class ThermoPhysical():  
+	"""
+	Thermo-physical properties (T, rho, cp, viscosity, k, Pr) of fluids
+	"""
+	s_DataBasePath = _parent_path(__file__) / "thermophysical.db"
+	
+	def __init__(self, FluidName:str ) -> None:
+		"""
+		FluidName: Name of the fluid
+		"""
+
+		self.m_Connection = _sql.connect(self.s_DataBasePath) 
+		
+		if(FluidName ==""):
+			return
+		
+		self.m_FluidName = FluidName
+		cursor = self.m_Connection.cursor()
+
+		"""
+		Check if the parameter FluidName is valid
+		Note that the columns in the database is configured as
+		COLLATE NOCASE, therefore search is not case-sensitive
+		"""
+		QueryString = "SELECT NAME FROM MAINTABLE where NAME=?"
+		rows = cursor.execute(QueryString , (FluidName,)).fetchall()
+
+		#more than 1 name matches
+		if(len(rows)>1):
+			raise ValueError("More than 1 fluid matched the name:" + FluidName)
+
+		self.m_DBTable = rows[0][0]
+
+
+	def __del__( self ):
+		self.m_Connection.close()
+	
+	
+	def GetFluidNames(self):
+		QueryString = "SELECT name FROM MAINTABLE"
+		FluidNameList = self.m_Connection.cursor().execute(QueryString , []).fetchall()
+		
+		return FluidNameList
+
+
+	def search(self, PropertyName:str, QueryValue:float, Sort:bool = True): 
+		return _searchOrderedTable(self.m_Connection, self.m_DBTable, PropertyName, QueryValue, Sort) 
+
+
+
+def _GetFieldNames(connection, TableName: str)->list:
+		"""
+		Given a TableName returns all fieldnames (properties) of the table
+		"""
+		QueryString = "SELECT name FROM PRAGMA_TABLE_INFO(?)"
+		rowList = connection.cursor().execute(QueryString , (TableName,)).fetchall()
+
+		if(len(rowList) == 0):
+			raise ValueError("Invalid table name:" + TableName)
+
+		retList = []
+		for tupleItem in rowList:
+			retList.append(tupleItem[0])
+
+		return retList
+
+	
+
+def _searchOrderedTable(connection, TableName:str, PropertyName:str, QueryValue:float, Sort:bool = True)->dict:
+	"""
+		TableName: Database table name where uniquely named properties are <br>
+		PropertyName: Name of the property corresponding to fieldname in the table <br>
+		QueryValue: Value at which properties are sought after <br>
+		Sort: Sort the table based on the property name in ascending order 
+		(if multiple queries are performed on the same property, set Sort to False for efficiency )
+		
+		--Table must be in the form of, for example <br>
+		P	T	s	vf <br>
+		50	20	2	0.2 <br>
+		70	25	3	0.8 <br>
+		
+		if we are after properties at T=22, then returns a dict with keys P, s corresponding to T=22`
+	"""
+	cursor = connection.cursor() 
+	AllFieldNames = _GetFieldNames(connection, TableName)
+
+	#Index of the property in the columns of the table
+	ParamIndex = -1
+	try:
+		"""
+			note that we search in capitalized field names with capitalized PropertyName
+			For example, user now can enter Pr, pr ... to find properties for Prandtl
+			The table must contain only unique fields
+		"""
+		CapitalizedFiledNames = [s.capitalize() for s in AllFieldNames]
+		ParamIndex = CapitalizedFiledNames.index(PropertyName.capitalize())
+	except:
+		raise ValueError("Valid property names: " + str(AllFieldNames))
+	
+
+	#Check if QueryValue is within the bounds of the property
+	strQuery="SELECT min( {} ), max( {} ) FROM " + TableName 
+	rows = cursor.execute(strQuery.format(PropertyName, PropertyName)).fetchone()
+	MinVal, MaxVal = rows[0],  rows[1]
+	if(not (MinVal<QueryValue and QueryValue<MaxVal)):
+		raise ValueError(PropertyName + " range: [" + str(rows[0]) + " , " + str(rows[1]) + "]")
+
+	_rows = None
+
+	if(Sort):
+		strQuery = "SELECT * FROM " + TableName + " ORDER BY "+ PropertyName
+		_rows = cursor.execute(strQuery , []).fetchall()
+	
+
+	RowIndex = -1
+	for i in range(len(_rows)):
+		Value = _rows[i][ParamIndex]
+		if(Value>=QueryValue):
+			RowIndex = i
+			break
+	
+	
+	retDict = dict()
+	if(RowIndex == 0):
+		TupleIndex = -1
+		for propName in AllFieldNames:
+			TupleIndex += 1
+			if(propName == PropertyName):
+				continue
+
+			Value = _rows[0][TupleIndex]
+			retDict[propName] = Value
+
+		return retDict
+			
+		
+
+	PropValHigh = _rows[RowIndex][ParamIndex]
+	PropValLow = _rows[RowIndex - 1][ParamIndex] 
+	TupleIndex = -1
+
+	for propName in AllFieldNames: 
+		TupleIndex += 1
+		
+		if(propName.capitalize() == PropertyName.capitalize()):
+			continue 
+
+		ValueLow = _rows[RowIndex - 1][TupleIndex]
+		ValueHigh = _rows[RowIndex][TupleIndex]
+		Value = _linearinterp(PropValLow, ValueLow, PropValHigh, ValueHigh, QueryValue)
+		retDict[propName] = Value
+		
+	return retDict
