@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scisuit"
+version = "1.0.1"
+authors = [{ name="Gokhan Bingol", email="gbingol@sciencesuit.org" },]
+description = "Scientific Computing Package"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["wxPython", ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+	"Programming Language :: C++",
+    "License :: Free for non-commercial use",
+    "Operating System :: Microsoft :: Windows",
+]
+
+[project.urls]
+"Homepage" = "https://www.sciencesuit.org"

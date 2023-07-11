@@ -1,0 +1,3 @@
+include *.py
+include scisuit/ctypeslib/*.dll
+include scisuit/eng/fluids/*.db

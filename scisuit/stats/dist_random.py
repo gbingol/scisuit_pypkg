@@ -1,0 +1,72 @@
+import numpy as _np
+
+
+def rbinom(n:int, size, prob):
+	"""
+	Draw samples from binomial distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
+	return _np.random.binomial(size=n, n=size, p=prob).tolist()
+
+
+def rchisq(n:int, df):
+	"""
+	Draw samples from Chi-Square distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert df>0, "df>0 expected"
+
+	return _np.random.chisquare(size=n, df = df).tolist()
+
+
+def rf(n:int, df1, df2):
+	"""
+	Draw samples from F distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert df1>0, "df1>0 expected"
+	assert df2>0, "df2>0 expected"
+
+	return _np.random.f(size=n, dfnum=df1, dfden=df2).tolist()
+
+
+def rnorm(n:int, mean=0.0, sd=1.0):
+	"""
+	Draw samples from normal distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert sd>0, "sd>0 expected"
+
+	return _np.random.normal(size=n, loc=mean, scale=sd).tolist()
+
+
+def rpois(n:int, mu = 1):
+	"""
+	Draw samples from Poisson distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert mu>0, "mu>0 expected"
+
+	return _np.random.poisson(size=n, lam=mu).tolist()
+
+
+def rt(n:int, df):
+	"""
+	Draw samples from standard Student's t distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert df>0, "df1>0 expected"
+
+	return _np.random.standard_t(size=n, df=df).tolist()
+
+
+def runif(n:int, min=0.0, max=1.0):
+	"""
+	Draw samples from uniform distribution
+	"""
+	assert n>0 ,"n>0 expected"
+
+	return _np.random.uniform(size=n, low=min, high=max).tolist()
