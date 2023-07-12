@@ -12,7 +12,7 @@ from scisuit.wxpy import makeicon, NumTextCtrl
 
 class frmPsychrometry ( wx.Frame ):
 
-	def __init__( self, parent = None, MainLoopCanTerminate = True ):
+	def __init__( self, parent = None, MainLoopCanTerminate = True, FileMenu = None ):
 		"""
 		MainLoopCanTerminate: When the final frame closes wx.App terminates main loop. \n
 		For most applications this must be set to True. \n
@@ -151,10 +151,14 @@ class frmPsychrometry ( wx.Frame ):
 		mainSizer.Add( ( 0, 20), 0, wx.EXPAND, 5 )
 		mainSizer.Add( self.m_btnCalc, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
 		
-		
-		self.m_menuFile = wx.Menu()
-		self.m_menuCopyClipbrd = wx.MenuItem( self.m_menuFile, -1, u"Copy to clipboard")
-		self.m_menuFile.Append( self.m_menuCopyClipbrd )
+		if(FileMenu == None):
+			self.m_menuFile = wx.Menu()
+			self.m_menuCopyClipbrd = wx.MenuItem( self.m_menuFile, -1, u"Copy to clipboard")
+			self.m_menuFile.Append( self.m_menuCopyClipbrd )
+			self.Bind( wx.EVT_MENU, self.__OnCopyClipbrd, id = self.m_menuCopyClipbrd.GetId() )
+		else:
+			assert isinstance(FileMenu, wx.Menu), "FileMenu must be of type wx.Menu"
+			self.m_menuFile = FileMenu
 		
 		self.m_menuDigits = wx.Menu()	
 		self.m_menuItem2Digits = wx.MenuItem( self.m_menuDigits, -1, u"2 Digits","", wx.ITEM_RADIO)
@@ -184,7 +188,7 @@ class frmPsychrometry ( wx.Frame ):
 		self.Bind( wx.EVT_CHECKBOX, self.__OnCheckBox )
 		self.m_btnCalc.Bind( wx.EVT_BUTTON, self.__OnBtn )
 		
-		self.Bind( wx.EVT_MENU, self.__OnCopyClipbrd, id = self.m_menuCopyClipbrd.GetId() )
+		
 		self.Bind( wx.EVT_MENU, self.__OnMenuDigits, id = self.m_menuItem2Digits.GetId() )
 		self.Bind( wx.EVT_MENU, self.__OnMenuDigits, id = self.m_menuItem3Digits.GetId() )
 		self.Bind( wx.EVT_MENU, self.__OnMenuDigits, id = self.m_menuItem4Digits.GetId() )

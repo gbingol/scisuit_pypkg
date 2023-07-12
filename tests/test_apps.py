@@ -9,7 +9,7 @@ from scisuit.apps import frmPsychrometry
 
 app = wx.App(useBestVisual=True)
 
-frm = frmPsychrometry(None, False)
+frm = frmPsychrometry()
 frm.Show()
 
 app.MainLoop()
