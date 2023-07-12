@@ -4,10 +4,14 @@ import sys, os
 sys.path.insert(0, os.getcwd()) 
 
 import wx
+import ctypes
 
 from scisuit.apps import frmPsychrometry
 
-app = wx.App(useBestVisual=True)
+#Important otherwise colors/text of app looks blurry
+ctypes.windll.shcore.SetProcessDpiAwareness(True)
+
+app = wx.App()
 
 frm = frmPsychrometry()
 frm.Show()
