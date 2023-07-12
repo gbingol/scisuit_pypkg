@@ -1,4 +1,4 @@
-from ..ctypeslib import core as _core
+from ._ctypeslib import core as _core
 import ctypes as _ct
 import numbers as _numbers
 from numpy.polynomial import polynomial as _Polynomial
