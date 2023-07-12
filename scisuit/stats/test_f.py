@@ -20,11 +20,15 @@ class test_f_Result:
 
 def test_f(x, y, alternative:str = "two.sided", ratio:float = 1.0, conflevel:float = 0.95)->tuple:
 	"""
-	returns p-value and test_f_Result class. \n
+	Performs F test
 
+	## Return
+	p-value and test_f_Result class. \n
+
+	## Input
 	x/y: First/second sample, ndarray/list \n
 	alternative: "two.sided", "less", "greater" \n
-	ratio: Assumed ratio of variances of the samples
+	ratio: Assumed ratio of variances of the samples \n
 	conflevel: Confidence level, [0,1] 
 	"""
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"

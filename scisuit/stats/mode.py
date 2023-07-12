@@ -1,9 +1,12 @@
 import numpy as _np
 
-def mode(y):
+def mode(y:_np.ndarray | list)->tuple:
 	"""
-	y: ndarray / list.<br>
-	mode(y=) &rarr; (list, int)
+	Computes mode
+
+	## Example
+	arr = np.array([1, 3, 5, 5, 7, 9, 3, 5, 7, 3, 6])
+	print(mode(y = arr))
 	"""
 	n = len(y)
 

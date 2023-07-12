@@ -93,13 +93,16 @@ def _FindCI(xvec, alternative, ConfLevel):
 
 def test_sign(x, md, y=None, alternative="two.sided", conflevel=0.95):
 	"""
-	returns p-value and a test_sign_Result class. \n
+	
+	## Return
+	p-value and a test_sign_Result class. \n
 
+	## Input
 	x: Sample \n
 	y: Second sample \n
 	md: Median of the population tested by the null hypothesis \n
 	alternative: "two.sided", "less", "greater" \n
-	conflevel:	Confidence level, [0,1] \n
+	conflevel:	Confidence level, [0,1]
 	"""
 
 	NORMALAPPROX = 12

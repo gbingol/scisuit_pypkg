@@ -106,7 +106,7 @@ class aov:
 
 	def tukey(self, Alpha)->list:
 		"""
-		perform tukey test <br>
+		perform tukey test \n
 
 		tukey(Alpha)-> list
 		"""

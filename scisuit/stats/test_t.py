@@ -221,6 +221,9 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95):
 
 
 def test_t (x, y = None, varequal=True, alternative="two.sided", mu=0, conflevel=0.95, paired=False ):
+	"""
+	Performs paired, 1-sample and 2-sample t-test
+	"""
 	if y == None:
 		return _test_t1(x=x, mu=mu, alternative=alternative, conflevel=conflevel )	
 	else:

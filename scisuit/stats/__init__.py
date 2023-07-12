@@ -1,5 +1,5 @@
 import ctypes as _ct
-from ..ctypeslib import core as _core
+from .._ctypeslib import core as _core
 from dataclasses import dataclass as _dataclass    
 
 

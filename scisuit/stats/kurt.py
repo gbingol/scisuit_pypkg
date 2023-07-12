@@ -1,8 +1,8 @@
 import numpy as _np
 
-def kurt(y):
+def kurt(y:_np.ndarray | list):
 	"""
-	Computes excess kurtosis. <br>
+	Computes excess kurtosis. \n
 	y: ndarray / list.
 	"""
 	n = len(y)

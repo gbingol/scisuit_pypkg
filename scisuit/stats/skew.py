@@ -3,12 +3,14 @@ import math as _math
 
 
 
-def skew(y):
+def skew(y:_np.ndarray | list):
 	"""
-	Computes the skewness of a distribution <br>
-	skew(y=) <br>
+	Computes the skewness of a distribution
+
+	## Example
+	y = _np.random.standard_normal(1000)
+	print(skew(y))
 	
-	y: ndarray / list.
 	"""
 	n = len(y)
 
@@ -27,6 +29,8 @@ def skew(y):
 	skew_p /= (n * std_p**3.0);
 
 	return _math.sqrt(n * (n - 1)) * skew_p/(n-2)
+
+
 
 """
 y = _np.random.standard_normal(1000)

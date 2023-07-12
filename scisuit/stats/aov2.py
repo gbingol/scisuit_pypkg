@@ -69,6 +69,13 @@ class aov2_results():
 
 
 def aov2(y, x1, x2):
+	"""
+	Performs 2-way ANOVA
+
+	## Input
+	y: Responses \n
+	x1, x2: factors
+	"""
 	X1 = x1
 	if isinstance(x1, list):
 		X1 = np.asfarray(x1)

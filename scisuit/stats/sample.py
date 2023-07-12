@@ -2,7 +2,14 @@ import numpy as _np
 
 def sample(y, size:int, replace = False):
 	"""
-	y: ndarray / list.<br>
+	y: ndarray / list.
+
+	## Example
+	ss = _np.linspace(start=1, stop=10, num=10) \n
+	s = sample(ss, 4) \n
+	s1 = sample(ss, 11, replace=True) \n
+	s2 = sample(ss, 11, replace=False) \n
+	print(s1)
 	"""
 	n = len(y)
 

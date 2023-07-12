@@ -1,4 +1,4 @@
-from ..ctypeslib import core as _core
+from .._ctypeslib import core as _core
 
 import numpy as np
 
@@ -9,18 +9,18 @@ __all__ = ['rolling']
 class rolling:
 
 	"""
-	<p>A class to compute rolling window mean, std, var min, max... </p>
+	A class to compute rolling window mean, std, var min, max...
 
-	<p><b>Example</b>:</p>
-	>>r = rolling(x, y, period=2) <br>
-	>>r.mean() <br>
-	>>r.var() <br><br>
+	## Example:
+	>>r = rolling(x, y, period=2) \n
+	>>r.mean() \n
+	>>r.var() \n \n
 
-	<b>OR</b> <br>
+	OR \n
 	
-	>>r=rolling(x, y, period=2).mean() <br>
+	>>r=rolling(x, y, period=2).mean() \n
 
-	<p>If multiple calls required, prefer the first way for efficiency.</p>
+	If multiple calls required, prefer the first way for efficiency.
 
 	"""
 

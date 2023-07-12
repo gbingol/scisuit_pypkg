@@ -447,9 +447,12 @@ class multiple_linregress:
 
 def linregress(yobs, factor, intercept=True, alpha=0.05):
 	"""
-	yobs: Dependent data (vector, list) <br>
-	factor: independent data (matrix, 2D list) <br>
-	intercept: True if there is intercept <br>
+	Performs simple/multiple linear regression
+
+	## Input
+	yobs: Dependent data (ndarray|list) \n
+	factor: independent data (2D list| 2D ndarray) \n
+	intercept: True if there is intercept \n
 	alpha: significance level
 	"""
 	Observed = yobs

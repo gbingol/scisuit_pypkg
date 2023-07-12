@@ -22,8 +22,11 @@ class test_z_Result:
 
 def test_z(x, sd, mu, alternative="two.sided", conflevel=0.95):
 	"""
-	returns p-value and test_z_Result class. \n
+	
+	## Return
+	p-value and test_z_Result class. \n
 
+	## Input
 	x: sample,  ndarray/list \n
 	sd: Standard deviation of population \n
 	mu: Assumed mean of population \n
