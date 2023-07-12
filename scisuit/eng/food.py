@@ -269,17 +269,20 @@ def Intersection(f1:Food, f2:Food)->list:
 
 class Food:
 	"""
-	A class to compute thermal and physical properties of food materials
+	A class to compute thermal and physical properties of food materials \n
+
+	## Input: 
+	Keys are CHO, protein, lipid(fat, oil), ash, Water, salt \n
+	Values can be percentages or fractions (must be consistent) \n
+
+	## Example:
+	f = Food(CHO=30, water=70)
 	"""
 	
 	def __init__(self, **kwargs):
 		#fractions or percentages
-		self.__Water = 0.0
-		self.__CHO = 0.0
-		self.__Protein = 0.0
-		self.__Lipid = 0.0
-		self.__Ash = 0.0
-		self.__Salt = 0.0
+		self.__Water = 0.0; self.__CHO = 0.0; self.__Protein = 0.0; self.__Lipid = 0.0
+		self.__Ash = 0.0; self.__Salt = 0.0
 
 		self.m_Ingredients={}
 		
@@ -287,7 +290,7 @@ class Food:
 			key= k.lower()
 
 			if(value<0.0):
-				raise ValueError("Ingredient's fraction cannot be negative.")
+				raise ValueError("Ingredient's fraction/percentage cannot be negative.")
 
 			if(key == "water"): self.__Water= value
 			elif(key == "cho"): self.__CHO=value
@@ -327,10 +330,6 @@ class Food:
 		self._m_Weight = 1.0 #Unit weight
 		
 			
-	def __add__(self, rhs):
-		return self.x + rhs.x
-
-
 	def __getitem__(self, index):
 		return index
 	
@@ -338,14 +337,10 @@ class Food:
 
 	def cp(self)->float:
 		"""
+		T is temperature in Celcius \n
+
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
-
-		T is temperature in Celcius
-
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
 		"""
 		Cp_w = _np.polynomial.Polynomial([5.4731E-6, -9.0864E-5, 4.1289][::-1])
 		Cp_p =  _np.polynomial.Polynomial([-1.3129E-6, 1.2089E-3, 2.0082][::-1])
@@ -353,6 +348,12 @@ class Food:
 		Cp_CHO =  _np.polynomial.Polynomial([-5.9399E-6, 1.9625E-3, 1.5488][::-1])
 		Cp_ash =  _np.polynomial.Polynomial([-3.6817E-6, 1.8896E-3, 1.0926][::-1])
 		Cp_salt =  _np.polynomial.Polynomial([0.88])
+		"""
+		Note that previously scisuit.core polynomial was used and the list conforms
+		to this (ax^n +... + a0). 
+		However, new numpy polynomial uses reverse order and that's why [::-1]
+		"""
+
 		T = self._m_T
 
 		return (self.__Water)*Cp_w(T) + \
@@ -365,9 +366,14 @@ class Food:
 
 
 	def k(self)->float:
+		"""T in celcius, result W/mK"""
+		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
+		k_p =  _np.polynomial.Polynomial([-2.7178E-6, 1.1958E-3, 1.7881E-1][::-1])
+		k_f =  _np.polynomial.Polynomial([-1.7749E-7, -2.7604E-4, 1.8071E-1][::-1])
+		k_CHO =  _np.polynomial.Polynomial([-4.3312E-6, 1.3874E-3, 2.0141E-1][::-1])
+		k_ash =  _np.polynomial.Polynomial([-2.9069E-6, 1.4011E-3, 3.2962E-1][::-1])
+		k_salt =  _np.polynomial.Polynomial([0.574])
 		"""
-		T in celcius, result W/mK
-
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
 		Thermal Conductivities of Aqueous Solutions of Strong Electrolytes Chem.-1ng.-Technik., 23 (3) P.59 - 64
 
@@ -375,12 +381,6 @@ class Food:
 		to this (ax^n +... + a0). 
 		However, new numpy polynomial uses reverse order and that's why [::-1]
 		"""
-		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
-		k_p =  _np.polynomial.Polynomial([-2.7178E-6, 1.1958E-3, 1.7881E-1][::-1])
-		k_f =  _np.polynomial.Polynomial([-1.7749E-7, -2.7604E-4, 1.8071E-1][::-1])
-		k_CHO =  _np.polynomial.Polynomial([-4.3312E-6, 1.3874E-3, 2.0141E-1][::-1])
-		k_ash =  _np.polynomial.Polynomial([-2.9069E-6, 1.4011E-3, 3.2962E-1][::-1])
-		k_salt =  _np.polynomial.Polynomial([0.574])	
 		
 		T=self._m_T
 
@@ -394,19 +394,19 @@ class Food:
 		
 	
 	def rho(self)->float:
-		"""
-		T celcius, result kg/m3
+		"""T celcius, result kg/m3"""
 
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""
 		rho_w =  _np.polynomial.Polynomial([-3.7574E-3, 3.1439E-3, 997.18][::-1])
 		rho_p =  _np.polynomial.Polynomial([-5.1840E-1, 1329.9][::-1])
 		rho_f =  _np.polynomial.Polynomial([-4.1757E-1, 925.59][::-1])
 		rho_CHO =  _np.polynomial.Polynomial([-3.1046E-1, 1599.1][::-1])
 		rho_ash =  _np.polynomial.Polynomial([-2.8063E-1, 2423.8][::-1])
 		rho_salt =  _np.polynomial.Polynomial([2165]) #Wikipedia
+		"""
+		Note that previously scisuit.core polynomial was used and the list conforms
+		to this (ax^n +... + a0). 
+		However, new numpy polynomial uses reverse order and that's why [::-1]
+		"""
 		
 		T=self._m_T
 
@@ -421,10 +421,11 @@ class Food:
 
 	def aw(self)->float:
 		"""
-		Returns value of water activity or None <br>
-		<br>
-		<b>WARNING:</b> At T>25 C, built-in computation might not yield accurate results 
-		therefore the built-in function might return None.
+		Returns value of water activity or None \n
+		
+		## Warning:
+		At T>25 C, built-in computation might return None. \n
+		Therefore, must be used with caution.
 		"""
 		aw1 = 0.92
 	
@@ -500,7 +501,7 @@ class Food:
 
 	def h(self, T)->float:
 		"""
-		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg <br>
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg \n
 		T: Initial freezing temperature
 		"""	 
 		if(not isinstance(T, float)):
@@ -512,7 +513,7 @@ class Food:
 
 	def freezing_T(self):
 		"""
-		Estimates the initial freezing temperature of a food item <br>
+		Estimates the initial freezing temperature of a food item \n
 		returns in Celcius (None if estimation fails)
 		"""
 		CHO = self.__CHO 
@@ -545,7 +546,7 @@ class Food:
 
 	def x_ice(self, T:float)->float:
 		"""
-		Finds the fraction of ice <br>
+		Finds the fraction of ice \n
 		T: Initial freezing temperature
 		"""
 		Tfood = self._m_T
@@ -570,7 +571,7 @@ class Food:
 	def makefrom(self, Foods:list)->list:
 		"""
 		Given a list of food items, computes the amount of each to be mixed to 
-		make the current food item <br>
+		make the current food item \n
 		Material Balance
 		"""
 		N = len(Foods)
@@ -613,6 +614,9 @@ class Food:
 	
 
 	def normalize(self):
+		"""
+		sets the weight to 1.0
+		"""
 		self._m_Weight = 1.0
 
 
@@ -854,7 +858,9 @@ class Food:
 
 """
 if __name__=='__main__':
-	f = Food(CHO=30, water=70)
-	print(f)
-
+	f1 = Food(CHO=30, water=70)
+	f2 = Food(protein=20, water=70, CHO=10)
+	print(f1)
+	print(f2)
+	print(f1+f2)
 """
