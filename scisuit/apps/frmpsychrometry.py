@@ -12,16 +12,7 @@ from scisuit.wxpy import makeicon, NumTextCtrl
 
 class frmPsychrometry ( wx.Frame ):
 
-	def __init__( self, parent = None, MainLoopCanTerminate = True, FileMenu = None ):
-		"""
-		MainLoopCanTerminate: When the final frame closes wx.App terminates main loop. \n
-		For most applications this must be set to True. \n
-		However, if the application manages the main loop, then set to False
-
-		## Note
-		When MainLoopCanTerminate set to False, wx.EVT_CLOSE event is Bind'ed and 
-		the frame is simply hidden & destroyed.
-		"""
+	def __init__( self, parent = None, FileMenu = None ):
 		wx.Frame.__init__ ( self, 
                 parent,  	
                 title = u"Psychrometry", 
@@ -182,9 +173,6 @@ class frmPsychrometry ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 
-		if MainLoopCanTerminate == False:
-			self.Bind(wx.EVT_CLOSE, self.OnClose)
-
 		self.Bind( wx.EVT_CHECKBOX, self.__OnCheckBox )
 		self.m_btnCalc.Bind( wx.EVT_BUTTON, self.__OnBtn )
 		
@@ -227,13 +215,6 @@ class frmPsychrometry ( wx.Frame ):
 
 	def __del__( self ):
 		pass
-
-
-	def OnClose(self, event):
-		self.Hide()
-		self.Destroy()
-
-		event.Skip()
 
     
 	def __OnCheckBox( self, event ):
