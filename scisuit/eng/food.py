@@ -8,7 +8,7 @@ class Food:
 
 
 
-def Cp_Siebel(food:Food, Tfreezing = -1.7):
+def Cp_Siebel(food:Food, Tfreezing = -1.7)->float:
 	"""
 	returns kJ/kg°C <br>
 	Tfreezing = -1.7 is the default freezing temperature<br>
@@ -47,7 +47,7 @@ def Cp_Heldman(food:Food):
 	return 4.18*M + 1.547*Protein + 1.672*Fat + 1.42*CHO + 0.836*Ash
 
 
-def Cp_Chen(food:Food):
+def Cp_Chen(food:Food)->float:
 	"""
 	returns kJ/kg°C <br>
 	specific heat of an unfrozen food <br>
