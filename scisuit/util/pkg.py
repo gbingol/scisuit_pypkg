@@ -1,4 +1,5 @@
 import wx
+import os
 import pkgutil
 from .path import pyhomepath
 
@@ -38,17 +39,22 @@ def assert_pkg(name:str, pip:str)->bool:
 	#package already installed
 	if(pkg_installed(name)):
 		return True
+	
+	PyHome = pyhomepath()
+	PyExe = PyHome + os.sep + "python.exe"
+	Cmd = "\"" + PyExe + "\""
+	Cmd += " -m pip install " + pip
 
-	Msg = name + " is missing. Wanna install?"
+	Msg = name + " is missing. Wanna install? \n \n"
+	Msg += "Choosing Yes will launch the terminal and installation process using the following command: \n \n"
+	
+	Msg += Cmd + "\n \n"
+
+	Msg += "If you choose No, you might have to manually install the package to run the requiring app."
 
 	YesNo = wx.MessageBox(Msg, "Install " + name + "?", wx.YES_NO)
 	if (YesNo == wx.NO):
 		return False
-
-	PyHome = pyhomepath()
-	PyExe = PyHome + "/python.exe"
-	Cmd = "\"" + PyExe + "\""
-	Cmd += " -m pip install " + pip
 
 	wx.Shell(Cmd)
 
