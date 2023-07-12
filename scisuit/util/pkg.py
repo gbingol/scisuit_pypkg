@@ -13,7 +13,6 @@ def pkg_installed(name:str)->bool:
 	For example, wxPython's package name is wx but pip installation
 	requires wxPython. Here the name parameter is wx.
 	"""
-	
 	x = pkgutil.iter_modules()
 	for i in x:
 		if i.ispkg==True and i.name == name:
@@ -24,13 +23,16 @@ def pkg_installed(name:str)->bool:
 
 def assert_pkg(name:str, pip:str)->bool:
 	"""
+	## Input: 
 	Name: package name, (wx) \n
-	pip: pip install name (wxPython) \n
+	pip: pip install name (wxPython) 
 
-	if package is not missing returns True \n
+	## Return: 
+	if package is already installed returns True \n
 
-	If missing, prompts the user to install the package,
-	if user rejects, returns False, otherwise returns True
+	If missing, prompts the user (wx.MessageBox) to install the package, \n
+	if user clicks No, returns False, \n
+	if user clicks Yes, installation process begins and function returns True
 	"""
 
 	#package already installed

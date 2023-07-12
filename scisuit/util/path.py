@@ -8,9 +8,13 @@ def parent_path(path:str, level = 0)->_Path:
 	"""
 	This is used so many times that a convenience function is deemed appropriate.
 
-	path: Relative or full path (C:\\a\\b\\c.py)
+	## Input: 
+	path: Relative or full path 
 	
-	level=0 => C:\\a\\b ---- level=1 => C:\\a
+	## Example:
+	if path is C:\\a\\b\\c.py  \n
+	level=0 => C:\\a\\b \n
+	level=1 => C:\\a
 	
 	"""
 	pt = _Path(path)
