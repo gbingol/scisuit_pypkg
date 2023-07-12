@@ -26,67 +26,67 @@ class frmPsychrometry ( wx.Frame ):
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		self.SetBackgroundColour( wx.Colour( 0, 242, 242 ) )
 
-		self.m_chkP = wx.CheckBox( self, wx.ID_ANY, u"P")
+		self.m_chkP = wx.CheckBox( self, wx.ID_ANY, "P")
 		self.m_chkP.SetToolTip( u"Pressure" )
 		self.m_txtP = NumTextCtrl( self)
 		self.m_txtP.SetToolTip( u"Pressure" )
-		self.m_lblP = wx.StaticText( self, wx.ID_ANY, u"kPa")
+		self.m_lblP = wx.StaticText( self, wx.ID_ANY, "kPa")
 		self.m_lblP.Wrap( -1 )
 
-		self.m_stxtPw = wx.StaticText( self, wx.ID_ANY, u"Pw")
+		self.m_stxtPw = wx.StaticText( self, wx.ID_ANY, "Pw")
 		self.m_stxtPw.Wrap( -1 )
 		self.m_txtPw = wx.TextCtrl( self, style= wx.TE_READONLY )
-		self.m_lblPw = wx.StaticText( self, wx.ID_ANY, u"kPa")
+		self.m_lblPw = wx.StaticText( self, wx.ID_ANY, "kPa")
 		self.m_lblPw.Wrap( -1 )
 
 		self.m_stxtPws = wx.StaticText( self, wx.ID_ANY, u"Pws")
 		self.m_stxtPws.Wrap( -1 )
 		self.m_txtPws = wx.TextCtrl( self, style= wx.TE_READONLY )
-		self.m_lblPws = wx.StaticText( self, wx.ID_ANY, u"kPa")
+		self.m_lblPws = wx.StaticText( self, wx.ID_ANY, "kPa")
 		self.m_lblPws.Wrap( -1 )
 
 		self.m_chkTdb = wx.CheckBox( self, wx.ID_ANY, u"Tdb")
 		self.m_chkTdb.SetToolTip( u"dry-bulb temperature" )
 		self.m_txtTdb = NumTextCtrl( self)
-		self.m_lblTdb = wx.StaticText( self, wx.ID_ANY, u"°C")
+		self.m_lblTdb = wx.StaticText( self, wx.ID_ANY, "°C")
 		self.m_lblTdb.Wrap( -1 )
 
 		self.m_chkTwb = wx.CheckBox( self, wx.ID_ANY, u"Twb")
 		self.m_chkTwb.SetToolTip( u"wet-bulb temperature" )
 		self.m_txtTwb = NumTextCtrl( self)
-		self.m_lblTwb = wx.StaticText( self, wx.ID_ANY, u"°C")
+		self.m_lblTwb = wx.StaticText( self, wx.ID_ANY, "°C")
 		self.m_lblTwb.Wrap( -1 )
 
 		self.m_chkTdp = wx.CheckBox( self, wx.ID_ANY, u"Tdp")
 		self.m_chkTdp.SetToolTip( u"dew-point temperature" )
 		self.m_txtTdp = NumTextCtrl( self)
-		self.m_lblTdp = wx.StaticText( self, wx.ID_ANY, u"°C")
+		self.m_lblTdp = wx.StaticText( self, wx.ID_ANY, "°C")
 		self.m_lblTdp.Wrap( -1 )
 
-		self.m_chkW = wx.CheckBox( self, wx.ID_ANY, u"W")
+		self.m_chkW = wx.CheckBox( self, wx.ID_ANY, "W")
 		self.m_txtW = NumTextCtrl( self)	
-		self.m_lblW = wx.StaticText( self, wx.ID_ANY, u"kg/kgda")
+		self.m_lblW = wx.StaticText( self, wx.ID_ANY, "kg/kgda")
 		self.m_lblW.Wrap( -1 )
 
-		self.m_stxtWs = wx.StaticText( self, wx.ID_ANY, u"Ws")
+		self.m_stxtWs = wx.StaticText( self, wx.ID_ANY, "Ws")
 		self.m_stxtWs.Wrap( -1 )	
 		self.m_txtWs = wx.TextCtrl( self,style = wx.TE_READONLY )
-		self.m_lblWs = wx.StaticText( self, wx.ID_ANY, u"kg/kgda")
+		self.m_lblWs = wx.StaticText( self, wx.ID_ANY, "kg/kgda")
 		self.m_lblWs.Wrap( -1 )	
 
-		self.m_chkH = wx.CheckBox( self, wx.ID_ANY, u"H")
+		self.m_chkH = wx.CheckBox( self, wx.ID_ANY, "H")
 		self.m_txtH =  NumTextCtrl( self)
-		self.m_lblH = wx.StaticText( self, wx.ID_ANY, u"kJ/kgda")
+		self.m_lblH = wx.StaticText( self, wx.ID_ANY, "kJ/kgda")
 		self.m_lblH.Wrap( -1 )
 
-		self.m_chkRH = wx.CheckBox( self, wx.ID_ANY, u"RH")
+		self.m_chkRH = wx.CheckBox( self, wx.ID_ANY, "RH")
 		self.m_txtRH = NumTextCtrl( self)
-		self.m_lblRH = wx.StaticText( self, wx.ID_ANY, u"%")
+		self.m_lblRH = wx.StaticText( self, wx.ID_ANY, "%")
 		self.m_lblRH.Wrap( -1 )
 
-		self.m_chkV = wx.CheckBox( self, wx.ID_ANY, u"v")
+		self.m_chkV = wx.CheckBox( self, wx.ID_ANY, "v")
 		self.m_txtV = NumTextCtrl( self)
-		self.m_lblV = wx.StaticText( self, wx.ID_ANY, u"m3/kg")
+		self.m_lblV = wx.StaticText( self, wx.ID_ANY, "m3/kg")
 		self.m_lblV.Wrap( -1 )
 
 		fgSzr_L = wx.FlexGridSizer( 0, 3, 0, 0 )
@@ -134,7 +134,7 @@ class frmPsychrometry ( wx.Frame ):
 		szrLR.Add( fgSzr_L, 1, wx.EXPAND, 5 )
 		szrLR.Add( fgSzr_R, 1, wx.EXPAND, 5 )
 
-		self.m_btnCalc = wx.Button( self, wx.ID_ANY, u"Compute")
+		self.m_btnCalc = wx.Button( self, wx.ID_ANY, "Compute")
 		self.m_btnCalc.Enabled=False
 		
 		mainSizer = wx.BoxSizer( wx.VERTICAL )
@@ -144,7 +144,7 @@ class frmPsychrometry ( wx.Frame ):
 		
 		if(FileMenu == None):
 			self.m_menuFile = wx.Menu()
-			self.m_menuCopyClipbrd = wx.MenuItem( self.m_menuFile, -1, u"Copy to clipboard")
+			self.m_menuCopyClipbrd = wx.MenuItem( self.m_menuFile, -1, "Copy to clipboard")
 			self.m_menuFile.Append( self.m_menuCopyClipbrd )
 			self.Bind( wx.EVT_MENU, self.__OnCopyClipbrd, id = self.m_menuCopyClipbrd.GetId() )
 		else:
@@ -152,19 +152,19 @@ class frmPsychrometry ( wx.Frame ):
 			self.m_menuFile = FileMenu
 		
 		self.m_menuDigits = wx.Menu()	
-		self.m_menuItem2Digits = wx.MenuItem( self.m_menuDigits, -1, u"2 Digits","", wx.ITEM_RADIO)
+		self.m_menuItem2Digits = wx.MenuItem( self.m_menuDigits, -1, "2 Digits","", wx.ITEM_RADIO)
 		self.m_menuDigits.Append( self.m_menuItem2Digits )
 
-		self.m_menuItem3Digits = wx.MenuItem( self.m_menuDigits, -1, u"3 Digits", "", wx.ITEM_RADIO )
+		self.m_menuItem3Digits = wx.MenuItem( self.m_menuDigits, -1, "3 Digits", "", wx.ITEM_RADIO )
 		self.m_menuDigits.Append( self.m_menuItem3Digits )
 		self.m_menuItem3Digits.Check(True)
 
-		self.m_menuItem4Digits = wx.MenuItem( self.m_menuDigits, -1, u"4 Digits", "", wx.ITEM_RADIO )
+		self.m_menuItem4Digits = wx.MenuItem( self.m_menuDigits, -1, "4 Digits", "", wx.ITEM_RADIO )
 		self.m_menuDigits.Append( self.m_menuItem4Digits )
 
 		self.m_menubar = wx.MenuBar( 0 )
-		self.m_menubar.Append( self.m_menuFile, u"File" )
-		self.m_menubar.Append( self.m_menuDigits, u"Digits" )
+		self.m_menubar.Append( self.m_menuFile, "File" )
+		self.m_menubar.Append( self.m_menuDigits, "Digits" )
 		self.SetMenuBar( self.m_menubar )
 
 
@@ -188,9 +188,9 @@ class frmPsychrometry ( wx.Frame ):
 		
 		self.m_Controls=[
 			[self.m_chkP, self.m_txtP, "kPa", "P"],
-			[self.m_chkTdb, self.m_txtTdb, u"°C", "Tdb"],
-			[self.m_chkTwb, self.m_txtTwb, u"°C", "Twb"],
-			[self.m_chkTdp, self.m_txtTdp, u"°C", "Tdp"],
+			[self.m_chkTdb, self.m_txtTdb, "°C", "Tdb"],
+			[self.m_chkTwb, self.m_txtTwb, "°C", "Twb"],
+			[self.m_chkTdp, self.m_txtTdp, "°C", "Tdp"],
 			[self.m_chkW, self.m_txtW, "kg/kg da", "W"],
 			[self.m_chkH, self.m_txtH, "kJ/kgda", "H"],
 			[self.m_chkRH, self.m_txtRH, "%", "RH"],
@@ -245,6 +245,7 @@ class frmPsychrometry ( wx.Frame ):
 		if wx.TheClipboard.Open():
 			wx.TheClipboard.SetData(wx.TextDataObject(data))
 			wx.TheClipboard.Close()
+			wx.TheClipboard.Flush()
 		
 			
 	

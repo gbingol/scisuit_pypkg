@@ -166,6 +166,7 @@ class pnlRefrigerantSaturated ( wx.Panel ):
 		if wx.TheClipboard.Open():
 			wx.TheClipboard.SetData(wx.TextDataObject(s))
 			wx.TheClipboard.Close()
+			wx.TheClipboard.Flush()
 
 
 
@@ -367,6 +368,7 @@ class pnlRefrigerantSuperheated ( wx.Panel ):
 		if wx.TheClipboard.Open():
 			wx.TheClipboard.SetData(wx.TextDataObject(s))
 			wx.TheClipboard.Close()
+			wx.TheClipboard.Flush()
 
 
 
@@ -577,6 +579,7 @@ class pnlThermoPhysical ( wx.Panel ):
 		if wx.TheClipboard.Open():
 			wx.TheClipboard.SetData(wx.TextDataObject(s))
 			wx.TheClipboard.Close()
+			wx.TheClipboard.Flush()
 
 
 
