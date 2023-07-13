@@ -56,6 +56,17 @@ def qt(p, df:int):
 	return _core.c_stat_qt(p, _ct.c_int(df))
 
 
+#----------------------------
+def dchisq(x, df:int):
+	return _core.c_stat_dchisq(x, _ct.c_int(df))
+
+def pchisq(q, df:int):
+	return _core.c_stat_pchisq(q, _ct.c_int(df))
+
+def qchisq(p, df:int):
+	return _core.c_stat_qchisq(p, _ct.c_int(df))
+
+
 #-------------------
 def dunif(x, min=0.0, max=1.0):
 	return _core.c_stat_dunif(x, _ct.c_double(min), _ct.c_double(max))
