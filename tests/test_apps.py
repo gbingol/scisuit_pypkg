@@ -13,8 +13,8 @@ ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
 app = wx.App()
 
-frm = frmPsychrometry()
-frm.Show()
+frm1 = frmPsychrometry()
+frm1.Show()
 
 frm2 = frmFluidProperties()
 frm2.Show()

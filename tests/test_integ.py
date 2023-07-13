@@ -6,12 +6,14 @@ sys.path.insert(0, os.getcwd())
 
 from scisuit import trapz, cumtrapz
 
-x = np.arange(1,6)
+x = np.arange(1, 6)
 y = x**2
 
+print("****** cumtrapz ******")
 print(cumtrapz(x, y))
 
 
+print("****** trapz ******")
 
 x=np.linspace(0, 3, num=100)
 y = x**2

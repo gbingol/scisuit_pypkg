@@ -6,5 +6,12 @@ sys.path.insert(0, os.getcwd())
 
 from scisuit.eng import psychrometry
 
-res1 = psychrometry(P=101, Tdb=30, Twb=20)
-print(res1)
+result = psychrometry(P=101, Tdb=30, Twb=20)
+
+#all of the properties
+print(result)
+
+print("----------------------- \n")
+
+#an individual property (enthalpy)
+print("h=" + str(result.H))
