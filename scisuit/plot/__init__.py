@@ -1,9 +1,12 @@
 import ctypes as _ct
 from ..util import parent_path as _parent_path
+from .colors import Colors
 
 
+#TODO: this is debug version, change it during release
 _path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
 _plt = _ct.PyDLL(str(_path))
+
 
 
 _plt.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
