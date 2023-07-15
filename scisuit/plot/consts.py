@@ -1,8 +1,9 @@
-import dataclasses as _dc
+from enum import Enum
 
-
-@_dc.dataclass
-class Colors:
+class Colors(Enum):
+	"""
+	Colors with corresponding RGB values
+	"""
 	AQUA="0 255 255"
 	BLUE="0 0 255"
 	BLUE_MEDIUM="0 0 205"
@@ -25,8 +26,7 @@ class Colors:
 	GREEN="0 128 0"
 	PURPLE="128 0 128"
 	TEAL="0 128 128"
-	NAVY="0 0 128"
-	MAROON="128 0 0" 
+	NAVY="0 0 128" 
 	SALMON_DARK="233 150 122"
 	SALMON="250 128 114" 
 	SALMON_LIGHT="255 160 122"
@@ -37,3 +37,37 @@ class Colors:
 	WHEAT="245 222 179"
 	ORCHID="218 112 214"
 	INDIGO="75 0 130"
+
+
+class Fill(Enum):
+	"""
+	Fill styles
+	"""
+	SOLID = 100, 
+	TRANSPARENT = 106, 
+	BDIAGHATCH = 111, 
+	CROSSDIAGHATCH = 112
+	FDIAGHATCH = 113
+	CROSSHATCH = 114
+	HORIZHATCH =115
+	VERTHATCH = 116
+
+
+
+class Line(Enum):
+	"""
+	Line styles
+	"""
+	SOLID = 100
+	DOT = 101
+	LONGDASH = 102
+	SHORTDASH = 103
+	DOTDASH = 104
+	TRANSPARENT = 106
+
+
+
+class Bar_Type(Enum):
+	CLUSTER = "c"
+	STACKED = "s"
+	PERCENTSTK = "%"

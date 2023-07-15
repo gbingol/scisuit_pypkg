@@ -1,12 +1,13 @@
 import ctypes as _ct
+from enum import Enum
+
 from ..util import parent_path as _parent_path
-from .colors import Colors
+from .consts import Bar_Type
 
 
 #TODO: this is debug version, change it during release
 _path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
 _plt = _ct.PyDLL(str(_path))
-
 
 
 _plt.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
@@ -94,19 +95,25 @@ def close(hwnd):
 
 
 
+#---------------------------------------------------------------------------
 
-
-#-----------------------------------------------------
-
-def bar(height:list, labels=None, name=None, title=None, type="c", fill=None, line=None, hwnd=None):
+def bar(
+		height:list, 
+		labels=None, 
+		name=None, 
+		title=None, 
+		type = Bar_Type.CLUSTER,
+		fill=None, 
+		line=None, 
+		hwnd=None):
 	"""
 	Plots bar chart
 
 	## Input
-	height : Numeric data \n
-	labels : Category labels \n
-	name:	Name of the series \n
-	type:	"c", "s" and "%" for clustered, stacked and 100% stacked, respectively.\n
+	height: Numeric data \n
+	labels: Category labels \n
+	name: Name of the series \n
+	type: clustered, stacked and 100% stacked \n
 	title: Title of the chart
 	"""
 	return _plt.c_plot_bar((),
@@ -115,15 +122,23 @@ def bar(height:list, labels=None, name=None, title=None, type="c", fill=None, li
 
 
 
-def barh(width:list, labels=None, name=None, title=None, type="c", fill=None, line=None, hwnd=None):
+def barh(
+		width:list, 
+		labels=None, 
+		name=None, 
+		title=None, 
+		type=Bar_Type.CLUSTER, 
+		fill=None, 
+		line=None, 
+		hwnd=None):
 	"""
 	Plots horizontal bar chart
 
 	## Input
 	width : Numeric data \n
 	labels : Category labels \n
-	name:	Name of the series \n
-	type:	"c", "s" and "%" for clustered, stacked and 100% stacked, respectively.\n
+	name: Name of the series \n
+	type: clustered, stacked and 100% stacked.\n
 	title: Title of the chart
 	"""
 	return _plt.c_plot_barh((),
