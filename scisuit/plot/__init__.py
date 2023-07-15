@@ -2,7 +2,7 @@ import ctypes as _ct
 from ..util import parent_path as _parent_path
 
 
-_path = _parent_path(__file__) / "scisuit_plotter"
+_path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
 _plt = _ct.PyDLL(str(_path))
 
 _plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
@@ -49,12 +49,9 @@ def scatter(y, x:list=None, name:str=None, title:str=None,
 
 
 	"""
-	_plt.c_plot_scatter
-	(
-		(), 
+	return _plt.c_plot_scatter((), 
 		{'y':y ,"x":x, "name":name, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
-		"bubble":bubble, "marker":marker, "line":line, "trendline":trendline, "hwnd":hwnd}
-	)
+		"bubble":bubble, "marker":marker, "line":line, "trendline":trendline, "hwnd":hwnd})
 
 
 
@@ -67,11 +64,7 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	RH: A list in increasing order containing the requested relative humidity (%) lines \n
 	P: Absolute pressure (Pa)
 	"""
-	_plt.c_plot_psychrometry
-	(
-		(), 
-		{'Tdb':Tdb, 'RH':RH, 'P':P}
-	)
+	return _plt.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
 
 
@@ -79,7 +72,9 @@ def app():
 	"""
 	Initiates a GUI application
 	"""
-	_plt.c_plot_app()
+	#IMPORTANT: if not set colors/text of plots looks blurry
+	_ct.windll.shcore.SetProcessDpiAwareness(True)
+	return _plt.c_plot_app()
 
 
 def mainloop(shared=False):
