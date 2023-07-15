@@ -9,6 +9,9 @@ _plt = _ct.PyDLL(str(_path))
 _plt.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_bar.restype=_ct.py_object
 
+_plt.c_plot_barh.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_barh.restype=_ct.py_object
+
 _plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_scatter.restype=_ct.py_object
 
@@ -46,6 +49,23 @@ def bar(height:list, labels=None, name=None, title=None, type="c", fill=None, li
 	"""
 	return _plt.c_plot_bar((),
 			{"height":height, "labels":labels, "name":name, "title":title, "type":type, 
+    			"fill":fill, "line":line, "hwnd":hwnd})
+
+
+
+def barh(width:list, labels=None, name=None, title=None, type="c", fill=None, line=None, hwnd=None):
+	"""
+	Plots horizontal bar chart
+
+	## Input
+	width : Numeric data \n
+	labels : Category labels \n
+	name:	Name of the series \n
+	type:	"c", "s" and "%" for clustered, stacked and 100% stacked, respectively.\n
+	title: Title of the chart ← string
+	"""
+	return _plt.c_plot_barh((),
+			{"width":width, "labels":labels, "name":name, "title":title, "type":type, 
     			"fill":fill, "line":line, "hwnd":hwnd})
 
 
