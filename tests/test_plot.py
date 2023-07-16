@@ -11,6 +11,8 @@ import numpy as np
 
 plt.app()
 
+data=[10, 6, 8]
+
 
 
 
@@ -19,6 +21,9 @@ plt.mainloop()
 
 
 
+
+
+#---------------------------------------------------------------------
 
 
 """
@@ -33,6 +38,10 @@ plt.histogram(x, mode=plt.Histogram_Mode.RELFREQUENCY, cumulative=True)
 plt.histogram(x, fill={'color': plt.Color.RED}, line={'color': plt.Color.GREEN, 'width': 2} )
 """
 
+
+
+
+#---------------------------------------------------------------------
 
 """
 #Line Chart
@@ -55,4 +64,36 @@ plt.line(y=B, type=plt.Line_Type.STACKED, hwnd=hwnd)
 #%-stacked with two series
 hwnd = plt.line(labels=categories, y=A, type=plt.Line_Type.PERCENTSTK)
 plt.line(y=B, type=plt.Line_Type.PERCENTSTK, hwnd=hwnd)
+"""
+
+
+
+#---------------------------------------------------------------------
+
+"""
+#Pie Chart
+
+data=[10, 6, 8]
+
+#labels have been automatically assigned as 1, 2 and 3.
+plt.pie(data)
+
+#Labels explicitly defined
+plt.pie(data, labels=["A", "B", "C"])
+
+#Number of labels less than slices
+plt.pie(data, labels=["A"])
+
+#Explosion of whole pie
+plt.pie(data, explode = 1)
+
+#Explosion of only first slice
+plt.pie(data, explode = [1] )
+
+#arbitrary colors for each slice.
+plt.pie(data, colors = [plt.Color.GREEN, plt.Color.RED, plt.Color.CHOCOLATE] )
+
+#set the angle of first slice to 45°.
+plt.pie(data, startangle=45)
+
 """
