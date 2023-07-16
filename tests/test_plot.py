@@ -4,7 +4,9 @@ import sys, os
 sys.path.insert(0, os.getcwd()) 
 
 
+import scisuit.stats as stat
 import scisuit.plot as plt
+from scisuit.plot.enums import Marker_Type, Color
 import numpy as np
 
 
@@ -115,4 +117,18 @@ plt.piepie(data, groups=groups, lexplode=[2], rexplode = [1] )
 #Colors defined (first of left, two of right)
 plt.piepie(data, groups=groups, lcolors = ["255 51 153"], rcolors=["153 153 0", "0 153 153"] )
 
+"""
+
+
+"""
+#QQ Norm 
+
+x=stat.rnorm(100)
+
+#Normal Q-Q chart
+plt.qqnorm(x)
+
+#Marker specified
+marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size': 5}
+plt.qqnorm(x, marker=marker)
 """

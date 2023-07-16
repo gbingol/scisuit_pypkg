@@ -3,7 +3,7 @@ import numpy as _np
 from enum import Enum
 
 from ..util import parent_path as _parent_path
-from .consts import Bar_Type, Line_Type, Histogram_Mode, Color
+from .enums import Bar_Type, Line_Type, Histogram_Mode
 
 
 
@@ -35,6 +35,9 @@ _plt.c_plot_piepie.restype=_ct.py_object
 
 _plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_psychrometry.restype=_ct.py_object
+
+_plt.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_qqnorm.restype=_ct.py_object
 
 _plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_scatter.restype=_ct.py_object
@@ -303,6 +306,30 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	"""
 	return _plt.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
+
+
+def qqnorm(
+		data:list|_np.ndarray,  
+		title = "Normal Q-Q Plot", 
+		xlab="Theoretical Quantiles",  
+		ylab="Sample Quantiles", 
+		show=True, 
+		line=None, 
+		marker=None, 
+		hwnd=None):
+		"""
+		Quantile-quantile chart
+
+		## Input:
+		data: Data \n
+		title: Title of the chart \n
+		xlab: Label of x-axis \n
+		ylab: Label of y-axis \n
+		show: Whether to show theoretical line or not 
+		"""
+		return _plt.c_plot_qqnorm((),
+			{"data":data, "title":title, "xlab":xlab, "ylab":ylab, 
+			"show":show, "line":line, "marker":marker, "hwnd":hwnd} )
 
 
 
