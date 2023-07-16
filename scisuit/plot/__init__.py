@@ -26,6 +26,9 @@ _plt.c_plot_histogram.restype=_ct.py_object
 _plt.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_line.restype=_ct.py_object
 
+_plt.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_pie.restype=_ct.py_object
+
 _plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_psychrometry.restype=_ct.py_object
 
@@ -217,6 +220,32 @@ def line(
 	return _plt.c_plot_line((),
 			 {"y":y, "labels":labels, "name":name, "title":title, 
      			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
+
+
+def pie(
+	data:list|_np.ndarray, 
+	title:str=None, 
+	labels:list=None, 
+	colors:list=None, 
+	explode:list|int=None, 
+	startangle:int=None, 
+	legend=True, 
+	hwnd=None):
+	"""
+	Plots Pie chart
+
+	## Input:
+	data : Data of individual slices \n
+	title: Title of the chart \n
+	labels: Label of individual slices \n
+	colors: Color of individual slices \n
+	explode: Explosion level \n
+	startangle:	Start angle of first slice \n
+	legend: Whether to show legend or not
+	"""
+	return _plt.c_plot_pie((),
+				{"data":data, "title":title, "labels":labels, "colors":colors, 
+     				"explode":explode, "startangle":startangle, "legend":legend, "hwnd":hwnd})
 
 
 def psychrometry(Tdb:list=None, RH:list=None, P=101325):
