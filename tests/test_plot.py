@@ -4,22 +4,28 @@ import sys, os
 sys.path.insert(0, os.getcwd()) 
 
 import wx
-import ctypes
 
 import scisuit.plot as plt
 
+import numpy as np
+import scisuit.stats as stat
 
 
-pltapp = plt.app()
+
+plt.app()
 
 
-#psychrometry(P=100000, Tdb=[0,80])
-
-x = [1, 2, 3, 4]
-y = [1, 3, 7, 14]
-
-plt.scatter(x=x, y=y)
 
 plt.mainloop()
 
-print("after main")
+
+"""
+#Test Histogram
+
+x=stat.rnorm(500)
+
+plt.histogram(x)
+plt.histogram(x, mode=plt.Histogram_Mode.RELFREQUENCY, cumulative=True)
+plt.histogram(x, fill={'color': plt.Color.RED}, line={'color': plt.Color.GREEN, 'width': 2} )
+
+"""
