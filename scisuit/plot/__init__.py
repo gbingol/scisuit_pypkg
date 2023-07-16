@@ -1,8 +1,9 @@
 import ctypes as _ct
+import numpy as _np
 from enum import Enum
 
 from ..util import parent_path as _parent_path
-from .consts import Bar_Type
+from .consts import Bar_Type, Histogram_Mode, Color
 
 
 #TODO: this is debug version, change it during release
@@ -19,11 +20,16 @@ _plt.c_plot_barh.restype=_ct.py_object
 _plt.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_boxplot.restype=_ct.py_object
 
-_plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_scatter.restype=_ct.py_object
+_plt.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_histogram.restype=_ct.py_object
 
 _plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_psychrometry.restype=_ct.py_object
+
+_plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_scatter.restype=_ct.py_object
+
+
 
 _plt.c_plot_app.argtypes = []
 _plt.c_plot_app.restype=_ct.py_object
@@ -158,6 +164,31 @@ def boxplot(data:list, name:str=None, title:str=None, fill:dict=None, line:dict=
 	"""
 	return _plt.c_plot_boxplot((),
 			{"data":data, "name":name, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
+
+
+
+def histogram(
+		data:list|_np.ndarray, 
+		mode:str=Histogram_Mode.FREQUENCY, 
+		cumulative=False, 
+		breaks = None, 
+		title = None,
+		fill = None, 
+		line = None, 
+		hwnd=None):
+	"""
+	Plots histogram
+
+	## Input
+	data:	A variable
+	mode : density, frequency and relative frequency.
+	cumulative : True, cumulative distribution
+	breaks : Number of breaks or the break points, int/ndarray/list
+	title: Title of the chart
+	"""
+	return _plt.c_plot_histogram((),
+			    {"data":data, "mode":mode, "cumulative":cumulative, 
+				"breaks":breaks, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
 
 
 
