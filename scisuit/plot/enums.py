@@ -84,3 +84,10 @@ class Histogram_Mode(StrEnum):
 	DENSITY = "d"
 	FREQUENCY = "f"
 	RELFREQUENCY = "r"
+
+
+class Marker_Type(StrEnum):
+	CIRCLE = "c"
+	TRIANGLE = "t"
+	SQUARE = "s"
+	XMARKER = "x"
