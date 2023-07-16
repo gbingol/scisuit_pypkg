@@ -1,6 +1,5 @@
 import ctypes as _ct
 import numpy as _np
-from enum import Enum
 
 from ..util import parent_path as _parent_path
 from .enums import Bar_Type, Line_Type, Histogram_Mode
