@@ -44,10 +44,8 @@ class Color(StrEnum):
 	INDIGO="75 0 130"
 
 
-class Fill_Style(IntEnum):
-	"""
-	Fill styles
-	"""
+class Brush_Style(IntEnum):
+	"""Fill styles"""
 	SOLID = 100, 
 	TRANSPARENT = 106, 
 	BDIAGHATCH = 111, 
@@ -59,10 +57,8 @@ class Fill_Style(IntEnum):
 
 
 
-class Line_Style(IntEnum):
-	"""
-	Line styles
-	"""
+class Pen_Style(IntEnum):
+	"""Line styles"""
 	SOLID = 100
 	DOT = 101
 	LONGDASH = 102
@@ -73,6 +69,12 @@ class Line_Style(IntEnum):
 
 
 class Bar_Type(StrEnum):
+	CLUSTER = "c"
+	STACKED = "s"
+	PERCENTSTK = "%"
+
+
+class Line_Type(StrEnum):
 	CLUSTER = "c"
 	STACKED = "s"
 	PERCENTSTK = "%"

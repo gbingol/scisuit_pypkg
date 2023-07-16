@@ -3,7 +3,7 @@ import numpy as _np
 from enum import Enum
 
 from ..util import parent_path as _parent_path
-from .consts import Bar_Type, Histogram_Mode, Color
+from .consts import Bar_Type, Line_Type, Histogram_Mode, Color
 
 
 #TODO: this is debug version, change it during release
@@ -22,6 +22,9 @@ _plt.c_plot_boxplot.restype=_ct.py_object
 
 _plt.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_histogram.restype=_ct.py_object
+
+_plt.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_line.restype=_ct.py_object
 
 _plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_psychrometry.restype=_ct.py_object
@@ -180,10 +183,10 @@ def histogram(
 	Plots histogram
 
 	## Input
-	data:	A variable
-	mode : density, frequency and relative frequency.
-	cumulative : True, cumulative distribution
-	breaks : Number of breaks or the break points, int/ndarray/list
+	data:	A variable \n
+	mode : density, frequency and relative frequency.\n
+	cumulative : True, cumulative distribution \n
+	breaks : Number of breaks or the break points, int/ndarray/list\n
 	title: Title of the chart
 	"""
 	return _plt.c_plot_histogram((),
@@ -191,6 +194,29 @@ def histogram(
 				"breaks":breaks, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
 
 
+
+def line(
+	y:list|_np.ndarray, 
+	labels:list=None, 
+	name:str=None, 
+	title:str=None, 
+	type=Line_Type.CLUSTER, 
+	marker=None, 
+	line=None, 
+	hwnd=None):
+	"""
+	Plots line chart
+
+	## Input:
+	y : Numeric data \n
+	labels : Category labels \n
+	name:	Name of the series \n
+	type:	clustered, stacked and 100% stacked \n
+	title: Title of the chart
+	"""
+	return _plt.c_plot_line((),
+			 {"y":y, "labels":labels, "name":name, "title":title, 
+     			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
 
 
 def psychrometry(Tdb:list=None, RH:list=None, P=101325):
