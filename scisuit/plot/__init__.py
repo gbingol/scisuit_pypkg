@@ -6,6 +6,7 @@ from ..util import parent_path as _parent_path
 from .consts import Bar_Type, Line_Type, Histogram_Mode, Color
 
 
+
 #TODO: this is debug version, change it during release
 _path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
 _plt = _ct.PyDLL(str(_path))
@@ -28,6 +29,9 @@ _plt.c_plot_line.restype=_ct.py_object
 
 _plt.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_pie.restype=_ct.py_object
+
+_plt.c_plot_piepie.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_piepie.restype=_ct.py_object
 
 _plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_psychrometry.restype=_ct.py_object
@@ -110,14 +114,14 @@ def close(hwnd):
 #---------------------------------------------------------------------------
 
 def bar(
-		height:list, 
-		labels=None, 
-		name=None, 
-		title=None, 
-		type = Bar_Type.CLUSTER,
-		fill=None, 
-		line=None, 
-		hwnd=None):
+	height:list, 
+	labels=None, 
+	name=None, 
+	title=None, 
+	type = Bar_Type.CLUSTER,
+	fill=None, 
+	line=None, 
+	hwnd=None):
 	"""
 	Plots bar chart
 
@@ -135,14 +139,14 @@ def bar(
 
 
 def barh(
-		width:list, 
-		labels=None, 
-		name=None, 
-		title=None, 
-		type=Bar_Type.CLUSTER, 
-		fill=None, 
-		line=None, 
-		hwnd=None):
+	width:list, 
+	labels=None, 
+	name=None, 
+	title=None, 
+	type=Bar_Type.CLUSTER, 
+	fill=None, 
+	line=None, 
+	hwnd=None):
 	"""
 	Plots horizontal bar chart
 
@@ -159,7 +163,13 @@ def barh(
 
 
 
-def boxplot(data:list, name:str=None, title:str=None, fill:dict=None, line:dict=None, hwnd=None):
+def boxplot(
+	data:list|_np.ndarray, 
+	name:str=None, 
+	title:str=None, 
+	fill:dict=None, 
+	line:dict=None, 
+	hwnd=None):
 	"""
 	Plots box-whisker chart and returns a window handle.
 
@@ -248,6 +258,40 @@ def pie(
      				"explode":explode, "startangle":startangle, "legend":legend, "hwnd":hwnd})
 
 
+
+def piepie(
+	data:list|_np.ndarray, 
+	title:str=None, 
+	labels:list=None, 
+	groups:list=None, 
+	lcolors:list=None, 
+	rcolors:list=None, 
+	lexplode:list|int=None, 
+	rexplode:list|int=None,
+	legend=True, 
+	hwnd=None):
+	"""
+	Plots pie pie chart
+
+	## Inputs:
+	data : Data of individual slices \n
+	title: Title of the chart \n
+	labels: Label of individual slices \n
+	groups: group membership only containing two unique numbers, i.e. [1, 2, 2, 1] \n
+	lcolors: Color of individual slices at the left pie \n
+	rcolors: If exists, color of individual slices at the right pie \n
+	lexplode: Explosion level of left pie \n
+	rexplode: If exists, explosion level of right pie \n
+	legend: Whether to show legend or not \n
+	"""
+	return _plt.c_plot_piepie((),
+			{"data":data, "title":title, "labels":labels, 
+       		"groups":groups, "lcolors":lcolors, "rcolors":rcolors, 
+			"lexplode":lexplode, "rexplode":rexplode,
+			"legend":legend, "hwnd":hwnd})
+
+
+
 def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	"""
 	Plots psychromety chart.
@@ -262,10 +306,19 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 
 
 
-def scatter(y, x:list=None, name:str=None, title:str=None, 
-	    xlab:str=None, ylab:str=None, smooth:bool=False, 
-	    bubble:dict=None, 
-	    marker:dict=None, line:dict=None, trendline:dict=None, hwnd=None):
+def scatter(
+		y:list|_np.ndarray, 
+		x:list|_np.ndarray=None, 
+		name:str=None, 
+		title:str=None, 
+		xlab:str=None, 
+		ylab:str=None, 
+		smooth:bool=False, 
+		bubble:dict=None, 
+		marker:dict=None, 
+		line:dict=None, 
+		trendline:dict=None, 
+		hwnd=None):
 	"""
 	Plot scatter charts and returns a window handle
 
