@@ -1,6 +1,11 @@
-from enum import Enum
+from enum import Enum, IntEnum
 
-class Colors(Enum):
+
+class StrEnum(str, Enum):
+	pass
+
+
+class Color(StrEnum):
 	"""
 	Colors with corresponding RGB values
 	"""
@@ -39,7 +44,7 @@ class Colors(Enum):
 	INDIGO="75 0 130"
 
 
-class Fill(Enum):
+class Fill_Style(IntEnum):
 	"""
 	Fill styles
 	"""
@@ -54,7 +59,7 @@ class Fill(Enum):
 
 
 
-class Line(Enum):
+class Line_Style(IntEnum):
 	"""
 	Line styles
 	"""
@@ -67,7 +72,13 @@ class Line(Enum):
 
 
 
-class Bar_Type(Enum):
+class Bar_Type(StrEnum):
 	CLUSTER = "c"
 	STACKED = "s"
 	PERCENTSTK = "%"
+
+
+class Histogram_Mode(StrEnum):
+	DENSITY = "d"
+	FREQUENCY = "f"
+	RELFREQUENCY = "r"
