@@ -8,118 +8,46 @@ from .enums import Bar_Type, Line_Type, Histogram_Mode
 
 #TODO: this is debug version, change it during release
 _path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
-_plt = _ct.PyDLL(str(_path))
+pltdll = _ct.PyDLL(str(_path))
 
 
-_plt.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_bar.restype=_ct.py_object
+pltdll.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_bar.restype=_ct.py_object
 
-_plt.c_plot_barh.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_barh.restype=_ct.py_object
+pltdll.c_plot_barh.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_barh.restype=_ct.py_object
 
-_plt.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_boxplot.restype=_ct.py_object
+pltdll.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_boxplot.restype=_ct.py_object
 
-_plt.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_histogram.restype=_ct.py_object
+pltdll.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_histogram.restype=_ct.py_object
 
-_plt.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_line.restype=_ct.py_object
+pltdll.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_line.restype=_ct.py_object
 
-_plt.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_pie.restype=_ct.py_object
+pltdll.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_pie.restype=_ct.py_object
 
-_plt.c_plot_piepie.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_piepie.restype=_ct.py_object
+pltdll.c_plot_piepie.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_piepie.restype=_ct.py_object
 
-_plt.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_psychrometry.restype=_ct.py_object
+pltdll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_psychrometry.restype=_ct.py_object
 
-_plt.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_qqnorm.restype=_ct.py_object
+pltdll.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_qqnorm.restype=_ct.py_object
 
-_plt.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_qqplot.restype=_ct.py_object
+pltdll.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_qqplot.restype=_ct.py_object
 
-_plt.c_plot_quiver.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_quiver.restype=_ct.py_object
+pltdll.c_plot_quiver.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_quiver.restype=_ct.py_object
 
-_plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
-_plt.c_plot_scatter.restype=_ct.py_object
-
-
-
-_plt.c_plot_app.argtypes = []
-_plt.c_plot_app.restype=_ct.py_object
-
-_plt.c_plot_mainloop.argtypes = [_ct.c_bool]
-_plt.c_plot_mainloop.restype=_ct.c_bool
-
-_plt.c_plot_ismainlooprunning.argtypes = []
-_plt.c_plot_ismainlooprunning.restype=_ct.c_bool
-
-_plt.c_plot_exitmainloop.argtypes = []
-_plt.c_plot_exitmainloop.restype=_ct.c_bool
-
-_plt.c_plot_close.argtypes = [_ct.py_object]
-_plt.c_plot_close.restype=_ct.c_bool
+pltdll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
+pltdll.c_plot_scatter.restype=_ct.py_object
 
 
-
-
-
-#---------------------------------------------------------------
-
-def app():
-	"""
-	Initiates a GUI application
-	"""
-	#IMPORTANT: if not set colors/text of plots looks blurry
-	_ct.windll.shcore.SetProcessDpiAwareness(True)
-	return _plt.c_plot_app()
-
-
-def mainloop(shared=False):
-	"""
-	Once a GUI application is initiated, starts the main loop \n
-	shared: True, if there is any other application using a main loop \n
-
-	returns True if mainloop is started
-	"""
-	return _plt.c_plot_mainloop(_ct.c_bool(shared))
-
-
-def ismainlooprunning():
-	"""
-	Is there any main loop initiated by scisuit plot library running
-	"""
-	return _plt.c_plot_ismainlooprunning()
-
-
-def exitmainloop():
-	"""
-	Exits the main loop inititated by scisuit plot library and 
-	closes all the associated windows. \n
-
-	returns True if main loop is exited.
-	"""
-	return _plt.c_plot_exitmainloop()
-
-
-def close(hwnd):
-	"""
-	Closes the window with the given window handle \n
-	hwnd: Window handle \n
-
-	returns True if the window is closed
-	"""
-	return _plt.c_plot_close(hwnd)
-	
-
-
-
-
-#---------------------------------------------------------------------------
 
 def bar(
 	height:list, 
@@ -140,7 +68,7 @@ def bar(
 	type: clustered, stacked and 100% stacked \n
 	title: Title of the chart
 	"""
-	return _plt.c_plot_bar((),
+	return pltdll.c_plot_bar((),
 			{"height":height, "labels":labels, "name":name, "title":title, "type":type, 
     			"fill":fill, "line":line, "hwnd":hwnd})
 
@@ -165,7 +93,7 @@ def barh(
 	type: clustered, stacked and 100% stacked.\n
 	title: Title of the chart
 	"""
-	return _plt.c_plot_barh((),
+	return pltdll.c_plot_barh((),
 			{"width":width, "labels":labels, "name":name, "title":title, "type":type, 
     			"fill":fill, "line":line, "hwnd":hwnd})
 
@@ -186,7 +114,7 @@ def boxplot(
 	name:	Name of the series \n
 	title: Title of the chart 
 	"""
-	return _plt.c_plot_boxplot((),
+	return pltdll.c_plot_boxplot((),
 			{"data":data, "name":name, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
 
 
@@ -210,7 +138,7 @@ def histogram(
 	breaks : Number of breaks or the break points, int/ndarray/list\n
 	title: Title of the chart
 	"""
-	return _plt.c_plot_histogram((),
+	return pltdll.c_plot_histogram((),
 			    {"data":data, "mode":mode, "cumulative":cumulative, 
 				"breaks":breaks, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
 
@@ -235,7 +163,7 @@ def line(
 	type:	clustered, stacked and 100% stacked \n
 	title: Title of the chart
 	"""
-	return _plt.c_plot_line((),
+	return pltdll.c_plot_line((),
 			 {"y":y, "labels":labels, "name":name, "title":title, 
      			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
 
@@ -261,7 +189,7 @@ def pie(
 	startangle:	Start angle of first slice \n
 	legend: Whether to show legend or not
 	"""
-	return _plt.c_plot_pie((),
+	return pltdll.c_plot_pie((),
 				{"data":data, "title":title, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle, "legend":legend, "hwnd":hwnd})
 
@@ -292,7 +220,7 @@ def piepie(
 	rexplode: If exists, explosion level of right pie \n
 	legend: Whether to show legend or not \n
 	"""
-	return _plt.c_plot_piepie((),
+	return pltdll.c_plot_piepie((),
 			{"data":data, "title":title, "labels":labels, 
        		"groups":groups, "lcolors":lcolors, "rcolors":rcolors, 
 			"lexplode":lexplode, "rexplode":rexplode,
@@ -309,7 +237,7 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	RH: A list in increasing order containing the requested relative humidity (%) lines \n
 	P: Absolute pressure (Pa)
 	"""
-	return _plt.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
+	return pltdll.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
 
 
@@ -332,7 +260,7 @@ def qqnorm(
 		ylab: Label of y-axis \n
 		show: Whether to show theoretical line or not 
 		"""
-		return _plt.c_plot_qqnorm((),
+		return pltdll.c_plot_qqnorm((),
 			{"data":data, "title":title, "xlab":xlab, "ylab":ylab, 
 			"show":show, "line":line, "marker":marker, "hwnd":hwnd} )
 
@@ -355,7 +283,7 @@ def qqplot(
 	xlab: Label of x-axis \n
 	ylab: Label of y-axis
 	"""
-	return _plt.c_plot_qqplot((),
+	return pltdll.c_plot_qqplot((),
 			{"x":x, "y":y, "title":title, 
 			"xlab":xlab, "ylab":ylab, "marker":marker, "hwnd":hwnd})
 
@@ -381,7 +309,7 @@ def quiver(
 	xlab: Label of x-axis \n
 	ylab: Label of y-axis
 	"""
-	return _plt.c_plot_quiver((),
+	return pltdll.c_plot_quiver((),
 			{"x":x, "y":y,"u":u, "v":v, "scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
 
 
@@ -436,6 +364,6 @@ def scatter(
 	size:	size data (list), color: color (str), \n
 	mode: "A" area "W" diameter, scale: size scale (0, 200]
 	"""
-	return _plt.c_plot_scatter((), 
+	return pltdll.c_plot_scatter((), 
 		{'y':y ,"x":x, "name":name, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
 		"bubble":bubble, "marker":marker, "line":line, "trendline":trendline, "hwnd":hwnd})
