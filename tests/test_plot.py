@@ -13,7 +13,19 @@ import numpy as np
 
 plt.app()
 
+x=np.arange(-3.0, 3.0, 0.5)
+y=np.arange(-1.0, 5.0, 0.5)
+X, Y = np.meshgrid(x,y)
 
+#V= (u, v) = (0.5+0.8x)i + (1.5-0.8y)j
+U= 0.5 + 0.8*X
+V=1.5 - 0.8*Y
+
+#without scaling
+plt.quiver(X,Y, U, V)
+
+#with scaling
+plt.quiver(X,Y, U, V, scale = True)
 
 
 plt.mainloop()
@@ -134,6 +146,31 @@ plt.qqnorm(x)
 marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size': 5}
 plt.qqnorm(x, marker=marker)
 """
+
+
+#--------------------------------------------------------------
+
+
+"""
+Quiver chart
+
+x=np.arange(-3.0, 3.0, 0.5)
+y=np.arange(-1.0, 5.0, 0.5)
+X, Y = np.meshgrid(x,y)
+
+#V= (u, v) = (0.5+0.8x)i + (1.5-0.8y)j
+U= 0.5 + 0.8*X
+V=1.5 - 0.8*Y
+
+#without scaling
+plt.quiver(X,Y, U, V)
+
+#with scaling
+plt.quiver(X,Y, U, V, scale = True)
+
+"""
+
+
 
 
 #-----------------------------------------------------------------

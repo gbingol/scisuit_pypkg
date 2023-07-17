@@ -41,6 +41,9 @@ _plt.c_plot_qqnorm.restype=_ct.py_object
 _plt.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_qqplot.restype=_ct.py_object
 
+_plt.c_plot_quiver.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_quiver.restype=_ct.py_object
+
 _plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_scatter.restype=_ct.py_object
 
@@ -356,6 +359,30 @@ def qqplot(
 			{"x":x, "y":y, "title":title, 
 			"xlab":xlab, "ylab":ylab, "marker":marker, "hwnd":hwnd})
 
+
+
+def quiver(
+		x:_np.ndarray, 
+		y:_np.ndarray, 
+		u:_np.ndarray, 
+		v:_np.ndarray, 
+		scale=False, 
+		title:str = None, 
+		xlab:str = None, 
+		ylab:str = None):
+	""""
+	Plots quiver chart
+
+	## Input:
+	x, y: (x,y) location, 2D ndarray \n
+	u, v: length in x and y directions, 2D ndarray \n
+	scale: Whether to scale the length of the arrows \n
+	title: Title of the chart \n
+	xlab: Label of x-axis \n
+	ylab: Label of y-axis
+	"""
+	return _plt.c_plot_quiver((),
+			{"x":x, "y":y,"u":u, "v":v, "scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
 
 
 def scatter(
