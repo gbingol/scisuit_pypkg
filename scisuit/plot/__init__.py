@@ -385,6 +385,28 @@ def quiver(
 			{"x":x, "y":y,"u":u, "v":v, "scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
 
 
+
+def dirfield(x, y, slope):
+	"""
+	Plots the direction field for a given function f=dy/dx \n
+
+	## Input
+	x, y: 2D numpy array (after using meshgrid) \n
+	slope: 2D array resulting from evaluation of f=dy/dx, first order ODE
+	"""
+
+	# angle of inclination
+	t = _np.arctan(slope)
+
+	# xy-components of arrow
+	dx = _np.cos(t)
+	dy = _np.sin(t); 
+
+	#call quiver to visualize   
+	quiver(x, y, dx, dy)
+
+
+
 def scatter(
 		y:list|_np.ndarray, 
 		x:list|_np.ndarray=None, 

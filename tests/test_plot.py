@@ -13,19 +13,14 @@ import numpy as np
 
 plt.app()
 
-x=np.arange(-3.0, 3.0, 0.5)
-y=np.arange(-1.0, 5.0, 0.5)
-X, Y = np.meshgrid(x,y)
+t=np.arange(0.0, 2.0, 0.2)
+y=np.arange(-5.0, 0.0, 0.2)
 
-#V= (u, v) = (0.5+0.8x)i + (1.5-0.8y)j
-U= 0.5 + 0.8*X
-V=1.5 - 0.8*Y
+t, y = np.meshgrid(t,y) 
+ 
+f1= 4-t+2*y
 
-#without scaling
-plt.quiver(X,Y, U, V)
-
-#with scaling
-plt.quiver(X,Y, U, V, scale = True)
+plt.dirfield(t,y,f1) 
 
 
 plt.mainloop()
@@ -148,8 +143,21 @@ plt.qqnorm(x, marker=marker)
 """
 
 
-#--------------------------------------------------------------
+"""
+#QQ Plot
 
+treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+
+plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment")
+
+marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size':5}
+plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment", marker = marker)
+"""
+
+
+
+#--------------------------------------------------------------
 
 """
 Quiver chart
@@ -171,16 +179,16 @@ plt.quiver(X,Y, U, V, scale = True)
 """
 
 
-
-
-#-----------------------------------------------------------------
-
 """
-treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
-control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+#Direction field
 
-plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment")
+t=np.arange(0.0, 2.0, 0.2)
+y=np.arange(-5.0, 0.0, 0.2)
 
-marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size':5}
-plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment", marker = marker)
+t, y = np.meshgrid(t,y) 
+ 
+f1= 4-t+2*y
+
+plt.dirfield(t,y,f1) 
+
 """
