@@ -16,7 +16,6 @@ plt.app()
 
 
 
-
 plt.mainloop()
 
 
@@ -100,6 +99,7 @@ plt.pie(data, startangle=45)
 """
 
 
+#----------------------------------------------------------------------
 
 """
 # Pie of Pie Chart
@@ -120,6 +120,8 @@ plt.piepie(data, groups=groups, lcolors = ["255 51 153"], rcolors=["153 153 0", 
 """
 
 
+#----------------------------------------------------------------
+
 """
 #QQ Norm 
 
@@ -131,4 +133,17 @@ plt.qqnorm(x)
 #Marker specified
 marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size': 5}
 plt.qqnorm(x, marker=marker)
+"""
+
+
+#-----------------------------------------------------------------
+
+"""
+treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+
+plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment")
+
+marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size':5}
+plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment", marker = marker)
 """

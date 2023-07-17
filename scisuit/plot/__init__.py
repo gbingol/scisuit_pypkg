@@ -38,6 +38,9 @@ _plt.c_plot_psychrometry.restype=_ct.py_object
 _plt.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_qqnorm.restype=_ct.py_object
 
+_plt.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
+_plt.c_plot_qqplot.restype=_ct.py_object
+
 _plt.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 _plt.c_plot_scatter.restype=_ct.py_object
 
@@ -329,6 +332,29 @@ def qqnorm(
 		return _plt.c_plot_qqnorm((),
 			{"data":data, "title":title, "xlab":xlab, "ylab":ylab, 
 			"show":show, "line":line, "marker":marker, "hwnd":hwnd} )
+
+
+
+def qqplot(
+		x:list|_np.ndarray,
+		y:list|_np.ndarray,
+		title:str = None, 
+		xlab:str=None, 
+		ylab:str=None, 
+		marker=None, 
+		hwnd=None):
+	"""
+	Plots quantile-quantile chart using two data-sets (x,y)
+
+	## Input
+	x, y: Data \n
+	title: title of the chart \n
+	xlab: Label of x-axis \n
+	ylab: Label of y-axis
+	"""
+	return _plt.c_plot_qqplot((),
+			{"x":x, "y":y, "title":title, 
+			"xlab":xlab, "ylab":ylab, "marker":marker, "hwnd":hwnd})
 
 
 
