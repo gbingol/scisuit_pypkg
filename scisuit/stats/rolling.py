@@ -47,8 +47,8 @@ class rolling:
 
 	def get(self):
 		"""
-		When mean, median, min, max member funcs do not meet the purpose.<br>
-		To process rolling windows data (2D list) manually. <br>
+		When mean, median, min, max member funcs do not meet the purpose.\n
+		To process rolling windows data (2D list) manually. n
 		get()->(list, 2D list)
 		"""
 		return self._m_X, self._m_Windows

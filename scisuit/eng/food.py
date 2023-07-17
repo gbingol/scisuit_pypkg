@@ -10,9 +10,12 @@ class Food:
 
 def Cp_Siebel(food:Food, Tfreezing = -1.7)->float:
 	"""
-	returns kJ/kg°C <br>
-	Tfreezing = -1.7 is the default freezing temperature<br>
+	returns kJ/kg°C \n
 
+	## Input:
+	Tfreezing = -1.7 is the default freezing temperature
+
+	## Reference:
 	Siebel, E (1892). Specific heats of various products. Ice and Refrigeration, 2, 256-257.
 	"""
 	Fat = food.Lipid
@@ -35,7 +38,9 @@ def Cp_Siebel(food:Food, Tfreezing = -1.7)->float:
 
 def Cp_Heldman(food:Food):
 	"""
-	returns kJ/kg°C <br>
+	returns kJ/kg°C 
+
+	## Reference:
 	Heldman, DR (1975). Food Process Engineering. Westport, CT: AVI 
 	"""
 	Fat = food.Lipid
@@ -49,8 +54,9 @@ def Cp_Heldman(food:Food):
 
 def Cp_Chen(food:Food)->float:
 	"""
-	returns kJ/kg°C <br>
-	specific heat of an unfrozen food <br>
+	specific heat of an unfrozen food returns kJ/kg°C \n
+
+	## Reference:
 	Chen CS (1985). Thermodynamic Analysis of the Freezing and Thawing of Foods: 
 	Enthalpy and Apparent Specific Heat. Food Science, 50(4), 1158-1162
 	"""
@@ -63,8 +69,10 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 	"""
 	Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
+	## Reference:
 	2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
 
+	## Notes:
 	If foods current temperature smaller than Tfreezing it will 
 	compute the enthalpy for frozen foods.
 	
@@ -136,8 +144,8 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 
 def aw_FerroFontan_Chirife_Boquet(food:Food)->float:
 	"""
-	CHO is considered as fructose
-	protein is considered as alanine
+	CHO is considered as fructose \n
+	protein is considered as alanine \n
 	lipid is considered as glycerol
 	"""
 	MW_CHO = 180.16

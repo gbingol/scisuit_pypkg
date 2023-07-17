@@ -43,8 +43,7 @@ def FitZeroIntercept(yobs:np.ndarray, factor:np.ndarray):
 
 class linregressResult:
 	"""
-	Do NOT create an instance of this class directly <br>
-
+	Do NOT create an instance of this class directly \n
 	An instance is returned by simple_linregress or multiple_linregress classes' summary methods
 	"""
 	def __init__(self, Dict) -> None:
@@ -81,8 +80,7 @@ class linregressResult:
 	@property
 	def intercept(self):
 		"""
-		returns dictionary with keys: <br>
-		coeff, pvalue, tvalue, SE, CILow, CIHigh
+		returns {coeff, pvalue, tvalue, SE, CILow, CIHigh}
 		"""
 		if(len(self.m_Dict["CoefStats"])>1):
 			return self.m_Dict["CoefStats"][0]
@@ -92,17 +90,15 @@ class linregressResult:
 	@property
 	def ANOVA(self):
 		"""
-		returns dictionary with keys: <br>
-		DF_Residual, SS_Residual, MS_Residual, DF_Regression, SS_Regression, MS_Regression <br>
-		SS_Total, Fvalue, pvalue
+		returns {DF_Residual, SS_Residual, MS_Residual, DF_Regression, SS_Regression, MS_Regression 
+		SS_Total, Fvalue, pvalue}
 		"""
 		return self.m_Dict["ANOVA"]
 
 	@property
 	def coeffstat(self):
 		"""
-		returns a list containing dictionary with keys: <br>
-		coeff, pvalue, tvalue, SE, CILow, CIHigh
+		{coeff, pvalue, tvalue, SE, CILow, CIHigh}
 		"""
 		return self.m_Dict["CoefStats"]
 
@@ -125,8 +121,7 @@ class simple_linregress:
 
 	def compute(self)->list:
 		"""
-		returns a list containing <br>
-		slope, [intercept] and must be called before summary()
+		returns [slope, [intercept]] and must be called before summary()
 		"""
 		if(self.m_intercept):
 			self.m_coeffs = np.polyfit(self.m_factor, self.m_yobs, 1)

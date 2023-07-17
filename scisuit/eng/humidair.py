@@ -5,9 +5,10 @@ from .._ctypeslib import core as _ctcore
 
 class PsychrometryResult:
 	"""
-	<p>Computation results of psychrometry class. </p>
+	Computation results of psychrometry class.
 
-	>>result = psy.compute() <br>
+	## Example:
+	>>result = psy.compute() \n
 	>>result.P #access to pressure
 	"""
 

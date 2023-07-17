@@ -370,18 +370,19 @@ def _GetFieldNames(connection, TableName: str)->list:
 
 def _searchOrderedTable(connection, TableName:str, PropertyName:str, QueryValue:float, Sort:bool = True)->dict:
 	"""
-		TableName: Database table name where uniquely named properties are <br>
-		PropertyName: Name of the property corresponding to fieldname in the table <br>
-		QueryValue: Value at which properties are sought after <br>
-		Sort: Sort the table based on the property name in ascending order 
-		(if multiple queries are performed on the same property, set Sort to False for efficiency )
-		
-		--Table must be in the form of, for example <br>
-		P	T	s	vf <br>
-		50	20	2	0.2 <br>
-		70	25	3	0.8 <br>
-		
-		if we are after properties at T=22, then returns a dict with keys P, s corresponding to T=22`
+	## Input:
+	TableName: Database table name where uniquely named properties are \n
+	PropertyName: Name of the property corresponding to fieldname in the table \n
+	QueryValue: Value at which properties are sought after \n
+	Sort: Sort the table based on the property name in ascending order \n
+	(if multiple queries are performed on the same property, set Sort to False for efficiency )\n \n
+
+	--Table must be in the form of, for example \n
+	P	T	s	vf \n
+	50	20	2	0.2 \n
+	70	25	3	0.8 \n
+	
+	if we are after properties at T=22, then returns a dict with keys P, s corresponding to T=22`
 	"""
 	cursor = connection.cursor() 
 	AllFieldNames = _GetFieldNames(connection, TableName)
