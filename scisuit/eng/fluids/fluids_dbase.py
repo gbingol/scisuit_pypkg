@@ -1,7 +1,7 @@
 import sqlite3 as _sql
 
-from ..util import parent_path as _parent_path
-from .. import linearinterp as _linearinterp
+from ...util import parent_path as _parent_path
+from ... import linearinterp as _linearinterp
 
 
 __all__ = ['ThermoPhysical', 'SaturatedRefrigerant', 'SuperHeatedRefrigerant']

@@ -2,7 +2,7 @@ import wx
 
 from ..util import parent_path as _parent_path
 from ..wxpy import NumTextCtrl, makeicon
-from ..eng.fluids_dbase import Refrigerant, SaturatedRefrigerant, SuperHeatedRefrigerant, ThermoPhysical
+from ..eng.fluids.fluids_dbase import Refrigerant, SaturatedRefrigerant, SuperHeatedRefrigerant, ThermoPhysical
 
 
 class pnlRefrigerantSaturated ( wx.Panel ):

@@ -1,5 +1,5 @@
 
-from .._ctypeslib import core as _ctcore
+from ..._ctypeslib import core as _ctcore
 
 
 
