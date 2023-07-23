@@ -28,10 +28,10 @@ def cumtrapz(x:list|_np.ndarray, y:list|_np.ndarray)->list:
 		b = x[i + 1]
 
 		if _math.isclose(b, a, abs_tol = 1E-5):
-			raise ValueError("X data contains successive entries whose difference is smaller than 1E-5")
+			raise ValueError("|X(i+1)-X(i)|<1E-5")
 
 		if (b < a):
-			raise ValueError("X data is not sorted in ascending order.")
+			raise ValueError("X(i+1) > X(i) expected.")
 
 		f_a = y[i]
 		f_b = y[i + 1]
