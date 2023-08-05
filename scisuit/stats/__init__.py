@@ -14,6 +14,7 @@ def qbinom(p, size:int, prob:float):
 	return _core.c_stat_qbinom(p, _ct.c_int(size), _ct.c_double(prob))
 
 
+#-----------------------------
 def df(x, df1:int, df2:int):
 	return _core.c_stat_df(x, _ct.c_int(df1), _ct.c_int(df2))
 
@@ -22,6 +23,13 @@ def pf(q, df1:int, df2:int):
 
 def qf(p, df1:int, df2:int):
 	return _core.c_stat_qf(p, _ct.c_int(df1), _ct.c_int(df2))
+
+
+#----------------------
+
+def dhyper(x, m:int, n:int, k:int):
+	return _core.c_stat_dhyper(x, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+
 
 #----------------
 def dnorm(x, mean=0.0, sd=1.0):

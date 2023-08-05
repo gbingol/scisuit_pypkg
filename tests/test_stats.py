@@ -8,6 +8,9 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+print(st.dhyper(x=3, m=10, n=4, k=5))
+
+"""
 print("*** Normal Distribution ***")
 
 #Compute density
@@ -30,6 +33,7 @@ print(st.dchisq(x=2, df=5))
 arr3 = np.array([0, 1, 2])
 print(st.dchisq(x=arr3, df=5))
 
+"""
 
 """
 from scisuit.stats import test_t

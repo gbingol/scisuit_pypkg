@@ -1,8 +1,8 @@
 import ctypes as _ct
 from ..util import parent_path as _parent_path
 
-
-_path = _parent_path(__file__, level=1) / "scisuit_core"
+#TODO: Change to release version
+_path = _parent_path(__file__, level=1) / "scisuit_core_d"
 core = _ct.PyDLL(str(_path))
 
 
@@ -86,6 +86,9 @@ core.c_stat_pnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 core.c_stat_pnorm.restype=_ct.py_object
 core.c_stat_qnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 core.c_stat_qnorm.restype=_ct.py_object
+
+core.c_stat_dhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
+core.c_stat_dhyper.restype=_ct.py_object
 
 
 core.c_stat_dpois.argtypes = [_ct.py_object, _ct.c_double]
