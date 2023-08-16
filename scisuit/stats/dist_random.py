@@ -32,6 +32,17 @@ def rf(n:int, df1, df2):
 
 	return _np.random.f(size=n, dfnum=df1, dfden=df2).tolist()
 
+def rhyper(nn:int, m:int, n:int, k:int):
+	"""
+	Draw samples from hypergeometric distribution
+	"""
+	assert nn>0 ,"nn>0 expected"
+	assert m>0, "m>0 expected"
+	assert n>0, "n>0 expected"
+	assert k>0, "k>0 expected"
+
+	return _np.random.hypergeometric(size=nn, ngood=m, nbad=n, nsample=k)
+
 
 def rnorm(n:int, mean=0.0, sd=1.0):
 	"""

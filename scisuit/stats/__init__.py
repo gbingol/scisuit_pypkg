@@ -30,6 +30,12 @@ def qf(p, df1:int, df2:int):
 def dhyper(x, m:int, n:int, k:int):
 	return _core.c_stat_dhyper(x, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
+def phyper(q, m:int, n:int, k:int):
+	return _core.c_stat_phyper(q, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+
+def qhyper(p, m:int, n:int, k:int):
+	return _core.c_stat_qhyper(p, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+
 
 #----------------
 def dnorm(x, mean=0.0, sd=1.0):

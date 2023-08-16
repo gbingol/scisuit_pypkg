@@ -10,6 +10,10 @@ import numpy as np
 
 print(st.dhyper(x=3, m=10, n=4, k=5))
 
+print(st.phyper(q=3, m=10, n=4, k=5))
+
+print(st.qhyper(p=[i*0.1 for i in range(10)], m=10, n=4, k=5))
+
 """
 print("*** Normal Distribution ***")
 
