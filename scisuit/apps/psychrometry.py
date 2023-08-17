@@ -8,9 +8,7 @@ from scisuit.wxpy import makeicon, NumTextCtrl
 
 
 
-
-
-class frmPsychrometry ( wx.Frame ):
+class Psychrometry ( wx.Frame ):
 
 	def __init__( self, parent = None, FileMenu = None ):
 		wx.Frame.__init__ ( self, 

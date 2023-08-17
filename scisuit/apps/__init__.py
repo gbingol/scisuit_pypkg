@@ -1,1 +1,1 @@
-from .frmpsychrometry import frmPsychrometry
+from .psychrometry import Psychrometry

@@ -6,17 +6,14 @@ sys.path.insert(0, os.getcwd())
 import wx
 import ctypes
 
-from scisuit.apps import frmPsychrometry, frmFluidProperties
+from scisuit.apps import Psychrometry
 
 #Important otherwise colors/text of app looks blurry
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
 app = wx.App()
 
-frm1 = frmPsychrometry()
+frm1 = Psychrometry()
 frm1.Show()
-
-frm2 = frmFluidProperties()
-frm2.Show()
 
 app.MainLoop()
