@@ -9,7 +9,7 @@ authors = [{ name="Gokhan Bingol", email="gbingol@sciencesuit.org" },]
 description = "Scientific Computing Package"
 readme = "README.md"
 requires-python = ">=3.7"
-dependencies = ["wxPython", ]
+dependencies = ["numpy", ]
 classifiers = [
     "Programming Language :: Python :: 3",
 	"Programming Language :: C++",
