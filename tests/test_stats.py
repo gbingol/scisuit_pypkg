@@ -8,11 +8,30 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+
+print(st.dgeom(x=3, prob=0.6))
+print(st.dgeom(x=[0,1,2,3], prob=0.6))
+
+print("-------------------")
+
+print(st.pgeom(q=3, prob=0.6))
+print(st.pgeom(q=[0,1,2,3], prob=0.6))
+
+print("-------------------")
+
+print(st.qgeom(p=0.5, prob=0.45))
+print(st.qgeom(p=[0,0.1,0.2,0.3, 0.5, 0.7], prob=0.45))
+
+
+"""
 print(st.dhyper(x=3, m=10, n=4, k=5))
 
 print(st.phyper(q=3, m=10, n=4, k=5))
 
 print(st.qhyper(p=[i*0.1 for i in range(10)], m=10, n=4, k=5))
+"""
+
+
 
 """
 print("*** Normal Distribution ***")
