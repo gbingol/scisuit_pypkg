@@ -1,4 +1,6 @@
+import numpy as _np
 import ctypes as _ct
+
 from .._ctypeslib import core as _core
 from dataclasses import dataclass as _dataclass    
 
@@ -29,14 +31,26 @@ def qf(p, df1:int, df2:int):
 
 #-------------------------
 
-def dgeom(x, prob:float):
+def dgeom(x:list|_np.ndarray, prob:float):
+	"""
+	x: Number of failures before success occurs.
+	prob: probability of success in each trial.
+	"""
 	return _core.c_stat_dgeom(x, _ct.c_double(prob))
 
 
-def pgeom(q, prob:float):
+def pgeom(q:list|_np.ndarray, prob:float):
+	"""
+	q: Number of failures before success occurs.
+	prob: probability of success in each trial.
+	"""
 	return _core.c_stat_pgeom(q, _ct.c_double(prob))
 
-def qgeom(p, prob:float):
+def qgeom(p:list|_np.ndarray, prob:float):
+	"""
+	p: probabilities
+	prob: probability of success in each trial.
+	"""
 	return _core.c_stat_qgeom(p, _ct.c_double(prob))
 
 
