@@ -80,12 +80,12 @@ core.c_stat_qf.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
 core.c_stat_qf.restype=_ct.py_object
 
 
-core.c_stat_dnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-core.c_stat_dnorm.restype=_ct.py_object
-core.c_stat_pnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-core.c_stat_pnorm.restype=_ct.py_object
-core.c_stat_qnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-core.c_stat_qnorm.restype=_ct.py_object
+core.c_stat_dgeom.argtypes = [_ct.py_object, _ct.c_double]
+core.c_stat_dgeom.restype=_ct.py_object
+core.c_stat_pgeom.argtypes =  [_ct.py_object, _ct.c_double]
+core.c_stat_pgeom.restype=_ct.py_object
+core.c_stat_qgeom.argtypes =  [_ct.py_object, _ct.c_double]
+core.c_stat_qgeom.restype=_ct.py_object
 
 core.c_stat_dhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
 core.c_stat_dhyper.restype=_ct.py_object
@@ -93,6 +93,14 @@ core.c_stat_phyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
 core.c_stat_phyper.restype=_ct.py_object
 core.c_stat_qhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
 core.c_stat_qhyper.restype=_ct.py_object
+
+
+core.c_stat_dnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_dnorm.restype=_ct.py_object
+core.c_stat_pnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_pnorm.restype=_ct.py_object
+core.c_stat_qnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_qnorm.restype=_ct.py_object
 
 
 core.c_stat_dpois.argtypes = [_ct.py_object, _ct.c_double]

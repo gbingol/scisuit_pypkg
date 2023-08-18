@@ -32,6 +32,17 @@ def rf(n:int, df1, df2):
 
 	return _np.random.f(size=n, dfnum=df1, dfden=df2).tolist()
 
+
+def rgeom(n:int, prob):
+	"""
+	Draw samples from geometric distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
+	return _np.random.geometric(size=n, p=prob).tolist()
+
+
 def rhyper(nn:int, m:int, n:int, k:int):
 	"""
 	Draw samples from hypergeometric distribution

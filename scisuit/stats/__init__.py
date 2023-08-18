@@ -3,6 +3,8 @@ from .._ctypeslib import core as _core
 from dataclasses import dataclass as _dataclass    
 
 
+
+
 def dbinom(x, size:int, prob:float):
 	return _core.c_stat_dbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
@@ -23,6 +25,19 @@ def pf(q, df1:int, df2:int):
 
 def qf(p, df1:int, df2:int):
 	return _core.c_stat_qf(p, _ct.c_int(df1), _ct.c_int(df2))
+
+
+#-------------------------
+
+def dgeom(x, prob:float):
+	return _core.c_stat_dgeom(x, _ct.c_double(prob))
+
+
+def pgeom(q, prob:float):
+	return _core.c_stat_pgeom(q, _ct.c_double(prob))
+
+def qgeom(p, prob:float):
+	return _core.c_stat_qgeom(p, _ct.c_double(prob))
 
 
 #----------------------
@@ -138,7 +153,7 @@ from .test_f import test_f, test_f_Result
 from .test_sign import test_sign, test_sign_Result
 from .test_t import test_t, test_t1_result, test_t2_result, test_tpaired_result
 
-from .dist_random import rbinom, rchisq, rf, rnorm, rpois, rt, runif
+from .dist_random import rbinom, rchisq, rf, rgeom, rhyper, rnorm, rpois, rt, runif
 
 
 
