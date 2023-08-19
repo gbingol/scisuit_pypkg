@@ -7,15 +7,44 @@ from dataclasses import dataclass as _dataclass
 
 
 
-def dbinom(x, size:int, prob:float):
+def dbinom(x:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_dbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
 
-def pbinom(q, size:int, prob:float):
+def pbinom(q:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_pbinom(q, _ct.c_int(size), _ct.c_double(prob))
 
-def qbinom(p, size:int, prob:float):
+def qbinom(p:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_qbinom(p, _ct.c_int(size), _ct.c_double(prob))
+
+
+#------------------------------
+
+def dnbinom(x:list|_np.ndarray, size:int, prob:float):
+	"""
+	x: quantiles
+	size: target for number of successful trials
+	prob: probability of success in each trial
+	"""
+	return _core.c_stat_dnbinom(x, _ct.c_int(size), _ct.c_double(prob))
+
+
+def pnbinom(q:list|_np.ndarray, size:int, prob:float):
+	"""
+	q: quantiles
+	size: target for number of successful trials
+	prob: probability of success in each trial
+	"""
+	return _core.c_stat_pnbinom(q, _ct.c_int(size), _ct.c_double(prob))
+
+def qnbinom(p:list|_np.ndarray, size:int, prob:float):
+	"""
+	p: probabilities
+	size: target for number of successful trials
+	prob: probability of success in each trial
+	"""
+	return _core.c_stat_qnbinom(p, _ct.c_int(size), _ct.c_double(prob))
+
 
 
 #-----------------------------

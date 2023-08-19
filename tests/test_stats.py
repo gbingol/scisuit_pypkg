@@ -9,6 +9,21 @@ import scisuit.stats as st
 import numpy as np
 
 
+print("\n *** Binomial Distribution ***")
+print(st.dbinom(x=2, size=5, prob=0.3))
+print(st.dbinom(x=[7, 8, 9], size=9, prob=0.94))
+
+print(st.qbinom(p=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], size=9, prob=0.65))
+
+print("\n *** Negative Binomial Distribution ***")
+print(st.dnbinom(x=2, size=5, prob=0.3))
+print(st.dnbinom(x=[7, 8, 9], size=9, prob=0.94))
+
+print(st.pnbinom(q=4, size=6, prob=0.8))
+
+print(st.qnbinom(p=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], size=9, prob=0.65))
+
+"""
 print(st.dgeom(x=3, prob=0.6))
 print(st.dgeom(x=[0,1,2,3], prob=0.6))
 
@@ -21,7 +36,7 @@ print("-------------------")
 
 print(st.qgeom(p=0.5, prob=0.45))
 print(st.qgeom(p=[0,0.1,0.2,0.3, 0.5, 0.7], prob=0.45))
-
+"""
 
 """
 print(st.dhyper(x=3, m=10, n=4, k=5))

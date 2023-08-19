@@ -64,6 +64,14 @@ core.c_stat_qbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
 core.c_stat_qbinom.restype=_ct.py_object
 
 
+core.c_stat_dnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
+core.c_stat_dnbinom.restype=_ct.py_object
+core.c_stat_pnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
+core.c_stat_pnbinom.restype=_ct.py_object
+core.c_stat_qnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
+core.c_stat_qnbinom.restype=_ct.py_object
+
+
 core.c_stat_dchisq.argtypes = [_ct.py_object, _ct.c_int]
 core.c_stat_dchisq.restype=_ct.py_object
 core.c_stat_pchisq.argtypes = [_ct.py_object, _ct.c_int]
