@@ -12,6 +12,17 @@ def rbinom(n:int, size, prob):
 	return _np.random.binomial(size=n, n=size, p=prob).tolist()
 
 
+def rnbinom(n:int, size, prob):
+	"""
+	Draw samples from negative binomial distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
+	return _np.random.negative_binomial(size=n, n=size, p=prob).tolist()
+
+
 def rchisq(n:int, df):
 	"""
 	Draw samples from Chi-Square distribution
