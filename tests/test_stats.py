@@ -8,6 +8,7 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+print(st.dnbinom(x=15-4, size=4, prob=0.2))
 
 print("\n *** Binomial Distribution ***")
 print(st.dbinom(x=2, size=5, prob=0.3))
