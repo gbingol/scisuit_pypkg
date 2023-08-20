@@ -22,7 +22,7 @@ def qbinom(p:list|_np.ndarray, size:int, prob:float):
 
 def dnbinom(x:list|_np.ndarray, size:int, prob:float):
 	"""
-	x: quantiles
+	x: quantiles representing number of failures
 	size: target for number of successful trials
 	prob: probability of success in each trial
 	"""
@@ -31,7 +31,7 @@ def dnbinom(x:list|_np.ndarray, size:int, prob:float):
 
 def pnbinom(q:list|_np.ndarray, size:int, prob:float):
 	"""
-	q: quantiles
+	q: quantiles representing number of failures
 	size: target for number of successful trials
 	prob: probability of success in each trial
 	"""
