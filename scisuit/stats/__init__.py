@@ -47,6 +47,33 @@ def qnbinom(p:list|_np.ndarray, size:int, prob:float):
 
 
 
+
+#------------------------------
+
+def dexp(x:list|_np.ndarray, rate = 1.0):
+	"""
+	x: quantiles representing number of failures
+	rate: 1/mean, where mean is the waiting time for the next event recurrence
+	"""
+	return _core.c_stat_dexp(x, _ct.c_double(rate))
+
+
+def pexp(q:list|_np.ndarray, rate = 1.0):
+	"""
+	q: quantiles representing number of failures
+	rate: 1/mean, where mean is the waiting time for the next event recurrence
+	"""
+	return _core.c_stat_pnbinom(q,  _ct.c_double(rate))
+
+def qnbinom(p:list|_np.ndarray, rate = 1.0):
+	"""
+	p: probabilities
+	rate: 1/mean, where mean is the waiting time for the next event recurrence
+	"""
+	return _core.c_stat_qnbinom(p,  _ct.c_double(rate))
+
+
+
 #-----------------------------
 def df(x, df1:int, df2:int):
 	return _core.c_stat_df(x, _ct.c_int(df1), _ct.c_int(df2))

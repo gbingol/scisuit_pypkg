@@ -80,6 +80,14 @@ core.c_stat_qchisq.argtypes = [_ct.py_object, _ct.c_int]
 core.c_stat_qchisq.restype=_ct.py_object
 
 
+core.c_stat_dexp.argtypes = [_ct.py_object, _ct.c_double]
+core.c_stat_dexp.restype=_ct.py_object
+core.c_stat_pexp.argtypes = [_ct.py_object, _ct.c_double]
+core.c_stat_pexp.restype=_ct.py_object
+core.c_stat_qexp.argtypes = [_ct.py_object, _ct.c_double]
+core.c_stat_qexp.restype=_ct.py_object
+
+
 core.c_stat_df.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
 core.c_stat_df.restype=_ct.py_object
 core.c_stat_pf.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
