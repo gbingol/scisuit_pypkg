@@ -63,14 +63,14 @@ def pexp(q:list|_np.ndarray, rate = 1.0):
 	q: quantiles
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
-	return _core.c_stat_pnbinom(q,  _ct.c_double(rate))
+	return _core.c_stat_pexp(q,  _ct.c_double(rate))
 
-def qnbinom(p:list|_np.ndarray, rate = 1.0):
+def qexp(p:list|_np.ndarray, rate = 1.0):
 	"""
 	p: probabilities
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
-	return _core.c_stat_qnbinom(p,  _ct.c_double(rate))
+	return _core.c_stat_qexp(p,  _ct.c_double(rate))
 
 
 

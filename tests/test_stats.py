@@ -8,6 +8,16 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+
+print(st.dexp(x=3, rate=0.2))
+print(st.pexp(q=3, rate=0.2))
+print(st.qexp(p=0.3, rate=0.2))
+
+print(st.dexp(x=[1,2,3], rate=0.2))
+print(st.pexp(q=[1,2,3], rate=0.2))
+print(st.qexp(p=[0.1, 0.2, 0.3], rate=0.2))
+
+"""
 print(st.dnbinom(x=15-4, size=4, prob=0.2))
 
 print("\n *** Binomial Distribution ***")
@@ -23,6 +33,8 @@ print(st.dnbinom(x=[7, 8, 9], size=9, prob=0.94))
 print(st.pnbinom(q=4, size=6, prob=0.8))
 
 print(st.qnbinom(p=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], size=9, prob=0.65))
+
+"""
 
 """
 print(st.dgeom(x=3, prob=0.6))
