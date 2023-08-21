@@ -33,6 +33,16 @@ def rchisq(n:int, df):
 	return _np.random.chisquare(size=n, df = df).tolist()
 
 
+def rexp(n:int, rate=1.0):
+	"""
+	Draw samples from exponential distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert rate>0, "rate>0 expected"
+
+	return _np.random.exponential(size=n, scale=1/rate).tolist()
+
+
 def rf(n:int, df1, df2):
 	"""
 	Draw samples from F distribution
