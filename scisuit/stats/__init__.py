@@ -87,6 +87,35 @@ def qf(p, df1:int, df2:int):
 
 #-------------------------
 
+def dgamma(x:list|_np.ndarray, shape:float, scale = 1.0):
+	"""
+	x: quantile	
+	shape: waiting time for the rth event to occur
+	scale: average waiting time for the next event recurrence
+	"""
+	return _core.c_stat_dgamma(x, _ct.c_double(shape), _ct.c_double(scale))
+
+
+def pgamma(q:list|_np.ndarray, shape:float, scale = 1.0):
+	"""
+	q: quantile
+	shape: waiting time for the rth event to occur
+	scale: average waiting time for the next event recurrence
+	"""
+	return _core.c_stat_pgamma(q, _ct.c_double(shape), _ct.c_double(scale))
+
+def qgamma(p:list|_np.ndarray, shape:float, scale = 1.0):
+	"""
+	p: probabilities
+	shape: waiting time for the rth event to occur
+	scale: average waiting time for the next event recurrence
+	"""
+	return _core.c_stat_qgamma(p, _ct.c_double(shape), _ct.c_double(scale))
+
+
+
+#-------------------------
+
 def dgeom(x:list|_np.ndarray, prob:float):
 	"""
 	x: Number of failures before success occurs.

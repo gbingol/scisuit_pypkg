@@ -54,6 +54,17 @@ def rf(n:int, df1, df2):
 	return _np.random.f(size=n, dfnum=df1, dfden=df2).tolist()
 
 
+def rexp(n:int, shape:float, scale=1.0):
+	"""
+	Draw samples from gamma distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert shape>0, "shape>0 expected"
+	assert scale>0, "scale>0 expected"
+
+	return _np.random.gamma(size=n, scale=scale, shape=shape).tolist()
+
+
 def rgeom(n:int, prob):
 	"""
 	Draw samples from geometric distribution

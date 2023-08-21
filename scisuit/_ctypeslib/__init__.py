@@ -96,6 +96,14 @@ core.c_stat_qf.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
 core.c_stat_qf.restype=_ct.py_object
 
 
+core.c_stat_dgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_dgamma.restype=_ct.py_object
+core.c_stat_pgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_pgamma.restype=_ct.py_object
+core.c_stat_qgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+core.c_stat_qgamma.restype=_ct.py_object
+
+
 core.c_stat_dgeom.argtypes = [_ct.py_object, _ct.c_double]
 core.c_stat_dgeom.restype=_ct.py_object
 core.c_stat_pgeom.argtypes =  [_ct.py_object, _ct.c_double]

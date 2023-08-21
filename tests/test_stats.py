@@ -8,7 +8,11 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+print(st.dgamma(x=4, scale=4, shape=3))
+print(st.pgamma(q = 3, shape = 10, scale = 0.25))
+print(st.qgamma(p =[0, 0.1, 0.2], shape = 10, scale = 0.25))
 
+"""
 print(st.dexp(x=3, rate=0.2))
 print(st.pexp(q=3, rate=0.2))
 print(st.qexp(p=0.3, rate=0.2))
@@ -16,6 +20,8 @@ print(st.qexp(p=0.3, rate=0.2))
 print(st.dexp(x=[1,2,3], rate=0.2))
 print(st.pexp(q=[1,2,3], rate=0.2))
 print(st.qexp(p=[0.1, 0.2, 0.3], rate=0.2))
+
+"""
 
 """
 print(st.dnbinom(x=15-4, size=4, prob=0.2))
