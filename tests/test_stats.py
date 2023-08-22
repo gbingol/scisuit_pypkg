@@ -8,9 +8,18 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as st
 import numpy as np
 
+
+N=1000
+x=st.rhyper(nn=1000, m=70, n=30, k=7)
+print(np.mean(x))
+
+
+"""
 print(st.dgamma(x=4, scale=4, shape=3))
 print(st.pgamma(q = 3, shape = 10, scale = 0.25))
 print(st.qgamma(p =[0, 0.1, 0.2], shape = 10, scale = 0.25))
+
+"""
 
 """
 print(st.dexp(x=3, rate=0.2))
