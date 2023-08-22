@@ -3,7 +3,7 @@ import numbers
 import numpy as np
 
 from . import pf
-
+from ..fitting import linearinterp
 
 
 __all__ = ['aov']
@@ -403,20 +403,6 @@ qdist099=[
 
 
 
-def Interpolation(x1, y1,x2,y2,val):
-	# Given 2 data points (x1,y1) and (x2,y2) we are looking for the y-value of the point x=val
-	if(x1==x2):
-		return y1 
-
-	if(abs(x1-val)<1E-6):
-		return y1 
-	
-	m = (y2 - y1) / (x2 - x1)
-	n = y2 - m * x2
-	
-	return m * val + n
-
-
 
 def qdist(alpha, k, df):
       """
@@ -430,4 +416,4 @@ def qdist(alpha, k, df):
       
       srd1, srd2 = qdist095[df][k], qdist099[df][k]
       
-      return Interpolation(0.95, srd1,0.99,srd2,alpha)
+      return linearinterp(0.95, srd1,0.99,srd2,alpha)
