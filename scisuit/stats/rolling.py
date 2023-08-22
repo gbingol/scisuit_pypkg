@@ -1,4 +1,4 @@
-from .._ctypeslib import core as _core
+from .._ctypeslib import coreDLL as _core
 
 import numpy as np
 

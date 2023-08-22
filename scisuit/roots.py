@@ -1,4 +1,4 @@
-from ._ctypeslib import core as _core
+from ._ctypeslib import coreDLL as _core
 import ctypes as _ct
 import numbers as _numbers
 import types as _types

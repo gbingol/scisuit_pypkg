@@ -1,7 +1,7 @@
 import numpy as _np
 import ctypes as _ct
 
-from .._ctypeslib import core as _core
+from .._ctypeslib import coreDLL as _core
 from dataclasses import dataclass as _dataclass    
 
 
