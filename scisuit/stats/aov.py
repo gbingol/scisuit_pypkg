@@ -2,7 +2,7 @@ import math
 import numbers
 import numpy as np
 
-from . import pf
+from .distributions import pf
 from ..fitting import linearinterp
 
 

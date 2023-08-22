@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-from . import pt, qt
+from .distributions import pt, qt
 
 from dataclasses import dataclass
 

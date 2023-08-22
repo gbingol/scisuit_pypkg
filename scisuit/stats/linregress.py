@@ -2,7 +2,7 @@ import math
 import numbers
 
 import numpy as np
-from ..stats import pf, pt, qt
+from .distributions import pf, pt, qt
 
 
 

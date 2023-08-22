@@ -3,7 +3,7 @@ import numpy as np
 
 from dataclasses import dataclass
 
-from . import pbinom, pnorm
+from .distributions import pbinom, pnorm
 
 
 __all__ = ['test_sign', 'test_sign_Result', 'CI_Result']
