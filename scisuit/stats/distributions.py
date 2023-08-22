@@ -6,19 +6,38 @@ from .._ctypeslib import coreDLL as _core
 # ----- Binomial Distribution  -------
 
 def dbinom(x:list|_np.ndarray, size:int, prob:float):
+	"""
+	size: number of trials
+	prob: probability of success in each trial
+	"""
 	return _core.c_stat_dbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
 
 def pbinom(q:list|_np.ndarray, size:int, prob:float):
+	"""
+	size: number of trials
+	prob: probability of success in each trial
+	"""
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
 	return _core.c_stat_pbinom(q, _ct.c_int(size), _ct.c_double(prob))
 
 def qbinom(p:list|_np.ndarray, size:int, prob:float):
+	"""
+	size: number of trials
+	prob: probability of success in each trial
+	"""
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
 	return _core.c_stat_qbinom(p, _ct.c_int(size), _ct.c_double(prob))
 	
 
-def rbinom(n:int, size, prob):
+def rbinom(n:int, size:int, prob:float):
 	"""
-	Draw samples from binomial distribution
+	size: number of trials
+	prob: probability of success in each trial
 	"""
 	assert n>0 ,"n>0 expected"
 	assert size>0, "size>0 expected"
@@ -37,6 +56,9 @@ def dnbinom(x:list|_np.ndarray, size:int, prob:float):
 	size: target for number of successful trials
 	prob: probability of success in each trial
 	"""
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
 	return _core.c_stat_dnbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
 
@@ -46,6 +68,9 @@ def pnbinom(q:list|_np.ndarray, size:int, prob:float):
 	size: target for number of successful trials
 	prob: probability of success in each trial
 	"""
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
 	return _core.c_stat_pnbinom(q, _ct.c_int(size), _ct.c_double(prob))
 
 def qnbinom(p:list|_np.ndarray, size:int, prob:float):
@@ -54,12 +79,16 @@ def qnbinom(p:list|_np.ndarray, size:int, prob:float):
 	size: target for number of successful trials
 	prob: probability of success in each trial
 	"""
+	assert size>0, "size>0 expected"
+	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
+
 	return _core.c_stat_qnbinom(p, _ct.c_int(size), _ct.c_double(prob))
 
 
 def rnbinom(n:int, size, prob):
 	"""
-	Draw samples from negative binomial distribution
+	size: target for number of successful trials
+	prob: probability of success in each trial
 	"""
 	assert n>0 ,"n>0 expected"
 	assert size>0, "size>0 expected"
@@ -73,17 +102,32 @@ def rnbinom(n:int, size, prob):
 # ----- Chi-Square Distribution  -------
 
 def dchisq(x, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+
 	return _core.c_stat_dchisq(x, _ct.c_int(df))
 
 def pchisq(q, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+	
 	return _core.c_stat_pchisq(q, _ct.c_int(df))
 
 def qchisq(p, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+	
 	return _core.c_stat_qchisq(p, _ct.c_int(df))
 
 def rchisq(n:int, df):
 	"""
-	Draw samples from Chi-Square distribution
+	df: degrees of freedom
 	"""
 	assert n>0 ,"n>0 expected"
 	assert df>0, "df>0 expected"
@@ -119,7 +163,7 @@ def qexp(p:list|_np.ndarray, rate = 1.0):
 
 def rexp(n:int, rate=1.0):
 	"""
-	Draw samples from exponential distribution
+	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
 	assert n>0 ,"n>0 expected"
 	assert rate>0, "rate>0 expected"
@@ -131,18 +175,40 @@ def rexp(n:int, rate=1.0):
 # ----- F Distribution  -------
 
 def df(x, df1:int, df2:int):
+	"""
+	df1: degrees of freedom, numerator
+	df2: degrees of freedom, denominator
+	"""
+	assert df1>0, "df1>0 expected"
+	assert df2>0, "df2>0 expected"
+
 	return _core.c_stat_df(x, _ct.c_int(df1), _ct.c_int(df2))
 
 def pf(q, df1:int, df2:int):
+	"""
+	df1: degrees of freedom, numerator
+	df2: degrees of freedom, denominator
+	"""
+	assert df1>0, "df1>0 expected"
+	assert df2>0, "df2>0 expected"
+
 	return _core.c_stat_pf(q, _ct.c_int(df1), _ct.c_int(df2))
 
 def qf(p, df1:int, df2:int):
+	"""
+	df1: degrees of freedom, numerator
+	df2: degrees of freedom, denominator
+	"""
+	assert df1>0, "df1>0 expected"
+	assert df2>0, "df2>0 expected"
+
 	return _core.c_stat_qf(p, _ct.c_int(df1), _ct.c_int(df2))
 
 
 def rf(n:int, df1, df2):
 	"""
-	Draw samples from F distribution
+	df1: degrees of freedom, numerator
+	df2: degrees of freedom, denominator
 	"""
 	assert n>0 ,"n>0 expected"
 	assert df1>0, "df1>0 expected"
@@ -234,18 +300,35 @@ def rgeom(n:int, prob):
 # ----- Hypergeometric Distribution  -------
 
 def dhyper(x, m:int, n:int, k:int):
+	"""
+	m: number of good samples in the urn
+	n: number of bad samples in the urn
+	k: samples drawn from the urn
+	"""
 	return _core.c_stat_dhyper(x, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 def phyper(q, m:int, n:int, k:int):
+	"""
+	m: number of good samples in the urn
+	n: number of bad samples in the urn
+	k: samples drawn from the urn
+	"""
 	return _core.c_stat_phyper(q, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 def qhyper(p, m:int, n:int, k:int):
+	"""
+	m: number of good samples in the urn
+	n: number of bad samples in the urn
+	k: samples drawn from the urn
+	"""
 	return _core.c_stat_qhyper(p, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 
 def rhyper(nn:int, m:int, n:int, k:int):
 	"""
-	Draw samples from hypergeometric distribution
+	m: number of good samples in the urn
+	n: number of bad samples in the urn
+	k: samples drawn from the urn
 	"""
 	assert nn>0 ,"nn>0 expected"
 	assert m>0, "m>0 expected"
@@ -260,17 +343,30 @@ def rhyper(nn:int, m:int, n:int, k:int):
 # ----- Normal Distribution  -------
 
 def dnorm(x, mean=0.0, sd=1.0):
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
 	return _core.c_stat_dnorm(x, _ct.c_double(mean), _ct.c_double(sd))
 
 def pnorm(q, mean=0.0, sd=1.0):
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
 	return _core.c_stat_pnorm(q, _ct.c_double(mean), _ct.c_double(sd))
 
 def qnorm(p, mean=0.0, sd=1.0):
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
 	return _core.c_stat_qnorm(p, _ct.c_double(mean), _ct.c_double(sd))
 
 def rnorm(n:int, mean=0.0, sd=1.0):
 	"""
-	Draw samples from normal distribution
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
 	"""
 	assert n>0 ,"n>0 expected"
 	assert sd>0, "sd>0 expected"
@@ -307,17 +403,32 @@ def rpois(n:int, mu = 1):
 # ----- t Distribution  -------
 
 def dt(x, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+
 	return _core.c_stat_dt(x, _ct.c_int(df))
 
 def pt(q, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+
 	return _core.c_stat_pt(q, _ct.c_int(df))
 
 def qt(p, df:int):
+	"""
+	df: degrees of freedom
+	"""
+	assert df>0, "df>0 expected"
+
 	return _core.c_stat_qt(p, _ct.c_int(df))
 
 def rt(n:int, df):
 	"""
-	Draw samples from standard Student's t distribution
+	df: degrees of freedom
 	"""
 	assert n>0 ,"n>0 expected"
 	assert df>0, "df1>0 expected"
@@ -343,18 +454,38 @@ def qsignrank(p, n:int):
 # ----- Uniform Distribution  -------
 
 def dunif(x, min=0.0, max=1.0):
+	"""
+	min: minimum bound
+	max: maximum bound
+	"""
+	assert max>min, "max>min expected"
+
 	return _core.c_stat_dunif(x, _ct.c_double(min), _ct.c_double(max))
 
 def punif(q, min=0.0, max=1.0):
+	"""
+	min: minimum bound
+	max: maximum bound
+	"""
+	assert max>min, "max>min expected"
+
 	return _core.c_stat_punif(q, _ct.c_double(min), _ct.c_double(max))
 
 def qunif(p, min=0.0, max=1.0):
+	"""
+	min: minimum bound
+	max: maximum bound
+	"""
+	assert max>min, "max>min expected"
+
 	return _core.c_stat_qunif(p, _ct.c_double(min), _ct.c_double(max))
 
 def runif(n:int, min=0.0, max=1.0):
 	"""
-	Draw samples from uniform distribution
+	min: minimum bound
+	max: maximum bound
 	"""
+	assert max>min, "max>min expected"
 	assert n>0 ,"n>0 expected"
 
 	return _np.random.uniform(size=n, low=min, high=max).tolist()
