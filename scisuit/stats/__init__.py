@@ -29,10 +29,9 @@ def test_norm_ad(x):
 
 
 
-
-from .aov import aov
-from .aov2 import aov2, aov2_results
 from .core import kurt, mode, rolling, sample, skew
+
+from .aov import aov, aov2, aov2_results
 from .linregress import linregress
 
 from .test_z import test_z, test_z_Result
