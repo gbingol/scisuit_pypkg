@@ -7,37 +7,18 @@ from dataclasses import dataclass as _dataclass
 
 
 
-
-#----------------------
-def moveavg(x, y, period=2):
-	return _core.c_stat_moveavg(x, y, _ct.c_int(period))
-
-def rolling(x, y, period=2):
-	return _core.c_stat_rolling(x, y, _ct.c_int(period))
-
-#----------------------
-
-@_dataclass
-class TestNormRes:
-	pval:float
-	A2:float
-
-def test_norm_ad(x):
-	pval, A2 = _core.c_stat_test_norm_ad(x)
-	return TestNormRes(pval, A2)
-
-
-
-
-from .core import kurt, mode, rolling, sample, skew
+from .core import kurt, mode, moveavg, rolling, sample, skew
 
 from .aov import aov, aov2, aov2_results
 from .linregress import linregress
 
-from .test_z import test_z, test_z_Result
-from .test_f import test_f, test_f_Result
-from .test_sign import test_sign, test_sign_Result
-from .test_t import test_t, test_t1_result, test_t2_result, test_tpaired_result
+from .test_basic import \
+	test_norm_ad, TestNormRes, \
+	test_f, test_f_Result, \
+	test_sign, test_sign_Result,\
+	test_t, test_t1_result, test_t2_result, test_tpaired_result, \
+	test_z, test_z_Result
+
 
 from .distributions import \
 	dbinom, pbinom, qbinom, rbinom, \

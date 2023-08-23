@@ -1,7 +1,10 @@
 import numpy as _np
 import math as _math
 
+import ctypes as _ct
 from .._ctypeslib import coreDLL as _core
+
+
 
 
 
@@ -59,6 +62,11 @@ def mode(y:_np.ndarray | list)->tuple:
 
 	return values[index].flatten().tolist(), int(_np.max(counts))
 
+
+
+
+def moveavg(x, y, period=2):
+	return _core.c_stat_moveavg(x, y, _ct.c_int(period))
 
 
 
