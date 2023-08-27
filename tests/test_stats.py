@@ -6,8 +6,38 @@ sys.path.insert(0, os.getcwd())
 
 
 import scisuit.stats as st
-import numpy as np
 
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+n=5
+
+#Generate 250 random numbers from uniform dist
+W = np.array(list( map( lambda _: st.runif(n=250) , [None]*n) )).transpose() #2D array (250*5)
+
+#For uniform distribution
+mu=0.5
+sigma=math.sqrt(1/12)
+
+#W1+W2+...
+x = np.sum(W, axis=1) #len=50
+
+
+#z-ratio
+z = (x - n*mu)/(math.sqrt(n)*sigma)
+
+#DeMoivre's equation
+f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
+
+#Density scaled histogram
+plt.hist(z, density=True, color = "green", ec="red")
+
+#Overlay scatter plot
+plt.scatter(x=z, y=f, marker="x")
+
+plt.show()
 
 
 
