@@ -22,12 +22,7 @@ class Air:
 		self._P=P
 		self._Z=Z
 
-	
-	def rho(self):
-		"""return kg/m3, uses ideal gas equation with Z"""
-		R = 287.0500676 #J/ (kg K)
-		return self._P/(R*self._T*self._Z)
-	
+
 	def cp(self):
 		"""
 		returns kJ/kgK, does not take P and Z into account
@@ -37,6 +32,7 @@ class Air:
 		"""
 		T=self._T
 		return (1030.5-0.19975*T+0.00039734*T**2)/1000
+
 	
 	def k(self):
 		"""
@@ -48,6 +44,7 @@ class Air:
 		T=self._T
 		return (0.002334*T**1.5)/(164.54+T)
 	
+
 	def mu(self):
 		"""
 		returns Pa s, does not take P and Z into account
@@ -57,7 +54,14 @@ class Air:
 		"""
 		T = self._T
 		return (1.4592*T**1.5)/(109.1+T)*0.000001
-	
+
+
 	def Pr(self):
 		"""Prandtl number"""
 		return self.cp()*self.mu()/self.k()*1000
+	
+
+	def rho(self):
+		"""returns kg/m3, uses ideal gas equation with Z"""
+		R = 287.0500676 #J/ (kg K)
+		return self._P/(R*self._T*self._Z)

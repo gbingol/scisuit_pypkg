@@ -1,5 +1,5 @@
 
-from ..._ctypeslib import coreDLL as _ctcore
+from .._ctypeslib import coreDLL as _ctcore
 
 
 
