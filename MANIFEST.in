@@ -1,4 +1,2 @@
 include *.py
 include scisuit/*.dll
-include scisuit/apps/icons/*.*
-include scisuit/eng/*.db
