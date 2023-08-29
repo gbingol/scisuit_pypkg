@@ -7,7 +7,8 @@ sys.path.insert(0, os.getcwd())
 
 import scisuit.stats as st
 
-
+x=st.rnorm(10)
+print(st.sample(x, size=11))
 
 
 
