@@ -156,8 +156,8 @@ def aw_FerroFontan_Chirife_Boquet(food:Food)->float:
 	NWater = food.Water/18.02
 	Nsolute = NCHO + NLipid + NProtein
 
-	Percent_Solute = 1 - food.Water
-	C_CHO, C_Lipid, C_Protein = food.CHO/Percent_Solute, food.Lipid/Percent_Solute, food.Protein/Percent_Solute
+	Solute = 1 - food.Water
+	C_CHO, C_Lipid, C_Protein = food.CHO/Solute, food.Lipid/Solute, food.Protein/Solute
 
 	Mt= _math.sqrt(C_CHO/MW_CHO + C_Lipid/MW_Lipid + C_Protein/MW_Protein)
 
@@ -177,7 +177,7 @@ def aw_FerroFontan_Chirife_Boquet(food:Food)->float:
 
 
 def aw_Norrish(food:Food)->float:
-	# Norrish equation
+	"""Norrish equation"""
 	
 	#CHO is considered as fructose
 	NCHO = food.CHO/180.16 
@@ -239,9 +239,8 @@ def aw_Raoult(food:Food)->float:
 
 
 def HasIntersection(f1:Food, f2:Food)->int:
-	"""
-	return the number of common ingredients between f1 and f2
-	"""
+	"""return the number of common ingredients between f1 and f2"""
+	
 	#check if there are common ingredients
 	fA, fB = f1.getIngredients(), f2.getIngredients()
 
@@ -257,9 +256,8 @@ def HasIntersection(f1:Food, f2:Food)->int:
 
 
 def Intersection(f1:Food, f2:Food)->list:
-	"""
-	return the name of common ingredients between f1 and f2
-	"""
+	"""return the name of common ingredients between f1 and f2"""
+	
 	if(not HasIntersection(f1, f2)):
 		return []
 
@@ -374,7 +372,7 @@ class Food:
 
 
 	def k(self)->float:
-		"""T in celcius, result W/mK"""
+		"""result W/mK"""
 		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
 		k_p =  _np.polynomial.Polynomial([-2.7178E-6, 1.1958E-3, 1.7881E-1][::-1])
 		k_f =  _np.polynomial.Polynomial([-1.7749E-7, -2.7604E-4, 1.8071E-1][::-1])
@@ -383,7 +381,8 @@ class Food:
 		k_salt =  _np.polynomial.Polynomial([0.574])
 		"""
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
-		Thermal Conductivities of Aqueous Solutions of Strong Electrolytes Chem.-1ng.-Technik., 23 (3) P.59 - 64
+		Thermal Conductivities of Aqueous Solutions of Strong Electrolytes 
+		Chem.-1ng.-Technik., 23 (3) P.59 - 64
 
 		Note that previously scisuit.core polynomial was used and the list conforms
 		to this (ax^n +... + a0). 
@@ -398,11 +397,15 @@ class Food:
 			(self.__CHO)*k_CHO(T) + \
 			(self.__Ash)*k_ash(T) + \
 			(self.__Salt)*k_salt(T)	
-			
+
+
+	def conductivity(self)->float:
+		"""Alias for k()"""
+		return self.k()	
 		
 	
 	def rho(self)->float:
-		"""T celcius, result kg/m3"""
+		"""returns kg/m3"""
 
 		rho_w =  _np.polynomial.Polynomial([-3.7574E-3, 3.1439E-3, 997.18][::-1])
 		rho_p =  _np.polynomial.Polynomial([-5.1840E-1, 1329.9][::-1])
@@ -426,6 +429,10 @@ class Food:
 			(self.__Salt)*rho_salt(T)
 
 
+	def density(self)->float:
+		"""Alias for rho()"""
+		return self.rho()
+
 
 	def aw(self)->float:
 		"""
@@ -437,9 +444,8 @@ class Food:
 		"""
 		aw1 = 0.92
 	
-		#all in percentages
-		water, CHO, lipid, protein, ash = self.__Water, self.__CHO, self.__Lipid, self.__Protein, self.__Ash
-		salt = self.__Salt 
+		water, CHO, lipid, protein = self.__Water, self.__CHO, self.__Lipid, self.__Protein
+		ash, salt = self.__Ash, self.__Salt 
 
 		#note that salt is excluded
 		Msolute = CHO + lipid + protein + ash
@@ -517,6 +523,10 @@ class Food:
 			
 		return _Enthalpy(self, T)
 
+
+	def enthalpy(self, T)->float:
+		"""Alias for h()"""
+		return self.h(T)
 
 
 	def freezing_T(self):
