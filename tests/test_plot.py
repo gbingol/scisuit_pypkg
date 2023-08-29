@@ -7,12 +7,12 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as stat
 import scisuit.plot as plt
 from scisuit.plot.enums import Marker_Type, Color
-from scisuit.theapp import TheApp
+from scisuit.app import App
 import numpy as np
 
 
 
-app = TheApp()
+app = App()
 
 t=np.arange(0.0, 2.0, 0.2)
 y=np.arange(-5.0, 0.0, 0.2)

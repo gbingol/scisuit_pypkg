@@ -18,7 +18,7 @@ pltdll.c_plot_close.restype=_ct.c_bool
 
 
 
-class TheApp:
+class App:
 	def __init__(self) -> None:
 		"""
 		Initiates the GUI application
