@@ -44,6 +44,10 @@ class Air:
 		T=self._T
 		return (0.002334*T**1.5)/(164.54+T)
 	
+	def conductivity(self):
+		"""Alias for member func k()"""
+		return self.k()
+	
 
 	def mu(self):
 		"""
@@ -54,6 +58,10 @@ class Air:
 		"""
 		T = self._T
 		return (1.4592*T**1.5)/(109.1+T)*0.000001
+	
+	def viscosity(self):
+		"""Alias for mu()"""
+		return self.mu()
 
 
 	def Pr(self):
@@ -65,3 +73,7 @@ class Air:
 		"""returns kg/m3, uses ideal gas equation with Z"""
 		R = 287.0500676 #J/ (kg K)
 		return self._P/(R*self._T*self._Z)
+	
+	def density(self):
+		"""Alias for rho()"""
+		return self.rho()
