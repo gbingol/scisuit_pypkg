@@ -1,50 +1,103 @@
 import numpy as _np
-import dataclasses as _dc
 
-@_dc.dataclass
+
 class Water:
-	"""
-	Thermo-physical properties of water. 
+	"""Thermo-physical properties of water."""
 
-	## Variables:
-	T: Temperature (K) \n
-	rho: density (kg/m3) \n
-	cp: specific heat capacity (kJ/kgK) \n
-	k: thermal conductivity (W/mK) \n
-	mu: Viscosity (Pa s) \n
-	Pr: Prandtl number
-	"""
+	def __init__(self, T:float) -> None:
+		"""T in Celcius"""
+
+		assert T>0 and T<100, "T must be in range (0, 100)"
+		self.__T = T
 	
-	T = _np.array([273.16, 278.15, 283.15, 288.15, 293.15, 298.15, 303.15, 308.15,
-       313.15, 318.15, 323.15, 328.15, 333.15, 338.15, 343.15, 348.15,
-       353.15, 358.15, 363.15, 368.15, 373.15, 383.15, 393.15, 403.15,
-       413.15, 423.15, 433.15, 443.15, 453.15, 463.15, 473.15, 493.15,
-       513.15, 533.15, 553.15, 573.15, 593.15, 613.15, 633.15])
+	def cp(self)->float:
+		"""
+		Thermo-physical properties are valid in the range of -40<=T(C) <=150
+		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
+		"""
+		Cp_w = _np.polynomial.Polynomial([5.4731E-6, -9.0864E-5, 4.1289][::-1])
+		"""
+		Note that previously scisuit.core polynomial was used and the list conforms
+		to this (ax^n +... + a0). 
+		However, new numpy polynomial uses reverse order and that's why [::-1]
+		"""
+
+		T = self.__T
+
+		return Cp_w(T)
 	
-	rho = _np.array([999.8 , 999.9 , 999.7 , 999.1 , 998.21, 997.05, 995.65, 994.03,
-       992.22, 990.21, 988.04, 985.69, 983.2 , 980.55, 977.76, 974.84,
-       971.79, 968.61, 965.31, 961.89, 958.35, 950.95, 943.11, 934.6 ,
-       921.7 , 916.6 , 907.4 , 897.7 , 887.3 , 876.4 , 864.3 , 840.3 ,
-       813.37, 783.63, 750.28, 713.8 , 667.09, 610.5 , 528.3 ])
+
+	def conductivity(self)->float:
+		"""Thermal conductivity, result W/mK"""
+		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
+		"""
+		Note that previously scisuit.core polynomial was used and the list conforms
+		to this (ax^n +... + a0). 
+		However, new numpy polynomial uses reverse order and that's why [::-1]
+		"""	
+		T=self.__T
+
+		return k_w(T)	
+
 	
-	cp =_np.array([ 4.217, 4.205,  4.194,  4.186,  4.182,  4.18 ,  4.178,  4.178,
-        4.179,  4.18 , 4.181,  4.183,  4.185,  4.187,  4.19 ,  4.193,
-        4.197,  4.201,  4.206,  4.212,  4.217,  4.229,  4.244,  4.263,
-        4.286,  4.311,  4.34 ,  4.37 ,  4.41 ,  4.46 ,  4.5  ,  4.61 ,
-        4.76 ,  4.97 ,  5.28 ,  5.75 ,  6.54 ,  8.24 , 14.69 ])
+	def density(self)->float:
+		"""returns kg/m3"""
+
+		rho_w =  _np.polynomial.Polynomial([-3.7574E-3, 3.1439E-3, 997.18][::-1])
+		"""
+		Note that previously scisuit.core polynomial was used and the list conforms
+		to this (ax^n +... + a0). 
+		However, new numpy polynomial uses reverse order and that's why [::-1]
+		"""	
+		T=self.__T
+
+		return rho_w(T)
+
 	
-	k = _np.array([0.561, 0.571, 0.58 , 0.589, 0.598, 0.607, 0.615, 0.623, 0.631,
-       0.637, 0.644, 0.649, 0.654, 0.659, 0.663, 0.667, 0.67 , 0.673,
-       0.675, 0.677, 0.679, 0.682, 0.683, 0.684, 0.683, 0.682, 0.68 ,
-       0.677, 0.673, 0.669, 0.663, 0.65 , 0.632, 0.609, 0.581, 0.548,
-       0.509, 0.469, 0.427])
+	def viscosity(self)->float:
+		"""
+		returns Pa*s
+		
+		## Reference:
+		Joseph Kestin, Mordechai Sokolov, and William A. Wakeham
+		Viscosity of liquid water in the range -8°C to 150°C
+		Journal of Physical and Chemical Reference Data 7, 941 (1978);	
+		"""
+		T=self.__T
+		mu_ref=1002 #micro-Pascal*second (at 20C)
+		
+		temp1 =(20-T)/(T+96)*(1.2378-0.001303*(20-T)+0.00000306*(20-T)**2+0.0000000255*(20-T)**3)
+		mu = 10**temp1*mu_ref #micro-Pascal*second
 	
-	mu = _np.array([1.792e-03, 1.510e-03, 1.307e-03, 1.138e-03, 1.002e-03, 8.910e-04,
-       7.980e-04, 7.200e-04, 6.530e-04, 5.960e-04, 5.470e-04, 5.040e-04,
-       4.670e-04, 4.330e-04, 4.040e-04, 3.780e-04, 3.550e-04, 3.330e-04,
-       3.150e-04, 2.970e-04, 2.820e-04, 2.550e-04, 2.320e-04, 2.130e-04,
-       1.970e-04, 1.830e-04, 1.700e-04, 1.600e-04, 1.500e-04, 1.420e-04,
-       1.340e-04, 1.220e-04, 1.110e-04, 1.020e-04, 9.400e-05, 8.600e-05,
-       7.800e-05, 7.000e-05, 6.000e-05])
+		return mu/1E6
 	
-	Pr = (cp*mu/k)*1000
+
+	@property
+	def T(self):
+		"""in Celcius, same as property temperature"""
+		pass
+
+	@T.setter
+	def T(self, T):
+		assert T+273.15 >= 0, "Temperature > 0 Kelvin expected"
+		self.__T = T
+
+	@T.getter
+	def T(self)->float:
+		return self.__T
+	
+
+"""
+if __name__ == "__main__":
+	w=Water(30)
+	print(w.viscosity())
+	print(w.cp())
+	print(w.conductivity())
+	print(w.density())
+
+	w.T=15
+	print(w.viscosity())
+	print(w.cp())
+	print(w.conductivity())
+	print(w.density())
+"""
