@@ -373,7 +373,7 @@ class Food:
 
 	def k(self)->float:
 		"""result W/mK"""
-		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
+		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 5.7109E-01][::-1])
 		k_p =  _np.polynomial.Polynomial([-2.7178E-6, 1.1958E-3, 1.7881E-1][::-1])
 		k_f =  _np.polynomial.Polynomial([-1.7749E-7, -2.7604E-4, 1.8071E-1][::-1])
 		k_CHO =  _np.polynomial.Polynomial([-4.3312E-6, 1.3874E-3, 2.0141E-1][::-1])
