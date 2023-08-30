@@ -4,7 +4,7 @@ import numpy as np
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
-from scisuit import trapz, cumtrapz
+from scisuit.integ import trapz, cumtrapz
 
 x = np.arange(1, 6)
 y = x**2
