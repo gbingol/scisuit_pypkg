@@ -29,7 +29,7 @@ class Water:
 
 	def conductivity(self)->float:
 		"""Thermal conductivity, result W/mK"""
-		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 4.57109E-01][::-1])
+		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 5.7109E-01][::-1])
 		"""
 		Note that previously scisuit.core polynomial was used and the list conforms
 		to this (ax^n +... + a0). 
@@ -70,6 +70,11 @@ class Water:
 		mu = 10**temp1*mu_ref #micro-Pascal*second
 	
 		return mu/1E6
+
+
+	def Prandtl(self):
+		"""Prandtl number"""
+		return self.cp()*self.viscosity()/self.conductivity()*1000
 	
 
 	@property
@@ -87,17 +92,11 @@ class Water:
 		return self.__T
 	
 
-"""
+
 if __name__ == "__main__":
 	w=Water(30)
 	print(w.viscosity())
 	print(w.cp())
 	print(w.conductivity())
 	print(w.density())
-
-	w.T=15
-	print(w.viscosity())
-	print(w.cp())
-	print(w.conductivity())
-	print(w.density())
-"""
+	print(w.Prandtl())
