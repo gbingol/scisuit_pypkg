@@ -6,8 +6,7 @@ from .enums import Bar_Type, Line_Type, Histogram_Mode
 
 
 
-#TODO: this is debug version, change it during release
-_path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
+_path = _parent_path(__file__, level=1) / "scisuit_plotter"
 pltdll = _ct.PyDLL(str(_path))
 
 
