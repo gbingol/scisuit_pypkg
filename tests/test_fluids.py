@@ -1,9 +1,33 @@
 import sys, os
+import numpy as np
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
-from scisuit.eng.refrigerants import Refrigerant
 
-r = Refrigerant.SR12()
-print(r.hf>20)
+from scisuit.eng import Refrigerant
+
+r = Refrigerant().SR12()
+rng = np.where(np.logical_and(r.hf>20, r.hf<50))
+print(list(map(lambda i: r.hf[i], rng)))
+
+
+def water():
+	from scisuit.eng import Water
+
+	#temperature in Celcius
+	water = Water(25)
+
+	print(f"Density (kg/m3): {water.density()}")
+	print(f"Viscosity (Pa*s): {water.viscosity()}")
+
+
+def dryair():
+	from scisuit.eng import Air
+
+	#temperature Kelvin
+	air = Air(T=300)
+
+	print(f"Density (kg/m3): {air.density()}")
+	print(f"Viscosity (Pa*s): {air.viscosity()}")
+

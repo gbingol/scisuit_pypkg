@@ -1,29 +1,25 @@
 import sys, os
+import numpy as np
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
 
 import scisuit.stats as stat
-import scisuit.plot as plt
 from scisuit.plot.enums import Marker_Type, Color
+
+
+import scisuit.plot as plt
 from scisuit.app import App
-import numpy as np
 
 
-
+#start application
 app = App()
 
-t=np.arange(0.0, 2.0, 0.2)
-y=np.arange(-5.0, 0.0, 0.2)
-
-t, y = np.meshgrid(t,y) 
- 
-f1= 4-t+2*y
-
-plt.dirfield(t,y,f1) 
+plt.psychrometry()
 
 
+#start mainloop 
 app.mainloop()
 
 
