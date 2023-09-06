@@ -388,12 +388,42 @@ def dirfield(x, y, slope):
 
 @_dc.dataclass
 class Marker:
-	"""A class to define marker in scatter chart"""
-	type = "c" #"c", "s", "t" or "x"	
-	size = 5 #>0 expected
-	fill = None #if specified, string containing RGB, "255 255 0"
-	linewidth=1	#>0 expected
-	linecolor = None #if specified, string containing RGB, "255 255 0"
+	"""
+	A class to define marker properties
+
+	## Input:
+	type: "c", "s", "t", "x" (default "c") \n	
+	size: 5 #>0 expected \n
+	fill: if specified, RGB "255 255 0" \n
+	linewidth: #>0 expected \n
+	linecolor: if specified, RGB "255 255 0"
+	"""
+	type:str="c" 
+	size:int=5 
+	fill:str=None
+	linewidth:int = 1
+	linecolor:str = None
+
+
+@_dc.dataclass
+class Trendline:
+	"""
+	A class to define Trendline properties
+
+	## Input:
+	type: "linear", "poly", "exp", "log","pow" \n
+	degree: 2, >=2 expected when type is polynomial \n
+	intercept: number expected \n
+	color: "R G B" format, "255 255 125" \n
+	width: >0 expected \n
+	style: 100, 101, 102, 103, 104, 106 (default 102)
+	"""
+	type:str="linear"
+	degree:int=2
+	intercept:float=None
+	color:str = None
+	width:int = 1
+	style:int = 102
 
 
 
@@ -408,7 +438,7 @@ def scatter(
 		bubble:dict=None, 
 		marker=Marker(), 
 		line:dict=None, 
-		trendline:dict=None, 
+		trendline:Trendline=None, 
 		hwnd=None):
 	"""
 	Plot scatter charts and returns a window handle

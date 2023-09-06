@@ -17,9 +17,9 @@ from scisuit.app import App
 #start application
 app = App()
 
+t=plt.Trendline()
 m=plt.Marker()
 m.size=8
-m.fill="255 255 0"
 plt.scatter(x=np.array([1,2,3,4]), y=(1,2,3,4), marker=m)
 
 
