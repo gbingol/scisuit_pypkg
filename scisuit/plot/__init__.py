@@ -1,5 +1,9 @@
 import ctypes as _ct
 import numpy as _np
+import dataclasses as _dc
+
+from typing import Iterable
+
 
 from ..util import parent_path as _parent_path
 from .enums import Bar_Type, Line_Type, Histogram_Mode
@@ -48,8 +52,12 @@ pltdll.c_plot_scatter.restype=_ct.py_object
 
 
 
+
+
+#-----------------------------------------------------------------------------------
+
 def bar(
-	height:list, 
+	height:Iterable, 
 	labels=None, 
 	label=None, 
 	title=None, 
@@ -73,8 +81,9 @@ def bar(
 
 
 
+
 def barh(
-	width:list, 
+	width:Iterable, 
 	labels=None, 
 	label=None, 
 	title=None, 
@@ -98,8 +107,12 @@ def barh(
 
 
 
+
+
+#-----------------------------------------------------------------------------------
+
 def boxplot(
-	data:list|_np.ndarray, 
+	data:Iterable, 
 	label:str=None, 
 	title:str=None, 
 	fill:dict=None, 
@@ -118,8 +131,12 @@ def boxplot(
 
 
 
+
+
+#-----------------------------------------------------------------------------------
+
 def histogram(
-		data:list|_np.ndarray, 
+		data:Iterable, 
 		mode:str=Histogram_Mode.FREQUENCY, 
 		cumulative=False, 
 		breaks = None, 
@@ -143,8 +160,12 @@ def histogram(
 
 
 
+
+
+#-----------------------------------------------------------------------------------
+
 def line(
-	y:list|_np.ndarray, 
+	y:Iterable, 
 	labels:list=None, 
 	label:str=None, 
 	title:str=None, 
@@ -167,8 +188,16 @@ def line(
      			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
 
 
+
+
+
+
+
+#-----------------------------------------------------------------------------------
+
+
 def pie(
-	data:list|_np.ndarray, 
+	data:Iterable, 
 	title:str=None, 
 	labels:list=None, 
 	colors:list=None, 
@@ -194,8 +223,10 @@ def pie(
 
 
 
+
+
 def piepie(
-	data:list|_np.ndarray, 
+	data:Iterable, 
 	title:str=None, 
 	labels:list=None, 
 	groups:list=None, 
@@ -227,6 +258,10 @@ def piepie(
 
 
 
+
+#-----------------------------------------------------------------------------------
+
+
 def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	"""
 	Plots psychromety chart.
@@ -240,8 +275,12 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 
 
 
+
+#-----------------------------------------------------------------------------------
+
+
 def qqnorm(
-		data:list|_np.ndarray,  
+		data:Iterable,  
 		title = "Normal Q-Q Plot", 
 		xlab="Theoretical Quantiles",  
 		ylab="Sample Quantiles", 
@@ -265,9 +304,11 @@ def qqnorm(
 
 
 
+
+
 def qqplot(
-		x:list|_np.ndarray,
-		y:list|_np.ndarray,
+		x:Iterable,
+		y:Iterable,
 		title:str = None, 
 		xlab:str=None, 
 		ylab:str=None, 
@@ -286,6 +327,13 @@ def qqplot(
 			{"x":x, "y":y, "title":title, 
 			"xlab":xlab, "ylab":ylab, "marker":marker, "hwnd":hwnd})
 
+
+
+
+
+
+
+#-----------------------------------------------------------------------------------
 
 
 def quiver(
@@ -334,16 +382,31 @@ def dirfield(x, y, slope):
 
 
 
+
+#-----------------------------------------------------------------------------------
+
+
+@_dc.dataclass
+class Marker:
+	"""A class to define marker in scatter chart"""
+	type = "c" #"c", "s", "t" or "x"	
+	size = 5 #>0 expected
+	fill = None #if specified, string containing RGB, "255 255 0"
+	linewidth=1	#>0 expected
+	linecolor = None #if specified, string containing RGB, "255 255 0"
+
+
+
 def scatter(
-		y:list|_np.ndarray, 
-		x:list|_np.ndarray=None, 
+		x:Iterable,
+		y:Iterable,  
 		label:str=None, 
 		title:str=None, 
 		xlab:str=None, 
 		ylab:str=None, 
 		smooth:bool=False, 
 		bubble:dict=None, 
-		marker:dict=None, 
+		marker=Marker(), 
 		line:dict=None, 
 		trendline:dict=None, 
 		hwnd=None):
@@ -352,7 +415,7 @@ def scatter(
 
 	## Input:
 	x, y:	x- and y-data \n
-	label:	Name of the series \n
+	label: Name of the series \n
 	title: Title of the chart \n
 	xlab:	Label of x-axis \n
 	ylab:	Label of y-axis \n
@@ -363,6 +426,10 @@ def scatter(
 	size:	size data (list), color: color (str), \n
 	mode: "A" area "W" diameter, scale: size scale (0, 200]
 	"""
+	assert isinstance(x, Iterable), "x must be iterable object"
+	assert isinstance(y, Iterable), "y must be iterable object"
+	assert len(x) == len(y), "x and y must have same lengths"
+
 	return pltdll.c_plot_scatter((), 
 		{'y':y ,"x":x, "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
-		"bubble":bubble, "marker":marker, "line":line, "trendline":trendline, "hwnd":hwnd})
+		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline, "hwnd":hwnd})

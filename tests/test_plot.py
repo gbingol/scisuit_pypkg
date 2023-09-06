@@ -4,6 +4,7 @@ import numpy as np
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
+import matplotlib.pyplot as plt
 
 import scisuit.stats as stat
 from scisuit.plot.enums import Marker_Type, Color
@@ -16,7 +17,10 @@ from scisuit.app import App
 #start application
 app = App()
 
-plt.psychrometry()
+m=plt.Marker()
+m.size=8
+m.fill="255 255 0"
+plt.scatter(x=np.array([1,2,3,4]), y=(1,2,3,4), marker=m)
 
 
 #start mainloop 
