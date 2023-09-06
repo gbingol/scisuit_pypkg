@@ -51,7 +51,7 @@ pltdll.c_plot_scatter.restype=_ct.py_object
 def bar(
 	height:list, 
 	labels=None, 
-	name=None, 
+	label=None, 
 	title=None, 
 	type = Bar_Type.CLUSTER,
 	fill=None, 
@@ -63,12 +63,12 @@ def bar(
 	## Input
 	height: Numeric data \n
 	labels: Category labels \n
-	name: Name of the series \n
+	label: Name of the series \n
 	type: clustered, stacked and 100% stacked \n
 	title: Title of the chart
 	"""
 	return pltdll.c_plot_bar((),
-			{"height":height, "labels":labels, "name":name, "title":title, "type":type, 
+			{"height":height, "labels":labels, "name":label, "title":title, "type":type, 
     			"fill":fill, "line":line, "hwnd":hwnd})
 
 
@@ -76,7 +76,7 @@ def bar(
 def barh(
 	width:list, 
 	labels=None, 
-	name=None, 
+	label=None, 
 	title=None, 
 	type=Bar_Type.CLUSTER, 
 	fill=None, 
@@ -88,19 +88,19 @@ def barh(
 	## Input
 	width : Numeric data \n
 	labels : Category labels \n
-	name: Name of the series \n
+	label: Name of the series \n
 	type: clustered, stacked and 100% stacked.\n
 	title: Title of the chart
 	"""
 	return pltdll.c_plot_barh((),
-			{"width":width, "labels":labels, "name":name, "title":title, "type":type, 
+			{"width":width, "labels":labels, "name":label, "title":title, "type":type, 
     			"fill":fill, "line":line, "hwnd":hwnd})
 
 
 
 def boxplot(
 	data:list|_np.ndarray, 
-	name:str=None, 
+	label:str=None, 
 	title:str=None, 
 	fill:dict=None, 
 	line:dict=None, 
@@ -110,11 +110,11 @@ def boxplot(
 
 	## Input
 	data : Data to be plotted \n
-	name:	Name of the series \n
+	label: Name of the series \n
 	title: Title of the chart 
 	"""
 	return pltdll.c_plot_boxplot((),
-			{"data":data, "name":name, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
+			{"data":data, "name":label, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
 
 
 
@@ -146,7 +146,7 @@ def histogram(
 def line(
 	y:list|_np.ndarray, 
 	labels:list=None, 
-	name:str=None, 
+	label:str=None, 
 	title:str=None, 
 	type=Line_Type.CLUSTER, 
 	marker=None, 
@@ -158,12 +158,12 @@ def line(
 	## Input:
 	y : Numeric data \n
 	labels : Category labels \n
-	name:	Name of the series \n
+	label: Name of the series \n
 	type:	clustered, stacked and 100% stacked \n
 	title: Title of the chart
 	"""
 	return pltdll.c_plot_line((),
-			 {"y":y, "labels":labels, "name":name, "title":title, 
+			 {"y":y, "labels":labels, "name":label, "title":title, 
      			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
 
 
@@ -337,7 +337,7 @@ def dirfield(x, y, slope):
 def scatter(
 		y:list|_np.ndarray, 
 		x:list|_np.ndarray=None, 
-		name:str=None, 
+		label:str=None, 
 		title:str=None, 
 		xlab:str=None, 
 		ylab:str=None, 
@@ -352,7 +352,7 @@ def scatter(
 
 	## Input:
 	x, y:	x- and y-data \n
-	name:	Name of the series \n
+	label:	Name of the series \n
 	title: Title of the chart \n
 	xlab:	Label of x-axis \n
 	ylab:	Label of y-axis \n
@@ -364,5 +364,5 @@ def scatter(
 	mode: "A" area "W" diameter, scale: size scale (0, 200]
 	"""
 	return pltdll.c_plot_scatter((), 
-		{'y':y ,"x":x, "name":name, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
+		{'y':y ,"x":x, "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
 		"bubble":bubble, "marker":marker, "line":line, "trendline":trendline, "hwnd":hwnd})
