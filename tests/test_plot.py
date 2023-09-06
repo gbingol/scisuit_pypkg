@@ -17,10 +17,13 @@ from scisuit.app import App
 #start application
 app = App()
 
-t=plt.Trendline()
+
 m=plt.Marker()
 m.size=8
-plt.scatter(x=np.array([1,2,3,4]), y=(1,2,3,4), marker=m)
+plt.scatter(
+	x=np.array([1,2,3,4]), 
+	y=(1,2,3,4), 
+	marker=m, trendline=plt.Trendline(degree=5))
 
 
 #start mainloop 

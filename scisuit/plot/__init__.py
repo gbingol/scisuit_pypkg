@@ -460,6 +460,9 @@ def scatter(
 	assert isinstance(y, Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
 
+	if isinstance(trendline, Trendline):
+		trendline=vars(trendline)
+
 	return pltdll.c_plot_scatter((), 
 		{'y':y ,"x":x, "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
 		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline, "hwnd":hwnd})
