@@ -320,11 +320,16 @@ def quiver(
 	ylab: Label of y-axis
 	"""
 	return pltdll.c_plot_quiver((),
-			{"x":x, "y":y,"u":u, "v":v, "scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
+			{
+				"x":x.flatten().tolist(), 
+				"y":y.flatten().tolist(),
+				"u":u.flatten().tolist(), 
+				"v":v.flatten().tolist(), 
+				"scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
 
 
 
-def dirfield(x, y, slope):
+def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 	"""
 	Plots the direction field for a given function f=dy/dx \n
 
