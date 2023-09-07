@@ -130,7 +130,6 @@ def dirfield():
 #start application
 app = App()
 
-quiver()
 
 """m=plt.Marker()
 m.size=8
@@ -139,6 +138,13 @@ plt.scatter(
 	y=(1,2,3,4), 
 	marker=m, trendline=plt.Trendline(degree=5))"""
 
+
+x=np.array([1,2,3,4])
+
+
+#no need for hwnd, draws on the same plot window
+plt.scatter(x=x, y=(1,2,3,4))	
+plt.scatter(x=x, y=2*x)
 
 #start mainloop 
 app.mainloop()
