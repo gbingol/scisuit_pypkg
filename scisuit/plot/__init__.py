@@ -32,9 +32,6 @@ pltdll.c_plot_line.restype=_ct.py_object
 pltdll.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
 pltdll.c_plot_pie.restype=_ct.py_object
 
-pltdll.c_plot_piepie.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_piepie.restype=_ct.py_object
-
 pltdll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 pltdll.c_plot_psychrometry.restype=_ct.py_object
 
@@ -221,40 +218,6 @@ def pie(
 				{"data":data, "title":title, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle, "legend":legend, "hwnd":hwnd})
 
-
-
-
-
-def piepie(
-	data:Iterable, 
-	title:str=None, 
-	labels:list=None, 
-	groups:list=None, 
-	lcolors:list=None, 
-	rcolors:list=None, 
-	lexplode:list|int=None, 
-	rexplode:list|int=None,
-	legend=True, 
-	hwnd=None):
-	"""
-	Plots pie pie chart
-
-	## Inputs:
-	data : Data of individual slices \n
-	title: Title of the chart \n
-	labels: Label of individual slices \n
-	groups: group membership only containing two unique numbers, i.e. [1, 2, 2, 1] \n
-	lcolors: Color of individual slices at the left pie \n
-	rcolors: If exists, color of individual slices at the right pie \n
-	lexplode: Explosion level of left pie \n
-	rexplode: If exists, explosion level of right pie \n
-	legend: Whether to show legend or not \n
-	"""
-	return pltdll.c_plot_piepie((),
-			{"data":data, "title":title, "labels":labels, 
-       		"groups":groups, "lcolors":lcolors, "rcolors":rcolors, 
-			"lexplode":lexplode, "rexplode":rexplode,
-			"legend":legend, "hwnd":hwnd})
 
 
 

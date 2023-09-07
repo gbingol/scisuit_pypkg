@@ -110,26 +110,6 @@ plt.pie(data, startangle=45)
 """
 
 
-#----------------------------------------------------------------------
-
-"""
-# Pie of Pie Chart
-
-data=[10, 6, 8, 1, 2]
-labels=["A", "B", "C", "D", "E"]
-groups=[1, 1, 1, 2, 2]
-
-#Group membership defined
-plt.piepie(data, groups=groups)
-
-#TODO: Fix me
-plt.piepie(data, groups=groups, lexplode=[2], rexplode = [1] )
-
-#Colors defined (first of left, two of right)
-plt.piepie(data, groups=groups, lcolors = ["255 51 153"], rcolors=["153 153 0", "0 153 153"] )
-
-"""
-
 
 #----------------------------------------------------------------
 
