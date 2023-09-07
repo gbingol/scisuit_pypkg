@@ -430,5 +430,5 @@ def scatter(
 		trendline=vars(trendline)
 
 	return pltdll.c_plot_scatter((), 
-		{'y':y ,"x":x, "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
+		{"x":x, "y":y , "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
 		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
