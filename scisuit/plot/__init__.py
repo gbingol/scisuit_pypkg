@@ -406,10 +406,9 @@ def scatter(
 		bubble:dict=None, 
 		marker=Marker(), 
 		line:dict=None, 
-		trendline:Trendline=None, 
-		hwnd=None):
+		trendline:Trendline=None):
 	"""
-	Plot scatter charts and returns a window handle
+	Plot scatter charts
 
 	## Input:
 	x, y:	x- and y-data \n
@@ -418,7 +417,6 @@ def scatter(
 	xlab:	Label of x-axis \n
 	ylab:	Label of y-axis \n
 	smooth: Spline algorithm is applied to smooth the line \n
-	hwnd:	Window handle. If None, a new window is opened \n 
 
 	Bubble Properties \n
 	size:	size data (list), color: color (str), \n
@@ -433,4 +431,4 @@ def scatter(
 
 	return pltdll.c_plot_scatter((), 
 		{'y':y ,"x":x, "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
-		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline, "hwnd":hwnd})
+		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
