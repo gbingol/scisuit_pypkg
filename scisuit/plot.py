@@ -3,14 +3,13 @@ import numpy as _np
 import dataclasses as _dc
 
 from typing import Iterable
+from enum import Enum
 
-
-from ..util import parent_path as _parent_path
-from .enums import Bar_Type, Line_Type, Histogram_Mode
+from .util import parent_path as _parent_path
 
 
 #TODO: Change to release version
-_path = _parent_path(__file__, level=1) / "scisuit_plotter_d"
+_path = _parent_path(__file__) / "scisuit_plotter_d"
 pltdll = _ct.PyDLL(str(_path))
 
 
@@ -50,18 +49,104 @@ pltdll.c_plot_scatter.restype=_ct.py_object
 
 
 
+"""       DEFINITIONS            """
+class StrEnum(str, Enum):
+	pass
 
-#-----------------------------------------------------------------------------------
+
+#BAR Charts and Line Charts
+CLUSTER = "c"
+STACKED = "s"
+PERCENTSTK = "%"
+
+#Histogram Modes
+HIST_DENSITY = "d"
+HIST_FREQUENCY = "f"
+HIST_RELFREQUENCY = "r"
+
+#Pen Styles
+PEN_SOLID = 100
+PEN_DOT = 101
+PEN_LONGDASH = 102
+PEN_SHORTDASH = 103
+PEN_DOTDASH = 104
+PEN_TRANSPARENT = 106
+
+
+#Brush/Fill Styles
+BRUSH_SOLID = 100, 
+BRUSH_TRANSPARENT = 106, 
+BRUSH_BDIAGHATCH = 111, 
+BRUSH_CROSSDIAGHATCH = 112
+BRUSH_FDIAGHATCH = 113
+BRUSH_CROSSHATCH = 114
+BRUSH_HORIZHATCH =115
+BRUSH_VERTHATCH = 116
+
+
+#Marker Types
+MARKER_CIRCLE = "c"
+MARKER_TRIANGLE = "t"
+MARKER_SQUARE = "s"
+MARKER_XMARKER = "x"
+
+
+
+class Color(StrEnum):
+	"""
+	Colors with corresponding RGB values
+	"""
+	AQUA="0 255 255"
+	BLUE="0 0 255"
+	BLUE_MEDIUM="0 0 205"
+	BLUE_ROYAL="65 105 225"
+	BLUE_MIDNIGHT="25 25 112"
+	BROWN="165 42 42"
+	BROWN_SADDLE="139 69 19"
+	CHOCOLATE="210 105 30" 
+	CRIMSON="220 20 60"
+	FUCHSIA="255 0 255"
+	GRAY="128 128 128"
+	WHITE="255 255 255"
+	RED="255 0 0"
+	RED_DARK="139 0 0"
+	LIME="0 255 0"
+	YELLOW="255 255 0"
+	SILVER="192 192 192"
+	MAROON="128 0 0"
+	OLIVE="128 128 0"
+	GREEN="0 128 0"
+	PURPLE="128 0 128"
+	TEAL="0 128 128"
+	NAVY="0 0 128" 
+	SALMON_DARK="233 150 122"
+	SALMON="250 128 114" 
+	SALMON_LIGHT="255 160 122"
+	ORANGE_RED="255 69 0"
+	ORANGE_DARK="255 140 0"
+	ORANGE="255 165 0"
+	TAN="210 180 140"
+	WHEAT="245 222 179"
+	ORCHID="218 112 214"
+	INDIGO="75 0 130"
+
+
+
+
+
+
+
+
+"""            CHARTS                             """
 
 def bar(
 	height:Iterable, 
 	labels=None, 
 	label=None, 
 	title=None, 
-	type = Bar_Type.CLUSTER,
+	type = CLUSTER,
 	fill=None, 
-	line=None, 
-	hwnd=None):
+	line=None):
 	"""
 	Plots bar chart
 
@@ -74,7 +159,7 @@ def bar(
 	"""
 	return pltdll.c_plot_bar((),
 			{"height":height, "labels":labels, "name":label, "title":title, "type":type, 
-    			"fill":fill, "line":line, "hwnd":hwnd})
+    			"fill":fill, "line":line})
 
 
 
@@ -84,10 +169,9 @@ def barh(
 	labels=None, 
 	label=None, 
 	title=None, 
-	type=Bar_Type.CLUSTER, 
+	type=CLUSTER, 
 	fill=None, 
-	line=None, 
-	hwnd=None):
+	line=None):
 	"""
 	Plots horizontal bar chart
 
@@ -100,7 +184,7 @@ def barh(
 	"""
 	return pltdll.c_plot_barh((),
 			{"width":width, "labels":labels, "name":label, "title":title, "type":type, 
-    			"fill":fill, "line":line, "hwnd":hwnd})
+    			"fill":fill, "line":line})
 
 
 
@@ -113,8 +197,7 @@ def boxplot(
 	label:str=None, 
 	title:str=None, 
 	fill:dict=None, 
-	line:dict=None, 
-	hwnd=None):
+	line:dict=None):
 	"""
 	Plots box-whisker chart and returns a window handle.
 
@@ -124,7 +207,7 @@ def boxplot(
 	title: Title of the chart 
 	"""
 	return pltdll.c_plot_boxplot((),
-			{"data":data, "name":label, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
+			{"data":data, "name":label, "title":title, "fill":fill, "line":line})
 
 
 
@@ -134,13 +217,12 @@ def boxplot(
 
 def histogram(
 		data:Iterable, 
-		mode:str=Histogram_Mode.FREQUENCY, 
+		mode:str=HIST_FREQUENCY, 
 		cumulative=False, 
 		breaks = None, 
 		title = None,
 		fill = None, 
-		line = None, 
-		hwnd=None):
+		line = None):
 	"""
 	Plots histogram
 
@@ -148,12 +230,12 @@ def histogram(
 	data:	A variable \n
 	mode : density, frequency and relative frequency.\n
 	cumulative : True, cumulative distribution \n
-	breaks : Number of breaks or the break points, int/ndarray/list\n
+	breaks : Number of breaks or the break points, int/iterable\n
 	title: Title of the chart
 	"""
 	return pltdll.c_plot_histogram((),
 			    {"data":data, "mode":mode, "cumulative":cumulative, 
-				"breaks":breaks, "title":title, "fill":fill, "line":line, "hwnd":hwnd})
+				"breaks":breaks, "title":title, "fill":fill, "line":line})
 
 
 
@@ -166,10 +248,9 @@ def line(
 	labels:list=None, 
 	label:str=None, 
 	title:str=None, 
-	type=Line_Type.CLUSTER, 
+	type=CLUSTER, 
 	marker=None, 
-	line=None, 
-	hwnd=None):
+	line=None):
 	"""
 	Plots line chart
 
@@ -182,7 +263,7 @@ def line(
 	"""
 	return pltdll.c_plot_line((),
 			 {"y":y, "labels":labels, "name":label, "title":title, 
-     			"type":type, "marker":marker, "line":line, "hwnd":hwnd})
+     			"type":type, "marker":marker, "line":line})
 
 
 
@@ -200,8 +281,7 @@ def pie(
 	colors:list=None, 
 	explode:list|int=None, 
 	startangle:int=None, 
-	legend=True, 
-	hwnd=None):
+	legend=True):
 	"""
 	Plots Pie chart
 
@@ -216,7 +296,7 @@ def pie(
 	"""
 	return pltdll.c_plot_pie((),
 				{"data":data, "title":title, "labels":labels, "colors":colors, 
-     				"explode":explode, "startangle":startangle, "legend":legend, "hwnd":hwnd})
+     				"explode":explode, "startangle":startangle, "legend":legend})
 
 
 
@@ -249,8 +329,7 @@ def qqnorm(
 		ylab="Sample Quantiles", 
 		show=True, 
 		line=None, 
-		marker=None, 
-		hwnd=None):
+		marker=None):
 		"""
 		Quantile-quantile chart
 
@@ -263,7 +342,7 @@ def qqnorm(
 		"""
 		return pltdll.c_plot_qqnorm((),
 			{"data":data, "title":title, "xlab":xlab, "ylab":ylab, 
-			"show":show, "line":line, "marker":marker, "hwnd":hwnd} )
+			"show":show, "line":line, "marker":marker} )
 
 
 
@@ -275,8 +354,7 @@ def qqplot(
 		title:str = None, 
 		xlab:str=None, 
 		ylab:str=None, 
-		marker=None, 
-		hwnd=None):
+		marker=None):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 
@@ -288,9 +366,7 @@ def qqplot(
 	"""
 	return pltdll.c_plot_qqplot((),
 			{"x":x, "y":y, "title":title, 
-			"xlab":xlab, "ylab":ylab, "marker":marker, "hwnd":hwnd})
-
-
+			"xlab":xlab, "ylab":ylab, "marker":marker})
 
 
 
@@ -366,7 +442,7 @@ class Marker:
 	linewidth: #>0 expected \n
 	linecolor: if specified, RGB "255 255 0"
 	"""
-	type:str="c" 
+	type:str=MARKER_CIRCLE 
 	size:int=5 
 	fill:str=None
 	linewidth:int = 1

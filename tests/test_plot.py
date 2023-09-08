@@ -6,13 +6,18 @@ sys.path.insert(0, os.getcwd())
 
 
 import scisuit.stats as stat
-from scisuit.plot.enums import Marker_Type, Color
-
-
 import scisuit.plot as plt
 from scisuit.app import App
 
 
+
+def bar():
+	categ=["Q1", "Q2", "Q3", "Q4"]
+	A = [44, 55, 41, 67]
+	B = [13, 23, 8, 13]
+
+	plt.barh(labels=["A", "B", "C", "Q4"], width=B)
+	plt.barh(labels=categ, width=A)
 
 
 def histogram():
@@ -21,7 +26,7 @@ def histogram():
 	x=stat.rnorm(500)
 
 	plt.histogram(x)
-	plt.histogram(x, mode=plt.Histogram_Mode.RELFREQUENCY, cumulative=True)
+	plt.histogram(x, mode=plt.HIST_RELFREQUENCY, cumulative=True)
 	plt.histogram(x, fill={'color': plt.Color.RED}, line={'color': plt.Color.GREEN, 'width': 2} )
 
 
@@ -81,7 +86,7 @@ def qqnorm():
 	plt.qqnorm(x)
 
 	#Marker specified
-	marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size': 5}
+	marker = {'fill': plt.Color.WHITE, 'linecolor': plt.Color.BLUE, 'type': plt.MARKER_SQUARE, 'linewidth': 2, 'size': 5}
 	plt.qqnorm(x, marker=marker)
 
 
@@ -92,7 +97,7 @@ def qqplot():
 
 	plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment")
 
-	marker = {'fill': Color.WHITE, 'linecolor': Color.BLUE, 'type': Marker_Type.SQUARE, 'linewidth': 2, 'size':5}
+	marker = {'fill': plt.Color.WHITE, 'linecolor': plt.Color.BLUE, 'type': plt.MARKER_SQUARE, 'linewidth': 2, 'size':5}
 	plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment", marker = marker)
 
 
@@ -126,6 +131,23 @@ def dirfield():
 	plt.dirfield(t,y,f1) 
 
 
+def matplotlib_mixed():
+	import matplotlib.pyplot as plt
+	fruits = ['apple', 'blueberry', 'cherry', 'orange']
+	counts = [40, 100, 30, 55]
+	bar_labels = ['red', 'blue', '_red', 'orange']
+	bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
+
+	plt.plot([1,2,3], [1, 4, 9])
+	plt.bar(fruits, counts, label=bar_labels, color=bar_colors)
+
+def boxplot():
+	x = [2, 1, 3, 6, 4]
+	y = [7, 7, 8, 4, 2]
+
+	plt.boxplot(data=x)
+	plt.boxplot(data=y)
+
 
 #start application
 app = App()
@@ -138,13 +160,11 @@ plt.scatter(
 	y=(1,2,3,4), 
 	marker=m, trendline=plt.Trendline(degree=5))"""
 
+data=[10, 6, 8]
 
-x=np.array([1,2,3,4])
-
-
-#no need for hwnd, draws on the same plot window
-plt.scatter(x=x, y=(1,2,3,4))	
-plt.scatter(x=x, y=2*x)
+#labels have been automatically assigned as 1, 2 and 3.
+plt.pie(data)
+plt.pie([20, 30])
 
 #start mainloop 
 app.mainloop()
