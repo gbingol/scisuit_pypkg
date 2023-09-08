@@ -46,7 +46,8 @@ pltdll.c_plot_quiver.restype=_ct.py_object
 pltdll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 pltdll.c_plot_scatter.restype=_ct.py_object
 
-
+pltdll.c_plot_figure.argtypes = []
+pltdll.c_plot_figure.restype=None
 
 
 """       DEFINITIONS            """
@@ -508,3 +509,9 @@ def scatter(
 	return pltdll.c_plot_scatter((), 
 		{"x":x, "y":y , "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
 		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
+
+
+
+def figure():
+	"""Start a new plot window"""
+	pltdll.c_plot_figure()

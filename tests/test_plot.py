@@ -164,6 +164,7 @@ data=[10, 6, 8]
 
 #labels have been automatically assigned as 1, 2 and 3.
 plt.pie(data)
+plt.figure()
 plt.pie([20, 30])
 
 #start mainloop 
