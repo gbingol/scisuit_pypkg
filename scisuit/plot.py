@@ -49,6 +49,9 @@ pltdll.c_plot_scatter.restype=_ct.py_object
 pltdll.c_plot_figure.argtypes = []
 pltdll.c_plot_figure.restype=None
 
+pltdll.c_plot_title.argtypes = [_ct.py_object]
+pltdll.c_plot_title.restype=None
+
 pltdll.c_plot_xlabel.argtypes = [_ct.py_object]
 pltdll.c_plot_xlabel.restype=None
 
@@ -151,7 +154,6 @@ def bar(
 	height:Iterable, 
 	labels=None, 
 	label=None, 
-	title=None, 
 	type = CLUSTER,
 	fill=None, 
 	line=None):
@@ -162,11 +164,10 @@ def bar(
 	height: Numeric data \n
 	labels: Category labels \n
 	label: Name of the series \n
-	type: clustered, stacked and 100% stacked \n
-	title: Title of the chart
+	type: clustered, stacked and 100% stacked
 	"""
 	return pltdll.c_plot_bar((),
-			{"height":height, "labels":labels, "name":label, "title":title, "type":type, 
+			{"height":height, "labels":labels, "name":label, "type":type, 
     			"fill":fill, "line":line})
 
 
@@ -176,7 +177,6 @@ def barh(
 	width:Iterable, 
 	labels=None, 
 	label=None, 
-	title=None, 
 	type=CLUSTER, 
 	fill=None, 
 	line=None):
@@ -187,11 +187,10 @@ def barh(
 	width : Numeric data \n
 	labels : Category labels \n
 	label: Name of the series \n
-	type: clustered, stacked and 100% stacked.\n
-	title: Title of the chart
+	type: clustered, stacked and 100% stacked.
 	"""
 	return pltdll.c_plot_barh((),
-			{"width":width, "labels":labels, "name":label, "title":title, "type":type, 
+			{"width":width, "labels":labels, "name":label, "type":type, 
     			"fill":fill, "line":line})
 
 
@@ -203,7 +202,6 @@ def barh(
 def boxplot(
 	data:Iterable, 
 	label:str=None, 
-	title:str=None, 
 	fill:dict=None, 
 	line:dict=None):
 	"""
@@ -211,11 +209,10 @@ def boxplot(
 
 	## Input
 	data : Data to be plotted \n
-	label: Name of the series \n
-	title: Title of the chart 
+	label: Name of the series
 	"""
 	return pltdll.c_plot_boxplot((),
-			{"data":data, "name":label, "title":title, "fill":fill, "line":line})
+			{"data":data, "name":label, "fill":fill, "line":line})
 
 
 
@@ -228,7 +225,6 @@ def histogram(
 		mode:str=HIST_FREQUENCY, 
 		cumulative=False, 
 		breaks = None, 
-		title = None,
 		fill = None, 
 		line = None):
 	"""
@@ -238,12 +234,11 @@ def histogram(
 	data:	A variable \n
 	mode : density, frequency and relative frequency.\n
 	cumulative : True, cumulative distribution \n
-	breaks : Number of breaks or the break points, int/iterable\n
-	title: Title of the chart
+	breaks : Number of breaks or the break points, int/iterable
 	"""
 	return pltdll.c_plot_histogram((),
 			    {"data":data, "mode":mode, "cumulative":cumulative, 
-				"breaks":breaks, "title":title, "fill":fill, "line":line})
+				"breaks":breaks, "fill":fill, "line":line})
 
 
 
@@ -255,7 +250,6 @@ def line(
 	y:Iterable, 
 	labels:list=None, 
 	label:str=None, 
-	title:str=None, 
 	type=CLUSTER, 
 	marker=None, 
 	line=None):
@@ -266,14 +260,10 @@ def line(
 	y : Numeric data \n
 	labels : Category labels \n
 	label: Name of the series \n
-	type:	clustered, stacked and 100% stacked \n
-	title: Title of the chart
+	type:	clustered, stacked and 100% stacked 
 	"""
 	return pltdll.c_plot_line((),
-			 {"y":y, "labels":labels, "name":label, "title":title, 
-     			"type":type, "marker":marker, "line":line})
-
-
+			 {"y":y, "labels":labels, "name":label, "type":type, "marker":marker, "line":line})
 
 
 
@@ -284,7 +274,6 @@ def line(
 
 def pie(
 	data:Iterable, 
-	title:str=None, 
 	labels:list=None, 
 	colors:list=None, 
 	explode:list|int=None, 
@@ -295,7 +284,6 @@ def pie(
 
 	## Input:
 	data : Data of individual slices \n
-	title: Title of the chart \n
 	labels: Label of individual slices \n
 	colors: Color of individual slices \n
 	explode: Explosion level \n
@@ -303,7 +291,7 @@ def pie(
 	legend: Whether to show legend or not
 	"""
 	return pltdll.c_plot_pie((),
-				{"data":data, "title":title, "labels":labels, "colors":colors, 
+				{"data":data, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle, "legend":legend})
 
 
@@ -332,25 +320,20 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 
 def qqnorm(
 		data:Iterable,  
-		title = "Normal Q-Q Plot", 
-		xlab="Theoretical Quantiles",  
-		ylab="Sample Quantiles", 
 		show=True, 
 		line=None, 
 		marker=None):
 		"""
-		Quantile-quantile chart
+		Normal Quantile-quantile chart \n
+		x-axis="Theoretical Quantiles" \n  
+		y-axis="Sample Quantiles" \n
 
 		## Input:
 		data: Data \n
-		title: Title of the chart \n
-		xlab: Label of x-axis \n
-		ylab: Label of y-axis \n
 		show: Whether to show theoretical line or not 
 		"""
 		return pltdll.c_plot_qqnorm((),
-			{"data":data, "title":title, "xlab":xlab, "ylab":ylab, 
-			"show":show, "line":line, "marker":marker} )
+			{"data":data, "show":show, "line":line, "marker":marker} )
 
 
 
@@ -359,22 +342,15 @@ def qqnorm(
 def qqplot(
 		x:Iterable,
 		y:Iterable,
-		title:str = None, 
-		xlab:str=None, 
-		ylab:str=None, 
 		marker=None):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 
 	## Input
-	x, y: Data \n
-	title: title of the chart \n
-	xlab: Label of x-axis \n
-	ylab: Label of y-axis
+	x, y: Data
 	"""
 	return pltdll.c_plot_qqplot((),
-			{"x":x, "y":y, "title":title, 
-			"xlab":xlab, "ylab":ylab, "marker":marker})
+			{"x":x, "y":y, "marker":marker})
 
 
 
@@ -388,20 +364,14 @@ def quiver(
 		y:_np.ndarray, 
 		u:_np.ndarray, 
 		v:_np.ndarray, 
-		scale=False, 
-		title:str = None, 
-		xlab:str = None, 
-		ylab:str = None):
+		scale=False):
 	""""
 	Plots quiver chart
 
 	## Input:
 	x, y: (x,y) location, 2D ndarray \n
 	u, v: length in x and y directions, 2D ndarray \n
-	scale: Whether to scale the length of the arrows \n
-	title: Title of the chart \n
-	xlab: Label of x-axis \n
-	ylab: Label of y-axis
+	scale: Whether to scale the length of the arrows
 	"""
 	return pltdll.c_plot_quiver((),
 			{
@@ -409,7 +379,7 @@ def quiver(
 				"y":y.flatten().tolist(),
 				"u":u.flatten().tolist(), 
 				"v":v.flatten().tolist(), 
-				"scale":scale, "title":title, "xlab":xlab, "ylab":ylab})
+				"scale":scale})
 
 
 
@@ -483,9 +453,6 @@ def scatter(
 		x:Iterable,
 		y:Iterable,  
 		label:str=None, 
-		title:str=None, 
-		xlab:str=None, 
-		ylab:str=None, 
 		smooth:bool=False, 
 		bubble:dict=None, 
 		marker=Marker(), 
@@ -497,9 +464,6 @@ def scatter(
 	## Input:
 	x, y:	x- and y-data \n
 	label: Name of the series \n
-	title: Title of the chart \n
-	xlab:	Label of x-axis \n
-	ylab:	Label of y-axis \n
 	smooth: Spline algorithm is applied to smooth the line \n
 
 	Bubble Properties \n
@@ -514,7 +478,7 @@ def scatter(
 		trendline=vars(trendline)
 
 	return pltdll.c_plot_scatter((), 
-		{"x":x, "y":y , "name":label, "title":title, "xlab":xlab, "ylab":ylab, "smooth":smooth, 
+		{"x":x, "y":y , "name":label, "smooth":smooth, 
 		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
 
 
@@ -522,6 +486,12 @@ def scatter(
 def figure():
 	"""Start a new plot window"""
 	pltdll.c_plot_figure()
+
+
+def title(label:str):
+	"""Create chart title"""
+	pltdll.c_plot_title(label)
+
 
 def xlabel(label:str):
 	"""Create x-axis label"""

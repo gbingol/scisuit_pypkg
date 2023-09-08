@@ -167,6 +167,7 @@ y=2*x
 plt.scatter(x=x,y=y)
 plt.xlabel("x label")
 plt.ylabel("y label")
+plt.title("a title")
 
 #start mainloop 
 app.mainloop()
