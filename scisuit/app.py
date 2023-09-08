@@ -13,8 +13,6 @@ pltdll.c_plot_ismainlooprunning.restype=_ct.c_bool
 pltdll.c_plot_exitmainloop.argtypes = []
 pltdll.c_plot_exitmainloop.restype=_ct.c_bool
 
-pltdll.c_plot_close.argtypes = [_ct.py_object]
-pltdll.c_plot_close.restype=_ct.c_bool
 
 
 
@@ -53,13 +51,3 @@ class App:
 		returns True if main loop is exited.
 		"""
 		return pltdll.c_plot_exitmainloop()
-
-
-	def closewnd(self, hwnd):
-		"""
-		Closes the window with the given window handle \n
-		hwnd: Window handle \n
-
-		returns True if the window is closed
-		"""
-		return pltdll.c_plot_close(hwnd)
