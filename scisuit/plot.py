@@ -58,6 +58,9 @@ pltdll.c_plot_xlabel.restype=None
 pltdll.c_plot_ylabel.argtypes = [_ct.py_object]
 pltdll.c_plot_ylabel.restype=None
 
+pltdll.c_plot_legend.argtypes = []
+pltdll.c_plot_legend.restype=None
+
 
 
 """       DEFINITIONS            """
@@ -277,8 +280,7 @@ def pie(
 	labels:list=None, 
 	colors:list=None, 
 	explode:list|int=None, 
-	startangle:int=None, 
-	legend=True):
+	startangle:int=None):
 	"""
 	Plots Pie chart
 
@@ -287,12 +289,11 @@ def pie(
 	labels: Label of individual slices \n
 	colors: Color of individual slices \n
 	explode: Explosion level \n
-	startangle:	Start angle of first slice \n
-	legend: Whether to show legend or not
+	startangle:	Start angle of first slice 
 	"""
 	return pltdll.c_plot_pie((),
 				{"data":data, "labels":labels, "colors":colors, 
-     				"explode":explode, "startangle":startangle, "legend":legend})
+     				"explode":explode, "startangle":startangle})
 
 
 
@@ -504,3 +505,8 @@ def ylabel(label:str):
 	"""Create y-axis label"""
 	assert isinstance(label, str), "label must be of type string."
 	pltdll.c_plot_ylabel(label)
+
+
+def legend():
+	"""Create legend"""
+	pltdll.c_plot_legend()
