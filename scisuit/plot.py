@@ -49,6 +49,13 @@ pltdll.c_plot_scatter.restype=_ct.py_object
 pltdll.c_plot_figure.argtypes = []
 pltdll.c_plot_figure.restype=None
 
+pltdll.c_plot_xlabel.argtypes = [_ct.py_object]
+pltdll.c_plot_xlabel.restype=None
+
+pltdll.c_plot_ylabel.argtypes = [_ct.py_object]
+pltdll.c_plot_ylabel.restype=None
+
+
 
 """       DEFINITIONS            """
 class StrEnum(str, Enum):
@@ -515,3 +522,11 @@ def scatter(
 def figure():
 	"""Start a new plot window"""
 	pltdll.c_plot_figure()
+
+def xlabel(label:str):
+	"""Create x-axis label"""
+	pltdll.c_plot_xlabel(label)
+
+def ylabel(label:str):
+	"""Create y-axis label"""
+	pltdll.c_plot_ylabel(label)

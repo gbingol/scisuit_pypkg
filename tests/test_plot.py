@@ -160,12 +160,13 @@ plt.scatter(
 	y=(1,2,3,4), 
 	marker=m, trendline=plt.Trendline(degree=5))"""
 
-data=[10, 6, 8]
 
-#labels have been automatically assigned as 1, 2 and 3.
-plt.pie(data)
-plt.figure()
-plt.pie([20, 30])
+x=np.array([1,2,3,4])
+y=2*x
+
+plt.scatter(x=x,y=y)
+plt.xlabel("x label")
+plt.ylabel("y label")
 
 #start mainloop 
 app.mainloop()
