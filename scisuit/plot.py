@@ -61,6 +61,9 @@ pltdll.c_plot_ylabel.restype=None
 pltdll.c_plot_legend.argtypes = []
 pltdll.c_plot_legend.restype=None
 
+pltdll.c_plot_show.argtypes = [_ct.c_bool, _ct.c_bool]
+pltdll.c_plot_show.restype=None
+
 
 
 """       DEFINITIONS            """
@@ -510,3 +513,17 @@ def ylabel(label:str):
 def legend():
 	"""Create legend"""
 	pltdll.c_plot_legend()
+
+
+def show(maximize = False, shared = False, dpiaware = True):
+	"""
+	Starts main loop and shows the chart
+	
+	## Input:
+	maximize: Whether to show chart as maximized (good for Psychrometric chart) \n
+	shared: if there is any other application using a main loop \n
+	dpiaware: Show chart dpi aware
+	"""
+	_ct.windll.shcore.SetProcessDpiAwareness(dpiaware)
+	pltdll.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
+	

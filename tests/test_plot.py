@@ -149,9 +149,6 @@ def boxplot():
 	plt.boxplot(data=y)
 
 
-#start application
-app = App()
-
 
 """m=plt.Marker()
 m.size=8
@@ -171,6 +168,4 @@ plt.ylabel("y label")
 plt.title("a title")
 
 plt.legend()
-
-#start mainloop 
-app.mainloop()
+plt.show()
