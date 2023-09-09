@@ -487,6 +487,10 @@ def scatter(
 
 
 
+
+
+#----------------------------------------------------------------------------
+
 def figure():
 	"""Start a new plot window"""
 	pltdll.c_plot_figure()
