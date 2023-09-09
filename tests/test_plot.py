@@ -161,11 +161,6 @@ plt.scatter(
 x=np.array([1,2,3,4])
 y=2*x
 
-plt.scatter(x=x,y=y)
-plt.scatter(x=x, y=2*x+5)
-plt.xlabel("x label")
-plt.ylabel("y label")
-plt.title("a title")
-
+plt.psychrometry()
 plt.legend()
-plt.show()
+plt.show(maximize=True)
