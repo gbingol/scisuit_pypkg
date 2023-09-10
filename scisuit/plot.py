@@ -5,68 +5,25 @@ import dataclasses as _dc
 from typing import Iterable
 from enum import Enum
 
+from ._ctypeslib import pltDLL
 from .util import parent_path as _parent_path
+from .app import App
 
 
-#TODO: Change to release version
-_path = _parent_path(__file__) / "scisuit_plotter_d"
-pltdll = _ct.PyDLL(str(_path))
-
-
-pltdll.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_bar.restype=_ct.py_object
-
-pltdll.c_plot_barh.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_barh.restype=_ct.py_object
-
-pltdll.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_boxplot.restype=_ct.py_object
-
-pltdll.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_histogram.restype=_ct.py_object
-
-pltdll.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_line.restype=_ct.py_object
-
-pltdll.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_pie.restype=_ct.py_object
-
-pltdll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_psychrometry.restype=_ct.py_object
-
-pltdll.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_qqnorm.restype=_ct.py_object
-
-pltdll.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_qqplot.restype=_ct.py_object
-
-pltdll.c_plot_quiver.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_quiver.restype=_ct.py_object
-
-pltdll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
-pltdll.c_plot_scatter.restype=_ct.py_object
-
-pltdll.c_plot_figure.argtypes = []
-pltdll.c_plot_figure.restype=None
-
-pltdll.c_plot_title.argtypes = [_ct.py_object]
-pltdll.c_plot_title.restype=None
-
-pltdll.c_plot_xlabel.argtypes = [_ct.py_object]
-pltdll.c_plot_xlabel.restype=None
-
-pltdll.c_plot_ylabel.argtypes = [_ct.py_object]
-pltdll.c_plot_ylabel.restype=None
-
-pltdll.c_plot_legend.argtypes = []
-pltdll.c_plot_legend.restype=None
-
-pltdll.c_plot_show.argtypes = [_ct.c_bool, _ct.c_bool]
-pltdll.c_plot_show.restype=None
 
 
 
 """       DEFINITIONS            """
+
+
+"""
+Starts an application
+From C++ side c_plot_app function starts an application only once. 
+So it is safe to call this many times. 
+"""
+app = App()
+
+
 class StrEnum(str, Enum):
 	pass
 
@@ -172,7 +129,7 @@ def bar(
 	label: Name of the series \n
 	type: clustered, stacked and 100% stacked
 	"""
-	return pltdll.c_plot_bar((),
+	return pltDLL.c_plot_bar((),
 			{"height":height, "labels":labels, "name":label, "type":type, 
     			"fill":fill, "line":line})
 
@@ -195,7 +152,7 @@ def barh(
 	label: Name of the series \n
 	type: clustered, stacked and 100% stacked.
 	"""
-	return pltdll.c_plot_barh((),
+	return pltDLL.c_plot_barh((),
 			{"width":width, "labels":labels, "name":label, "type":type, 
     			"fill":fill, "line":line})
 
@@ -217,7 +174,7 @@ def boxplot(
 	data : Data to be plotted \n
 	label: Name of the series
 	"""
-	return pltdll.c_plot_boxplot((),
+	return pltDLL.c_plot_boxplot((),
 			{"data":data, "name":label, "fill":fill, "line":line})
 
 
@@ -242,7 +199,7 @@ def histogram(
 	cumulative : True, cumulative distribution \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
-	return pltdll.c_plot_histogram((),
+	return pltDLL.c_plot_histogram((),
 			    {"data":data, "mode":mode, "cumulative":cumulative, 
 				"breaks":breaks, "fill":fill, "line":line})
 
@@ -268,7 +225,7 @@ def line(
 	label: Name of the series \n
 	type:	clustered, stacked and 100% stacked 
 	"""
-	return pltdll.c_plot_line((),
+	return pltDLL.c_plot_line((),
 			 {"y":y, "labels":labels, "name":label, "type":type, "marker":marker, "line":line})
 
 
@@ -294,7 +251,7 @@ def pie(
 	explode: Explosion level \n
 	startangle:	Start angle of first slice 
 	"""
-	return pltdll.c_plot_pie((),
+	return pltDLL.c_plot_pie((),
 				{"data":data, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle})
 
@@ -314,7 +271,7 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	RH: A list in increasing order containing the requested relative humidity (%) lines \n
 	P: Absolute pressure (Pa)
 	"""
-	return pltdll.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
+	return pltDLL.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
 
 
@@ -336,7 +293,7 @@ def qqnorm(
 		data: Data \n
 		show: Whether to show theoretical line or not 
 		"""
-		return pltdll.c_plot_qqnorm((),
+		return pltDLL.c_plot_qqnorm((),
 			{"data":data, "show":show, "line":line, "marker":marker} )
 
 
@@ -353,7 +310,7 @@ def qqplot(
 	## Input
 	x, y: Data
 	"""
-	return pltdll.c_plot_qqplot((),
+	return pltDLL.c_plot_qqplot((),
 			{"x":x, "y":y, "marker":marker})
 
 
@@ -377,7 +334,7 @@ def quiver(
 	u, v: length in x and y directions, 2D ndarray \n
 	scale: Whether to scale the length of the arrows
 	"""
-	return pltdll.c_plot_quiver((),
+	return pltDLL.c_plot_quiver((),
 			{
 				"x":x.flatten().tolist(), 
 				"y":y.flatten().tolist(),
@@ -481,7 +438,7 @@ def scatter(
 	if isinstance(trendline, Trendline):
 		trendline=vars(trendline)
 
-	return pltdll.c_plot_scatter((), 
+	return pltDLL.c_plot_scatter((), 
 		{"x":x, "y":y , "name":label, "smooth":smooth, 
 		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
 
@@ -493,33 +450,33 @@ def scatter(
 
 def figure():
 	"""Start a new plot window"""
-	pltdll.c_plot_figure()
+	pltDLL.c_plot_figure()
 
 
 def title(label:str):
 	"""Create chart title"""
 	assert isinstance(label, str), "label must be of type string."
-	pltdll.c_plot_title(label)
+	pltDLL.c_plot_title(label)
 
 
 def xlabel(label:str):
 	"""Create x-axis label"""
 	assert isinstance(label, str), "label must be of type string."
-	pltdll.c_plot_xlabel(label)
+	pltDLL.c_plot_xlabel(label)
 
 
 def ylabel(label:str):
 	"""Create y-axis label"""
 	assert isinstance(label, str), "label must be of type string."
-	pltdll.c_plot_ylabel(label)
+	pltDLL.c_plot_ylabel(label)
 
 
 def legend():
 	"""Create legend"""
-	pltdll.c_plot_legend()
+	pltDLL.c_plot_legend()
 
 
-def show(maximize = False, shared = False, dpiaware = True):
+def show(maximize = False, shared = False):
 	"""
 	Starts main loop and shows the chart
 	
@@ -528,6 +485,6 @@ def show(maximize = False, shared = False, dpiaware = True):
 	shared: if there is any other application using a main loop \n
 	dpiaware: Show chart dpi aware
 	"""
-	_ct.windll.shcore.SetProcessDpiAwareness(dpiaware)
-	pltdll.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
+	pltDLL.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
+	app.mainloop()
 	

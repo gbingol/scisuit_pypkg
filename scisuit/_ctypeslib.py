@@ -5,8 +5,9 @@ from .util import parent_path as _parent_path
 _path = _parent_path(__file__) / "scisuit_core_d"
 coreDLL = _ct.PyDLL(str(_path))
 
-
-
+#TODO: Change to release version
+_pathPlot = _parent_path(__file__) / "scisuit_plotter_d"
+pltDLL = _ct.PyDLL(str(_pathPlot))
 
 
 """       ENGINEERING               """
@@ -168,6 +169,59 @@ coreDLL.c_stat_rolling.restype=_ct.py_object
 coreDLL.c_stat_test_norm_ad.argtypes = [_ct.py_object]
 coreDLL.c_stat_test_norm_ad.restype=_ct.py_object
 
+
+""" -----------  PLOT LIBRARY ----------------------"""
+
+pltDLL.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_bar.restype=_ct.py_object
+
+pltDLL.c_plot_barh.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_barh.restype=_ct.py_object
+
+pltDLL.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_boxplot.restype=_ct.py_object
+
+pltDLL.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_histogram.restype=_ct.py_object
+
+pltDLL.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_line.restype=_ct.py_object
+
+pltDLL.c_plot_pie.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_pie.restype=_ct.py_object
+
+pltDLL.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_psychrometry.restype=_ct.py_object
+
+pltDLL.c_plot_qqnorm.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_qqnorm.restype=_ct.py_object
+
+pltDLL.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_qqplot.restype=_ct.py_object
+
+pltDLL.c_plot_quiver.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_quiver.restype=_ct.py_object
+
+pltDLL.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_scatter.restype=_ct.py_object
+
+pltDLL.c_plot_figure.argtypes = []
+pltDLL.c_plot_figure.restype=None
+
+pltDLL.c_plot_title.argtypes = [_ct.py_object]
+pltDLL.c_plot_title.restype=None
+
+pltDLL.c_plot_xlabel.argtypes = [_ct.py_object]
+pltDLL.c_plot_xlabel.restype=None
+
+pltDLL.c_plot_ylabel.argtypes = [_ct.py_object]
+pltDLL.c_plot_ylabel.restype=None
+
+pltDLL.c_plot_legend.argtypes = []
+pltDLL.c_plot_legend.restype=None
+
+pltDLL.c_plot_show.argtypes = [_ct.c_bool, _ct.c_bool]
+pltDLL.c_plot_show.restype=None
 
 
 __all__ = ['coreDLL']
