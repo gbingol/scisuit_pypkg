@@ -73,6 +73,10 @@ coreDLL.c_stat_qnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
 coreDLL.c_stat_qnbinom.restype=_ct.py_object
 
 
+coreDLL.c_stat_dmultinom.argtypes = [_ct.py_object, _ct.c_int, _ct.py_object]
+coreDLL.c_stat_dmultinom.restype=_ct.py_object
+
+
 coreDLL.c_stat_dchisq.argtypes = [_ct.py_object, _ct.c_int]
 coreDLL.c_stat_dchisq.restype=_ct.py_object
 coreDLL.c_stat_pchisq.argtypes = [_ct.py_object, _ct.c_int]

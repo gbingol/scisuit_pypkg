@@ -1,11 +1,13 @@
 import numpy as _np
 import ctypes as _ct
+from typing import Iterable
+from numbers import Real
 from .._ctypeslib import coreDLL as _core
 
 
 # ----- Binomial Distribution  -------
 
-def dbinom(x:list|_np.ndarray, size:int, prob:float):
+def dbinom(x:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	size: number of trials
 	prob: probability of success in each trial
@@ -13,7 +15,7 @@ def dbinom(x:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_dbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
 
-def pbinom(q:list|_np.ndarray, size:int, prob:float):
+def pbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	size: number of trials
 	prob: probability of success in each trial
@@ -23,7 +25,7 @@ def pbinom(q:list|_np.ndarray, size:int, prob:float):
 
 	return _core.c_stat_pbinom(q, _ct.c_int(size), _ct.c_double(prob))
 
-def qbinom(p:list|_np.ndarray, size:int, prob:float):
+def qbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	size: number of trials
 	prob: probability of success in each trial
@@ -34,7 +36,7 @@ def qbinom(p:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_qbinom(p, _ct.c_int(size), _ct.c_double(prob))
 	
 
-def rbinom(n:int, size:int, prob:float):
+def rbinom(n:int, size:int, prob:float)->list:
 	"""
 	size: number of trials
 	prob: probability of success in each trial
@@ -50,7 +52,7 @@ def rbinom(n:int, size:int, prob:float):
 
 # ----- Negative-Binomial Distribution  -------
 
-def dnbinom(x:list|_np.ndarray, size:int, prob:float):
+def dnbinom(x:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	x: quantiles representing number of failures
 	size: target for number of successful trials
@@ -62,7 +64,7 @@ def dnbinom(x:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_dnbinom(x, _ct.c_int(size), _ct.c_double(prob))
 
 
-def pnbinom(q:list|_np.ndarray, size:int, prob:float):
+def pnbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	q: quantiles representing number of failures
 	size: target for number of successful trials
@@ -73,7 +75,7 @@ def pnbinom(q:list|_np.ndarray, size:int, prob:float):
 
 	return _core.c_stat_pnbinom(q, _ct.c_int(size), _ct.c_double(prob))
 
-def qnbinom(p:list|_np.ndarray, size:int, prob:float):
+def qnbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
 	p: probabilities
 	size: target for number of successful trials
@@ -85,7 +87,7 @@ def qnbinom(p:list|_np.ndarray, size:int, prob:float):
 	return _core.c_stat_qnbinom(p, _ct.c_int(size), _ct.c_double(prob))
 
 
-def rnbinom(n:int, size, prob):
+def rnbinom(n:int, size, prob)->list:
 	"""
 	size: target for number of successful trials
 	prob: probability of success in each trial
@@ -98,10 +100,30 @@ def rnbinom(n:int, size, prob):
 
 
 
+# ----- Multinomial Distribution  -------
+
+def dmultinom(x:Iterable, size:int, prob:Iterable)->float:
+	"""
+	x: quantiles 
+	size: number of trials
+	prob: probabilities of success in each trial
+
+	## Note:
+	Internally sum of probabilities is normalized to 1.0
+	"""
+
+	assert sum(x) == size, "sum(x) == size expected."
+	assert size>0, "size>0 expected"
+
+	return _core.c_stat_dmultinom(x, _ct.c_int(size), prob)
+
+
+
+
 
 # ----- Chi-Square Distribution  -------
 
-def dchisq(x, df:int):
+def dchisq(x:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -109,7 +131,7 @@ def dchisq(x, df:int):
 
 	return _core.c_stat_dchisq(x, _ct.c_int(df))
 
-def pchisq(q, df:int):
+def pchisq(q:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -117,7 +139,7 @@ def pchisq(q, df:int):
 	
 	return _core.c_stat_pchisq(q, _ct.c_int(df))
 
-def qchisq(p, df:int):
+def qchisq(p:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -125,7 +147,8 @@ def qchisq(p, df:int):
 	
 	return _core.c_stat_qchisq(p, _ct.c_int(df))
 
-def rchisq(n:int, df):
+
+def rchisq(n:int, df)->list:
 	"""
 	df: degrees of freedom
 	"""
@@ -138,7 +161,7 @@ def rchisq(n:int, df):
 
 # ----- Exponential Distribution  -------
 
-def dexp(x:list|_np.ndarray, rate = 1.0):
+def dexp(x:Iterable|Real, rate = 1.0)->list|Real:
 	"""
 	x: quantiles
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
@@ -146,14 +169,15 @@ def dexp(x:list|_np.ndarray, rate = 1.0):
 	return _core.c_stat_dexp(x, _ct.c_double(rate))
 
 
-def pexp(q:list|_np.ndarray, rate = 1.0):
+def pexp(q:Iterable|Real, rate = 1.0)->list|Real:
 	"""
 	q: quantiles
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
 	return _core.c_stat_pexp(q,  _ct.c_double(rate))
 
-def qexp(p:list|_np.ndarray, rate = 1.0):
+
+def qexp(p:Iterable|Real, rate = 1.0)->list|Real:
 	"""
 	p: probabilities
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
@@ -161,7 +185,7 @@ def qexp(p:list|_np.ndarray, rate = 1.0):
 	return _core.c_stat_qexp(p,  _ct.c_double(rate))
 
 
-def rexp(n:int, rate=1.0):
+def rexp(n:int, rate=1.0)->list:
 	"""
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
@@ -174,7 +198,7 @@ def rexp(n:int, rate=1.0):
 
 # ----- F Distribution  -------
 
-def df(x, df1:int, df2:int):
+def df(x:Iterable|Real, df1:int, df2:int)->list|Real:
 	"""
 	df1: degrees of freedom, numerator
 	df2: degrees of freedom, denominator
@@ -184,7 +208,8 @@ def df(x, df1:int, df2:int):
 
 	return _core.c_stat_df(x, _ct.c_int(df1), _ct.c_int(df2))
 
-def pf(q, df1:int, df2:int):
+
+def pf(q:Iterable|Real, df1:int, df2:int)->list|Real:
 	"""
 	df1: degrees of freedom, numerator
 	df2: degrees of freedom, denominator
@@ -194,7 +219,7 @@ def pf(q, df1:int, df2:int):
 
 	return _core.c_stat_pf(q, _ct.c_int(df1), _ct.c_int(df2))
 
-def qf(p, df1:int, df2:int):
+def qf(p:Iterable|Real, df1:int, df2:int)->list|Real:
 	"""
 	df1: degrees of freedom, numerator
 	df2: degrees of freedom, denominator
@@ -205,7 +230,7 @@ def qf(p, df1:int, df2:int):
 	return _core.c_stat_qf(p, _ct.c_int(df1), _ct.c_int(df2))
 
 
-def rf(n:int, df1, df2):
+def rf(n:int, df1, df2)->list:
 	"""
 	df1: degrees of freedom, numerator
 	df2: degrees of freedom, denominator
@@ -221,7 +246,7 @@ def rf(n:int, df1, df2):
 
 # ----- Gamma Distribution  -------
 
-def dgamma(x:list|_np.ndarray, shape:float, scale = 1.0):
+def dgamma(x:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	"""
 	x: quantile	
 	shape: waiting time for the rth event to occur
@@ -230,7 +255,7 @@ def dgamma(x:list|_np.ndarray, shape:float, scale = 1.0):
 	return _core.c_stat_dgamma(x, _ct.c_double(shape), _ct.c_double(scale))
 
 
-def pgamma(q:list|_np.ndarray, shape:float, scale = 1.0):
+def pgamma(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	"""
 	q: quantile
 	shape: waiting time for the rth event to occur
@@ -238,7 +263,8 @@ def pgamma(q:list|_np.ndarray, shape:float, scale = 1.0):
 	"""
 	return _core.c_stat_pgamma(q, _ct.c_double(shape), _ct.c_double(scale))
 
-def qgamma(p:list|_np.ndarray, shape:float, scale = 1.0):
+
+def qgamma(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	"""
 	p: probabilities
 	shape: waiting time for the rth event to occur
@@ -247,7 +273,7 @@ def qgamma(p:list|_np.ndarray, shape:float, scale = 1.0):
 	return _core.c_stat_qgamma(p, _ct.c_double(shape), _ct.c_double(scale))
 
 
-def rgamma(n:int, shape:float, scale=1.0):
+def rgamma(n:int, shape:float, scale=1.0)->list:
 	"""
 	Draw samples from gamma distribution
 	"""
@@ -262,7 +288,7 @@ def rgamma(n:int, shape:float, scale=1.0):
 
 # ----- Geometric Distribution  -------
 
-def dgeom(x:list|_np.ndarray, prob:float):
+def dgeom(x:Iterable|Real, prob:float)->list|Real:
 	"""
 	x: Number of failures before success occurs.
 	prob: probability of success in each trial.
@@ -270,14 +296,14 @@ def dgeom(x:list|_np.ndarray, prob:float):
 	return _core.c_stat_dgeom(x, _ct.c_double(prob))
 
 
-def pgeom(q:list|_np.ndarray, prob:float):
+def pgeom(q:Iterable|Real, prob:float)->list|Real:
 	"""
 	q: Number of failures before success occurs.
 	prob: probability of success in each trial.
 	"""
 	return _core.c_stat_pgeom(q, _ct.c_double(prob))
 
-def qgeom(p:list|_np.ndarray, prob:float):
+def qgeom(p:Iterable|Real, prob:float)->list|Real:
 	"""
 	p: probabilities
 	prob: probability of success in each trial.
@@ -285,7 +311,7 @@ def qgeom(p:list|_np.ndarray, prob:float):
 	return _core.c_stat_qgeom(p, _ct.c_double(prob))
 
 
-def rgeom(n:int, prob):
+def rgeom(n:int, prob)->list:
 	"""
 	Draw samples from geometric distribution
 	"""
@@ -299,7 +325,7 @@ def rgeom(n:int, prob):
 
 # ----- Hypergeometric Distribution  -------
 
-def dhyper(x, m:int, n:int, k:int):
+def dhyper(x:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	"""
 	m: number of good samples in the urn
 	n: number of bad samples in the urn
@@ -307,7 +333,8 @@ def dhyper(x, m:int, n:int, k:int):
 	"""
 	return _core.c_stat_dhyper(x, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
-def phyper(q, m:int, n:int, k:int):
+
+def phyper(q:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	"""
 	m: number of good samples in the urn
 	n: number of bad samples in the urn
@@ -315,7 +342,8 @@ def phyper(q, m:int, n:int, k:int):
 	"""
 	return _core.c_stat_phyper(q, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
-def qhyper(p, m:int, n:int, k:int):
+
+def qhyper(p:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	"""
 	m: number of good samples in the urn
 	n: number of bad samples in the urn
@@ -324,7 +352,7 @@ def qhyper(p, m:int, n:int, k:int):
 	return _core.c_stat_qhyper(p, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 
-def rhyper(nn:int, m:int, n:int, k:int):
+def rhyper(nn:int, m:int, n:int, k:int)->list:
 	"""
 	m: number of good samples in the urn
 	n: number of bad samples in the urn
@@ -342,28 +370,31 @@ def rhyper(nn:int, m:int, n:int, k:int):
 
 # ----- Normal Distribution  -------
 
-def dnorm(x, mean=0.0, sd=1.0):
+def dnorm(x:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	"""
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
 	return _core.c_stat_dnorm(x, _ct.c_double(mean), _ct.c_double(sd))
 
-def pnorm(q, mean=0.0, sd=1.0):
+
+def pnorm(q:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	"""
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
 	return _core.c_stat_pnorm(q, _ct.c_double(mean), _ct.c_double(sd))
 
-def qnorm(p, mean=0.0, sd=1.0):
+
+def qnorm(p:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	"""
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
 	return _core.c_stat_qnorm(p, _ct.c_double(mean), _ct.c_double(sd))
 
-def rnorm(n:int, mean=0.0, sd=1.0):
+
+def rnorm(n:int, mean=0.0, sd=1.0)->list:
 	"""
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
@@ -378,17 +409,19 @@ def rnorm(n:int, mean=0.0, sd=1.0):
 
 # ----- Poisson Distribution  -------
 
-def dpois(x, mu:float):
+def dpois(x:Iterable|Real, mu:float)->list|Real:
 	return _core.c_stat_dpois(x, _ct.c_double(mu))
 
-def ppois(q, mu:float):
+
+def ppois(q:Iterable|Real, mu:float)->list|Real:
 	return _core.c_stat_ppois(q, _ct.c_double(mu))
 
-def qpois(p, mu:float):
+
+def qpois(p:Iterable|Real, mu:float)->list|Real:
 	return _core.c_stat_qpois(p, _ct.c_double(mu))
 
 
-def rpois(n:int, mu = 1):
+def rpois(n:int, mu = 1)->list:
 	"""
 	Draw samples from Poisson distribution
 	"""
@@ -402,7 +435,7 @@ def rpois(n:int, mu = 1):
 
 # ----- t Distribution  -------
 
-def dt(x, df:int):
+def dt(x:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -410,7 +443,8 @@ def dt(x, df:int):
 
 	return _core.c_stat_dt(x, _ct.c_int(df))
 
-def pt(q, df:int):
+
+def pt(q:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -418,7 +452,8 @@ def pt(q, df:int):
 
 	return _core.c_stat_pt(q, _ct.c_int(df))
 
-def qt(p, df:int):
+
+def qt(p:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
@@ -426,7 +461,8 @@ def qt(p, df:int):
 
 	return _core.c_stat_qt(p, _ct.c_int(df))
 
-def rt(n:int, df):
+
+def rt(n:int, df)->list:
 	"""
 	df: degrees of freedom
 	"""
@@ -440,20 +476,22 @@ def rt(n:int, df):
 
 # ----- Wilcoxon Sign Rank Distribution  -------
 
-def dsignrank(x, n:int):
+def dsignrank(x:Iterable|Real, n:int)->list|Real:
 	return _core.c_stat_dsignrank(x, _ct.c_int(n))
 
-def psignrank(q, n:int):
+
+def psignrank(q:Iterable|Real, n:int)->list|Real:
 	return _core.c_stat_psignrank(q, _ct.c_int(n))
 
-def qsignrank(p, n:int):
+
+def qsignrank(p:Iterable|Real, n:int)->list|Real:
 	return _core.c_stat_qsignrank(p, _ct.c_int(n))
 
 
 
 # ----- Uniform Distribution  -------
 
-def dunif(x, min=0.0, max=1.0):
+def dunif(x:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	min: minimum bound
 	max: maximum bound
@@ -462,7 +500,8 @@ def dunif(x, min=0.0, max=1.0):
 
 	return _core.c_stat_dunif(x, _ct.c_double(min), _ct.c_double(max))
 
-def punif(q, min=0.0, max=1.0):
+
+def punif(q:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	min: minimum bound
 	max: maximum bound
@@ -471,7 +510,8 @@ def punif(q, min=0.0, max=1.0):
 
 	return _core.c_stat_punif(q, _ct.c_double(min), _ct.c_double(max))
 
-def qunif(p, min=0.0, max=1.0):
+
+def qunif(p:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	min: minimum bound
 	max: maximum bound
@@ -480,7 +520,8 @@ def qunif(p, min=0.0, max=1.0):
 
 	return _core.c_stat_qunif(p, _ct.c_double(min), _ct.c_double(max))
 
-def runif(n:int, min=0.0, max=1.0):
+
+def runif(n:int, min=0.0, max=1.0)->list:
 	"""
 	min: minimum bound
 	max: maximum bound

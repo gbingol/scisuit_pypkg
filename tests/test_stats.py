@@ -8,10 +8,6 @@ sys.path.insert(0, os.getcwd())
 
 import scisuit.stats as st
 
-x=st.rnorm(10)
-print(st.sample(x, size=7))
-
-
 
 
 def GammaDist():
@@ -96,3 +92,7 @@ def ANOVA1():
 
 	print("p-value=" + str(pval))
 	pprint.pprint(info)
+
+
+
+print(st.dmultinom(x=(3,3), size=6, prob=(0.2, 0.8)))

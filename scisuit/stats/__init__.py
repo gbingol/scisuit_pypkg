@@ -28,6 +28,7 @@ from .distributions import \
 	dgamma, pgamma, qgamma,rgamma, \
 	dgeom, pgeom, qgeom, rgeom, \
 	dhyper, phyper, qhyper, rhyper, \
+	dmultinom, \
 	dnbinom, pnbinom, qnbinom,rnbinom, \
 	dnorm, pnorm, qnorm, rnorm, \
 	dpois, ppois, qpois, rpois, \
