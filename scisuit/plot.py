@@ -6,7 +6,6 @@ from typing import Iterable
 from enum import Enum
 
 from ._ctypeslib import pltDLL
-from .util import parent_path as _parent_path
 from .app import App
 
 
@@ -478,12 +477,11 @@ def legend():
 
 def show(maximize = False, shared = False):
 	"""
-	Starts main loop and shows the chart
+	Starts main loop and shows the chart(s)
 	
 	## Input:
 	maximize: Whether to show chart as maximized (good for Psychrometric chart) \n
-	shared: if there is any other application using a main loop \n
-	dpiaware: Show chart dpi aware
+	shared: if there is any other application using a main loop
 	"""
 	pltDLL.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
 	app.mainloop()
