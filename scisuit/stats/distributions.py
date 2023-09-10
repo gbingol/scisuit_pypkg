@@ -118,6 +118,24 @@ def dmultinom(x:Iterable, size:int, prob:Iterable)->float:
 	return _core.c_stat_dmultinom(x, _ct.c_int(size), prob)
 
 
+def rmultinom(n:int, size:int, prob:Iterable)->list:
+	"""
+	size: number of trials
+	prob: probabilities of success in each trial
+
+	returns 2D list, where list[i] corresponds to prob[i]
+
+	## Note:
+	Sum of probabilities is normalized to 1.0
+	"""
+	assert size>0, "size>0 expected"
+	assert len(prob)>1, "For single prob value use rbinom function"
+
+	Sum = sum(prob) 
+	assert Sum>0, "sum of probabilities must be >0"
+
+	return [rbinom(n, size, p/Sum) for p in prob]
+
 
 
 

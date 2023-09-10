@@ -95,4 +95,4 @@ def ANOVA1():
 
 
 
-print(st.dmultinom(x=(3,3), size=6, prob=(0.2, 0.8)))
+print(st.rmultinom(n=10, size=6, prob=(0.2, 0.8)))
