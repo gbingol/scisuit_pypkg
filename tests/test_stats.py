@@ -95,4 +95,11 @@ def ANOVA1():
 
 
 
-print(st.rmultinom(n=10, size=6, prob=(0.2, 0.8)))
+def multinom_prob():
+	from scisuit.stats import dmultinom
+
+	probs = [1/21*i for i in range(1,7)]
+	x=[2]*6
+
+	p = dmultinom(x=x, size=12, prob=probs)
+	print(f"probability={p}")
