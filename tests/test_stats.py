@@ -95,7 +95,7 @@ def ANOVA1():
 
 
 
-def multinom_prob():
+def dmultinom():
 	from scisuit.stats import dmultinom
 
 	probs = [1/21*i for i in range(1,7)]
@@ -103,3 +103,26 @@ def multinom_prob():
 
 	p = dmultinom(x=x, size=12, prob=probs)
 	print(f"probability={p}")
+
+
+def rmultinom():
+	from scisuit.stats import rmultinom
+
+	n=10
+
+	#testing probabilities
+	p = np.array([0.05, 0.15, 0.30, 0.50 ])
+
+	#2D array
+	arr = np.array(rmultinom(n=1000, size=10, prob=p))
+
+	#means of each 1000 numbers with probabilities 0.05, 0.15 ...
+	means = np.mean(arr, axis=1)
+
+	#expected value (n*p[i])
+	E_X = n*p
+
+	print(f"Difference = {means - E_X}")
+
+
+
