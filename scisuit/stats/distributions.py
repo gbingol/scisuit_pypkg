@@ -548,3 +548,44 @@ def runif(n:int, min=0.0, max=1.0)->list:
 	assert n>0 ,"n>0 expected"
 
 	return _np.random.uniform(size=n, low=min, high=max).tolist()
+
+
+
+# ----- Weibull Distribution  -------
+
+def dweibull(x:Iterable|Real, shape:float, scale = 1.0)->list|Real:
+	"""
+	x: quantile	
+	shape: similar to failure rate
+	scale: similar to variability present in the distribution
+	"""
+	return _core.c_stat_dweibull(x, _ct.c_double(shape), _ct.c_double(scale))
+
+
+def pweibull(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
+	"""
+	q: quantile
+	shape: similar to failure rate
+	scale: similar to variability present in the distribution
+	"""
+	return _core.c_stat_pweibull(q, _ct.c_double(shape), _ct.c_double(scale))
+
+
+def qweibull(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
+	"""
+	p: probabilities
+	shape: similar to failure rate
+	scale: similar to variability present in the distribution
+	"""
+	return _core.c_stat_qweibull(p, _ct.c_double(shape), _ct.c_double(scale))
+
+
+def rweibull(n:int, shape:float, scale=1.0)->list:
+	"""
+	Draw samples from weibull distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert shape>0, "shape>0 expected"
+	assert scale>0, "scale>0 expected"
+
+	return (scale*_np.random.weibull(size=n, a=shape, )).tolist()

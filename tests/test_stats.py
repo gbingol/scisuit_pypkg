@@ -125,4 +125,7 @@ def rmultinom():
 	print(f"Difference = {means - E_X}")
 
 
-
+def weibull():
+	print(st.dweibull(x=3, shape=2, scale=4))
+	print(st.pweibull(q=3, shape=2, scale=4))
+	print(st. qweibull(p=0.3, shape=2, scale=4))

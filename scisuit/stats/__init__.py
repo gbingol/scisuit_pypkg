@@ -34,7 +34,8 @@ from .distributions import \
 	dpois, ppois, qpois, rpois, \
 	dsignrank, qsignrank, psignrank, \
 	dt, pt, qt, rt, \
-	dunif, punif, qunif, runif
+	dunif, punif, qunif, runif, \
+	dweibull, pweibull, qweibull, rweibull
 
 
 

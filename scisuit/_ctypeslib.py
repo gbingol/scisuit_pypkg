@@ -156,6 +156,14 @@ coreDLL.c_stat_qunif.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 coreDLL.c_stat_qunif.restype=_ct.py_object
 
 
+coreDLL.c_stat_dweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_dweibull.restype=_ct.py_object
+coreDLL.c_stat_pweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_pweibull.restype=_ct.py_object
+coreDLL.c_stat_qweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_qweibull.restype=_ct.py_object
+
+
 coreDLL.c_stat_dsignrank.argtypes = [_ct.py_object, _ct.c_int]
 coreDLL.c_stat_dsignrank.restype=_ct.py_object
 coreDLL.c_stat_psignrank.argtypes = [_ct.py_object, _ct.c_int]
