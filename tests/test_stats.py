@@ -129,3 +129,47 @@ def weibull():
 	print(st.dweibull(x=3, shape=2, scale=4))
 	print(st.pweibull(q=3, shape=2, scale=4))
 	print(st. qweibull(p=0.3, shape=2, scale=4))
+
+
+def gamma_weibull_scale():
+	import matplotlib.pyplot as plt
+	from scisuit.stats import dgamma, dweibull
+
+	figure, axis = plt.subplots(nrows=2, ncols=1)
+
+	axis[0].set_title("Gamma")
+	axis[1].set_title("Weibull")
+
+
+	x=np.linspace(0, 7, num=100)
+
+	for beta in [0.5, 1, 2, 4]:
+		axis[0].plot(x, dgamma(x=x, shape=2, scale=beta), label=str(beta))
+		axis[1].plot(x, dweibull(x=x, shape=2, scale=beta), label=str(beta))
+
+	axis[0].legend()
+	axis[1].legend()
+	plt.tight_layout()
+	plt.show()
+
+
+def gamma_weibull_shape():
+	import matplotlib.pyplot as plt
+	from scisuit.stats import dgamma, dweibull
+
+	figure, axis = plt.subplots(nrows=2, ncols=1)
+
+	axis[0].set_title("Gamma")
+	axis[1].set_title("Weibull")
+
+
+	x=np.linspace(0.1, 7, num=100)
+
+	for alpha in [0.6, 1, 3]:
+		axis[0].plot(x, dgamma(x=x, shape=alpha, scale=1), label=str(alpha))
+		axis[1].plot(x, dweibull(x=x, shape=alpha, scale=1), label=str(alpha))
+
+	axis[0].legend()
+	axis[1].legend()
+	plt.tight_layout()
+	plt.show()
