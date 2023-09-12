@@ -3,12 +3,31 @@ import ctypes as _ct
 import numbers as _numbers
 import types as _types
 import numpy as _np
+import dataclasses as _dc
+import sys as _sys
 
 
-__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve']
+__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Result"]
 
 
-def bisect(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100, method="bf", modified=False)->tuple:
+@_dc.dataclass
+class Result:
+	"""
+	root: root of the equation
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	errmsg: if convergence is False, a reason is given
+	"""
+	root:float
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	errmsg:str =""
+
+
+
+def bisect(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100, method="bf", modified=False)->Result:
 	"""
 	Finds the root using bisection method.
 
@@ -25,15 +44,18 @@ def bisect(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100, metho
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	return _core.c_root_bisect(f, _ct.c_double(a), _ct.c_double(b), 
+	root, lst =_core.c_root_bisect(f, _ct.c_double(a), _ct.c_double(b), 
 			_ct.c_double(tol), 
 			_ct.c_int(maxiter), 
 			_ct.c_char_p(method.encode('utf-8')),
 			_ct.c_bool(modified))
+	
+	return Result(root, lst[0], lst[1], lst[2], lst[3])
 
 
 
-def brentq(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->tuple:
+
+def brentq(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Result:
 	"""
 	Uses the Brent's method (1973) to find the root of the function 
 	using inverse quadratic interpolation.
@@ -49,12 +71,14 @@ def brentq(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->tupl
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	return _core.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _core.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+
+	return Result(root, None, lst[0], lst[1], lst[2])
 
 
 
 
-def muller(f:_types.FunctionType, x0:_numbers.Complex, h=None, x1=None, x2=None, tol=1E-5, maxiter=100)->tuple:
+def muller(f:_types.FunctionType, x0:_numbers.Complex, h=None, x1=None, x2=None, tol=1E-5, maxiter=100)->Result:
 	"""
 	## Inputs:
 	f: A unary function \n
@@ -66,11 +90,13 @@ def muller(f:_types.FunctionType, x0:_numbers.Complex, h=None, x1=None, x2=None,
 	assert callable(f), "f must be function"
 	assert isinstance(x0, _numbers.Complex), "x0 must be a Complex/Real number"
 	
-	return _core.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _core.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
+
+	return Result(root, None, lst[0], lst[1], lst[2])
 
 
 
-def newton(f:_types.FunctionType, x0:float, x1=None, fprime=None, tol=1E-5, maxiter=100)->tuple:
+def newton(f:_types.FunctionType, x0:float, x1=None, fprime=None, tol=1E-5, maxiter=100)->Result:
 	"""
 	If fprime is provided then uses Newton-Raphson method  \n
 	If fprime is not provided, then x1 must be provided uses Secant method.
@@ -89,12 +115,14 @@ def newton(f:_types.FunctionType, x0:float, x1=None, fprime=None, tol=1E-5, maxi
 	else:
 		assert callable(fprime), "If fprime is provided, it must be of type function."
 
-	return _core.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _core.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
+
+	return Result(root, lst[0], lst[1], lst[2], lst[3])
 
 
 
 
-def ridder(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->tuple:
+def ridder(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Result:
 	"""
 	Uses Ridder's method.
 
@@ -108,7 +136,9 @@ def ridder(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->tupl
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 	
-	return _core.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _core.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+
+	return Result(root, None, lst[0], lst[1], lst[2])
 
 
 
