@@ -5,6 +5,50 @@ from numbers import Real
 from .._ctypeslib import coreDLL as _core
 
 
+
+# ----- Standard Beta Distribution  -------
+
+def dbeta(x:Iterable|Real, shape1:float, shape2:float)->list|Real:
+	"""
+	shape1, shape2: similar to alpha and beta
+	"""
+	assert shape1>0, "shape1>0 expected"
+	assert shape2>0, "shape2>0 expected"
+	return _core.c_stat_dbeta(x, _ct.c_double(shape1), _ct.c_double(shape2))
+
+
+def pbeta(q:Iterable|Real, shape1:float, shape2:float)->list|Real:
+	"""
+	shape1, shape2: similar to alpha and beta
+	"""
+	assert shape1>0, "shape1>0 expected"
+	assert shape2>0, "shape2>0 expected"
+
+	return _core.c_stat_pbeta(q, _ct.c_double(shape1), _ct.c_double(shape2))
+
+
+def qbeta(p:Iterable|Real, shape1:float, shape2:float)->list|Real:
+	"""
+	shape1, shape2: similar to alpha and beta
+	"""
+	assert shape1>0, "shape1>0 expected"
+	assert shape2>0, "shape2>0 expected"
+
+	return _core.c_stat_qbeta(p, _ct.c_double(shape1), _ct.c_double(shape2))
+	
+
+def rbeta(n:int, shape1:float, shape2:float)->list:
+	"""
+	shape1, shape2: similar to alpha and beta
+	"""
+	assert n>0 ,"n>0 expected"
+	assert shape1>0, "shape1>0 expected"
+	assert shape2>0, "shape2>0 expected"
+
+	return _np.random.beta(size=n, a=shape1, b=shape2).tolist()
+
+
+
 # ----- Binomial Distribution  -------
 
 def dbinom(x:Iterable|Real, size:int, prob:float)->list|Real:
@@ -24,6 +68,7 @@ def pbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
 	return _core.c_stat_pbinom(q, _ct.c_int(size), _ct.c_double(prob))
+
 
 def qbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	"""

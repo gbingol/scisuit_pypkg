@@ -57,6 +57,14 @@ coreDLL.c_fit_spline.restype = _ct.py_object
 
 """        STATS PACKAGE           """
 
+coreDLL.c_stat_dbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
+coreDLL.c_stat_dbeta.restype=_ct.py_object
+coreDLL.c_stat_pbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
+coreDLL.c_stat_pbeta.restype=_ct.py_object
+coreDLL.c_stat_qbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
+coreDLL.c_stat_qbeta.restype=_ct.py_object
+
+
 coreDLL.c_stat_dbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
 coreDLL.c_stat_dbinom.restype=_ct.py_object
 coreDLL.c_stat_pbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]

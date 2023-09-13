@@ -173,3 +173,12 @@ def gamma_weibull_shape():
 	axis[1].legend()
 	plt.tight_layout()
 	plt.show()
+
+
+
+from scisuit.stats import dbeta, pbeta, qbeta
+
+print(dbeta(x=0.1, shape1=0.5, shape2=1))
+print(pbeta(q=0.1, shape1=0.5, shape2=1))
+print(qbeta(p=0.1, shape1=0.5, shape2=1))
+

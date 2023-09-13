@@ -21,6 +21,7 @@ from .test_basic import \
 
 
 from .distributions import \
+	dbeta, pbeta, qbeta, rbeta, \
 	dbinom, pbinom, qbinom, rbinom, \
 	dchisq, pchisq, qchisq, rchisq, \
 	dexp, pexp, qexp, rexp, \
