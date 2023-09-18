@@ -158,18 +158,14 @@ plt.scatter(
 
 
 x=np.array([1,2,3,4])
-y=2*x
+y=x**2
 
 plt.scatter(x=x, y=2*x+5)
 plt.legend()
 
 plt.figure()
 
-plt.plot(x=x, y=y)
-
-plt.figure()
-
-plt.histogram([1, 2, 3, 4, 5, 3, 4, 2, 5, 4, 6])
+plt.plot(x=x, y=y, width=3, color=plt.Color.BROWN)
 
 plt.show()
 

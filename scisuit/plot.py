@@ -464,6 +464,9 @@ def plot(
 	x:Iterable,
 	y:Iterable,  
 	label:str=None, 
+	color:str = None,
+	width:int = 1,
+	style:int = PEN_SOLID,
 	smooth:bool=False):
 	"""
 	Plot scatter charts
@@ -471,10 +474,13 @@ def plot(
 	## Input:
 	x, y:	x- and y-data \n
 	label: Name of the series \n
-	smooth: Smooth lines
+	smooth: Smooth lines \n
+	color: line color, check Color class \n
+	style: line style, use PEN_XXX \n
+	width: line width
 	"""
-	line = LineProp()
-	return scatter(x=x, y=y, label=label, smooth=smooth, marker=None, line=line)
+	line = LineProp(color=color, width=width, style=style)
+	return scatter(x=x, y=y, label=label, smooth=smooth, marker=None, line=vars(line))
 
 
 #----------------------------------------------------------------------------
