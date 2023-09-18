@@ -18,3 +18,7 @@ root, info = brentq(f=func, a=0, b=5)
 
 print("\n **** Brent's method ****")
 print(root," ", info)
+
+from scisuit.roots import bisect
+root, info = bisect(lambda x: x**2-5, a = 0, b = 4)
+print(root, " ",  info)

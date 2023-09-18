@@ -16,12 +16,12 @@ class Info:
 	err: error (if available)
 	iter: number of iterations to reach the root
 	conv: whether converged to a root or not
-	errmsg: if convergence is False, a reason is given
+	msg: if convergence is False, a reason is given
 	"""
 	err:float = None
 	iter:int = -1
 	conv:bool = False
-	errmsg:str =""
+	msg:str =""
 
 
 
