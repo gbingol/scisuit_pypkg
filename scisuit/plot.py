@@ -369,7 +369,7 @@ def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 
 
 @_dc.dataclass
-class Marker:
+class MarkerProp:
 	"""
 	A class to define marker properties
 
@@ -377,7 +377,7 @@ class Marker:
 	type: "c", "s", "t", "x" (default "c") \n	
 	size: 5 #>0 expected \n
 	fill: if specified, RGB "255 255 0" \n
-	linewidth: #>0 expected \n
+	linewidth: >0 expected \n
 	linecolor: if specified, RGB "255 255 0"
 	"""
 	type:str=MARKER_CIRCLE 
@@ -388,7 +388,22 @@ class Marker:
 
 
 @_dc.dataclass
-class Trendline:
+class LineProp:
+	"""
+	A class to define marker properties
+
+	## Input:
+	color: if specified, RGB "255 255 0" \n
+	width: >0 expected \n
+	style: Pen style
+	"""
+	color:str=None
+	width:int = 1
+	style:str = PEN_SOLID
+
+
+@_dc.dataclass
+class TrendlineProp:
 	"""
 	A class to define Trendline properties
 
@@ -415,16 +430,16 @@ def scatter(
 		label:str=None, 
 		smooth:bool=False, 
 		bubble:dict=None, 
-		marker=Marker(), 
+		marker=MarkerProp(), 
 		line:dict=None, 
-		trendline:Trendline=None):
+		trendline:TrendlineProp=None):
 	"""
 	Plot scatter charts
 
 	## Input:
 	x, y:	x- and y-data \n
 	label: Name of the series \n
-	smooth: Spline algorithm is applied to smooth the line \n
+	smooth: Smooth lines \n
 
 	Bubble Properties \n
 	size:	size data (list), color: color (str), \n
@@ -434,15 +449,32 @@ def scatter(
 	assert isinstance(y, Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
 
-	if isinstance(trendline, Trendline):
+	if isinstance(trendline, TrendlineProp):
 		trendline=vars(trendline)
 
 	return pltDLL.c_plot_scatter((), 
 		{"x":x, "y":y , "name":label, "smooth":smooth, 
-		"bubble":bubble, "marker":vars(marker), "line":line, "trendline":trendline})
+		"bubble":bubble, 
+		"marker":vars(marker) if marker!=None else None, 
+		"line":line, 
+		"trendline":trendline})
 
 
+def plot(
+	x:Iterable,
+	y:Iterable,  
+	label:str=None, 
+	smooth:bool=False):
+	"""
+	Plot scatter charts
 
+	## Input:
+	x, y:	x- and y-data \n
+	label: Name of the series \n
+	smooth: Smooth lines
+	"""
+	line = LineProp()
+	return scatter(x=x, y=y, label=label, smooth=smooth, marker=None, line=line)
 
 
 #----------------------------------------------------------------------------

@@ -7,7 +7,6 @@ sys.path.insert(0, os.getcwd())
 
 import scisuit.stats as stat
 import scisuit.plot as plt
-from scisuit.app import App
 
 
 
@@ -166,6 +165,14 @@ plt.legend()
 
 plt.figure()
 
-plt.scatter(x=x, y=y)
+plt.plot(x=x, y=y)
+
+plt.figure()
+
+plt.histogram([1, 2, 3, 4, 5, 3, 4, 2, 5, 4, 6])
 
 plt.show()
+
+
+
+
