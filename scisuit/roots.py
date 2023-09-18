@@ -7,19 +7,17 @@ import dataclasses as _dc
 import sys as _sys
 
 
-__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Result"]
+__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info"]
 
 
 @_dc.dataclass
-class Result:
+class Info:
 	"""
-	root: root of the equation
 	err: error (if available)
 	iter: number of iterations to reach the root
 	conv: whether converged to a root or not
 	errmsg: if convergence is False, a reason is given
 	"""
-	root:float
 	err:float = None
 	iter:int = -1
 	conv:bool = False
@@ -27,9 +25,16 @@ class Result:
 
 
 
-def bisect(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100, method="bf", modified=False)->Result:
+def bisect(
+	f:_types.FunctionType, 
+	a:float, 
+	b:float, 
+	tol=1E-5, 
+	maxiter=100, 
+	method="bf", 
+	modified=False)->tuple[float, Info]:
 	"""
-	Finds the root using bisection method.
+	Finds the root using bisection method, returns (root, Info)
 
 	## Inputs:
 	f: A unary function \n
@@ -50,15 +55,20 @@ def bisect(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100, metho
 			_ct.c_char_p(method.encode('utf-8')),
 			_ct.c_bool(modified))
 	
-	return Result(root, lst[0], lst[1], lst[2], lst[3])
+	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
 
 
 
-def brentq(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Result:
+def brentq(
+	f:_types.FunctionType, 
+	a:float, 
+	b:float, 
+	tol=1E-5, 
+	maxiter=100)->tuple[float, Info]:
 	"""
 	Uses the Brent's method (1973) to find the root of the function 
-	using inverse quadratic interpolation.
+	using inverse quadratic interpolation, returns (root, Info)
 
 	## Inputs:
 	f: A unary function whose root is sought after \n
@@ -73,13 +83,21 @@ def brentq(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Resu
 
 	root, lst = _core.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
-	return Result(root, None, lst[0], lst[1], lst[2])
+	return root, Info(None, lst[0], lst[1], lst[2])
 
 
 
 
-def muller(f:_types.FunctionType, x0:_numbers.Complex, h=None, x1=None, x2=None, tol=1E-5, maxiter=100)->Result:
+def muller(
+	f:_types.FunctionType, 
+	x0:_numbers.Complex, 
+	h=None, 
+	x1=None, 
+	x2=None, 
+	tol=1E-5, 
+	maxiter=100)->tuple[float, Info]:
 	"""
+	Finds root of an equation using Muller method, returns (root, Info)
 	## Inputs:
 	f: A unary function \n
 	x0, x1, x2:	Initial guesses \n
@@ -92,14 +110,22 @@ def muller(f:_types.FunctionType, x0:_numbers.Complex, h=None, x1=None, x2=None,
 	
 	root, lst = _core.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
 
-	return Result(root, None, lst[0], lst[1], lst[2])
+	return root, Info(None, lst[0], lst[1], lst[2])
 
 
 
-def newton(f:_types.FunctionType, x0:float, x1=None, fprime=None, tol=1E-5, maxiter=100)->Result:
+def newton(
+	f:_types.FunctionType, 
+	x0:float, 
+	x1=None, 
+	fprime=None, 
+	tol=1E-5, 
+	maxiter=100)->tuple[float, Info]:
 	"""
 	If fprime is provided then uses Newton-Raphson method  \n
 	If fprime is not provided, then x1 must be provided uses Secant method.
+
+	returns (root, Info)
 
 	## Inputs:
 	f: A unary function \n
@@ -117,12 +143,17 @@ def newton(f:_types.FunctionType, x0:float, x1=None, fprime=None, tol=1E-5, maxi
 
 	root, lst = _core.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
 
-	return Result(root, lst[0], lst[1], lst[2], lst[3])
+	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
 
 
 
-def ridder(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Result:
+def ridder(
+	f:_types.FunctionType, 
+	a:float, 
+	b:float, 
+	tol=1E-5, 
+	maxiter=100)->tuple[float, Info]:
 	"""
 	Uses Ridder's method.
 
@@ -138,7 +169,7 @@ def ridder(f:_types.FunctionType, a:float, b:float, tol=1E-5, maxiter=100)->Resu
 	
 	root, lst = _core.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
-	return Result(root, None, lst[0], lst[1], lst[2])
+	return root, Info(None, lst[0], lst[1], lst[2])
 
 
 
