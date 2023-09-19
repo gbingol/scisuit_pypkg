@@ -2,11 +2,11 @@ import ctypes as _ct
 from .util import parent_path as _parent_path
 
 #TODO: Change to release version
-_path = _parent_path(__file__) / "scisuit_core"
+_path = _parent_path(__file__) / "scisuit_core_d"
 coreDLL = _ct.PyDLL(str(_path))
 
 #TODO: Change to release version
-_pathPlot = _parent_path(__file__) / "scisuit_plotter"
+_pathPlot = _parent_path(__file__) / "scisuit_plotter_d"
 pltDLL = _ct.PyDLL(str(_pathPlot))
 
 
