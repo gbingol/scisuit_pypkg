@@ -285,28 +285,21 @@ class Food:
 	f = Food(CHO=30, water=70)
 	"""
 	
-	def __init__(self, **kwargs):
-		#fractions or percentages
-		self.__Water = 0.0; self.__CHO = 0.0; self.__Protein = 0.0; self.__Lipid = 0.0
-		self.__Ash = 0.0; self.__Salt = 0.0
-
-		self.m_Ingredients={}
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
 		
-		for k, value in kwargs.items():
-			key= k.lower()
+		assert water>=0, "water must be >=0.0"
+		assert cho>=0, "cho must be >=0.0"
+		assert protein>=0, "protein must be >=0.0"
+		assert lipid>=0, "lipid must be >=0.0"
+		assert ash>=0, "ash must be >=0.0"
+		assert salt>=0, "salt must be >=0.0"
 
-			if(value<0.0):
-				raise ValueError("Ingredient's fraction/percentage cannot be negative.")
-
-			if(key == "water"): self.__Water= value
-			elif(key == "cho"): self.__CHO=value
-			elif(key == "protein"): self.__Protein=value
-			elif(key == "lipid" or key=="oil" or key=="fat"): self.__Lipid=value
-			elif(key == "ash"): self.__Ash=value
-			elif(key == "salt"): self.__Salt=value
-			else: 
-				raise KeyError("Keys are CHO, Protein, Lipid(Fat, Oil), Ash, Water, Salt")
-
+		self.__Water = water
+		self.__CHO = cho
+		self.__Protein = protein
+		self.__Lipid = lipid
+		self.__Ash = ash
+		self.__Salt = salt
 		
 		"""
 		User does not necessarily provide values where total fraction is exactly 1.0
@@ -315,7 +308,7 @@ class Food:
 		Note that even if the values were percentages, dividing them
 		by sum forces it to be in the range of [0, 1]
 		"""
-		Sum = sum(kwargs.values())
+		Sum = self.__Water + self.__CHO + self.__Protein + self.__Lipid + self.__Ash + self.__Salt
 
 		self.__Water = self.__Water/Sum
 		self.__CHO = self.__CHO/Sum
@@ -325,12 +318,9 @@ class Food:
 		self.__Salt = self.__Salt/Sum
 
 
-		self.m_Ingredients["water"] = self.__Water
-		self.m_Ingredients["cho"] = self.__CHO
-		self.m_Ingredients["protein"] = self.__Protein
-		self.m_Ingredients["lipid"] = self.__Lipid
-		self.m_Ingredients["ash"] = self.__Ash
-		self.m_Ingredients["salt"] = self.__Salt
+		self.m_Ingredients = {
+			"water":self.__Water, "cho": self.__CHO, "protein": self.__Protein,
+			"lipid":self.__Lipid, "ash":self.__Ash, "salt":self.__Salt}
 		
 		self._m_T = 20.0 # C
 		self._m_Weight = 1.0 #Unit weight
@@ -454,6 +444,9 @@ class Food:
 		if(water<0.01):
 			return 0.01 
 	
+		#99.99% water
+		if(water>0.9999):
+			return 1.0
 	
 		IsElectrolyte = salt>=0.1
 
