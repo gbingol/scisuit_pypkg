@@ -294,12 +294,12 @@ class Food:
 		assert ash>=0, "ash must be >=0.0"
 		assert salt>=0, "salt must be >=0.0"
 
-		self.__Water = water
-		self.__CHO = cho
-		self.__Protein = protein
-		self.__Lipid = lipid
-		self.__Ash = ash
-		self.__Salt = salt
+		self._Water = water
+		self._CHO = cho
+		self._Protein = protein
+		self._Lipid = lipid
+		self._Ash = ash
+		self._Salt = salt
 		
 		"""
 		User does not necessarily provide values where total fraction is exactly 1.0
@@ -308,19 +308,19 @@ class Food:
 		Note that even if the values were percentages, dividing them
 		by sum forces it to be in the range of [0, 1]
 		"""
-		Sum = self.__Water + self.__CHO + self.__Protein + self.__Lipid + self.__Ash + self.__Salt
+		Sum = self._Water + self._CHO + self._Protein + self._Lipid + self._Ash + self._Salt
 
-		self.__Water = self.__Water/Sum
-		self.__CHO = self.__CHO/Sum
-		self.__Protein = self.__Protein/Sum
-		self.__Lipid = self.__Lipid/Sum
-		self.__Ash = self.__Ash/Sum
-		self.__Salt = self.__Salt/Sum
+		self._Water = self._Water/Sum
+		self._CHO = self._CHO/Sum
+		self._Protein = self._Protein/Sum
+		self._Lipid = self._Lipid/Sum
+		self._Ash = self._Ash/Sum
+		self._Salt = self._Salt/Sum
 
 
-		self.m_Ingredients = {
-			"water":self.__Water, "cho": self.__CHO, "protein": self.__Protein,
-			"lipid":self.__Lipid, "ash":self.__Ash, "salt":self.__Salt}
+		self.__Ingredients = {
+			"water":self._Water, "cho": self._CHO, "protein": self._Protein,
+			"lipid":self._Lipid, "ash":self._Ash, "salt":self._Salt}
 		
 		self._m_T = 20.0 # C
 		self._m_Weight = 1.0 #Unit weight
@@ -352,12 +352,12 @@ class Food:
 
 		T = self._m_T
 
-		return (self.__Water)*Cp_w(T) + \
-			(self.__Protein)*Cp_p(T) + \
-			(self.__Lipid)*Cp_f(T) + \
-			(self.__CHO)*Cp_CHO(T) + \
-			(self.__Ash)*Cp_ash(T) +  \
-			(self.__Salt)*Cp_salt(T)
+		return (self._Water)*Cp_w(T) + \
+			(self._Protein)*Cp_p(T) + \
+			(self._Lipid)*Cp_f(T) + \
+			(self._CHO)*Cp_CHO(T) + \
+			(self._Ash)*Cp_ash(T) +  \
+			(self._Salt)*Cp_salt(T)
 
 
 
@@ -381,12 +381,12 @@ class Food:
 		
 		T=self._m_T
 
-		return (self.__Water)*k_w(T)+ \
-			(self.__Protein)*k_p(T) + \
-			(self.__Lipid)*k_f(T) + \
-			(self.__CHO)*k_CHO(T) + \
-			(self.__Ash)*k_ash(T) + \
-			(self.__Salt)*k_salt(T)	
+		return (self._Water)*k_w(T)+ \
+			(self._Protein)*k_p(T) + \
+			(self._Lipid)*k_f(T) + \
+			(self._CHO)*k_CHO(T) + \
+			(self._Ash)*k_ash(T) + \
+			(self._Salt)*k_salt(T)	
 
 
 	def conductivity(self)->float:
@@ -411,12 +411,12 @@ class Food:
 		
 		T=self._m_T
 
-		return (self.__Water)*rho_w(T) + \
-			(self.__Protein)*rho_p(T) + \
-			(self.__Lipid)*rho_f(T) + \
-			(self.__CHO)*rho_CHO(T) + \
-			(self.__Ash)*rho_ash(T) + \
-			(self.__Salt)*rho_salt(T)
+		return (self._Water)*rho_w(T) + \
+			(self._Protein)*rho_p(T) + \
+			(self._Lipid)*rho_f(T) + \
+			(self._CHO)*rho_CHO(T) + \
+			(self._Ash)*rho_ash(T) + \
+			(self._Salt)*rho_salt(T)
 
 
 	def density(self)->float:
@@ -434,8 +434,8 @@ class Food:
 		"""
 		aw1 = 0.92
 	
-		water, CHO, lipid, protein = self.__Water, self.__CHO, self.__Lipid, self.__Protein
-		ash, salt = self.__Ash, self.__Salt 
+		water, CHO, lipid, protein = self._Water, self._CHO, self._Lipid, self._Protein
+		ash, salt = self._Ash, self._Salt 
 
 		#note that salt is excluded
 		Msolute = CHO + lipid + protein + ash
@@ -527,9 +527,9 @@ class Food:
 		Estimates the initial freezing temperature of a food item \n
 		returns in Celcius (None if estimation fails)
 		"""
-		CHO = self.__CHO 
-		lipid = self.__Lipid 
-		water = self.__Water 
+		CHO = self._CHO 
+		lipid = self._Lipid 
+		water = self._Water 
 
 		Tfreezing = 273.15 # 0.0 Celcius
 		
@@ -574,7 +574,7 @@ class Food:
 		assert Tdiff>0, "Are you sure food's temperature is smaller than freezing temperature?"
 
 		#Tchigeov's (1979) equation (Eq #5 in ASHRAE manual)
-		xice = 1.105*self.__Water / (1 + 0.7138/_math.log(Tdiff))
+		xice = 1.105*self._Water / (1 + 0.7138/_math.log(Tdiff))
 
 		return xice
 	
@@ -618,7 +618,7 @@ class Food:
 
 	def getIngredients(self)->dict:
 		retDict = dict()
-		for k, v in self.m_Ingredients.items():
+		for k, v in self.__Ingredients.items():
 			if(v>0):
 				retDict[k] = v
 		return retDict
@@ -677,27 +677,27 @@ class Food:
 
 	@property
 	def Water(self)->float:
-		return self.__Water
+		return self._Water
 	
 	@property
 	def CHO(self)->float:
-		return self.__CHO
+		return self._CHO
 
 	@property
 	def Lipid(self)->float:
-		return self.__Lipid
+		return self._Lipid
 
 	@property
 	def Protein(self)->float:
-		return self.__Protein
+		return self._Protein
 
 	@property
 	def Ash(self)->float:
-		return self.__Ash
+		return self._Ash
 
 	@property
 	def Salt(self)->float:
-		return self.__Salt
+		return self._Salt
 
 
 
@@ -816,23 +816,23 @@ class Food:
 
 		retStr += "Temperature (C)=" + str(round(self.temperature, 2)) +"\n"
 
-		if(self.__Water>0): 
-			retStr += "Water (%)=" + str(round(self.__Water*100, 2)) +"\n" 
+		if(self._Water>0): 
+			retStr += "Water (%)=" + str(round(self._Water*100, 2)) +"\n" 
 
-		if(self.__Protein>0): 
-			retStr += "Protein (%)=" + str(round(self.__Protein*100, 2)) +"\n" 
+		if(self._Protein>0): 
+			retStr += "Protein (%)=" + str(round(self._Protein*100, 2)) +"\n" 
 		
-		if(self.__CHO>0): 
-			retStr += "CHO (%)=" + str(round(self.__CHO*100, 2)) +"\n" 
+		if(self._CHO>0): 
+			retStr += "CHO (%)=" + str(round(self._CHO*100, 2)) +"\n" 
 		
-		if(self.__Lipid>0): 
-			retStr += "Lipid (%)=" + str(round(self.__Lipid*100, 2)) +"\n"
+		if(self._Lipid>0): 
+			retStr += "Lipid (%)=" + str(round(self._Lipid*100, 2)) +"\n"
 
-		if(self.__Ash>0): 
-			retStr += "Ash (%)=" + str(round(self.__Ash*100, 2)) +"\n" 
+		if(self._Ash>0): 
+			retStr += "Ash (%)=" + str(round(self._Ash*100, 2)) +"\n" 
 
-		if(self.__Salt>0): 
-			retStr += "Salt (%)=" + str(round(self.__Salt*100)) +"\n" 
+		if(self._Salt>0): 
+			retStr += "Salt (%)=" + str(round(self._Salt*100)) +"\n" 
 		
 		aw = self.aw()
 		if(aw != None):
