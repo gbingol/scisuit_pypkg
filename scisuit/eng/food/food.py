@@ -395,27 +395,27 @@ class Food:
 
 
 	@property
-	def Water(self)->float:
+	def water(self)->float:
 		return self._Water
 	
 	@property
-	def CHO(self)->float:
+	def cho(self)->float:
 		return self._CHO
 
 	@property
-	def Lipid(self)->float:
+	def lipid(self)->float:
 		return self._Lipid
 
 	@property
-	def Protein(self)->float:
+	def protein(self)->float:
 		return self._Protein
 
 	@property
-	def Ash(self)->float:
+	def ash(self)->float:
 		return self._Ash
 
 	@property
-	def Salt(self)->float:
+	def salt(self)->float:
 		return self._Salt
 
 
@@ -427,16 +427,16 @@ class Food:
 		Ta, Tb = self.temperature, foodB.temperature 
 		cpa, cpb = self.cp(), foodB.cp()
 
-		water = ma*self.Water + mb*foodB.Water
-		CHO = ma*self.CHO + mb*foodB.CHO
-		lipid = ma*self.Lipid + mb*foodB.Lipid
-		protein = ma*self.Protein + mb*foodB.Protein
-		ash = ma*self.Ash + mb* foodB.Ash
-		salt = ma*self.Salt + mb* foodB.Salt
+		water = ma*self.water + mb*foodB.water
+		cho = ma*self.cho + mb*foodB.cho
+		lipid = ma*self.lipid + mb*foodB.lipid
+		protein = ma*self.protein + mb*foodB.protein
+		ash = ma*self.ash + mb* foodB.ash
+		salt = ma*self.salt + mb* foodB.salt
 
-		sum = water + CHO + lipid + protein + ash + salt
+		sum = water + cho + lipid + protein + ash + salt
 
-		retFood = Food(water=water/sum, cho=CHO/sum, lipid=lipid/sum, protein=protein/sum, ash=ash/sum, salt=salt/sum)
+		retFood = Food(water=water/sum, cho=cho/sum, lipid=lipid/sum, protein=protein/sum, ash=ash/sum, salt=salt/sum)
 		retFood.weight= ma + mb
 	
 		"""

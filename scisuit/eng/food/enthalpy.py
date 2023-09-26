@@ -21,10 +21,10 @@ class Cp():
 
 		food = self._food
 
-		Fat = food.Lipid
-		SNF = food.Ash + food.Protein + food.CHO
-		M = food.Water
-		Tfood:float = food.T
+		Fat = food.lipid
+		SNF = food.ash + food.protein + food.cho
+		M = food.water
+		Tfood = food.T
 
 
 		#for fat free foods
@@ -48,13 +48,13 @@ class Cp():
 		"""
 		food = self._food
 
-		Fat = food.Lipid
-		Protein = food.Protein
-		Ash = food.Ash
-		CHO = food.CHO
-		M = food.Water
+		Fat = food.lipid
+		Protein = food.protein
+		Ash = food.ash
+		cho = food.cho
+		water = food.water
 		
-		return 4.18*M + 1.547*Protein + 1.672*Fat + 1.42*CHO + 0.836*Ash
+		return 4.18*water + 1.547*Protein + 1.672*Fat + 1.42*cho + 0.836*Ash
 
 
 	def Chen(self)->float:
@@ -67,7 +67,7 @@ class Cp():
 		"""
 		food = self._food
 
-		Solid = 1 - food.Water	
+		Solid = 1 - food.water	
 		return 4.19 - 2.30*Solid - 0.628*Solid**3
 
 
@@ -99,16 +99,16 @@ def Enthalpy(food:Food, Tf:float)->float:
 
 	Tfood=food.temperature
 
-	water = food.Water
-	CHO = food.CHO
-	lipid = food.Lipid
-	protein = food.Protein
-	ash = food.Ash 
-	salt = food.Salt
+	water = food.water
+	cho = food.cho
+	lipid = food.lipid
+	protein = food.protein
+	ash = food.ash 
+	salt = food.salt
 
 	XWater = water
 
-	XSolute = CHO + lipid + protein + ash + salt
+	XSolute = cho + lipid + protein + ash + salt
 
 	"""
 		if food's current T is smaller than or equal to (close enough) freezing temp 

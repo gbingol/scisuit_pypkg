@@ -8,6 +8,7 @@ class Aw():
 	def __init__(self, food:Food) -> None:
 		self._food = food
 
+
 	def FerroFontan_Chirife_Boquet(self)->float:
 		"""
 		CHO is considered as fructose \n
@@ -15,22 +16,22 @@ class Aw():
 		lipid is considered as glycerol
 		"""
 		MW_CHO = 180.16
-		MW_Lipid = 92.0944
-		MW_Protein = 89.09
+		MW_LIPID = 92.0944
+		MW_PROTEIN = 89.09
 
 		food = self._food
 
-		NCHO, NLipid, NProtein = food.CHO/MW_CHO, food.Lipid/ MW_Lipid, food.Protein/MW_Protein
-		NWater = food.Water/18.02
+		NCHO, NLipid, NProtein = food.cho/MW_CHO, food.lipid/ MW_LIPID, food.protein/MW_PROTEIN
+		NWater = food.water/18.02
 		Nsolute = NCHO + NLipid + NProtein
 
-		Solute = 1 - food.Water
-		C_CHO, C_Lipid, C_Protein = food.CHO/Solute, food.Lipid/Solute, food.Protein/Solute
+		Solute = 1 - food.water
+		C_CHO, C_Lipid, C_Protein = food.cho/Solute, food.lipid/Solute, food.protein/Solute
 
-		Mt= _math.sqrt(C_CHO/MW_CHO + C_Lipid/MW_Lipid + C_Protein/MW_Protein)
+		Mt= _math.sqrt(C_CHO/MW_CHO + C_Lipid/MW_LIPID + C_Protein/MW_PROTEIN)
 
 		# Norrish equation K values using Ferro-Chirife-Boquet equation
-		Km = C_CHO*(Mt/MW_CHO)*(-2.15) +C_Lipid*(Mt/MW_Lipid)*(-1.16) + C_Protein*(Mt/MW_Protein)*(-2.52) 
+		Km = C_CHO*(Mt/MW_CHO)*(-2.15) +C_Lipid*(Mt/MW_LIPID)*(-1.16) + C_Protein*(Mt/MW_PROTEIN)*(-2.52) 
 		
 		# Mole fraction of solute
 		XSolute = Nsolute/(Nsolute + NWater) 
@@ -47,18 +48,18 @@ class Aw():
 	def Norrish(self)->float:
 		"""Norrish equation"""
 		
-		food = self._food
+		f = self._food
 
 		#CHO is considered as fructose
-		NCHO = food.CHO/180.16 
+		NCHO = f.cho/180.16 
 		
 		#lipid is considered as glycerol
-		NLipid = food.Lipid/ 92.0944 
+		NLipid = f.lipid/ 92.0944 
 		
 		#protein is considered as alanine
-		NProtein = food.Protein/89.09 
+		NProtein = f.protein/89.09 
 		Nsolute = NCHO + NLipid + NProtein
-		NWater = food.Water / 18
+		NWater = f.water / 18
 		NTotal = NCHO + NLipid + NProtein + NWater
 
 		XCHO, XLipid, XProtein, XWater = NCHO/NTotal, NLipid/NTotal, NProtein/NTotal, NWater/NTotal
@@ -76,13 +77,13 @@ class Aw():
 
 	#mostly used in confectionaries
 	def MoneyBorn(self)->float:
-		food = self._food
+		f = self._food
 
 		# amount of CHO in 100 g water (equation considers thus way) 
-		WeightCHO = 100*food.CHO/food.Water 
+		W = 100*f.cho/f.water 
 		
 		#CHO is considered as fructose
-		NCHO = WeightCHO/180.16 
+		NCHO = W/180.16 
 		
 		return 1.0/(1.0 + 0.27*NCHO)
 
@@ -91,21 +92,21 @@ class Aw():
 		#prediction using Raoult's law
 		#all in percentages
 
-		food = self._food
+		f = self._food
 
-		xwater, xCHO, xlipid, xprotein, xash = food.Water, food.CHO, food.Lipid, food.Protein, food.Ash
-		xsolute = xCHO + xlipid + xprotein + xash
-		xsalt = food.Salt
+		x_w = f.water
+		xCHO =  f.cho
+		x_l = f.lipid
+		x_p =  f.protein
+
+		#solute
+		x_slt = xCHO + x_l + x_p + f.ash
 
 		#average molecular weight
-		if xsolute>0:
-			MWavg_solute = (xCHO/xsolute)*180.16 + (xlipid/xsolute)*92.0944 + (xprotein/xsolute)*89.09
-		else:
-			MWavg_solute = 1
+		MW_slt = (xCHO/x_slt)*180.16 + (x_l/x_slt)*92.0944 + (x_p/x_slt)*89.09 if x_slt>0 else 1
 			
 		MW_Water=18
 		MW_NaCl = 58.44
 
-		temp1 = xwater+(MW_Water/MWavg_solute)*xsolute + 2*(MW_Water/MW_NaCl)*xsalt
-
-		return xwater/temp1
+		temp1 = x_w + (MW_Water/MW_slt)*x_slt + 2*(MW_Water/MW_NaCl)*f.salt
+		return x_w/temp1
