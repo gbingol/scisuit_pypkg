@@ -11,25 +11,19 @@ class Food:
 
 
 class Food:
-	"""
-	A class to compute thermal and physical properties of food materials \n
-
-	## Input: 
-	Keys are CHO, protein, lipid(fat, oil), ash, Water, salt \n
-	Values can be percentages or fractions (must be consistent) \n
-
-	## Example:
-	f = Food(CHO=30, water=70)
-	"""
+	"""A class to compute thermal and physical properties of food materials"""
 	
 	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		
-		assert water>=0, "water must be >=0.0"
-		assert cho>=0, "cho must be >=0.0"
-		assert protein>=0, "protein must be >=0.0"
-		assert lipid>=0, "lipid must be >=0.0"
-		assert ash>=0, "ash must be >=0.0"
-		assert salt>=0, "salt must be >=0.0"
+		"""
+		## Input: 
+		Values can be percentages or fractions (must be consistent)
+
+		## Example:
+		f1 = Food(cho=30, water=70) \n
+		f2 = Food(cho=0.3, water=0.7)
+		"""
+		isOK = water>=0 and cho>=0 and protein>=0 and lipid>=0 and ash>=0 and salt>=0
+		assert isOK, "Ingredients cannot have negative value."
 
 		self._Water = water
 		self._CHO = cho
