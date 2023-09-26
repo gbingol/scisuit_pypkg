@@ -309,6 +309,7 @@ class Food:
 		by sum forces it to be in the range of [0, 1]
 		"""
 		Sum = self._Water + self._CHO + self._Protein + self._Lipid + self._Ash + self._Salt
+		assert Sum>0, "At least one ingredient must be present"
 
 		self._Water = self._Water/Sum
 		self._CHO = self._CHO/Sum
@@ -318,12 +319,12 @@ class Food:
 		self._Salt = self._Salt/Sum
 
 
-		self.__Ingredients = {
+		self._Ingredients = {
 			"water":self._Water, "cho": self._CHO, "protein": self._Protein,
 			"lipid":self._Lipid, "ash":self._Ash, "salt":self._Salt}
 		
-		self._m_T = 20.0 # C
-		self._m_Weight = 1.0 #Unit weight
+		self._T = 20.0 # C
+		self._Weight = 1.0 #Unit weight
 		
 			
 	def __getitem__(self, index):
@@ -338,19 +339,14 @@ class Food:
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
-		Cp_w = _np.polynomial.Polynomial([5.4731E-6, -9.0864E-5, 4.1289][::-1])
-		Cp_p =  _np.polynomial.Polynomial([-1.3129E-6, 1.2089E-3, 2.0082][::-1])
-		Cp_f =  _np.polynomial.Polynomial([-4.8008E-6, 1.4733E-3, 1.9842][::-1])
-		Cp_CHO =  _np.polynomial.Polynomial([-5.9399E-6, 1.9625E-3, 1.5488][::-1])
-		Cp_ash =  _np.polynomial.Polynomial([-3.6817E-6, 1.8896E-3, 1.0926][::-1])
+		Cp_w = _np.polynomial.Polynomial([4.1289, -9.0864e-05, 5.4731e-06])
+		Cp_p =  _np.polynomial.Polynomial([2.0082, 0.0012089, -1.3129e-06])
+		Cp_f =  _np.polynomial.Polynomial([1.9842, 0.0014733, -4.8008e-06])
+		Cp_CHO =  _np.polynomial.Polynomial([1.5488, 0.0019625, -5.9399e-06])
+		Cp_ash =  _np.polynomial.Polynomial([1.0926, 0.0018896, -3.6817e-06])
 		Cp_salt =  _np.polynomial.Polynomial([0.88])
-		"""
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""
 
-		T = self._m_T
+		T = self._T
 
 		return (self._Water)*Cp_w(T) + \
 			(self._Protein)*Cp_p(T) + \
@@ -363,23 +359,19 @@ class Food:
 
 	def k(self)->float:
 		"""result W/mK"""
-		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 5.7109E-01][::-1])
-		k_p =  _np.polynomial.Polynomial([-2.7178E-6, 1.1958E-3, 1.7881E-1][::-1])
-		k_f =  _np.polynomial.Polynomial([-1.7749E-7, -2.7604E-4, 1.8071E-1][::-1])
-		k_CHO =  _np.polynomial.Polynomial([-4.3312E-6, 1.3874E-3, 2.0141E-1][::-1])
-		k_ash =  _np.polynomial.Polynomial([-2.9069E-6, 1.4011E-3, 3.2962E-1][::-1])
+		k_w =  _np.polynomial.Polynomial([0.57109, 0.0017625, -6.7036e-06])
+		k_p =  _np.polynomial.Polynomial([0.17881, 0.0011958, -2.7178e-06])
+		k_f =  _np.polynomial.Polynomial([0.18071, -0.00027604, -1.7749e-07])
+		k_CHO =  _np.polynomial.Polynomial([0.20141, 0.0013874, -4.3312e-06])
+		k_ash =  _np.polynomial.Polynomial([0.32962, 0.0014011, -2.9069e-06])
 		k_salt =  _np.polynomial.Polynomial([0.574])
 		"""
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
 		Thermal Conductivities of Aqueous Solutions of Strong Electrolytes 
 		Chem.-1ng.-Technik., 23 (3) P.59 - 64
-
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
 		"""
 		
-		T=self._m_T
+		T=self._T
 
 		return (self._Water)*k_w(T)+ \
 			(self._Protein)*k_p(T) + \
@@ -396,20 +388,14 @@ class Food:
 	
 	def rho(self)->float:
 		"""returns kg/m3"""
-
-		rho_w =  _np.polynomial.Polynomial([-3.7574E-3, 3.1439E-3, 997.18][::-1])
-		rho_p =  _np.polynomial.Polynomial([-5.1840E-1, 1329.9][::-1])
-		rho_f =  _np.polynomial.Polynomial([-4.1757E-1, 925.59][::-1])
-		rho_CHO =  _np.polynomial.Polynomial([-3.1046E-1, 1599.1][::-1])
-		rho_ash =  _np.polynomial.Polynomial([-2.8063E-1, 2423.8][::-1])
+		rho_w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574])
+		rho_p =  _np.polynomial.Polynomial([1329.9, -0.5184])
+		rho_f =  _np.polynomial.Polynomial([925.59, -0.41757])
+		rho_CHO =  _np.polynomial.Polynomial([1599.1, -0.31046])
+		rho_ash =  _np.polynomial.Polynomial([2423.8, -0.28063])
 		rho_salt =  _np.polynomial.Polynomial([2165]) #Wikipedia
-		"""
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""
 		
-		T=self._m_T
+		T=self._T
 
 		return (self._Water)*rho_w(T) + \
 			(self._Protein)*rho_p(T) + \
@@ -560,7 +546,7 @@ class Food:
 		Finds the fraction of ice \n
 		T: Initial freezing temperature
 		"""
-		Tfood = self._m_T
+		Tfood = self._T
 
 		"""
 		if food temperature greater than initial freezing temperature
@@ -618,7 +604,7 @@ class Food:
 
 	def getIngredients(self)->dict:
 		retDict = dict()
-		for k, v in self.__Ingredients.items():
+		for k, v in self._Ingredients.items():
 			if(v>0):
 				retDict[k] = v
 		return retDict
@@ -628,7 +614,7 @@ class Food:
 		"""
 		sets the weight to 1.0
 		"""
-		self._m_Weight = 1.0
+		self._Weight = 1.0
 
 
 	@property
@@ -639,11 +625,11 @@ class Food:
 	@temperature.setter
 	def temperature(self, T):
 		assert T+273.15 >= 0, "Temperature > 0 Kelvin expected"
-		self._m_T = T
+		self._T = T
 
 	@temperature.getter
 	def temperature(self)->float:
-		return self._m_T
+		return self._T
 	
 	@property
 	def T(self):
@@ -653,11 +639,11 @@ class Food:
 	@T.setter
 	def T(self, T):
 		assert T+273.15 >= 0, "Temperature > 0 Kelvin expected"
-		self._m_T = T
+		self._T = T
 
 	@T.getter
 	def T(self)->float:
-		return self._m_T
+		return self._T
 
 
 
@@ -668,11 +654,11 @@ class Food:
 
 	@weight.setter
 	def weight(self, weight:float):
-		self._m_Weight=weight
+		self._Weight=weight
 	
 	@weight.getter
 	def weight(self)->float:
-		return self._m_Weight
+		return self._Weight
 
 
 	@property
