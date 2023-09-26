@@ -8,12 +8,12 @@ class Food:
 
 
 
-def Cp_Siebel(food:Food, Tfreezing = -1.7)->float:
+def Cp_Siebel(food:Food, Tf = -1.7)->float:
 	"""
 	returns kJ/kg°C \n
 
 	## Input:
-	Tfreezing = -1.7 is the default freezing temperature
+	Tf = -1.7 is the default freezing temperature
 
 	## Reference:
 	Siebel, E (1892). Specific heats of various products. Ice and Refrigeration, 2, 256-257.
@@ -27,11 +27,11 @@ def Cp_Siebel(food:Food, Tfreezing = -1.7)->float:
 	#for fat free foods
 	if(_math.isclose(Fat, 0.0, abs_tol=1E-5)):
 		retVal = 837.36
-		retVal += 3349*M if Tfood>Tfreezing else 1256*M
+		retVal += 3349*M if Tfood>Tf else 1256*M
 		return retVal/1000
 
 	retVal = 1674.72*Fat +  837.36*SNF
-	retVal += 4186.8*M if Tfood>Tfreezing else 2093.4*M
+	retVal += 4186.8*M if Tfood>Tf else 2093.4*M
 
 	return retVal/1000
 
@@ -65,7 +65,7 @@ def Cp_Chen(food:Food)->float:
 
 
 
-def _Enthalpy(food:Food, Tfreezing:float)->float:
+def _Enthalpy(food:Food, Tf:float)->float:
 	"""
 	Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
@@ -76,7 +76,7 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 	If foods current temperature smaller than Tfreezing it will 
 	compute the enthalpy for frozen foods.
 	
-	Tfreezing: Initial freezing temperature (a complete list available in ASHRAE)
+	Tf: Initial freezing temperature (a complete list available in ASHRAE)
 	Vegetables: ~-1.5, 
 	Fruits:~ -1.5 (Except dates=-15.7)
 	Whole/shell fish: -2.2
@@ -85,7 +85,7 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 	Juice/Beverages: -0.4
 	"""
 
-	assert isinstance(Tfreezing, float), "Tfreezing must be float"
+	assert isinstance(Tf, float), "Tfreezing must be float"
 
 	LO = 333.6 #constant
 	Tref= -40 #reference temperature
@@ -107,7 +107,7 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 		if food's current T is smaller than or equal to (close enough) freezing temp 
 		then it is assumed as frozen
 	"""
-	IsFrozen = Tfood<Tfreezing or _math.isclose(Tfood,Tfreezing, abs_tol=1E-5)
+	IsFrozen = Tfood<Tf or _math.isclose(Tfood,Tf, abs_tol=1E-5)
 
 	if(IsFrozen):
 		"""
@@ -124,7 +124,7 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 		"""
 		Xb = 0.4 * protein
 
-		temp= 1.55 + 1.26* XSolute - (XWater - Xb) * (LO* Tfreezing) / (Tref*Tfood)
+		temp= 1.55 + 1.26* XSolute - (XWater - Xb) * (LO* Tf) / (Tref*Tfood)
 		return (Tfood - Tref)*temp
 	
 
@@ -136,7 +136,7 @@ def _Enthalpy(food:Food, Tfreezing:float)->float:
 	"""
 	Hf = 9.79246 + 405.096*XWater
 
-	return Hf + (Tfood - Tfreezing)*(4.19 - 2.30*XSolute - 0.628*XSolute**3) 
+	return Hf + (Tfood - Tf)*(4.19 - 2.30*XSolute - 0.628*XSolute**3) 
 
 
 
@@ -205,9 +205,9 @@ def aw_Norrish(food:Food)->float:
 
 
 #mostly used in confectionaries
-def aw_MoneyBorn(confectionary:Food)->float:
+def aw_MoneyBorn(food:Food)->float:
 	# amount of CHO in 100 g water (equation considers thus way) 
-	WeightCHO = 100*confectionary.CHO/confectionary.Water 
+	WeightCHO = 100*food.CHO/food.Water 
 	
 	#CHO is considered as fructose
 	NCHO = WeightCHO/180.16 
