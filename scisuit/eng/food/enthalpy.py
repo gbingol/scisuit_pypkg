@@ -28,15 +28,15 @@ class Cp():
 
 
 		#for fat free foods
-		if(_math.isclose(Fat, 0.0, abs_tol=1E-5)):
-			retVal = 837.36
-			retVal += 3349*M if Tfood>Tf else 1256*M
-			return retVal/1000
+		if _math.isclose(Fat, 0.0, abs_tol=1E-5):
+			r = 837.36
+			r += 3349*M if Tfood>Tf else 1256*M
+			return r/1000
 
-		retVal = 1674.72*Fat +  837.36*SNF
-		retVal += 4186.8*M if Tfood>Tf else 2093.4*M
+		r = 1674.72*Fat +  837.36*SNF
+		r += 4186.8*M if Tfood>Tf else 2093.4*M
 
-		return retVal/1000
+		return r/1000
 
 
 	def Heldman(self):
@@ -116,12 +116,12 @@ def Enthalpy(food:Food, Tf:float)->float:
 	"""
 	IsFrozen = Tfood<Tf or _math.isclose(Tfood,Tf, abs_tol=1E-5)
 
-	if(IsFrozen):
+	if IsFrozen:
 		"""
 		If the food temperature is at 0C and it is frozen (IsFrozen = true)
 		then return the enthalpy of ice at 0C
 		"""
-		if(_math.isclose(Tfood,0.0, abs_tol=1E-5)):
+		if _math.isclose(Tfood,0.0, abs_tol=1E-5):
 			return 2.050
 
 		"""

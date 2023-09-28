@@ -155,18 +155,18 @@ class Food:
 		"""
 		aw1 = 0.92
 	
-		water, CHO, lipid, protein = self._Water, self._CHO, self._Lipid, self._Protein
+		water, cho, lipid, protein = self._Water, self._CHO, self._Lipid, self._Protein
 		ash, salt = self._Ash, self._Salt 
 
 		#note that salt is excluded
-		Msolute = CHO + lipid + protein + ash
+		Msolute = cho + lipid + protein + ash
 
 		#There is virtually no water
-		if(water<0.01):
+		if water<0.01:
 			return 0.01 
 	
 		#99.99% water
-		if(water>0.9999):
+		if water>0.9999:
 			return 1.0
 	
 		IsElectrolyte = salt>=0.1
@@ -174,25 +174,25 @@ class Food:
 		_aw = Aw(self)
 
 		#Non-electrolytes solutions
-		if(not IsElectrolyte):
+		if not IsElectrolyte:
 			# Dilute solution, as the total percentage is less than 1%
-			if(Msolute<0.01): 
+			if Msolute<0.01: 
 				return 0.99
 			
 			#almost all CHO
-			if(CHO>0.98):
+			if cho>0.98:
 				return 0.70
 
 			#diluted
-			if(water>=0.70) :
+			if water>=0.70:
 				aw1 = _aw.Raoult()
 
 			#solute is 2.5 more times than solvent
-			elif(Msolute>=0.70):
+			elif Msolute>=0.70:
 				aw1 = _aw.Norrish()
 			
 			#most likely a candy
-			elif(lipid<0.01 and protein<0.01 and ash<0.01 and water>0.01 and water<0.05 and CHO>0.05): 
+			elif lipid<0.01 and protein<0.01 and ash<0.01 and water>0.01 and water<0.05 and cho>0.05: 
 				aw1 = _aw.MoneyBorn()	
 			
 			else:
@@ -201,11 +201,13 @@ class Food:
 		else:
 			aw1 = _aw.Raoult()
 	
-		if(self.temperature == 20):
+
+		#somewhere around 20C
+		if _math.isclose(self.temperature, 20, abs_tol=1E-1):
 			return aw1
 
 		#average molecular weight
-		MWavg = water*18.02 + CHO*180.16 + lipid*92.0944 + protein*89.09 + salt*58.44
+		MWavg = water*18.02 + cho*180.16 + lipid*92.0944 + protein*89.09 + salt*58.44
 	
 		T = self.temperature
 
@@ -221,7 +223,7 @@ class Food:
 		R = 8.314 #kPa*m^3/kgK
 
 		T += 273.15
-		dT = (1/293.15 - 1/T)
+		dT = 1/293.15 - 1/T
 	
 		aw2 = aw1*_math.exp(Qs/R*dT)
 		
@@ -254,26 +256,27 @@ class Food:
 		lipid = self._Lipid 
 		water = self._Water 
 
-		Tfreezing = 273.15 # 0.0 Celcius
+		#freezing temperature
+		Tf = 273.15 # 0.0 Celcius
 		
 		#assuming it is in a meat group
-		if(_math.isclose(CHO, 0.0, abs_tol=1E-5)):
-			Tfreezing = 271.18 + 1.47*water
+		if _math.isclose(CHO, 0.0, abs_tol=1E-5):
+			Tf = 271.18 + 1.47*water
 
 		#fruit or vegetable group
 		elif lipid <0.1:
-			Tfreezing = 287.56 -49.19*water + 37.07*water**2
+			Tf = 287.56 -49.19*water + 37.07*water**2
 
 		#juice group
 		elif water>0.8:
-			Tfreezing = 120.47 + 327.35*water - 176.49*water**2
+			Tf = 120.47 + 327.35*water - 176.49*water**2
 
 		#no match
 		else:
 			return None
 
 		#return in Celcius
-		return Tfreezing - 273.15
+		return Tf - 273.15
 
 	
 
@@ -289,7 +292,7 @@ class Food:
 		if food temperature greater than initial freezing temperature
 		then no ice can exist
 		"""
-		if(Tfood > T):
+		if Tfood > T:
 			return 0.0
 
 		Tdiff = T -Tfood + 1
@@ -326,7 +329,7 @@ class Food:
 			for f in Foods:
 				ing = f.ingredients()
 				val = 0.0
-				if(ing.get(key)!= None):
+				if ing.get(key)!= None:
 					val = ing[key]/100
 				row.append(val)
 			
@@ -335,7 +338,7 @@ class Food:
 			b.append(value/100*self.weight)
 
 		#solve Ax=b
-		return _np.linalg.solve(_np.asfarray(A), _np.asfarray(b))
+		return _np.linalg.solve(_np.asfarray(A), _np.asfarray(b)).tolist()
 
 
 
@@ -443,7 +446,7 @@ class Food:
 		if the other food's temperature is negligibly different 
 		then mixtures temperature is one of the food items' temperature
 		"""
-		if(_math.isclose(Ta, Tb, rel_tol=1E-5)):
+		if _math.isclose(Ta, Tb, rel_tol=1E-5):
 			retFood.temperature = Ta	
 		else:
 			mtot = ma + mb
@@ -503,7 +506,7 @@ class Food:
 
 
 	def __mul__(self, elem:float)->Food:
-		if(not isinstance(elem, _numbers.Number)):
+		if not isinstance(elem, _numbers.Number):
 			raise TypeError("Foods can only be multiplied by numbers")
 
 		newFood = self.ingredients()
@@ -517,7 +520,7 @@ class Food:
 
 
 	def __rmul__(self, elem:float)->Food:
-		if(not isinstance(elem, _numbers.Number)):
+		if not isinstance(elem, _numbers.Number):
 			raise TypeError("Foods can only be multiplied by numbers")
 	 
 		newFood = self.ingredients()
@@ -540,7 +543,7 @@ class Food:
 			retStr += f"{k} (%)= {str(round(v*100, 2))} \n"
 		
 		aw = self.aw()
-		if(aw != None):
+		if aw != None:
 			retStr +="aw=" + str(round(aw, 3)) + "\n"	
 
 		return retStr
@@ -549,7 +552,7 @@ class Food:
 	
 	def __eq__(self, foodB:Food)->bool:
 
-		if(not isinstance(foodB, Food)):
+		if not isinstance(foodB, Food):
 			return False
 
 		fA, fB = self.ingredients(), foodB.ingredients()
@@ -565,7 +568,7 @@ class Food:
 			"""
 			values of the ingredient must be very close
 			"""
-			if(not _math.isclose(v, fB[k], rel_tol=1E-5)):
+			if not _math.isclose(v, fB[k], rel_tol=1E-5):
 				return False
 			
 		return True
