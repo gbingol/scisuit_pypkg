@@ -4,7 +4,7 @@ import numpy as _np
 
 from enum import Enum
 
-from .enthalpy import Enthalpy
+from .thermalprop import Enthalpy
 from .wateractivity import Aw
 
 
@@ -34,7 +34,7 @@ class Candy(Food):
 	pass
 
 
-class Category(Food, Enum):
+class FoodType(Food, Enum):
 	fruit = Fruit()
 	vegetable = Vegetable()
 	dairy = Dairy()
@@ -57,7 +57,7 @@ class Food:
 			lipid=0.0, 
 			ash=0.0, 
 			salt=0.0, 
-			category:Category = None):
+			categ:FoodType = None):
 		"""
 		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
@@ -103,9 +103,9 @@ class Food:
 		self._Ingredients.clear()
 		self._Ingredients.update(filtered)
 
-		if category != None:
-			assert isinstance(category, Category), "category must be of type Category"
-		self._category = category
+		if categ != None:
+			assert isinstance(categ, FoodType), "categ must be of type FoodType"
+		self._category = categ
 		
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
