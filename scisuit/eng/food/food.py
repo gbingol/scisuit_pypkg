@@ -2,6 +2,8 @@ import math as _math
 import numbers as _numbers
 import numpy as _np
 
+from enum import Enum
+
 from .enthalpy import Enthalpy
 from .wateractivity import Aw
 
@@ -10,13 +12,56 @@ class Food:
 	pass
 
 
+class Fruit(Food):
+	pass
+
+class Vegetable(Food):
+	pass
+
+class Dairy(Food):
+	pass
+
+class Juice(Food):
+	pass
+
+class Beverage(Food):
+	pass
+
+class Meat(Food):
+	pass
+
+class Candy(Food):
+	pass
+
+
+class Category(Food, Enum):
+	fruit = Fruit()
+	vegetable = Vegetable()
+	dairy = Dairy()
+	juice = Juice()
+	beverage = Beverage()
+	meat = Meat()
+	candy = Candy()
+
+
+
+#-----------------------------------------------------------------------------
+
 class Food:
 	"""A class to compute thermal and physical properties of food materials"""
 	
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+	def __init__(self, 
+			water=0.0, 
+			cho=0.0, 
+			protein=0.0, 
+			lipid=0.0, 
+			ash=0.0, 
+			salt=0.0, 
+			category:Category = None):
 		"""
 		## Input: 
-		Values can be percentages or fractions (must be consistent)
+		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
+		category: A Category variable to select Food type
 
 		## Example:
 		f1 = Food(cho=30, water=70) \n
@@ -57,6 +102,10 @@ class Food:
 		filtered = {k:v for k, v in self._Ingredients.items() if v>0}
 		self._Ingredients.clear()
 		self._Ingredients.update(filtered)
+
+		if category != None:
+			assert isinstance(category, Category), "category must be of type Category"
+		self._category = category
 		
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
@@ -586,3 +635,42 @@ class Food:
 				return True
 		
 		return False
+	
+
+
+
+#-----------------------------------------------------------------------------
+
+class Fruit(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Vegetable(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Dairy(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Juice(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Beverage(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Meat(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
+
+
+class Candy(Food):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
+		pass
