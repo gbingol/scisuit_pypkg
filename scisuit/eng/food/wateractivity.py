@@ -19,27 +19,31 @@ class Aw():
 		MW_LIPID = 92.0944
 		MW_PROTEIN = 89.09
 
-		food = self._food
+		fd = self._food
 
-		NCHO, NLipid, NProtein = food.cho/MW_CHO, food.lipid/ MW_LIPID, food.protein/MW_PROTEIN
-		NWater = food.water/18.02
-		Nsolute = NCHO + NLipid + NProtein
+		NCHO, NLipid, NProtein = fd.cho/MW_CHO, fd.lipid/ MW_LIPID, fd.protein/MW_PROTEIN
+		
+		#number of moles of water
+		N_w = fd.water/18.02
 
-		Solute = 1 - food.water
-		C_CHO, C_Lipid, C_Protein = food.cho/Solute, food.lipid/Solute, food.protein/Solute
+		#solute
+		N_slt = NCHO + NLipid + NProtein
 
-		Mt= _math.sqrt(C_CHO/MW_CHO + C_Lipid/MW_LIPID + C_Protein/MW_PROTEIN)
+		Solute = 1 - fd.water
+		C_cho, C_Lipid, C_Protein = fd.cho/Solute, fd.lipid/Solute, fd.protein/Solute
+
+		Mt = _math.sqrt(C_cho/MW_CHO + C_Lipid/MW_LIPID + C_Protein/MW_PROTEIN)
 
 		# Norrish equation K values using Ferro-Chirife-Boquet equation
-		Km = C_CHO*(Mt/MW_CHO)*(-2.15) +C_Lipid*(Mt/MW_LIPID)*(-1.16) + C_Protein*(Mt/MW_PROTEIN)*(-2.52) 
+		Km = C_cho*(Mt/MW_CHO)*(-2.15) +C_Lipid*(Mt/MW_LIPID)*(-1.16) + C_Protein*(Mt/MW_PROTEIN)*(-2.52) 
 		
 		# Mole fraction of solute
-		XSolute = Nsolute/(Nsolute + NWater) 
+		X_slt = N_slt/(N_slt + N_w) 
 
 		# Mole fraction of water
-		XWater = NWater/(Nsolute + NWater) 
+		XWater = N_w/(N_slt + N_w) 
 
-		aw = XWater*_math.exp(Km*XSolute**2)
+		aw = XWater*_math.exp(Km*X_slt**2)
 
 		return aw
 
@@ -51,27 +55,31 @@ class Aw():
 		f = self._food
 
 		#CHO is considered as fructose
-		NCHO = f.cho/180.16 
+		N_cho = f.cho/180.16 
 		
 		#lipid is considered as glycerol
-		NLipid = f.lipid/ 92.0944 
+		N_l = f.lipid/ 92.0944 
 		
 		#protein is considered as alanine
-		NProtein = f.protein/89.09 
-		Nsolute = NCHO + NLipid + NProtein
-		NWater = f.water / 18
-		NTotal = NCHO + NLipid + NProtein + NWater
+		N_p = f.protein/89.09 
 
-		XCHO, XLipid, XProtein, XWater = NCHO/NTotal, NLipid/NTotal, NProtein/NTotal, NWater/NTotal
+		#water
+		N_w = f.water / 18
+
+		#total
+		N_tot = N_cho + N_l + N_p + N_w
+
+		#X_l: lipid, X_p: protein, X_w: water
+		X_cho, X_l, X_p, X_w = N_cho/N_tot, N_l/N_tot, N_p/N_tot, N_w/N_tot
 
 		
 		# Norrish equation K values using Ferro-Chirife-Boquet equation
-		SumSq = -(2.15)*XCHO**2 - (1.16)*XLipid**2 - (2.52)*XProtein**2
-		SumX2 = XCHO**2 + XLipid**2 + XProtein**2
+		SumSq = -(2.15)*X_cho**2 - (1.16)*X_l**2 - (2.52)*X_p**2
+		SumX2 = X_cho**2 + X_l**2 + X_p**2
 		
-		RHS = _math.log(XWater) + SumSq/SumX2*(1-XWater)**2
+		rhs = _math.log(X_w) + SumSq/SumX2*(1-X_w)**2
 
-		return _math.exp(RHS)
+		return _math.exp(rhs)
 
 
 
@@ -83,9 +91,9 @@ class Aw():
 		W = 100*f.cho/f.water 
 		
 		#CHO is considered as fructose
-		NCHO = W/180.16 
+		N_cho = W/180.16 
 		
-		return 1.0/(1.0 + 0.27*NCHO)
+		return 1.0/(1.0 + 0.27*N_cho)
 
 
 	def Raoult(self)->float:
@@ -105,8 +113,8 @@ class Aw():
 		#average molecular weight
 		MW_slt = (xCHO/x_slt)*180.16 + (x_l/x_slt)*92.0944 + (x_p/x_slt)*89.09 if x_slt>0 else 1
 			
-		MW_Water=18
-		MW_NaCl = 58.44
+		MW_w=18 #molecular weight of water
+		MW_nacl = 58.44
 
-		temp1 = x_w + (MW_Water/MW_slt)*x_slt + 2*(MW_Water/MW_NaCl)*f.salt
+		temp1 = x_w + (MW_w/MW_slt)*x_slt + 2*(MW_w/MW_nacl)*f.salt
 		return x_w/temp1
