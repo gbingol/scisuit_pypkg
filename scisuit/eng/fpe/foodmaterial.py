@@ -114,7 +114,7 @@ class Food:
 
 		if categ != None:
 			assert isinstance(categ, FoodType), "categ must be of type FoodType"
-		self._category = categ
+		self._type = categ
 		
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
@@ -203,7 +203,7 @@ class Food:
 		return self.rho()
 
 
-	def aw(self)->float:
+	def aw(self)->float|None:
 		"""
 		Returns value of water activity or None \n
 		
@@ -305,33 +305,37 @@ class Food:
 		return self.h(T)
 
 
-	def freezing_T(self):
+	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
 		returns in Celcius (None if estimation fails)
 		"""
-		CHO = self._CHO 
-		lipid = self._Lipid 
 		water = self._Water 
+
+		f_meat = lambda x: 271.18 + 1.47*x
+		f_fruit_veg = lambda x: 287.56 -49.19*x + 37.07*x**2
+		f_juice = lambda x: 120.47 + 327.35*x - 176.49*x**2
 
 		#freezing temperature
 		Tf = 273.15 # 0.0 Celcius
 		
-		#assuming it is in a meat group
-		if _math.isclose(CHO, 0.0, abs_tol=1E-5):
-			Tf = 271.18 + 1.47*water
+		#try to make inference from the ingredients
+		if self._type == None:
+			#assuming it is in a meat group
+			if _math.isclose(self._CHO, 0.0, abs_tol=1E-5):
+				Tf = f_meat(water)
 
-		#fruit or vegetable group
-		elif lipid <0.1:
-			Tf = 287.56 -49.19*water + 37.07*water**2
+			#fruit or vegetable group
+			elif self._Lipid <0.1:
+				Tf = f_fruit_veg(water)
 
-		#juice group
-		elif water>0.8:
-			Tf = 120.47 + 327.35*water - 176.49*water**2
+			#juice group
+			elif water>0.8:
+				Tf = f_juice(water)
 
-		#no match
-		else:
-			return None
+			#no match
+			else:
+				return None
 
 		#return in Celcius
 		return Tf - 273.15

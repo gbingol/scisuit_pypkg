@@ -7,6 +7,7 @@ sys.path.insert(0, os.getcwd())
 from scisuit.eng.fpe import Food, FoodType
 
 milk = Food(water=0.8813, protein=0.0315, cho=0.0480, lipid=0.0325, ash=0.0067)
+milk.freezing_T()
 print(milk)
 
 #different percentages of same ingredients
