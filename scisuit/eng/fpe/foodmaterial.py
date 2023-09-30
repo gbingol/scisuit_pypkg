@@ -66,11 +66,11 @@ class Food:
 			lipid=0.0, 
 			ash=0.0, 
 			salt=0.0, 
-			categ:FoodType = None):
+			group:FoodType = None):
 		"""
 		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
-		categ: Of type FoodType to select Food type
+		group: Type of the food
 
 		## Example:
 		f1 = Food(cho=30, water=70) \n
@@ -112,9 +112,9 @@ class Food:
 		self._Ingredients.clear()
 		self._Ingredients.update(filtered)
 
-		if categ != None:
-			assert isinstance(categ, FoodType), "categ must be of type FoodType"
-		self._type = categ
+		if group != None:
+			assert isinstance(group, FoodType), "categ must be of type FoodType"
+		self._group = group
 		
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
@@ -311,34 +311,29 @@ class Food:
 		returns in Celcius (None if estimation fails)
 		"""
 		water = self._Water 
+		grp = self._group
 
-		f_meat = lambda x: 271.18 + 1.47*x
-		f_fruit_veg = lambda x: 287.56 -49.19*x + 37.07*x**2
-		f_juice = lambda x: 120.47 + 327.35*x - 176.49*x**2
+		if grp != None:
+			isMeat = (grp == FoodType.meat)
+			isFruitVeg = (grp == FoodType.fruit) or (grp == FoodType.vegetable)
+			isJuice =  (grp == FoodType.juice)
 
-		#freezing temperature
-		Tf = 273.15 # 0.0 Celcius
+		#make educated guess
+		else:
+			isMeat =  _math.isclose(self._CHO, 0.0, abs_tol=1E-5)
+			isFruitVeg = self._Lipid <0.1
+			isJuice =  water>0.85
 		
-		#try to make inference from the ingredients
-		if self._type == None:
-			#assuming it is in a meat group
-			if _math.isclose(self._CHO, 0.0, abs_tol=1E-5):
-				Tf = f_meat(water)
+		if isMeat:
+			return (271.18 + 1.47*water) - 273.15
 
-			#fruit or vegetable group
-			elif self._Lipid <0.1:
-				Tf = f_fruit_veg(water)
+		elif isFruitVeg:
+			return (287.56 -49.19*water + 37.07*water**2) - 273.15
 
-			#juice group
-			elif water>0.8:
-				Tf = f_juice(water)
+		elif isJuice:
+			return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
-			#no match
-			else:
-				return None
-
-		#return in Celcius
-		return Tf - 273.15
+		return None
 
 	
 
