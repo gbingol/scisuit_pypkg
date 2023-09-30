@@ -4,9 +4,9 @@ import sys, os
 sys.path.insert(0, os.getcwd()) 
 
 
-from scisuit.eng.fpe import Food, FoodType
+from scisuit.eng.fpe import Food
 
-milk = Food(water=88.13, protein=3.15, cho=4.8, lipid=3.25, ash=0.67, group=FoodType.dairy)
+milk = Food(water=88.13, protein=3.15, cho=4.8, lipid=3.25, ash=0.67)
 print(milk)
 
 #different percentages of same ingredients

@@ -6,6 +6,7 @@ import dataclasses as _dc
 from enum import Enum
 
 from .wateractivity import Aw
+from ...defs import override
 
 
 """
@@ -20,43 +21,6 @@ class Food:
 	pass
 
 
-
-class Fruit(Food):
-	pass
-
-class Vegetable(Food):
-	pass
-
-class Dairy(Food):
-	pass
-
-class Juice(Food):
-	pass
-
-class Beverage(Food):
-	pass
-
-class Meat(Food):
-	pass
-
-class Candy(Food):
-	pass
-
-class Cereal(Food):
-	pass
-
-
-class FoodType(Food, Enum):
-	fruit = Fruit()
-	vegetable = Vegetable()
-	dairy = Dairy()
-	juice = Juice()
-	beverage = Beverage()
-	meat = Meat()
-	candy = Candy()
-	cereal = Cereal()
-
-
 @_dc.dataclass
 class Dielectric:
 	Constant =0.0
@@ -68,14 +32,14 @@ class Dielectric:
 class Food:
 	"""A class to compute thermal and physical properties of food materials"""
 	
-	def __init__(self, 
+	def __init__(
+			self, 
 			water=0.0, 
 			cho=0.0, 
 			protein=0.0, 
 			lipid=0.0, 
 			ash=0.0, 
-			salt=0.0, 
-			group:FoodType = None):
+			salt=0.0):
 		"""
 		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
@@ -120,10 +84,6 @@ class Food:
 		filtered = {k:v for k, v in self._Ingredients.items() if v>0}
 		self._Ingredients.clear()
 		self._Ingredients.update(filtered)
-
-		if group != None:
-			assert isinstance(group, FoodType), "categ must be of type FoodType"
-		self._group = group
 		
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
@@ -368,35 +328,12 @@ class Food:
 
 
 
-	def freezing_T(self)->float|None:
+	def freezing_T(self)->None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
 		returns in Celcius (None if estimation fails)
 		"""
-		water = self._water 
-		grp = self._group
-
-		if grp != None:
-			isMeat = (grp == FoodType.meat)
-			isFruitVeg = (grp == FoodType.fruit) or (grp == FoodType.vegetable)
-			isJuice =  (grp == FoodType.juice)
-
-		#make educated guess
-		else:
-			isMeat =  _math.isclose(self._cho, 0.0, abs_tol=1E-5)
-			isFruitVeg = self._lipid <0.1
-			isJuice =  water>0.85
-		
-		if isMeat:
-			return (271.18 + 1.47*water) - 273.15
-
-		elif isFruitVeg:
-			return (287.56 -49.19*water + 37.07*water**2) - 273.15
-
-		elif isJuice:
-			return 120.47 + 327.35*water - 176.49*water**2  - 273.15
-
-		return None
+		raise NotImplementedError("Only implemented for Juice, Fruit/Veggies and Meat")
 
 	
 
@@ -758,50 +695,96 @@ class Food:
 				return True
 		
 		return False
-	
-
-
 
 #-----------------------------------------------------------------------------
 
 class Fruit(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+	
+	@override
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 	
+		return (287.56 -49.19*water + 37.07*water**2) - 273.15
+
 
 
 class Vegetable(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+	@override
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 	
+		return (287.56 -49.19*water + 37.07*water**2) - 273.15
+
 
 
 class Dairy(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
 
 
 class Juice(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 
+		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
 
 class Beverage(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 
+		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
 
 class Meat(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 
+		return (271.18 + 1.47*water) - 273.15
+
 
 
 class Candy(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
 
 
 class Cereal(Food):
-	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
-		pass
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
 
