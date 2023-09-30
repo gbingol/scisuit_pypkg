@@ -338,29 +338,23 @@ class Food:
 	
 
 
-	def x_ice(self, T:float)->float:
+	def x_ice(self, T:float)->float | None:
 		"""
-		Finds the fraction of ice \n
+		Computes the fraction of ice \n
 		T: Initial freezing temperature
 		"""
 		Tfood = self._T
 
-		"""
-		if food temperature greater than initial freezing temperature
-		then no ice can exist
-		"""
+		#if T_food > T then no ice can exist
 		if Tfood > T:
-			return 0.0
+			return None
 
 		Tdiff = T -Tfood + 1
 
-		assert Tdiff>0, "Are you sure food's temperature is smaller than freezing temperature?"
-
 		#Tchigeov's (1979) equation (Eq #5 in ASHRAE manual)
-		xice = 1.105*self._Water / (1 + 0.7138/_math.log(Tdiff))
-
-		return xice
+		return 1.105*self._Water / (1 + 0.7138/_math.log(Tdiff))
 	
+
 
 	def makefrom(self, Foods:list)->list:
 		"""
