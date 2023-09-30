@@ -372,20 +372,6 @@ class Food:
 		T = self.T
 		grp = self._group
 
-		d_const, d_loss = None, None
-
-		if grp != None:
-			isMeat = (grp == FoodType.meat)
-			isFruitVeg = (grp == FoodType.fruit) or (grp == FoodType.vegetable)
-			isCereal =  (grp == FoodType.cereal)
-
-		#make educated guess
-		else:
-			isMeat =  _math.isclose(self._cho, 0.0, abs_tol=1E-5)
-			isFruitVeg = self._lipid <0.1
-			isCereal =  self.cho>0.6
-
-		
 		meat_dc = lambda w, ash: w*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
 		meat_dl = lambda w, ash:  w*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
 		
@@ -394,33 +380,15 @@ class Food:
 						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
 						+ 0.002206*w*T + 0.1505*ash*T
 
-		if isMeat:
-			d_const = meat_dc(water, ash)
-			d_loss = meat_dl(water, ash)
-
-		elif isFruitVeg:
-			d_const = fv_dc(water, ash)
-			d_loss = fv_dl(water, ash)
-		
-		elif isCereal:
-			#assuming it as bulk density
-			logf = _math.log10(f)
-			density = self.rho()
-
-			d_const = (1 + 0.504*water*density/(_math.sqrt(water) + logf))**2
-			d_loss = 0.146*density**2 + 0.004615*water**2*density**2*(0.32*logf + 1.74/logf - 1)
-
-		else:
-			#No general equation so take an average
-			d_const = (meat_dc(water, ash) + fv_dc(water, ash)) / 2
-			d_loss = (meat_dl(water, ash) + fv_dl(water, ash)) / 2
+		#No generalized equation, so a crude approximation
+		d_const = (meat_dc(water, ash) + fv_dc(water, ash)) / 2
+		d_loss = (meat_dl(water, ash) + fv_dl(water, ash)) / 2
 		
 		return Dielectric(d_const, d_loss)
 		
 
 
-
-	def makefrom(self, Foods:list)->list:
+	def makefrom(self, Foods:list[Food])->list[float]:
 		"""
 		Given a list of food items, computes the amount of each to be mixed to 
 		make the current food item \n
@@ -696,6 +664,8 @@ class Food:
 		
 		return False
 
+
+
 #-----------------------------------------------------------------------------
 
 class Fruit(Food):
@@ -710,8 +680,33 @@ class Fruit(Food):
 		"""
 		water = self._water 	
 		return (287.56 -49.19*water + 37.07*water**2) - 273.15
+	
+
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
+
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		water = self._water 
+		ash = self.ash
+		T = self.T
+		
+		fv_dc = lambda w, ash:  38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
+		fv_dl = lambda w, ash: 17.72 - 0.4519*T + 0.001382*T**2 \
+						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
+						+ 0.002206*w*T + 0.1505*ash*T
+
+		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
 
 
+
+
+#--------------------------------------------------------------------------
 
 class Vegetable(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
@@ -726,7 +721,30 @@ class Vegetable(Food):
 		water = self._water 	
 		return (287.56 -49.19*water + 37.07*water**2) - 273.15
 
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
 
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		water = self._water 
+		ash = self.ash
+		T = self.T
+		
+		fv_dc = lambda w, ash:  38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
+		fv_dl = lambda w, ash: 17.72 - 0.4519*T + 0.001382*T**2 \
+						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
+						+ 0.002206*w*T + 0.1505*ash*T
+
+		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
+	
+
+
+#-------------------------------------------------------------------------------------
 
 class Dairy(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
@@ -734,11 +752,14 @@ class Dairy(Food):
 
 
 
+
+#----------------------------------------------------------------------------------
+
 class Juice(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-
+	@override
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -747,11 +768,15 @@ class Juice(Food):
 		water = self._water 
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
+
+
+#--------------------------------------------------------------------------------------
 
 class Beverage(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
+	@override
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -761,11 +786,14 @@ class Beverage(Food):
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
 
+
+#---------------------------------------------------------------------------------
+
 class Meat(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-
+	@override
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -775,16 +803,61 @@ class Meat(Food):
 		return (271.18 + 1.47*water) - 273.15
 
 
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
 
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		water = self._water 
+		ash = self.ash
+		T = self.T
+		
+		meat_dc = lambda w, ash: w*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
+		meat_dl = lambda w, ash:  w*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
+		
+		return Dielectric(meat_dc(water, ash), meat_dl(water, ash))
+
+
+
+#-------------------------------------------------------------------------------------
 class Candy(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
 
+#------------------------------------------------------------------------------------
+
 class Cereal(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
+
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		w = self._water 
+		
+		#assuming it as bulk density
+		logf = _math.log10(f)
+		rho = self.rho()
+
+		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		
+		return Dielectric(d_const, d_loss)
 
 
 
