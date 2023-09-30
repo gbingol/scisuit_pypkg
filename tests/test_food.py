@@ -19,4 +19,4 @@ print(f1 == f2)
 f1= Food (water =80, protein=20)
 f2= Food (water =60, cho=40)
 
-print(f1 == f2)
+print(f1 + f2)
