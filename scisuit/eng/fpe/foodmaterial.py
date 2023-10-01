@@ -231,16 +231,16 @@ class Food:
 	
 
 	def __str__(self):
-		retStr ="Type=" + str(type(self)) + "\n"
-		retStr += "Weight (unit weight)=" + str(round(self.weight, 2)) +"\n"
-		retStr += "Temperature (C)=" + str(round(self.temperature, 2)) +"\n"
+		retStr ="Type = " + self.__class__.__name__ + "\n"
+		retStr += "Weight (unit weight) = " + str(round(self.weight, 2)) +"\n"
+		retStr += "Temperature (C) = " + str(round(self.temperature, 2)) +"\n"
 
 		for k, v in self._Ingredients.items():
-			retStr += f"{k} (%)= {str(round(v*100, 2))} \n"
+			retStr += f"{k} (%) = {str(round(v*100, 2))} \n"
 		
 		aw = self.aw()
 		if aw != None:
-			retStr +="aw=" + str(round(aw, 3)) + "\n"	
+			retStr +="aw = " + str(round(aw, 3)) + "\n"	
 
 		return retStr
 
