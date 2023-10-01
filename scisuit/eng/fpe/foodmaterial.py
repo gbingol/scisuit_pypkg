@@ -5,7 +5,7 @@ import dataclasses as _dc
 
 from enum import Enum
 
-from .wateractivity import Aw
+from .wateractivity import Aw, ComputeAw_T
 from ...decorators import override
 
 
@@ -185,8 +185,6 @@ class Food:
 		water, cho, lipid, protein = self._water, self._cho, self._lipid, self._protein
 		ash, salt = self._ash, self._salt 
 
-		#note that salt is excluded
-		Msolute = cho + lipid + protein + ash
 
 		#There is virtually no water
 		if water<0.01:
@@ -195,6 +193,9 @@ class Food:
 		#99.99% water
 		if water>0.9999:
 			return 1.0
+
+		#note that salt is excluded
+		Msolute = cho + lipid + protein + ash
 	
 		IsElectrolyte = salt>=0.1
 
@@ -229,33 +230,21 @@ class Food:
 			aw1 = _aw.Raoult()
 	
 
-		#somewhere around 20C
-		if _math.isclose(self.temperature, 20, abs_tol=1E-1):
-			return aw1
-
-		#average molecular weight
-		MWavg = water*18.02 + cho*180.16 + lipid*92.0944 + protein*89.09 + salt*58.44
+		return ComputeAw_T(self, aw1)
 	
-		T = self.temperature
 
-		self.temperature = 20
-		Cp_20 = self.cp()
 
-		self.temperature = T
-		Cp_T = self.cp()
+	def molecularweight(self)->float:
+		"""
+		Average molecular weight of the food item
 
-		Cp_avg = (Cp_20 + Cp_T) / 2.0	
-		Qs = MWavg* Cp_avg*(T - 20.0) #kJ/kg
-	
-		R = 8.314 #kPa*m^3/kgK
-
-		T += 273.15
-		dT = 1/293.15 - 1/T
-	
-		aw2 = aw1*_math.exp(Qs/R*dT)
+		returns g/mol
+		"""
+		water, cho, lipid, protein = self._water, self._cho, self._lipid, self._protein
+		salt = self._salt 
 		
-		return aw2 if aw2>=0 and aw2<=1 else None
-	
+		return water*18.02 + cho*180.16 + lipid*92.0944 + protein*89.09 + salt*58.44
+
 
 
 	def enthalpy(self, T)->float:

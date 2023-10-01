@@ -118,3 +118,38 @@ class Aw():
 
 		temp1 = x_w + (MW_w/MW_slt)*x_slt + 2*(MW_w/MW_nacl)*f.salt
 		return x_w/temp1
+	
+
+def ComputeAw_T(food:Food, aw1:float)->float|None:
+	"""
+	Computes aw at a different temperatures
+	
+	food: Food material
+	aw1: water activity of food at reference temperature (generally around 20C)
+	T2: the temperature at which water activity will be computed
+	"""
+	Tref = 20
+	if _math.isclose(food.T, Tref, 1.0):
+		return aw1
+
+	#save the actual temperature
+	T = food.T
+
+	food.T = Tref
+	Cp_20 = food.cp()
+
+	#restore the actual temperature
+	food.T = T
+	Cp_T = food.cp()
+
+	Cp_avg = (Cp_20 + Cp_T) / 2.0	
+	Qs = food.molecularweight()* Cp_avg*(T - 20.0) #kJ/kg
+
+	R = 8.314 #kPa*m^3/kgK
+
+	T += 273.15
+	dT = 1/293.15 - 1/T
+
+	aw2 = aw1*_math.exp(Qs/R*dT)
+	
+	return aw2 if aw2>=0 and aw2<=1 else None
