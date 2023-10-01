@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math as _math
 import numbers as _numbers
 import numpy as _np
@@ -88,10 +89,162 @@ class Food:
 		self._T = 20.0 # C
 		self._Weight = 1.0 #Unit weight
 		
-			
-	def __getitem__(self, index):
-		return index
 	
+
+
+	def __eq__(self, other:Food)->bool:
+
+		assert isinstance(other, Food), "Food can only be compared with Food"
+		
+		if type(self) != type(other):
+			return False
+
+		fA, fB = self.ingredients(), other.ingredients()
+
+		for k,v in fA.items():
+			#if B does not have the same ingredient A has, then A and B cant be same
+			if fB.get(k) == None:
+				return False
+			
+			#values of the ingredient must be very close
+			if not _math.isclose(v, fB[k], rel_tol=1E-5):
+				return False
+			
+		return True
+			
+
+
+
+	#similar to mixing of two food items
+	def __add__(self, rhs:Food)->Food:
+
+		ma, mb = self.weight,  rhs.weight
+		Ta, Tb = self.T, rhs.T 
+		cpa, cpb = self.cp(), rhs.cp()
+
+		water = ma*self.water + mb*rhs.water
+		cho = ma*self.cho + mb*rhs.cho
+		lipid = ma*self.lipid + mb*rhs.lipid
+		protein = ma*self.protein + mb*rhs.protein
+		ash = ma*self.ash + mb* rhs.ash
+		salt = ma*self.salt + mb* rhs.salt
+
+		fd = Food(water=water, cho=cho, lipid=lipid, protein=protein, ash=ash, salt=salt)
+		fd.weight= ma + mb
+	
+		"""
+		if the other food's temperature is negligibly different (Ta=10, Tb=10.1)
+		then mixtures temperature is one of the food items' temperature
+		"""
+		if _math.isclose(Ta, Tb, abs_tol=T_TOL):
+			fd.T = Ta	
+		else:
+			mtot = ma + mb
+			E1 , E2 = ma*cpa*Ta, mb*cpb*Tb
+			cp_avg = (ma*cpa + mb*cpb) / mtot
+			Tmix = (E1 + E2)/(mtot*cp_avg)
+		
+			fd.T = Tmix
+
+		if type(self) != type(rhs):
+			return fd
+		
+		obj = type(self)
+		f = obj(**fd.ingredients())
+		f.weight = fd.weight
+		f.T = fd.T
+		return f
+
+
+	
+
+	def __sub__(self, B:Food)->Food:
+		assert type(self) == type(B), "Foods must have same type"
+
+		ma, mb = self.weight,  B.weight		
+		assert (ma - mb) < 0, "weight A> weight B expected"
+
+		Ta, Tb = self.T, B.T
+		assert _math.isclose(Ta, Tb, abs_tol=T_TOL), "Temperature differences must be negligible."
+
+		fA, fB = self.ingredients(), B.ingredients()
+
+		#A must have all the ingredients B has, check if it is the case
+		for k, _ in fB.items():
+			assert fA.get(k) != None, "Food does not have an ingredient:" + k
+		
+		
+		#collect ingredients in a dictionary
+		ingDict={}
+
+		for k, v in fA.items():
+			#Note that B does not need to have all the ingredients A has
+			_ing = None
+			if fB.get(k) != None:	
+				_ing = ma*v - mb*fB[k]
+				assert _ing>=0, "Weight of " + k + " can not be smaller than zero"
+				
+				if(_math.isclose(_ing, 0.0, abs_tol=1E-5)):
+					_ing = 0
+			else:
+				_ing = ma*v
+			
+			ingDict[k] = _ing
+
+
+		fd = Food(**ingDict)
+		fd.weight = ma-mb
+		
+		obj = type(self)
+		f = obj(**fd.ingredients())
+		f.weight = fd.weight
+		f.T = fd.T
+
+		return f
+
+
+
+
+	def __mul__(self, m:float)->Food:
+		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers"
+
+		obj = type(self)
+		f = obj(**self.ingredients())
+		f.weight = self.weight*m
+		f.T = self.T
+
+		return f
+
+
+
+
+	def __rmul__(self, elem:float)->Food:
+		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers"
+
+		obj = type(self)
+		f = obj(**self.ingredients())
+		f.weight = self.weight*m
+		f.T = self.T
+
+		return f
+
+	
+
+	def __str__(self):
+		retStr ="Type=" + str(type(self)) + "\n"
+		retStr += "Weight (unit weight)=" + str(round(self.weight, 2)) +"\n"
+		retStr += "Temperature (C)=" + str(round(self.temperature, 2)) +"\n"
+
+		for k, v in self._Ingredients.items():
+			retStr += f"{k} (%)= {str(round(v*100, 2))} \n"
+		
+		aw = self.aw()
+		if aw != None:
+			retStr +="aw=" + str(round(aw, 3)) + "\n"	
+
+		return retStr
+
+
 
 
 	def cp(self)->float:
@@ -490,151 +643,6 @@ class Food:
 	def salt(self)->float:
 		return self._salt
 
-
-
-	#similar to mixing of two food items
-	def __add__(self, rhs:Food)->Food:
-
-		ma, mb = self.weight,  rhs.weight
-		Ta, Tb = self.T, rhs.T 
-		cpa, cpb = self.cp(), rhs.cp()
-
-		water = ma*self.water + mb*rhs.water
-		cho = ma*self.cho + mb*rhs.cho
-		lipid = ma*self.lipid + mb*rhs.lipid
-		protein = ma*self.protein + mb*rhs.protein
-		ash = ma*self.ash + mb* rhs.ash
-		salt = ma*self.salt + mb* rhs.salt
-
-		fd = Food(water=water, cho=cho, lipid=lipid, protein=protein, ash=ash, salt=salt)
-		fd.weight= ma + mb
-	
-		"""
-		if the other food's temperature is negligibly different (Ta=10, Tb=10.1)
-		then mixtures temperature is one of the food items' temperature
-		"""
-		if _math.isclose(Ta, Tb, abs_tol=T_TOL):
-			fd.T = Ta	
-		else:
-			mtot = ma + mb
-			E1 , E2 = ma*cpa*Ta, mb*cpb*Tb
-			cp_avg = (ma*cpa + mb*cpb) / mtot
-			Tmix = (E1 + E2)/(mtot*cp_avg)
-		
-			fd.T = Tmix
-
-		return fd
-
-
-	
-
-	def __sub__(self, B:Food)->Food:	
-		ma, mb = self.weight,  B.weight		
-		assert (ma - mb) < 0, "A-B, weight A> weight B expected"
-
-		Ta, Tb = self.T, B.T
-		assert _math.isclose(Ta, Tb, rel_tol=T_TOL), "The difference between temperatures must be negligible."
-
-		fA, fB = self.ingredients(), B.ingredients()
-		newFood={}
-
-		#A must have all the ingredients B has, check if it is the case
-		for key, value in fB.items():
-			assert fA.get(key) != None, "Food does not have an ingredient:" + key
-		
-		
-		for key, value in fA.items():
-			#Note that B does not need to have all the ingredients A has
-			_ingredient = None
-			if fB.get(key) != None:	
-				_ingredient = ma*value - mb*fB[key]
-				assert _ingredient>=0, "Weight of " + key + " can not be smaller than zero"
-				
-				if(_math.isclose(_ingredient, 0.0, abs_tol=1E-5)):
-					_ingredient = 0
-			else:
-				_ingredient = ma*value
-			
-			newFood[key] = _ingredient
-
-
-		Total = sum(newFood.values())
-		for k,v in newFood.items():
-			newFood[k] = float(v)/Total	
-
-		retFood = Food(**newFood)
-		retFood.weight = ma-mb
-
-		return retFood
-
-
-
-
-	def __mul__(self, elem:float)->Food:
-		if not isinstance(elem, _numbers.Number):
-			raise TypeError("Foods can only be multiplied by numbers")
-
-		newFood = self.ingredients()
-		retFood = Food(**newFood)
-
-		retFood.weight = self.weight*elem
-
-		return retFood
-
-
-
-
-	def __rmul__(self, elem:float)->Food:
-		if not isinstance(elem, _numbers.Number):
-			raise TypeError("Foods can only be multiplied by numbers")
-	 
-		newFood = self.ingredients()
-		retFood = Food(**newFood)
-
-		retFood.weight = self.weight*elem
-
-		return retFood
-
-	
-
-	def __str__(self):
-		retStr=""
-		retStr += "Weight (unit weight)=" + str(round(self.weight, 2)) +"\n"
-		retStr += "Temperature (C)=" + str(round(self.temperature, 2)) +"\n"
-
-		for k, v in self._Ingredients.items():
-			retStr += f"{k} (%)= {str(round(v*100, 2))} \n"
-		
-		aw = self.aw()
-		if aw != None:
-			retStr +="aw=" + str(round(aw, 3)) + "\n"	
-
-		return retStr
-
-
-	
-	def __eq__(self, foodB:Food)->bool:
-
-		if not isinstance(foodB, Food):
-			return False
-
-		fA, fB = self.ingredients(), foodB.ingredients()
-
-		#v is the value for fA and fB[k] returns corresponding key value in foodB
-		for k,v in fA.items():
-			"""
-			if B does not have the same ingredient A has, then A and B cant be same
-			"""
-			if(fB.get(k) == None):
-				return False
-			
-			"""
-			values of the ingredient must be very close
-			"""
-			if not _math.isclose(v, fB[k], rel_tol=1E-5):
-				return False
-			
-		return True
 	
 
 	def intersects(self, f2:Food)->bool:
@@ -659,6 +667,7 @@ class Food:
 class Beverage(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
+
 
 	@override
 	def freezing_T(self)->float|None:
