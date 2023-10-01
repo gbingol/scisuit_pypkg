@@ -666,6 +666,147 @@ class Food:
 
 
 
+
+
+#--------------------------------------------------------------------------------------
+
+class Beverage(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+	@override
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 
+		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
+
+
+
+
+#----------------------------------------------------------------------------------
+
+class Juice(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+	@override
+	def freezing_T(self)->float|None:
+		"""
+		Estimates the initial freezing temperature of a food item \n
+		returns in Celcius
+		"""
+		water = self._water 
+		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
+
+
+
+
+#----------------------------------------------------------------------------------------
+
+class Cereal(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
+
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		w = self._water 
+		
+		#assuming it as bulk density
+		logf = _math.log10(f)
+		rho = self.rho()
+
+		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		
+		return Dielectric(d_const, d_loss)
+
+
+
+
+#----------------------------------------------------------------------------------------
+
+class Legume(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties 
+		f: frequency in MHz
+
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		w = self._water 
+		
+		#assuming it as bulk density
+		logf = _math.log10(f)
+		rho = self.rho()
+
+		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		
+		return Dielectric(d_const, d_loss)
+
+
+
+#----------------------------------------------------------------------------------------
+
+class Nut(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+	@override
+	def dielectric(self, f:int = 2450)->Dielectric:
+		"""
+		Computes dielectric properties
+		f: frequency in MHz
+
+		## Reference:
+		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
+		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+		"""
+		w = self._water 
+		
+		#assuming it as bulk density
+		logf = _math.log10(f)
+		rho = self.rho()
+
+		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		
+		return Dielectric(d_const, d_loss)
+
+
+
+
+#-------------------------------------------------------------------------------------
+
+class Dairy(Food):
+	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
+		super().__init__(water, cho, protein, lipid, ash, salt)
+
+
+
+
+
+
 #-----------------------------------------------------------------------------
 
 class Fruit(Food):
@@ -744,48 +885,6 @@ class Vegetable(Food):
 	
 
 
-#-------------------------------------------------------------------------------------
-
-class Dairy(Food):
-	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
-		super().__init__(water, cho, protein, lipid, ash, salt)
-
-
-
-
-#----------------------------------------------------------------------------------
-
-class Juice(Food):
-	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
-		super().__init__(water, cho, protein, lipid, ash, salt)
-
-	@override
-	def freezing_T(self)->float|None:
-		"""
-		Estimates the initial freezing temperature of a food item \n
-		returns in Celcius
-		"""
-		water = self._water 
-		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
-
-
-
-#--------------------------------------------------------------------------------------
-
-class Beverage(Food):
-	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
-		super().__init__(water, cho, protein, lipid, ash, salt)
-
-	@override
-	def freezing_T(self)->float|None:
-		"""
-		Estimates the initial freezing temperature of a food item \n
-		returns in Celcius
-		"""
-		water = self._water 
-		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
-
-
 
 #---------------------------------------------------------------------------------
 
@@ -825,43 +924,17 @@ class Meat(Food):
 
 
 #-------------------------------------------------------------------------------------
-class Candy(Food):
+class Sweet(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
 
-#------------------------------------------------------------------------------------
-
-class Cereal(Food):
-	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
-		super().__init__(water, cho, protein, lipid, ash, salt)
-
-
-	@override
-	def dielectric(self, f:int = 2450)->Dielectric:
-		"""
-		Computes dielectric properties
-		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-		"""
-		w = self._water 
-		
-		#assuming it as bulk density
-		logf = _math.log10(f)
-		rho = self.rho()
-
-		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
-		
-		return Dielectric(d_const, d_loss)
 
 
 
-#-------------------------------------------------------------------------------
+
+""" ------------------------------------------------------------------------------- """
 
 class Cp():
 	def __init__(self, food:Food) -> None:
