@@ -6,7 +6,7 @@ import dataclasses as _dc
 from enum import Enum
 
 from .wateractivity import Aw
-from ...defs import override
+from ...decorators import override
 
 
 """
