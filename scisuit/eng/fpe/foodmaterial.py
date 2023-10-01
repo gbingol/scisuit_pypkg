@@ -217,7 +217,7 @@ class Food:
 			return ComputeAw_T(self, aw1)	
 		
 		#dilute
-		if water>=0.70:
+		if water>=0.90:
 			aw1 = _aw.Raoult()
 
 		#solute is 2.5 more times than solvent
