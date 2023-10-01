@@ -218,7 +218,7 @@ class Food:
 
 
 
-	def __rmul__(self, elem:float)->Food:
+	def __rmul__(self, m:float)->Food:
 		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers"
 
 		obj = type(self)
@@ -339,13 +339,9 @@ class Food:
 		ash, salt = self._ash, self._salt 
 
 
-		#Virtually no water
-		if water<0.01:
-			return 0.01 
-	
-		#99.99% water
-		if water>0.9999:
-			return 1.0
+		#Virtually no water or 99.99% water
+		if water < 0.01 or water > 0.9999:
+			return water
 		
 		#almost all CHO
 		if cho>0.98:
@@ -410,14 +406,6 @@ class Food:
 		## Notes:
 		If foods current temperature smaller than Tfreezing it will 
 		compute the enthalpy for frozen foods.
-		
-		Tf: Initial freezing temperature (a complete list available in ASHRAE)
-		Vegetables: ~-1.5, 
-		Fruits:~ -1.5 (Except dates=-15.7)
-		Whole/shell fish: -2.2
-		Beef: -1.7
-		Milk: -0.6 (skim), -15.6 (evaporated, condensed)
-		Juice/Beverages: -0.4
 		"""	 			
 		assert isinstance(T, float), "Initial freezing temperature must be float"
 
@@ -426,9 +414,11 @@ class Food:
 
 		Tfood=self.T
 
-		XWater = self.water
-		XSolute = self.cho + self.lipid + self.protein + self.ash + self.salt
+		X_w = self.water
 
+		#solute
+		X_slt = self.cho + self.lipid + self.protein + self.ash + self.salt 
+	
 		"""
 		if food's current T is smaller than or equal to (close enough) freezing temp 
 		then it is assumed as frozen
@@ -437,7 +427,7 @@ class Food:
 
 		if IsFrozen:
 			"""
-			If the food temperature is at 0C and it is frozen (IsFrozen = true)
+			If the food temperature is at 0C and it is frozen
 			then return the enthalpy of ice at 0C
 			"""
 			if _math.isclose(Tfood,0.0, abs_tol=T_TOL):
@@ -450,7 +440,7 @@ class Food:
 			"""
 			Xb = 0.4 * self.protein
 
-			temp= 1.55 + 1.26* XSolute - (XWater - Xb) * (LO* T) / (Tref*Tfood)
+			temp= 1.55 + 1.26* X_slt - (X_w - Xb) * (LO* T) / (Tref*Tfood)
 			return (Tfood - Tref)*temp
 		
 
@@ -460,9 +450,9 @@ class Food:
 		compute enthalpy of food at initial freezing temperature 
 		Chang and Tao (1981) correlation, Eq #25 in ASHRAE manual
 		"""
-		Hf = 9.79246 + 405.096*XWater
+		Hf = 9.79246 + 405.096*X_w
 
-		return Hf + (Tfood - T)*(4.19 - 2.30*XSolute - 0.628*XSolute**3) 
+		return Hf + (Tfood - T)*(4.19 - 2.30*X_slt - 0.628*X_slt**3) 
 
 
 
@@ -678,7 +668,23 @@ class Beverage(Food):
 		water = self._water 
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
+	@override
+	def enthalpy(self, T=-0.4)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		
+		"""	
+		super().enthalpy(T) 			
 
 
 #----------------------------------------------------------------------------------
@@ -696,7 +702,22 @@ class Juice(Food):
 		water = self._water 
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
+	@override
+	def enthalpy(self, T=-0.4)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		"""
+		super().enthalpy(T)
 
 
 #----------------------------------------------------------------------------------------
@@ -726,7 +747,6 @@ class Cereal(Food):
 		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
 		
 		return Dielectric(d_const, d_loss)
-
 
 
 
@@ -798,8 +818,24 @@ class Dairy(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
+	@override
+	def enthalpy(self, T=-0.6)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
+		## Input:
+		T: Initial freezing temperature
 
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		
+		Milk: -0.6 (skim), -15.6 (evaporated, condensed)
+		"""	
+		super().enthalpy(T)
 
 
 #-----------------------------------------------------------------------------
@@ -840,7 +876,22 @@ class Fruit(Food):
 		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
 
 
+	@override
+	def enthalpy(self, T=-1.5)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		"""	
+		super().enthalpy(T)
 
 #--------------------------------------------------------------------------
 
@@ -880,6 +931,26 @@ class Vegetable(Food):
 	
 
 
+	@override
+	def enthalpy(self, T=-1.5)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
+
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		"""	
+		super().enthalpy(T)
+
+
+
+
 
 #---------------------------------------------------------------------------------
 
@@ -917,6 +988,26 @@ class Meat(Food):
 		return Dielectric(meat_dc(water, ash), meat_dl(water, ash))
 
 
+	@override
+	def enthalpy(self, T=-1.7)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
+
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		"""	
+		super().enthalpy(T)
+
+
+
+
 
 #-------------------------------------------------------------------------------------
 class Sweet(Food):
@@ -934,6 +1025,27 @@ class Sweet(Food):
 		"""
 		_aw = Aw(self)	
 		return ComputeAw_T(self, _aw.MoneyBorn())
+
+
+	@override
+	def enthalpy(self, T=-15)->float:
+		"""
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
+
+		## Input:
+		T: Initial freezing temperature
+
+		## Reference:
+		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
+
+		## Notes:
+		If foods current temperature smaller than Tfreezing it will 
+		compute the enthalpy for frozen foods.
+		"""	
+		super().enthalpy(T)
+
+
+
 
 
 
