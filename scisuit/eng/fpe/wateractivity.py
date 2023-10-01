@@ -129,7 +129,7 @@ def ComputeAw_T(food:Food, aw1:float)->float|None:
 	T2: the temperature at which water activity will be computed
 	"""
 	Tref = 20
-	if _math.isclose(food.T, Tref, 1.0):
+	if _math.isclose(food.T, Tref, abs_tol=1.0):
 		return aw1
 
 	#save the actual temperature
