@@ -193,24 +193,26 @@ class Food:
 		#99.99% water
 		if water>0.9999:
 			return 1.0
+		
+		#almost all CHO
+		if cho>0.98:
+			return 0.70
 
 		#note that salt is excluded
 		Msolute = cho + lipid + protein + ash
+
+		# Dilute solution, as the total percentage is less than 1%
+		if Msolute<0.01: 
+			return 0.99
 	
+
+
 		IsElectrolyte = salt>=0.1
 
 		_aw = Aw(self)
 
 		#Non-electrolytes solutions
-		if not IsElectrolyte:
-			# Dilute solution, as the total percentage is less than 1%
-			if Msolute<0.01: 
-				return 0.99
-			
-			#almost all CHO
-			if cho>0.98:
-				return 0.70
-
+		if not IsElectrolyte:			
 			#diluted
 			if water>=0.70:
 				aw1 = _aw.Raoult()
