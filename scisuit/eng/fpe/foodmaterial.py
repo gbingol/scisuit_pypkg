@@ -186,7 +186,7 @@ class Food:
 		ash, salt = self._ash, self._salt 
 
 
-		#There is virtually no water
+		#Virtually no water
 		if water<0.01:
 			return 0.01 
 	
@@ -206,31 +206,26 @@ class Food:
 			return 0.99
 	
 
-
-		IsElectrolyte = salt>=0.1
+		"""This assumption is only valid for dilute ones"""
+		IsElectrolyte = salt>=0.01
 
 		_aw = Aw(self)
 
-		#Non-electrolytes solutions
-		if not IsElectrolyte:			
-			#diluted
-			if water>=0.70:
-				aw1 = _aw.Raoult()
-
-			#solute is 2.5 more times than solvent
-			elif Msolute>=0.70:
-				aw1 = _aw.Norrish()
-			
-			#most likely a candy
-			elif lipid<0.01 and protein<0.01 and ash<0.01 and water>0.01 and water<0.05 and cho>0.05: 
-				aw1 = _aw.MoneyBorn()	
-			
-			else:
-				aw1 = _aw.FerroFontan_Chirife_Boquet()
-	
-		else:
+		#Electrolytes solutions
+		if IsElectrolyte:	
 			aw1 = _aw.Raoult()
-	
+			return ComputeAw_T(self, aw1)	
+		
+		#dilute
+		if water>=0.70:
+			aw1 = _aw.Raoult()
+
+		#solute is 2.5 more times than solvent
+		elif Msolute>=0.70:
+			aw1 = _aw.Norrish()
+		
+		else:
+			aw1 = _aw.FerroFontan_Chirife_Boquet()
 
 		return ComputeAw_T(self, aw1)
 	
@@ -919,8 +914,17 @@ class Sweet(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
+	@override
+	def aw(self)->float|None:
+		"""
+		Returns value of water activity or None \n
 
-
+		## Warning:
+		At T>25 C, built-in computation might return None. \n
+		Therefore, must be used with caution.
+		"""
+		_aw = Aw(self)	
+		return ComputeAw_T(self, _aw.MoneyBorn())
 
 
 
