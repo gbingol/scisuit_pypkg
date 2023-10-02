@@ -155,7 +155,7 @@ class Food:
 		assert type(self) == type(B), "Foods must have same type"
 
 		ma, mb = self.weight,  B.weight		
-		assert (ma - mb) > 0, "weight A> weight B expected"
+		assert (ma - mb) > 0, "weight A > weight B expected"
 
 		Ta, Tb = self.T, B.T
 		assert _math.isclose(Ta, Tb, abs_tol=T_TOL), "Temperature differences must be negligible."
