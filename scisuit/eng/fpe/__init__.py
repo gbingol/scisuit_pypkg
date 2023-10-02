@@ -1,14 +1,9 @@
-"""
-Food Process Engineering library (FPE)
-"""
+""" Food Process Engineering library (FPE) """
 
 
 """ Food is the base class"""
-from .foodmaterial import \
-	Food, \
-	Beverage, Juice, Cereal, Legume, Nut, Dairy, Fruit, Vegetable, Meat, Sweet, \
-	Cp
+from .foodmaterial import Food, Beverage, Juice, Cereal, Legume, Nut, Dairy, Fruit, Vegetable, Meat, Sweet
 
 
-"""Different methods to compute water activity"""
-from .wateractivity import Aw
+"""Different methods to compute water activity and specific heat capacity"""
+from .foodproperty import Aw, Cp
