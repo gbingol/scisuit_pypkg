@@ -239,9 +239,10 @@ class Food:
 
 
 
-	def cp(self)->float:
+	def cp(self, T:float = None)->float:
 		"""
-		T is temperature in Celcius \n
+		If T (in °C) is not specified then Food's current temperature will be used.\n
+		Returns specific heat capacity in kJ/kgK
 
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
@@ -253,16 +254,19 @@ class Food:
 		ash =  _np.polynomial.Polynomial([1.0926, 0.0018896, -3.6817e-06])
 		salt =  0.88
 
-		T = self.T
+		t = T if T != None else self.T
 
-		return self.water*w(T) + self.protein*p(T) + self.lipid*f(T) + \
-			self.cho*cho(T) + self.ash*ash(T) + self.salt*salt
+		return self.water*w(t) + self.protein*p(t) + self.lipid*f(t) + \
+			self.cho*cho(t) + self.ash*ash(t) + self.salt*salt
 
 
 
-	def k(self)->float:
-		"""result W/mK"""
-		w =  _np.polynomial.Polynomial([0.57109, 0.0017625, -6.7036e-06])
+	def k(self, T:float=None)->float:
+		"""
+		If T (in °C) is not specified then Food's current temperature will be used.\n
+		Returns conductivity in W/mK
+		"""
+		w =  _np.polynomial.Polynomial([0.457109, 0.0017625, -6.7036e-06])
 		p =  _np.polynomial.Polynomial([0.17881, 0.0011958, -2.7178e-06])
 		f =  _np.polynomial.Polynomial([0.18071, -0.00027604, -1.7749e-07])
 		cho =  _np.polynomial.Polynomial([0.20141, 0.0013874, -4.3312e-06])
@@ -274,10 +278,10 @@ class Food:
 		Chem.-1ng.-Technik., 23 (3) P.59 - 64
 		"""
 		
-		T=self.T
+		t = T if T != None else self.T
 
-		return self.water*w(T)+ self.protein*p(T) + self.lipid*f(T) + \
-			self.cho*cho(T) + self.ash*ash(T) + self.salt*salt	
+		return self.water*w(t)+ self.protein*p(t) + self.lipid*f(t) + \
+			self.cho*cho(t) + self.ash*ash(t) + self.salt*salt	
 
 
 	def conductivity(self)->float:
@@ -285,8 +289,11 @@ class Food:
 		return self.k()	
 		
 	
-	def rho(self)->float:
-		"""returns kg/m3"""
+	def rho(self, T:float = None)->float:
+		"""
+		If T (in °C) is not specified then Food's current temperature will be used.\n
+		Returns density in kg/m3
+		"""
 		w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574]) #water
 		p =  _np.polynomial.Polynomial([1329.9, -0.5184]) #protein
 		f =  _np.polynomial.Polynomial([925.59, -0.41757]) #lipid
@@ -294,10 +301,10 @@ class Food:
 		a =  _np.polynomial.Polynomial([2423.8, -0.28063]) #ash
 		s =  2165 #salt, Wikipedia
 		
-		T=self.T
+		t = T if T != None else self.T
 
-		return self.water*w(T) + self.protein*p(T) + self.lipid*f(T) + \
-			self.cho*c(T) + self.ash*a(T) + self.salt*s
+		return self.water*w(t) + self.protein*p(t) + self.lipid*f(t) + \
+			self.cho*c(t) + self.ash*a(t) + self.salt*s
 
 
 	def density(self)->float:
