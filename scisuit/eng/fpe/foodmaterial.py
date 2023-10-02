@@ -2,12 +2,10 @@ from __future__ import annotations
 import math as _math
 import numbers as _numbers
 import numpy as _np
-import dataclasses as _dc
 
-from enum import Enum
-
-from .wateractivity import Aw, ComputeAw_T
+from .foodproperty import Aw, ComputeAw_T
 from ...decorators import override
+from ..defs import Dielectric
 
 
 """
@@ -16,16 +14,6 @@ if less than tolerance food's temperatures assumed equal
 """
 T_TOL = 0.1
 
-
-#Forward declaration of Food class
-class Food:
-	pass
-
-
-@_dc.dataclass
-class Dielectric:
-	Constant =0.0
-	Loss = 0.0
 
 
 #-----------------------------------------------------------------------------
@@ -44,14 +32,19 @@ class Food:
 		"""
 		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
-		group: Type of the food
 
 		## Example:
 		f1 = Food(cho=30, water=70) \n
 		f2 = Food(cho=0.3, water=0.7)
 		"""
-		isOK = water>=0 and cho>=0 and protein>=0 and lipid>=0 and ash>=0 and salt>=0
-		assert isOK, "Ingredients cannot have negative value."
+		isOK = water>=0 and isinstance(water, _numbers.Real) and \
+			cho>=0 and isinstance(cho, _numbers.Real) and \
+			protein>=0 and isinstance(protein, _numbers.Real) and \
+			lipid>=0 and isinstance(lipid, _numbers.Real) and \
+			ash>=0 and isinstance(ash, _numbers.Real) and \
+			salt>=0 and isinstance(salt, _numbers.Real)
+			
+		assert isOK, "Ingredients must have non-negative real values."
 
 		self._water = water
 		self._cho = cho
@@ -184,8 +177,7 @@ class Food:
 				_ing = ma*v - mb*fB[k]
 				assert _ing>=0, "Weight of " + k + " can not be smaller than zero"
 				
-				if(_math.isclose(_ing, 0.0, abs_tol=1E-5)):
-					_ing = 0
+				if _math.isclose(_ing, 0.0, abs_tol=1E-5): _ing = 0
 			else:
 				_ing = ma*v
 			
@@ -254,46 +246,38 @@ class Food:
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
-		Cp_w = _np.polynomial.Polynomial([4.1289, -9.0864e-05, 5.4731e-06])
-		Cp_p =  _np.polynomial.Polynomial([2.0082, 0.0012089, -1.3129e-06])
-		Cp_f =  _np.polynomial.Polynomial([1.9842, 0.0014733, -4.8008e-06])
-		Cp_cho =  _np.polynomial.Polynomial([1.5488, 0.0019625, -5.9399e-06])
-		Cp_ash =  _np.polynomial.Polynomial([1.0926, 0.0018896, -3.6817e-06])
-		Cp_salt =  _np.polynomial.Polynomial([0.88])
+		w = _np.polynomial.Polynomial([4.1289, -9.0864e-05, 5.4731e-06])
+		p =  _np.polynomial.Polynomial([2.0082, 0.0012089, -1.3129e-06])
+		f =  _np.polynomial.Polynomial([1.9842, 0.0014733, -4.8008e-06])
+		cho =  _np.polynomial.Polynomial([1.5488, 0.0019625, -5.9399e-06])
+		ash =  _np.polynomial.Polynomial([1.0926, 0.0018896, -3.6817e-06])
+		salt =  0.88
 
-		T = self._T
+		T = self.T
 
-		return (self._water)*Cp_w(T) + \
-			(self._protein)*Cp_p(T) + \
-			(self._lipid)*Cp_f(T) + \
-			(self._cho)*Cp_cho(T) + \
-			(self._ash)*Cp_ash(T) +  \
-			(self._salt)*Cp_salt(T)
+		return self.water*w(T) + self.protein*p(T) + self.lipid*f(T) + \
+			self.cho*cho(T) + self.ash*ash(T) + self.salt*salt
 
 
 
 	def k(self)->float:
 		"""result W/mK"""
-		k_w =  _np.polynomial.Polynomial([0.57109, 0.0017625, -6.7036e-06])
-		k_p =  _np.polynomial.Polynomial([0.17881, 0.0011958, -2.7178e-06])
-		k_f =  _np.polynomial.Polynomial([0.18071, -0.00027604, -1.7749e-07])
-		k_cho =  _np.polynomial.Polynomial([0.20141, 0.0013874, -4.3312e-06])
-		k_ash =  _np.polynomial.Polynomial([0.32962, 0.0014011, -2.9069e-06])
-		k_salt =  _np.polynomial.Polynomial([0.574])
+		w =  _np.polynomial.Polynomial([0.57109, 0.0017625, -6.7036e-06])
+		p =  _np.polynomial.Polynomial([0.17881, 0.0011958, -2.7178e-06])
+		f =  _np.polynomial.Polynomial([0.18071, -0.00027604, -1.7749e-07])
+		cho =  _np.polynomial.Polynomial([0.20141, 0.0013874, -4.3312e-06])
+		ash =  _np.polynomial.Polynomial([0.32962, 0.0014011, -2.9069e-06])
+		salt =  0.574
 		"""
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
 		Thermal Conductivities of Aqueous Solutions of Strong Electrolytes 
 		Chem.-1ng.-Technik., 23 (3) P.59 - 64
 		"""
 		
-		T=self._T
+		T=self.T
 
-		return (self._water)*k_w(T)+ \
-			(self._protein)*k_p(T) + \
-			(self._lipid)*k_f(T) + \
-			(self._cho)*k_cho(T) + \
-			(self._ash)*k_ash(T) + \
-			(self._salt)*k_salt(T)	
+		return self.water*w(T)+ self.protein*p(T) + self.lipid*f(T) + \
+			self.cho*cho(T) + self.ash*ash(T) + self.salt*salt	
 
 
 	def conductivity(self)->float:
@@ -303,21 +287,17 @@ class Food:
 	
 	def rho(self)->float:
 		"""returns kg/m3"""
-		rho_w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574])
-		rho_p =  _np.polynomial.Polynomial([1329.9, -0.5184])
-		rho_f =  _np.polynomial.Polynomial([925.59, -0.41757])
-		rho_cho =  _np.polynomial.Polynomial([1599.1, -0.31046])
-		rho_ash =  _np.polynomial.Polynomial([2423.8, -0.28063])
-		rho_salt =  _np.polynomial.Polynomial([2165]) #Wikipedia
+		w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574]) #water
+		p =  _np.polynomial.Polynomial([1329.9, -0.5184]) #protein
+		f =  _np.polynomial.Polynomial([925.59, -0.41757]) #lipid
+		c =  _np.polynomial.Polynomial([1599.1, -0.31046]) #cho
+		a =  _np.polynomial.Polynomial([2423.8, -0.28063]) #ash
+		s =  2165 #salt, Wikipedia
 		
-		T=self._T
+		T=self.T
 
-		return (self._water)*rho_w(T) + \
-			(self._protein)*rho_p(T) + \
-			(self._lipid)*rho_f(T) + \
-			(self._cho)*rho_cho(T) + \
-			(self._ash)*rho_ash(T) + \
-			(self._salt)*rho_salt(T)
+		return self.water*w(T) + self.protein*p(T) + self.lipid*f(T) + \
+			self.cho*c(T) + self.ash*a(T) + self.salt*s
 
 
 	def density(self)->float:
@@ -331,7 +311,7 @@ class Food:
 		
 		## Warning:
 		At T>25 C, built-in computation might return None. \n
-		Therefore, must be used with caution.
+		Therefore, must be used with caution at T>25.
 		"""
 		aw1 = 0.92
 	
@@ -358,23 +338,23 @@ class Food:
 		"""This assumption is only valid for dilute ones"""
 		IsElectrolyte = salt>=0.01
 
-		_aw = Aw(self)
+		_Aw = Aw(self)
 
 		#Electrolytes solutions
 		if IsElectrolyte:	
-			aw1 = _aw.Raoult()
+			aw1 = _Aw.Raoult()
 			return ComputeAw_T(self, aw1)	
 		
 		#dilute
 		if water>=0.90:
-			aw1 = _aw.Raoult()
+			aw1 = _Aw.Raoult()
 
 		#solute is 2.5 more times than solvent
 		elif Msolute>=0.70:
-			aw1 = _aw.Norrish()
+			aw1 = _Aw.Norrish()
 		
 		else:
-			aw1 = _aw.FerroFontan_Chirife_Boquet()
+			aw1 = _Aw.FerroFontan_Chirife_Boquet()
 
 		return ComputeAw_T(self, aw1)
 	
@@ -461,6 +441,9 @@ class Food:
 		"""
 		Estimates the initial freezing temperature of a food item \n
 		returns in Celcius (None if estimation fails)
+
+		## Warning:
+		Not implemented in the base class (Food), raises error
 		"""
 		raise NotImplementedError("Only implemented for Juice, Fruit/Veggies and Meat")
 
@@ -473,10 +456,7 @@ class Food:
 		T: Initial freezing temperature
 		"""
 		
-		"""
-		if temperature > initial freezing temperature 
-		then no ice can exist
-		"""
+		#if temperature > initial freezing temperature then no ice can exist
 		if self.T > T:
 			return None
 
@@ -499,7 +479,6 @@ class Food:
 		water = self._water 
 		ash = self.ash
 		T = self.T
-		grp = self._group
 
 		meat_dc = lambda w, ash: w*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
 		meat_dl = lambda w, ash:  w*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
@@ -559,9 +538,7 @@ class Food:
 	
 
 	def normalize(self):
-		"""
-		sets the weight to 1.0
-		"""
+		"""sets the weight to 1.0"""
 		self._Weight = 1.0
 
 
@@ -638,9 +615,7 @@ class Food:
 	def intersects(self, f2:Food)->bool:
 		"""Do f1 and f2 have any common ingredient"""
 		
-		#ingredients return only the ingredients with value>0
-		fA:dict = self.ingredients()
-		fB:dict = f2.ingredients()
+		fA, fB = self.ingredients(), f2.ingredients()
 
 		for k, v in fA.items():
 			if _math.isclose(v, fB[k], abs_tol=1E-3):
@@ -1043,77 +1018,3 @@ class Sweet(Food):
 		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
-
-
-
-
-
-
-
-""" ------------------------------------------------------------------------------- """
-
-class Cp():
-	def __init__(self, food:Food) -> None:
-		self._food = food
-
-	def Siebel(self, Tf = -1.7)->float:
-		"""
-		returns kJ/kg°C \n
-
-		## Input:
-		Tf = -1.7 is the default freezing temperature
-
-		## Reference:
-		Siebel, E (1892). Specific heats of various products. Ice and Refrigeration, 2, 256-257.
-		"""
-
-		food = self._food
-
-		Fat = food.lipid
-		SNF = food.ash + food.protein + food.cho
-		M = food.water
-		Tfood = food.T
-
-
-		#for fat free foods
-		if _math.isclose(Fat, 0.0, abs_tol=1E-5):
-			r = 837.36
-			r += 3349*M if Tfood>Tf else 1256*M
-			return r/1000
-
-		r = 1674.72*Fat +  837.36*SNF
-		r += 4186.8*M if Tfood>Tf else 2093.4*M
-
-		return r/1000
-
-
-	def Heldman(self)->float:
-		"""
-		returns kJ/kg°C 
-
-		## Reference:
-		Heldman, DR (1975). Food Process Engineering. Westport, CT: AVI 
-		"""
-		food = self._food
-
-		Fat = food.lipid
-		Protein = food.protein
-		Ash = food.ash
-		cho = food.cho
-		water = food.water
-		
-		return 4.18*water + 1.547*Protein + 1.672*Fat + 1.42*cho + 0.836*Ash
-
-
-	def Chen(self)->float:
-		"""
-		specific heat of an unfrozen food returns kJ/kg°C \n
-
-		## Reference:
-		Chen CS (1985). Thermodynamic Analysis of the Freezing and Thawing of Foods: 
-		Enthalpy and Apparent Specific Heat. Food Science, 50(4), 1158-1162
-		"""
-		food = self._food
-
-		Solid = 1 - food.water	
-		return 4.19 - 2.30*Solid - 0.628*Solid**3
