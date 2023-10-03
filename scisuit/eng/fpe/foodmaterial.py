@@ -397,9 +397,9 @@ class Food:
 		assert isinstance(T, float), "Initial freezing temperature must be float"
 
 		LO = 333.6 #constant
-		Tref= -40 #reference temperature
+		Tref = -40 #reference temperature
 
-		Tfood=self.T
+		Tfood = self.T
 
 		X_w = self.water
 
@@ -417,7 +417,7 @@ class Food:
 			If the food temperature is at 0C and it is frozen
 			then return the enthalpy of ice at 0C
 			"""
-			if _math.isclose(Tfood,0.0, abs_tol=T_TOL):
+			if _math.isclose(Tfood, 0.0, abs_tol=T_TOL):
 				return 2.050
 
 			"""
