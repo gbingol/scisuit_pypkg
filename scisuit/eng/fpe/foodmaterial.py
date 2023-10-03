@@ -503,28 +503,28 @@ class Food:
 		
 
 
-	def makefrom(self, Foods:list[Food])->list[float]:
+	def makefrom(self, inputs:list[Food])->list[float]:
 		"""
 		Given a list of food items, computes the amount of each to be mixed to 
 		make the current food item \n
 		Material Balance
 		"""
-		N = len(Foods)
+		N = len(inputs)
 
 		A, b = [], []
 		A.append([1]*N) #first row is the weights
 		b.append(1)
 
-		for f in Foods:
-			assert isinstance(f, Food), "All entries in the list must be of type Food"
-			assert self.intersects(self, f), "List has food item with no common ingredient with the target"
+		for food in inputs:
+			assert isinstance(food, Food), "All entries in the list must be of type Food"
+			assert self.intersects(food), "List has food item with no common ingredient with the target"
 		
 		Ingredients = self.ingredients()
 		NCols = len(Ingredients) + 1
 
 		for key, value in Ingredients.items():
 			row = []
-			for f in Foods:
+			for f in inputs:
 				ing = f.ingredients()
 				val = 0.0
 				if ing.get(key)!= None:
@@ -620,15 +620,11 @@ class Food:
 	
 
 	def intersects(self, f2:Food)->bool:
-		"""Do f1 and f2 have any common ingredient"""
-		
+		"""Do f1 and f2 have any common ingredient"""	
 		fA, fB = self.ingredients(), f2.ingredients()
 
-		for k, v in fA.items():
-			if _math.isclose(v, fB[k], abs_tol=1E-3):
-				return True
-		
-		return False
+		#is there an element at intersection of both sets
+		return set(fA.keys()) & set(fB.keys())
 
 
 
