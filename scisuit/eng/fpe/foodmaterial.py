@@ -337,18 +337,21 @@ class Food:
 		#note that salt is excluded
 		Msolute = cho + lipid + protein + ash
 
-		# Dilute solution, as the total percentage is less than 1%
-		if Msolute<0.01: 
+		"""
+		Very dilute solution containing at least one of cho, lipid, protein or ash
+		
+		>> nacl = Food(water = 80, salt=20)
+		Therefore, for salt solutions that contain none of the above, the following check
+		does NOT return 0.99
+		"""
+		if 0 < Msolute < 0.01: 
 			return 0.99
 	
 
-		"""This assumption is only valid for dilute ones"""
-		IsElectrolyte = salt>=0.01
-
 		_Aw = Aw(self)
 
-		#Electrolytes solutions
-		if IsElectrolyte:	
+		#salt solution?
+		if salt>=0.01 and water>=0.7:	
 			aw1 = _Aw.Raoult()
 			return ComputeAw_T(self, aw1)	
 		
