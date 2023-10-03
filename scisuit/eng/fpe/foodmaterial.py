@@ -637,7 +637,7 @@ class Beverage(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
-	@override
+	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -646,7 +646,7 @@ class Beverage(Food):
 		water = self._water 
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-0.4)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -671,7 +671,7 @@ class Juice(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-	@override
+	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -680,7 +680,7 @@ class Juice(Food):
 		water = self._water 
 		return 120.47 + 327.35*water - 176.49*water**2  - 273.15
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-0.4)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -705,7 +705,7 @@ class Cereal(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties
@@ -735,7 +735,7 @@ class Legume(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties 
@@ -765,7 +765,7 @@ class Nut(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties
@@ -796,7 +796,7 @@ class Dairy(Food):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-0.6)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -822,7 +822,7 @@ class Fruit(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 	
-	@override
+	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -832,7 +832,7 @@ class Fruit(Food):
 		return (287.56 -49.19*water + 37.07*water**2) - 273.15
 	
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties
@@ -854,7 +854,7 @@ class Fruit(Food):
 		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
 
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-1.5)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -877,7 +877,7 @@ class Vegetable(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-	@override
+	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -886,7 +886,7 @@ class Vegetable(Food):
 		water = self._water 	
 		return (287.56 -49.19*water + 37.07*water**2) - 273.15
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties
@@ -909,7 +909,7 @@ class Vegetable(Food):
 	
 
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-1.5)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -936,7 +936,7 @@ class Meat(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-	@override
+	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
 		Estimates the initial freezing temperature of a food item \n
@@ -946,7 +946,7 @@ class Meat(Food):
 		return (271.18 + 1.47*water) - 273.15
 
 
-	@override
+	@override(Food)
 	def dielectric(self, f:int = 2450)->Dielectric:
 		"""
 		Computes dielectric properties
@@ -966,7 +966,7 @@ class Meat(Food):
 		return Dielectric(meat_dc(water, ash), meat_dl(water, ash))
 
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-1.7)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
@@ -992,7 +992,7 @@ class Sweet(Food):
 	def __init__(self, water=0, cho=0, protein=0, lipid=0, ash=0, salt=0):
 		super().__init__(water, cho, protein, lipid, ash, salt)
 
-	@override
+	@override(Food)
 	def aw(self)->float|None:
 		"""
 		Returns value of water activity or None \n
@@ -1005,7 +1005,7 @@ class Sweet(Food):
 		return ComputeAw_T(self, _aw.MoneyBorn())
 
 
-	@override
+	@override(Food)
 	def enthalpy(self, T=-15)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
