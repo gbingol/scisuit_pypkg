@@ -477,7 +477,7 @@ class Food:
 	
 	
 
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -709,7 +709,7 @@ class Cereal(Food):
 
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -717,17 +717,30 @@ class Cereal(Food):
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
 		"""
-		w = self._water 
+		w = self._water*100
+		T = self.T
 		
 		#assuming it as bulk density
 		logf = _math.log10(f)
 		rho = self.rho()
 
-		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		if 2000<f<3000 and 10<T<30 and 3<w<30:
+			dc_ = 1.71 + 0.0701*w
+			dl_ = 0.12 + 0.00519*w
+
+		elif 900<f<10000 and 10<T<30 and 3<w<30:
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
+
+		else:
+			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
 		
-		return Dielectric(d_const, d_loss)
+		return Dielectric(dc_, dl_)
 
 
 
@@ -739,25 +752,38 @@ class Legume(Food):
 
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
-		Computes dielectric properties 
+		Computes dielectric properties
 		f: frequency in MHz
 
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
 		"""
-		w = self._water 
+		w = self._water*100
+		T = self.T
 		
 		#assuming it as bulk density
 		logf = _math.log10(f)
 		rho = self.rho()
 
-		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		if 2000<f<3000 and 10<T<30 and 3<w<30:
+			dc_ = 1.71 + 0.0701*w
+			dl_ = 0.12 + 0.00519*w
+
+		elif 900<f<10000 and 10<T<30 and 3<w<30:
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
+
+		else:
+			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
 		
-		return Dielectric(d_const, d_loss)
+		return Dielectric(dc_, dl_)
 
 
 
@@ -769,7 +795,7 @@ class Nut(Food):
 
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -777,17 +803,30 @@ class Nut(Food):
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
 		"""
-		w = self._water 
+		w = self._water*100
+		T = self.T
 		
 		#assuming it as bulk density
 		logf = _math.log10(f)
 		rho = self.rho()
 
-		d_const = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-		d_loss = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+		if 2000<f<3000 and 10<T<30 and 3<w<30:
+			dc_ = 1.71 + 0.0701*w
+			dl_ = 0.12 + 0.00519*w
+
+		elif 900<f<10000 and 10<T<30 and 3<w<30:
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
+
+		else:
+			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
+			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
 		
-		return Dielectric(d_const, d_loss)
+		return Dielectric(dc_, dl_)
 
 
 
@@ -836,7 +875,7 @@ class Fruit(Food):
 	
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -844,17 +883,26 @@ class Fruit(Food):
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-		"""
-		water = self._water 
-		ash = self.ash
-		T = self.T
-		
-		fv_dc = lambda w, ash:  38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
-		fv_dl = lambda w, ash: 17.72 - 0.4519*T + 0.001382*T**2 \
-						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
-						+ 0.002206*w*T + 0.1505*ash*T
 
-		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
+		"""
+		w, ash = self.water*100, self.ash*100
+		T = self.T
+
+		if f == 2450 and 0<T<70 and 50<w<90:
+			dc_ = 2.14 - 0.104*T + 0.808*w
+			dl_ = 3.09-0.0638*T+0.213*w
+
+		elif 900<=f<=3000 and 0<T<70 and 50<w<90:
+			dc_ = -12.8-0.103*T + 0.788*w + 5.49*(f/1000)
+			dl_ = 10.1 + 0.008*T + 0.221*w -3.53*(f/1000)
+		
+		else:
+			dc_ = 38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
+			dl_ = 17.72 - 0.4519*T + 0.001382*T**2 - 0.07448*w + 22.93*ash - 13.44*ash**2 + 0.002206*w*T + 0.1505*ash*T
+
+		return Dielectric(dc_, dl_)
 
 
 	@override(Food)
@@ -890,7 +938,7 @@ class Vegetable(Food):
 		return (287.56 -49.19*water + 37.07*water**2) - 273.15
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -898,17 +946,26 @@ class Vegetable(Food):
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-		"""
-		water = self._water 
-		ash = self.ash
-		T = self.T
-		
-		fv_dc = lambda w, ash:  38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
-		fv_dl = lambda w, ash: 17.72 - 0.4519*T + 0.001382*T**2 \
-						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
-						+ 0.002206*w*T + 0.1505*ash*T
 
-		return Dielectric(fv_dc(water, ash), fv_dl(water, ash))
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
+		"""
+		w, ash = self.water*100, self.ash*100
+		T = self.T
+
+		if f == 2450 and 0<T<70 and 50<w<90:
+			dc_ = 2.14 - 0.104*T + 0.808*w
+			dl_ = 3.09-0.0638*T+0.213*w
+
+		elif 900<=f<=3000 and 0<T<70 and 50<w<90:
+			dc_ = -12.8-0.103*T + 0.788*w + 5.49*(f/1000)
+			dl_ = 10.1 + 0.008*T + 0.221*w -3.53*(f/1000)
+		
+		else:
+			dc_ = 38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
+			dl_ = 17.72 - 0.4519*T + 0.001382*T**2 - 0.07448*w + 22.93*ash - 13.44*ash**2 + 0.002206*w*T + 0.1505*ash*T
+
+		return Dielectric(dc_, dl_)
 	
 
 
@@ -950,7 +1007,7 @@ class Meat(Food):
 
 
 	@override(Food)
-	def dielectric(self, f:int = 2450)->Dielectric:
+	def dielectric(self, f:int=2450)->Dielectric:
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
@@ -958,15 +1015,31 @@ class Meat(Food):
 		## Reference:
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
+
+		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
+		International Journal of Food Science and Technology, 29, 699-713.
 		"""
-		water = self._water 
-		ash = self.ash
+		water, ash, salt, fat = self.water*100, self.ash, self.salt*100, self.lipid*100
 		T = self.T
+
+		if 0<fat<20 and -30<T<0:
+			"""Calay et al 2007, Predictive equations for dielectric ..."""
+			dc_ = 29.3 + 0.076*T - 0.3*water - 0.11*fat
+			dl_ = 9.8 + 0.028*T- 0.0117*water
 		
-		meat_dc = lambda w, ash: w*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
-		meat_dl = lambda w, ash:  w*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
+		elif 0<salt<=6 and 0<T<70:
+			dc_ = -52-0.03*T+ 1.2*water+(4.5+0.07*T)*salt
+			dl_ = -22-0.013*T + 0.48*water + (4 + 0.05*T)*salt
 		
-		return Dielectric(meat_dc(water, ash), meat_dl(water, ash))
+		elif -30<T<0:
+			dc_ = 23.6 + 0.0767*T - 0.231*water
+			dl_ = 9.8 + 0.028*T- 0.0117*water 
+		
+		else:
+			dc_ = water*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
+			dl_ = water*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
+		
+		return Dielectric(dc_, dl_)
 
 
 	@override(Food)
