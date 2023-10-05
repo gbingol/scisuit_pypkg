@@ -509,6 +509,48 @@ def rlnorm(n:int, meanlog=0.0, sdlog=1.0)->list:
 
 
 
+# ----- Pareto Distribution  -------
+
+def dpareto(x:Iterable|Real, location, shape=1.0)->list|Real:
+	"""
+	location: location parameter
+	shape: shape parameter
+	"""
+	assert location>0 and shape>0, "'location' and 'shape' must be positive"
+	return _core.c_stat_dpareto(x, _ct.c_double(location), _ct.c_double(shape))
+
+
+def ppareto(q:Iterable|Real, location, shape=1.0)->list|Real:
+	"""
+	location: location parameter
+	shape: shape parameter
+	"""
+	assert location>0 and shape>0, "'location' and 'shape' must be positive"
+	return _core.c_stat_ppareto(q, _ct.c_double(location), _ct.c_double(shape))
+
+
+def qpareto(p:Iterable|Real, location, shape=1.0)->list|Real:
+	"""
+	location: location parameter
+	shape: shape parameter
+	"""
+	assert location>0 and shape>0, "'location' and 'shape' must be positive"
+	return _core.c_stat_qpareto(p, _ct.c_double(location), _ct.c_double(shape))
+
+
+def rpareto(n:int, location, shape=1.0)->list:
+	"""
+	location: location parameter
+	shape: shape parameter
+	"""
+	assert location>0 and shape>0, "'location' and 'shape' must be positive"
+	assert n>0 ,"n>0 expected"
+	
+	return (_np.random.pareto(size=n, a=shape)*location).tolist()
+
+
+
+
 # ----- Poisson Distribution  -------
 
 def dpois(x:Iterable|Real, mu:float)->list|Real:

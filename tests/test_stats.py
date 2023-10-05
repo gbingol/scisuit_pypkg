@@ -183,3 +183,7 @@ def beta():
 	print(pbeta(q=0.1, shape1=0.5, shape2=1))
 	print(qbeta(p=0.1, shape1=0.5, shape2=1))
 
+
+from scisuit.stats import dlnorm, plnorm, qlnorm
+
+print(dlnorm(-0.1))
