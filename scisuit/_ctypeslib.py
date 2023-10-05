@@ -146,7 +146,7 @@ coreDLL.c_stat_dlnorm.restype=_ct.py_object
 coreDLL.c_stat_plnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 coreDLL.c_stat_plnorm.restype=_ct.py_object
 coreDLL.c_stat_qlnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-coreDLL.c_stat_qlnorm.restype=_ct.
+coreDLL.c_stat_qlnorm.restype=_ct.py_object
 
 
 coreDLL.c_stat_dpareto.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
