@@ -124,6 +124,7 @@ coreDLL.c_stat_pgeom.restype=_ct.py_object
 coreDLL.c_stat_qgeom.argtypes =  [_ct.py_object, _ct.c_double]
 coreDLL.c_stat_qgeom.restype=_ct.py_object
 
+
 coreDLL.c_stat_dhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
 coreDLL.c_stat_dhyper.restype=_ct.py_object
 coreDLL.c_stat_phyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
@@ -138,6 +139,14 @@ coreDLL.c_stat_pnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 coreDLL.c_stat_pnorm.restype=_ct.py_object
 coreDLL.c_stat_qnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
 coreDLL.c_stat_qnorm.restype=_ct.py_object
+
+
+coreDLL.c_stat_dlnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_dlnorm.restype=_ct.py_object
+coreDLL.c_stat_plnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_plnorm.restype=_ct.py_object
+coreDLL.c_stat_qlnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
+coreDLL.c_stat_qlnorm.restype=_ct.py_object
 
 
 coreDLL.c_stat_dpois.argtypes = [_ct.py_object, _ct.c_double]

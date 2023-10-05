@@ -470,6 +470,45 @@ def rnorm(n:int, mean=0.0, sd=1.0)->list:
 
 
 
+# ----- Log Normal Distribution  -------
+
+def dlnorm(x:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
+	"""
+	meanlog: mean value of the distribution
+	sdlog: standard deviation of the distribution
+	"""
+	return _core.c_stat_dlnorm(x, _ct.c_double(meanlog), _ct.c_double(sdlog))
+
+
+def plnorm(q:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
+	return _core.c_stat_plnorm(q, _ct.c_double(meanlog), _ct.c_double(sdlog))
+
+
+def qlnorm(p:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
+	return _core.c_stat_qlnorm(p, _ct.c_double(meanlog), _ct.c_double(sdlog))
+
+
+def rlnorm(n:int, meanlog=0.0, sdlog=1.0)->list:
+	"""
+	mean: mean value of the distribution
+	sd: standard deviation of the distribution
+	"""
+	assert n>0 ,"n>0 expected"
+	assert sdlog>0, "sd>0 expected"
+
+	return _np.random.lognormal(size=n, mean=meanlog, sigma=sdlog).tolist()
+
+
+
+
 # ----- Poisson Distribution  -------
 
 def dpois(x:Iterable|Real, mu:float)->list|Real:
