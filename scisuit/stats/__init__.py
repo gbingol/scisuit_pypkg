@@ -32,6 +32,7 @@ from .distributions import \
 	dmultinom, rmultinom, \
 	dnbinom, pnbinom, qnbinom,rnbinom, \
 	dnorm, pnorm, qnorm, rnorm, \
+	dlnorm, plnorm, qlnorm, rlnorm, \
 	dpois, ppois, qpois, rpois, \
 	dsignrank, qsignrank, psignrank, \
 	dt, pt, qt, rt, \
