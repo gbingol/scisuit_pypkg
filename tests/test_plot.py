@@ -94,10 +94,10 @@ def qqplot():
 	treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
 	control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-	plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment")
+	plt.qqplot(x=control, y=treatment)
 
 	marker = {'fill': plt.Color.WHITE, 'linecolor': plt.Color.BLUE, 'type': plt.MARKER_SQUARE, 'linewidth': 2, 'size':5}
-	plt.qqplot(x=control, y=treatment, xlab="control", ylab="treatment", marker = marker)
+	plt.qqplot(x=control, y=treatment, marker = marker)
 
 
 
@@ -157,16 +157,10 @@ plt.scatter(
 	marker=m, trendline=plt.Trendline(degree=5))"""
 
 
-x=np.array([1,2,3,4])
-y=x**2
+treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-plt.scatter(x=x, y=2*x+5)
-plt.legend()
-
-plt.figure()
-
-plt.plot(x=x, y=y, width=3, color=plt.Color.BROWN)
-
+plt.qqnorm(control)
 plt.show()
 
 
