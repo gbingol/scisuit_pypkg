@@ -15,8 +15,9 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.barh(labels=["A", "B", "C", "Q4"], width=B)
-	plt.barh(labels=categ, width=A)
+	plt.bar(labels=["A", "B", "C", "Q4"], height=B, style=plt.STACKED)
+	plt.bar(labels=categ, height=A, style=plt.STACKED)
+	plt.show()
 
 
 def histogram():
@@ -137,8 +138,9 @@ def matplotlib_mixed():
 	bar_labels = ['red', 'blue', '_red', 'orange']
 	bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
 
-	plt.plot([1,2,3], [1, 4, 9])
 	plt.bar(fruits, counts, label=bar_labels, color=bar_colors)
+	plt.plot([1,2,3], [1, 4, 9])
+	plt.show()
 
 def boxplot():
 	x = [2, 1, 3, 6, 4]
@@ -161,6 +163,6 @@ categ=["Q1", "Q2", "Q3", "Q4"]
 A = [44, 55, 41, 67]
 B = [13, 23, 8, 13]
 
-plt.barh(labels=["A", "B", "C", "Q4"], width=B)
-plt.barh(labels=categ, width=A)
+plt.bar(labels=["A", "B", "C", "Q4"], height=B, style=plt.STACKED)
+plt.bar(labels=categ, height=A, style=plt.STACKED)
 plt.show()
