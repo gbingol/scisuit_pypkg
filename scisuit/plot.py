@@ -279,7 +279,8 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 
 
 def qqnorm(
-		data:Iterable,  
+		data:Iterable, 
+		label:str=None, 
 		show=True, 
 		line=None, 
 		marker=None):
@@ -293,7 +294,7 @@ def qqnorm(
 		show: Whether to show theoretical line or not 
 		"""
 		return pltDLL.c_plot_qqnorm((),
-			{"data":data, "show":show, "line":line, "marker":marker} )
+			{"data":data, "name": label, "show":show, "line":line, "marker":marker} )
 
 
 
