@@ -157,9 +157,10 @@ plt.scatter(
 	marker=m, trendline=plt.Trendline(degree=5))"""
 
 
-treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
-control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+categ=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
 
-plt.qqnorm(control, label="control")
-plt.scatter(x=range(len(control)), y=control)
+plt.barh(labels=["A", "B", "C", "Q4"], width=B)
+plt.barh(labels=categ, width=A)
 plt.show()

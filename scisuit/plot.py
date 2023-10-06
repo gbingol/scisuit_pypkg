@@ -116,7 +116,7 @@ def bar(
 	height:Iterable, 
 	labels=None, 
 	label=None, 
-	type = CLUSTER,
+	style = CLUSTER,
 	fill=None, 
 	line=None):
 	"""
@@ -126,10 +126,10 @@ def bar(
 	height: Numeric data \n
 	labels: Category labels \n
 	label: Name of the series \n
-	type: clustered, stacked and 100% stacked
+	style: clustered, stacked and 100% stacked
 	"""
 	return pltDLL.c_plot_bar((),
-			{"height":height, "labels":labels, "name":label, "type":type, 
+			{"height":height, "labels":labels, "name":label, "style":style, 
     			"fill":fill, "line":line})
 
 
@@ -139,7 +139,7 @@ def barh(
 	width:Iterable, 
 	labels=None, 
 	label=None, 
-	type=CLUSTER, 
+	style=CLUSTER, 
 	fill=None, 
 	line=None):
 	"""
@@ -149,10 +149,10 @@ def barh(
 	width : Numeric data \n
 	labels : Category labels \n
 	label: Name of the series \n
-	type: clustered, stacked and 100% stacked.
+	style: clustered, stacked and 100% stacked.
 	"""
 	return pltDLL.c_plot_barh((),
-			{"width":width, "labels":labels, "name":label, "type":type, 
+			{"width":width, "labels":labels, "name":label, "style":style, 
     			"fill":fill, "line":line})
 
 
