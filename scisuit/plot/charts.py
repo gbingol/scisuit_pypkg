@@ -39,8 +39,8 @@ def barh(
 	width:_Iterable, 
 	labels:list[str]=None, 
 	style:str=_defs.CLUSTER,
-	fill=None, 
-	line=None):
+	fill:_gdi.Brush=None, 
+	line:_gdi.Pen=None):
 	"""
 	Plots horizontal bar chart
 
@@ -49,8 +49,12 @@ def barh(
 	labels : Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return _pltDLL.c_plot_barh((),
-			{"width":width, "labels":labels, "style":style, "fill":fill, "line":line})
+	return _pltDLL.c_plot_barh((),{
+		"width":width, 
+		"labels":labels, 
+		"style":style, 
+		"fill":vars(fill) if fill != None else None, 
+		"line":vars(line) if line != None else None})
 
 
 
@@ -61,17 +65,20 @@ def barh(
 def boxplot(
 	data:_Iterable, 
 	label:str=None, 
-	fill:dict=None, 
-	line:dict=None):
+	fill:_gdi.Brush=None, 
+	line:_gdi.Pen=None):
 	"""
-	Plots box-whisker chart and returns a window handle.
+	Plots box-whisker chart.
 
 	## Input
 	data : Data to be plotted \n
 	label: Name of the series
 	"""
-	return _pltDLL.c_plot_boxplot((),
-			{"data":data, "name":label, "fill":fill, "line":line})
+	return _pltDLL.c_plot_boxplot((), {
+		"data":data, 
+		"name":label, 
+		"fill":vars(fill) if fill != None else None, 
+		"line":vars(line) if line != None else None})
 
 
 
