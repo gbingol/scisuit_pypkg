@@ -1,12 +1,9 @@
 import dataclasses as _dc
-from enum import Enum, IntEnum
+from enum import IntEnum as _IntEnum
+from ..defs import StrEnum as _StrEnum
 
 
-
-class StrEnum(str, Enum):
-	pass
-
-class Color(StrEnum):
+class Color(_StrEnum):
 	"""
 	Colors with corresponding RGB values
 	"""
@@ -48,19 +45,21 @@ class Color(StrEnum):
 
 @_dc.dataclass
 class Pen:
-	class Style(IntEnum):
+	class STYLE(_IntEnum):
 		SOLID = 100
 		DOT = 101
 		LONGDASH = 102
 		SHORTDASH = 103
 		DOTDASH = 104
 		TRANSPARENT = 106
-	color:Color = Color.BLACK
+	color:Color = None
+	width:int = 1
+	style:STYLE= STYLE.SOLID
 
 
 @_dc.dataclass
 class Brush:
-	class Style(IntEnum):
+	class STYLE(_IntEnum):
 		SOLID = 100, 
 		TRANSPARENT = 106, 
 		BDIAGHATCH = 111, 
@@ -69,4 +68,5 @@ class Brush:
 		CROSSHATCH = 114
 		HORIZHATCH =115
 		VERTHATCH = 116
-	color:Color = Color.BLUE
+	color:Color = None
+	style:STYLE = STYLE.SOLID

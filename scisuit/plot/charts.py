@@ -1,54 +1,19 @@
 import ctypes as _ct
-import numpy as _np
-import dataclasses as _dc
+from typing import Iterable as _Iterable
 
-from typing import Iterable
+from .._ctypeslib import pltDLL as _pltDLL
 
-from ._ctypeslib import pltDLL
-from .app import App
-
-from .gdi import Color, Brush, Pen
-
-
-
-"""       DEFINITIONS            """
-
-
-"""
-Starts an application
-From C++ side c_plot_app function starts an application only once. 
-So it is safe to call this many times. 
-"""
-app = App()
-
-
-
-#BAR Charts and Line Charts
-CLUSTER = "c"
-STACKED = "s"
-PERCENTSTK = "%"
-
-#Histogram Modes
-HIST_DENSITY = "d"
-HIST_FREQUENCY = "f"
-HIST_RELFREQUENCY = "r"
-
-
-#Marker Types
-MARKER_CIRCLE = "c"
-MARKER_TRIANGLE = "t"
-MARKER_SQUARE = "s"
-MARKER_XMARKER = "x"
+import scisuit.plot.defs as _defs
+from .gdi import Pen as _Pen
 
 
 
 
-"""            CHARTS                             """
 
 def bar(
-	height:Iterable, 
+	height:_Iterable, 
 	labels:list[str]=None, 
-	style:str = CLUSTER,
+	style:str = _defs.CLUSTER,
 	fill=None, 
 	line=None):
 	"""
@@ -59,16 +24,16 @@ def bar(
 	labels: Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return pltDLL.c_plot_bar((),
+	return _pltDLL.c_plot_bar((),
 			{"height":height, "labels":labels, "style":style, "fill":fill, "line":line})
 
 
 
 
 def barh(
-	width:Iterable, 
+	width:_Iterable, 
 	labels:list[str]=None, 
-	style:str=CLUSTER,
+	style:str=_defs.CLUSTER,
 	fill=None, 
 	line=None):
 	"""
@@ -79,7 +44,7 @@ def barh(
 	labels : Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return pltDLL.c_plot_barh((),
+	return _pltDLL.c_plot_barh((),
 			{"width":width, "labels":labels, "style":style, "fill":fill, "line":line})
 
 
@@ -89,7 +54,7 @@ def barh(
 #-----------------------------------------------------------------------------------
 
 def boxplot(
-	data:Iterable, 
+	data:_Iterable, 
 	label:str=None, 
 	fill:dict=None, 
 	line:dict=None):
@@ -100,7 +65,7 @@ def boxplot(
 	data : Data to be plotted \n
 	label: Name of the series
 	"""
-	return pltDLL.c_plot_boxplot((),
+	return _pltDLL.c_plot_boxplot((),
 			{"data":data, "name":label, "fill":fill, "line":line})
 
 
@@ -110,8 +75,8 @@ def boxplot(
 #-----------------------------------------------------------------------------------
 
 def histogram(
-		data:Iterable, 
-		mode:str=HIST_FREQUENCY, 
+		data:_Iterable, 
+		mode:str=_defs.HIST_FREQUENCY, 
 		cumulative=False, 
 		breaks = None, 
 		fill = None, 
@@ -125,7 +90,7 @@ def histogram(
 	cumulative : True, cumulative distribution \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
-	return pltDLL.c_plot_histogram((),
+	return _pltDLL.c_plot_histogram((),
 			    {"data":data, "mode":mode, "cumulative":cumulative, 
 				"breaks":breaks, "fill":fill, "line":line})
 
@@ -136,10 +101,10 @@ def histogram(
 #-----------------------------------------------------------------------------------
 
 def line(
-	y:Iterable, 
+	y:_Iterable, 
 	labels:list=None, 
 	label:str=None, 
-	type=CLUSTER, 
+	type=_defs.CLUSTER, 
 	marker=None, 
 	line=None):
 	"""
@@ -151,7 +116,7 @@ def line(
 	label: Name of the series \n
 	type:	clustered, stacked and 100% stacked 
 	"""
-	return pltDLL.c_plot_line((),
+	return _pltDLL.c_plot_line((),
 			 {"y":y, "labels":labels, "name":label, "type":type, "marker":marker, "line":line})
 
 
@@ -162,7 +127,7 @@ def line(
 
 
 def pie(
-	data:Iterable, 
+	data:_Iterable, 
 	labels:list=None, 
 	colors:list=None, 
 	explode:list|int=None, 
@@ -177,7 +142,7 @@ def pie(
 	explode: Explosion level \n
 	startangle:	Start angle of first slice 
 	"""
-	return pltDLL.c_plot_pie((),
+	return _pltDLL.c_plot_pie((),
 				{"data":data, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle})
 
@@ -197,7 +162,7 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 	RH: A list in increasing order containing the requested relative humidity (%) lines \n
 	P: Absolute pressure (Pa)
 	"""
-	return pltDLL.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
+	return _pltDLL.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
 
 
@@ -206,7 +171,7 @@ def psychrometry(Tdb:list=None, RH:list=None, P=101325):
 
 
 def qqnorm(
-		data:Iterable, 
+		data:_Iterable, 
 		label:str=None, 
 		show=True, 
 		line=None, 
@@ -220,7 +185,7 @@ def qqnorm(
 		data: Data \n
 		show: Whether to show theoretical line or not 
 		"""
-		return pltDLL.c_plot_qqnorm((),
+		return _pltDLL.c_plot_qqnorm((),
 			{"data":data, "name": label, "show":show, "line":line, "marker":marker} )
 
 
@@ -228,8 +193,8 @@ def qqnorm(
 
 
 def qqplot(
-		x:Iterable,
-		y:Iterable,
+		x:_Iterable,
+		y:_Iterable,
 		marker=None):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
@@ -237,7 +202,7 @@ def qqplot(
 	## Input
 	x, y: Data
 	"""
-	return pltDLL.c_plot_qqplot((),
+	return _pltDLL.c_plot_qqplot((),
 			{"x":x, "y":y, "marker":marker})
 
 
@@ -246,6 +211,7 @@ def qqplot(
 
 #-----------------------------------------------------------------------------------
 
+import numpy as _np
 
 def quiver(
 		x:_np.ndarray, 
@@ -261,7 +227,7 @@ def quiver(
 	u, v: length in x and y directions, 2D ndarray \n
 	scale: Whether to scale the length of the arrows
 	"""
-	return pltDLL.c_plot_quiver((),
+	return _pltDLL.c_plot_quiver((),
 			{
 				"x":x.flatten().tolist(), 
 				"y":y.flatten().tolist(),
@@ -296,71 +262,16 @@ def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 #-----------------------------------------------------------------------------------
 
 
-@_dc.dataclass
-class MarkerProp:
-	"""
-	A class to define marker properties
-
-	## Input:
-	type: "c", "s", "t", "x" (default "c") \n	
-	size: 5 #>0 expected \n
-	fill: if specified, RGB "255 255 0" \n
-	linewidth: >0 expected \n
-	linecolor: if specified, RGB "255 255 0"
-	"""
-	type:str=MARKER_CIRCLE 
-	size:int=5 
-	fill:str=None
-	linewidth:int = 1
-	linecolor:str = None
-
-
-@_dc.dataclass
-class LineProp:
-	"""
-	A class to define marker properties
-
-	## Input:
-	color: if specified, RGB "255 255 0" \n
-	width: >0 expected \n
-	style: Pen style
-	"""
-	color:str=None
-	width:int = 1
-	style:str = Pen.Style.SOLID
-
-
-@_dc.dataclass
-class TrendlineProp:
-	"""
-	A class to define Trendline properties
-
-	## Input:
-	type: "linear", "poly", "exp", "log","pow" \n
-	degree: 2, >=2 expected when type is polynomial \n
-	intercept: number expected \n
-	color: "R G B" format, "255 255 125" \n
-	width: >0 expected \n
-	style: 100, 101, 102, 103, 104, 106 (default 102)
-	"""
-	type:str="linear"
-	degree:int=2
-	intercept:float=None
-	color:str = None
-	width:int = 1
-	style:int = 102
-
-
 
 def scatter(
-		x:Iterable,
-		y:Iterable,  
+		x:_Iterable,
+		y:_Iterable,  
 		label:str=None, 
 		smooth:bool=False, 
 		bubble:dict=None, 
-		marker=MarkerProp(), 
+		marker=_defs.Marker(), 
 		line:dict=None, 
-		trendline:TrendlineProp=None):
+		trendline:_defs.Trendline=None):
 	"""
 	Plot scatter charts
 
@@ -373,14 +284,14 @@ def scatter(
 	size:	size data (list), color: color (str), \n
 	mode: "A" area "W" diameter, scale: size scale (0, 200]
 	"""
-	assert isinstance(x, Iterable), "x must be iterable object"
-	assert isinstance(y, Iterable), "y must be iterable object"
+	assert isinstance(x, _Iterable), "x must be iterable object"
+	assert isinstance(y, _Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
 
-	if isinstance(trendline, TrendlineProp):
+	if isinstance(trendline, _defs.Trendline):
 		trendline=vars(trendline)
 
-	return pltDLL.c_plot_scatter((), 
+	return _pltDLL.c_plot_scatter((), 
 		{"x":x, "y":y , "name":label, "smooth":smooth, 
 		"bubble":bubble, 
 		"marker":vars(marker) if marker!=None else None, 
@@ -389,12 +300,12 @@ def scatter(
 
 
 def plot(
-	x:Iterable,
-	y:Iterable,  
+	x:_Iterable,
+	y:_Iterable,  
 	label:str=None, 
 	color:str = None,
 	width:int = 1,
-	style:int = Pen.Style.SOLID,
+	style:int = _Pen.STYLE.SOLID,
 	smooth:bool=False):
 	"""
 	Plot scatter charts
@@ -407,48 +318,13 @@ def plot(
 	style: line style, use PEN_XXX \n
 	width: line width
 	"""
-	line = LineProp(color=color, width=width, style=style)
-	return scatter(x=x, y=y, label=label, smooth=smooth, marker=None, line=vars(line))
+	line_ = _defs.Pen(color=color, width=width, style=style)
+	return scatter(
+		x=x, 
+		y=y, 
+		label=label, 
+		smooth=smooth, 
+		marker=None, 
+		line={"color": line_.color, "width":line_.width, "style":line_.style})
 
-
-#----------------------------------------------------------------------------
-
-def figure():
-	"""Start a new plot window"""
-	pltDLL.c_plot_figure()
-
-
-def title(label:str):
-	"""Create chart title"""
-	assert isinstance(label, str), "label must be of type string."
-	pltDLL.c_plot_title(label)
-
-
-def xlabel(label:str):
-	"""Create x-axis label"""
-	assert isinstance(label, str), "label must be of type string."
-	pltDLL.c_plot_xlabel(label)
-
-
-def ylabel(label:str):
-	"""Create y-axis label"""
-	assert isinstance(label, str), "label must be of type string."
-	pltDLL.c_plot_ylabel(label)
-
-
-def legend():
-	"""Create legend"""
-	pltDLL.c_plot_legend()
-
-
-def show(maximize = False, shared = False):
-	"""
-	Starts main loop and shows the chart(s)
-	
-	## Input:
-	maximize: Whether to show chart as maximized (good for Psychrometric chart) \n
-	shared: if there is any other application using a main loop
-	"""
-	pltDLL.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
-	app.mainloop()
 	
