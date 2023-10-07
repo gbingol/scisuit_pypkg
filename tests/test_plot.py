@@ -151,10 +151,13 @@ def boxplot():
 
 
 
-x = [2, 1, 3, 6, 4]
-y = [7, 7, 8, 4, 2]
+import scisuit.plot as plt
+import scisuit.stats as stat
 
-plt.boxplot(x, line=plt.Pen(color=plt.Color.LIME, width=3))
+x=stat.rnorm(500)
+plt.histogram(x,  
+		  fill=plt.Brush(color=plt.Color.RED), 
+		  line=plt.Pen(color="0 255 0", width=2))
 plt.show()
 
 

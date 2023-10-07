@@ -90,21 +90,25 @@ def histogram(
 		data:_Iterable, 
 		mode:str=_defs.HIST_FREQUENCY, 
 		cumulative=False, 
-		breaks = None, 
-		fill = None, 
-		line = None):
+		breaks:int|_Iterable = None, 
+		fill:_gdi.Brush=None, 
+		line:_gdi.Pen=None):
 	"""
 	Plots histogram
 
 	## Input
-	data:	A variable \n
+	data:	Numeric data \n
 	mode : density, frequency and relative frequency.\n
 	cumulative : True, cumulative distribution \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
-	return _pltDLL.c_plot_histogram((),
-			    {"data":data, "mode":mode, "cumulative":cumulative, 
-				"breaks":breaks, "fill":fill, "line":line})
+	return _pltDLL.c_plot_histogram((), {
+			"data":data, 
+			"mode":mode, 
+			"cumulative":cumulative, 
+			"breaks":breaks, 
+			"fill":vars(fill) if fill != None else None, 
+			"line":vars(line) if line != None else None})
 
 
 
