@@ -3,12 +3,11 @@ import numpy as _np
 import dataclasses as _dc
 
 from typing import Iterable
-from enum import Enum
 
 from ._ctypeslib import pltDLL
 from .app import App
 
-
+from .gdi import Color, Brush, Pen
 
 
 
@@ -23,9 +22,6 @@ So it is safe to call this many times.
 app = App()
 
 
-class StrEnum(str, Enum):
-	pass
-
 
 #BAR Charts and Line Charts
 CLUSTER = "c"
@@ -37,75 +33,12 @@ HIST_DENSITY = "d"
 HIST_FREQUENCY = "f"
 HIST_RELFREQUENCY = "r"
 
-#Pen Styles
-PEN_SOLID = 100
-PEN_DOT = 101
-PEN_LONGDASH = 102
-PEN_SHORTDASH = 103
-PEN_DOTDASH = 104
-PEN_TRANSPARENT = 106
-
-
-#Brush/Fill Styles
-BRUSH_SOLID = 100, 
-BRUSH_TRANSPARENT = 106, 
-BRUSH_BDIAGHATCH = 111, 
-BRUSH_CROSSDIAGHATCH = 112
-BRUSH_FDIAGHATCH = 113
-BRUSH_CROSSHATCH = 114
-BRUSH_HORIZHATCH =115
-BRUSH_VERTHATCH = 116
-
 
 #Marker Types
 MARKER_CIRCLE = "c"
 MARKER_TRIANGLE = "t"
 MARKER_SQUARE = "s"
 MARKER_XMARKER = "x"
-
-
-
-class Color(StrEnum):
-	"""
-	Colors with corresponding RGB values
-	"""
-	AQUA="0 255 255"
-	BLUE="0 0 255"
-	BLUE_MEDIUM="0 0 205"
-	BLUE_ROYAL="65 105 225"
-	BLUE_MIDNIGHT="25 25 112"
-	BROWN="165 42 42"
-	BROWN_SADDLE="139 69 19"
-	CHOCOLATE="210 105 30" 
-	CRIMSON="220 20 60"
-	FUCHSIA="255 0 255"
-	GRAY="128 128 128"
-	WHITE="255 255 255"
-	RED="255 0 0"
-	RED_DARK="139 0 0"
-	LIME="0 255 0"
-	YELLOW="255 255 0"
-	SILVER="192 192 192"
-	MAROON="128 0 0"
-	OLIVE="128 128 0"
-	GREEN="0 128 0"
-	PURPLE="128 0 128"
-	TEAL="0 128 128"
-	NAVY="0 0 128" 
-	SALMON_DARK="233 150 122"
-	SALMON="250 128 114" 
-	SALMON_LIGHT="255 160 122"
-	ORANGE_RED="255 69 0"
-	ORANGE_DARK="255 140 0"
-	ORANGE="255 165 0"
-	TAN="210 180 140"
-	WHEAT="245 222 179"
-	ORCHID="218 112 214"
-	INDIGO="75 0 130"
-
-
-
-
 
 
 
@@ -394,7 +327,7 @@ class LineProp:
 	"""
 	color:str=None
 	width:int = 1
-	style:str = PEN_SOLID
+	style:str = Pen.Style.SOLID
 
 
 @_dc.dataclass
@@ -461,7 +394,7 @@ def plot(
 	label:str=None, 
 	color:str = None,
 	width:int = 1,
-	style:int = PEN_SOLID,
+	style:int = Pen.Style.SOLID,
 	smooth:bool=False):
 	"""
 	Plot scatter charts
