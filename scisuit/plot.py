@@ -114,9 +114,8 @@ class Color(StrEnum):
 
 def bar(
 	height:Iterable, 
-	labels=None, 
-	label=None, 
-	style = CLUSTER,
+	labels:list[str]=None, 
+	style:str = CLUSTER,
 	fill=None, 
 	line=None):
 	"""
@@ -125,21 +124,18 @@ def bar(
 	## Input
 	height: Numeric data \n
 	labels: Category labels \n
-	label: Name of the series \n
-	style: clustered, stacked and 100% stacked
+	style: CLUSTER, STACKED or PERCENTSTK
 	"""
 	return pltDLL.c_plot_bar((),
-			{"height":height, "labels":labels, "name":label, "style":style, 
-    			"fill":fill, "line":line})
+			{"height":height, "labels":labels, "style":style, "fill":fill, "line":line})
 
 
 
 
 def barh(
 	width:Iterable, 
-	labels=None, 
-	label=None, 
-	style=CLUSTER, 
+	labels:list[str]=None, 
+	style:str=CLUSTER,
 	fill=None, 
 	line=None):
 	"""
@@ -148,12 +144,10 @@ def barh(
 	## Input
 	width : Numeric data \n
 	labels : Category labels \n
-	label: Name of the series \n
-	style: clustered, stacked and 100% stacked.
+	style: CLUSTER, STACKED or PERCENTSTK
 	"""
 	return pltDLL.c_plot_barh((),
-			{"width":width, "labels":labels, "name":label, "style":style, 
-    			"fill":fill, "line":line})
+			{"width":width, "labels":labels, "style":style, "fill":fill, "line":line})
 
 
 

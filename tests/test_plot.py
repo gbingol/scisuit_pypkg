@@ -163,6 +163,6 @@ categ=["Q1", "Q2", "Q3", "Q4"]
 A = [44, 55, 41, 67]
 B = [13, 23, 8, 13]
 
-plt.bar(labels=["A", "B", "C", "Q4"], height=B, style=plt.STACKED)
-plt.bar(labels=categ, height=A, style=plt.STACKED)
+plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
+plt.bar(height=B, style=plt.PERCENTSTK)
 plt.show()
