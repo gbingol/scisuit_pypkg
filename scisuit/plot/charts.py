@@ -4,7 +4,8 @@ from typing import Iterable as _Iterable
 from .._ctypeslib import pltDLL as _pltDLL
 
 import scisuit.plot.defs as _defs
-from .gdi import Pen as _Pen
+import scisuit.plot.gdi as _gdi
+
 
 
 
@@ -14,8 +15,8 @@ def bar(
 	height:_Iterable, 
 	labels:list[str]=None, 
 	style:str = _defs.CLUSTER,
-	fill=None, 
-	line=None):
+	fill:_gdi.Brush=None, 
+	line:_gdi.Pen=None):
 	"""
 	Plots bar chart
 
@@ -24,8 +25,12 @@ def bar(
 	labels: Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return _pltDLL.c_plot_bar((),
-			{"height":height, "labels":labels, "style":style, "fill":fill, "line":line})
+	return _pltDLL.c_plot_bar((),	{
+			"height":height, 
+    			"labels":labels, 
+			"style":style, 
+			"fill":vars(fill) if fill != None else None, 
+			"line":vars(line) if line != None else None})
 
 
 
@@ -305,7 +310,7 @@ def plot(
 	label:str=None, 
 	color:str = None,
 	width:int = 1,
-	style:int = _Pen.STYLE.SOLID,
+	style:int = _gdi.Pen.STYLE.SOLID,
 	smooth:bool=False):
 	"""
 	Plot scatter charts

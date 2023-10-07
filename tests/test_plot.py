@@ -151,11 +151,12 @@ def boxplot():
 
 
 
-"""m=plt.Marker()
-m.size=8
-plt.scatter(
-	x=np.array([1,2,3,4]), 
-	y=(1,2,3,4), 
-	marker=m, trendline=plt.Trendline(degree=5))"""
+categ=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
+
+plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
+plt.bar(height=B, style=plt.PERCENTSTK, fill=plt.Brush(color=plt.Color.BLACK))
+plt.show()
 
 
