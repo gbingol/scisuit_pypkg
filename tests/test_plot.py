@@ -151,12 +151,10 @@ def boxplot():
 
 
 
-categ=["Q1", "Q2", "Q3", "Q4"]
-A = [44, 55, 41, 67]
-B = [13, 23, 8, 13]
+x = [2, 1, 3, 6, 4]
+y = [7, 7, 8, 4, 2]
 
-plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
-plt.bar(height=B, style=plt.PERCENTSTK, fill=plt.Brush(color=plt.Color.BLACK))
+plt.boxplot(x, line=plt.Pen(color=plt.Color.LIME, width=3))
 plt.show()
 
 
