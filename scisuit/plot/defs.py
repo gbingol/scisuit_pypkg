@@ -1,6 +1,4 @@
-import dataclasses as _dc
 import scisuit.plot.gdi as _gdi
-from ..defs import StrEnum as _StrEnum
 
 
 #BAR Charts and Line Charts
@@ -15,9 +13,9 @@ HIST_RELFREQUENCY = "r"
 
 
 
-@_dc.dataclass
+
 class Trendline:
-	class STYLE(_StrEnum):
+	class STYLE:
 		LINEAR = "linear"
 		POLY = "poly"
 		EXP = "exp"
@@ -30,14 +28,30 @@ class Trendline:
 	style: "linear", "poly", "exp", "log","pow" (Use STYLE class) \n
 	degree: 2, >=2 expected when type is polynomial \n
 	intercept: number expected \n
-	color: "R G B" format, "255 255 125" \n
-	width: >0 expected \n
-	style: 100, 101, 102, 103, 104, 106 (default 102)
+	line: line properties
 	"""
-	style:str=STYLE.LINEAR
-	degree:int = 2
-	intercept:float=None
-	line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=_gdi.Pen.STYLE.LONGDASH)
+	def __init__(
+		self, 
+		style:str=STYLE.LINEAR,
+		degree:int=2, 
+		intercept:float=None, 
+		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=_gdi.Pen.STYLE.LONGDASH)
+		) -> None:
+
+		self._style=style
+		self._degree=degree
+		self._intercept=intercept
+		self._line=vars(line) if line != None else None
+
+
+	def __iter__(self):
+		return iter([
+			("style",self._style),
+			("degree", self._degree),
+			("intercept", self._intercept),
+			("line", dict(self._line) if self._line != None else None)
+		])
+
 
 
 

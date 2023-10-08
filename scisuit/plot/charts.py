@@ -254,13 +254,12 @@ def quiver(
 	u, v: length in x and y directions, 2D ndarray \n
 	scale: Whether to scale the length of the arrows
 	"""
-	return _pltDLL.c_plot_quiver((),
-			{
-				"x":x.flatten().tolist(), 
-				"y":y.flatten().tolist(),
-				"u":u.flatten().tolist(), 
-				"v":v.flatten().tolist(), 
-				"scale":scale})
+	return _pltDLL.c_plot_quiver((),{
+			"x":x.flatten().tolist(), 
+			"y":y.flatten().tolist(),
+			"u":u.flatten().tolist(), 
+			"v":v.flatten().tolist(), 
+			"scale":scale})
 
 
 
@@ -296,8 +295,8 @@ def scatter(
 		label:str=None, 
 		smooth:bool=False, 
 		bubble:dict=None, 
-		marker=_defs.Marker(), 
-		line:dict=None, 
+		marker:_defs.Marker=_defs.Marker(), 
+		line:_gdi.Pen=None, 
 		trendline:_defs.Trendline=None):
 	"""
 	Plot scatter charts
@@ -318,12 +317,15 @@ def scatter(
 	if isinstance(trendline, _defs.Trendline):
 		trendline=vars(trendline)
 
-	return _pltDLL.c_plot_scatter((), 
-		{"x":x, "y":y , "name":label, "smooth":smooth, 
+	return _pltDLL.c_plot_scatter((), {
+		"x":x, 
+		"y":y , 
+		"name":label, 
+		"smooth":smooth, 
 		"bubble":bubble, 
 		"marker":dict(marker) if marker!=None else None, 
-		"line":line, 
-		"trendline":trendline})
+		"line":vars(line) if line!=None else None, 
+		"trendline":dict(trendline) if trendline!=None else None})
 
 
 def plot(
@@ -345,13 +347,12 @@ def plot(
 	style: line style, use PEN_XXX \n
 	width: line width
 	"""
-	line_ = _defs.Pen(color=color, width=width, style=style)
 	return scatter(
 		x=x, 
 		y=y, 
 		label=label, 
 		smooth=smooth, 
 		marker=None, 
-		line={"color": line_.color, "width":line_.width, "style":line_.style})
+		line=_gdi.Pen(color=color, width=width, style=style))
 
 	
