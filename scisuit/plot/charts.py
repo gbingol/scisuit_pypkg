@@ -194,7 +194,7 @@ def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 def qqnorm(
 		data:_Iterable, 
 		label:str=None, 
-		show=True, 
+		show:bool=True, 
 		line:_gdi.Pen=None, 
 		marker:_defs.Marker=None):
 		"""
