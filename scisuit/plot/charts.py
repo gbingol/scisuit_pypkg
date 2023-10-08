@@ -220,7 +220,7 @@ def qqnorm(
 def qqplot(
 		x:_Iterable,
 		y:_Iterable,
-		marker=None):
+		marker:_defs.Marker=None):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 

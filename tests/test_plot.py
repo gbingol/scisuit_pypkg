@@ -153,10 +153,15 @@ def boxplot():
 
 import scisuit.plot as plt
 
-categ=["Q1", "Q2", "Q3", "Q4"]
-A = [44, 55, 41, 67]
-B = [13, 23, 8, 13]
+x=stat.rnorm(100)
 
-plt.line(labels=categ, y=A, style=plt.PERCENTSTK)
-plt.line(y=B, style=plt.STACKED)
+plt.qqnorm(
+	x, 
+	line=plt.Pen(color="0 102 51", style=plt.Pen.STYLE.LONGDASH),
+	marker=plt.Marker(
+		style=plt.Marker.STYLE.SQUARE,
+		size=5,
+		fill=plt.Brush(color="255 255 255"),
+		line=plt.Pen(color="0 0 255", width=2))
+)
 plt.show()
