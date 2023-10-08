@@ -152,15 +152,13 @@ def boxplot():
 
 
 import scisuit.plot as plt
+import numpy as np
 
-treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
-control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+x=np.arange(0.0, 12.0, 1.0)
+y=np.arange(0, 100, 10.0)
 
-plt.qqplot(x=control, y=treatment, 
-	     marker=plt.Marker(
-		     style=plt.Marker.STYLE.SQUARE,
-		     size=5,
-		     fill=plt.Brush(color="255 255 255"),
-		     line=plt.Pen(color="0 0 255", width=2))
-)
+x, y = np.meshgrid(x,y)
+f= 9.8 - y/5 #dy/dx = 9.8 - y/5
+
+plt.dirfield(x, y, f)
 plt.show()
