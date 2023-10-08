@@ -174,7 +174,7 @@ def pie(
 #-----------------------------------------------------------------------------------
 
 
-def psychrometry(Tdb:list=None, RH:list=None, P=101325):
+def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 	"""
 	Plots psychromety chart.
 
