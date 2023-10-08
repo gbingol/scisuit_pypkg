@@ -153,15 +153,14 @@ def boxplot():
 
 import scisuit.plot as plt
 
-x=stat.rnorm(100)
+treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-plt.qqnorm(
-	x, 
-	line=plt.Pen(color="0 102 51", style=plt.Pen.STYLE.LONGDASH),
-	marker=plt.Marker(
-		style=plt.Marker.STYLE.SQUARE,
-		size=5,
-		fill=plt.Brush(color="255 255 255"),
-		line=plt.Pen(color="0 0 255", width=2))
+plt.qqplot(x=control, y=treatment, 
+	     marker=plt.Marker(
+		     style=plt.Marker.STYLE.SQUARE,
+		     size=5,
+		     fill=plt.Brush(color="255 255 255"),
+		     line=plt.Pen(color="0 0 255", width=2))
 )
 plt.show()
