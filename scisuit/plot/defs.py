@@ -42,9 +42,8 @@ class Trendline:
 
 
 
-@_dc.dataclass
 class Marker:
-	class STYLE(_StrEnum):
+	class STYLE:
 		CIRCLE = "c"
 		TRIANGLE = "t"
 		SQUARE = "s"
@@ -57,7 +56,23 @@ class Marker:
 	size: 5 #>0 expected \n
 	fill: if specified, RGB "255 255 0" \n
 	"""
-	style:str = STYLE.CIRCLE 
-	size:int = 5 
-	fill:_gdi.Brush = None
-	line:_gdi.Pen = None
+	def __init__(
+		self,
+		style:str = STYLE.CIRCLE,
+		size:int = 5 ,
+		fill:_gdi.Brush = None,
+		line:_gdi.Pen = None) -> None:
+
+		assert style!=None,"'style' cannot be None"
+		self._style = style
+		self._size = size
+		self._fill = vars(fill) if fill != None else None
+		self._line = vars(line) if line != None else None
+	
+	def __iter__(self):
+		return iter([
+			("style",self._style),
+			("size", self._size),
+			("fill", dict(self._fill) if self._fill != None else None),
+			("line", dict(self._line) if self._line != None else None)
+		])

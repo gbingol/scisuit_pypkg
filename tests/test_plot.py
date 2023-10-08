@@ -24,10 +24,10 @@ def histogram():
 	import scisuit.stats as stat
 
 	x=stat.rnorm(500)
-
-	plt.histogram(x)
-	plt.histogram(x, mode=plt.HIST_RELFREQUENCY, cumulative=True)
-	plt.histogram(x, fill={'color': plt.Color.RED}, line={'color': plt.Color.GREEN, 'width': 2} )
+	plt.histogram(x,  
+			fill=plt.Brush(color=plt.Color.RED), 
+			line=plt.Pen(color="0 255 0", width=2))
+	plt.show()
 
 
 
@@ -152,12 +152,11 @@ def boxplot():
 
 
 import scisuit.plot as plt
-import scisuit.stats as stat
 
-x=stat.rnorm(500)
-plt.histogram(x,  
-		  fill=plt.Brush(color=plt.Color.RED), 
-		  line=plt.Pen(color="0 255 0", width=2))
+categ=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
+
+plt.line(labels=categ, y=A, style=plt.PERCENTSTK)
+plt.line(y=B, style=plt.STACKED)
 plt.show()
-
-
