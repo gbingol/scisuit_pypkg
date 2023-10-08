@@ -195,8 +195,8 @@ def qqnorm(
 		data:_Iterable, 
 		label:str=None, 
 		show=True, 
-		line=None, 
-		marker=None):
+		line:_gdi.Pen=None, 
+		marker:_defs.Marker=None):
 		"""
 		Normal Quantile-quantile chart \n
 		x-axis="Theoretical Quantiles" \n  
@@ -206,8 +206,12 @@ def qqnorm(
 		data: Data \n
 		show: Whether to show theoretical line or not 
 		"""
-		return _pltDLL.c_plot_qqnorm((),
-			{"data":data, "name": label, "show":show, "line":line, "marker":marker} )
+		return _pltDLL.c_plot_qqnorm((),{
+			"data":data, 
+			"name": label, 
+			"show":show, 
+			"marker":dict(marker) if marker != None else None, 
+			"line":vars(line) if line != None else None})
 
 
 
@@ -223,8 +227,10 @@ def qqplot(
 	## Input
 	x, y: Data
 	"""
-	return _pltDLL.c_plot_qqplot((),
-			{"x":x, "y":y, "marker":marker})
+	return _pltDLL.c_plot_qqplot((),{
+			"x":x, 
+			"y":y,
+			"marker":dict(marker) if marker != None else None})
 
 
 
@@ -239,7 +245,7 @@ def quiver(
 		y:_np.ndarray, 
 		u:_np.ndarray, 
 		v:_np.ndarray, 
-		scale=False):
+		scale:bool=False):
 	""""
 	Plots quiver chart
 
@@ -315,7 +321,7 @@ def scatter(
 	return _pltDLL.c_plot_scatter((), 
 		{"x":x, "y":y , "name":label, "smooth":smooth, 
 		"bubble":bubble, 
-		"marker":vars(marker) if marker!=None else None, 
+		"marker":dict(marker) if marker!=None else None, 
 		"line":line, 
 		"trendline":trendline})
 
