@@ -118,22 +118,27 @@ def histogram(
 
 def line(
 	y:_Iterable, 
-	labels:list=None, 
-	label:str=None, 
-	type=_defs.CLUSTER, 
-	marker=None, 
-	line=None):
+	labels:list[str]=None, 
+	style=_defs.CLUSTER,
+	label:str=None,  
+	marker:_defs.Marker=None, 
+	line:_gdi.Pen=None):
 	"""
 	Plots line chart
 
 	## Input:
-	y : Numeric data \n
+	y : An iterable containing numeric data \n
 	labels : Category labels \n
-	label: Name of the series \n
-	type:	clustered, stacked and 100% stacked 
+	style: CLUSTER, STACKED or PERCENTSTK \n
+	label: Label of the individual series 
 	"""
-	return _pltDLL.c_plot_line((),
-			 {"y":y, "labels":labels, "name":label, "type":type, "marker":marker, "line":line})
+	return _pltDLL.c_plot_line((), {
+			"y":y, 
+			"labels":labels, 
+			"name":label, 
+			"style":style, 
+			"marker":dict(marker) if marker != None else None, 
+			"line":vars(line) if line != None else None})
 
 
 
