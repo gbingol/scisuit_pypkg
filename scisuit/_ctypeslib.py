@@ -242,6 +242,9 @@ pltDLL.c_plot_quiver.restype=_ct.py_object
 pltDLL.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 pltDLL.c_plot_scatter.restype=_ct.py_object
 
+pltDLL.c_plot_bubble.argtypes = [_ct.py_object, _ct.py_object]
+pltDLL.c_plot_bubble.restype=_ct.py_object
+
 pltDLL.c_plot_figure.argtypes = []
 pltDLL.c_plot_figure.restype=None
 

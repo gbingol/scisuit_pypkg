@@ -287,8 +287,6 @@ def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 
 #-----------------------------------------------------------------------------------
 
-
-
 def scatter(
 		x:_Iterable,
 		y:_Iterable,  
@@ -303,13 +301,7 @@ def scatter(
 	## Input:
 	x, y:	x- and y-data \n
 	label: Name of the series \n
-	smooth: Smooth lines \n
-
-	Bubble Properties \n
-	size:	size data (list),\n
-	color: color (str), \n
-	mode: "A" area "W" diameter, \n
-	scale: size scale (0, 200]
+	smooth: Smooth lines
 	"""
 	assert isinstance(x, _Iterable), "x must be iterable object"
 	assert isinstance(y, _Iterable), "y must be iterable object"
@@ -325,16 +317,15 @@ def scatter(
 		"trendline":dict(trendline) if trendline!=None else None})
 
 
-def plot(
-	x:_Iterable,
-	y:_Iterable,  
-	label:str=None, 
-	color:str = None,
-	width:int = 1,
+
+
+#convenience function
+def plot(x:_Iterable, y:_Iterable, 
+	label:str=None, color:str = None, width:int = 1,
 	style:int = _gdi.Pen.STYLE.SOLID,
 	smooth:bool=False):
 	"""
-	Plot scatter charts
+	A convenience function to plot scatter chart without markers
 
 	## Input:
 	x, y:	x- and y-data \n
@@ -351,5 +342,37 @@ def plot(
 		smooth=smooth, 
 		marker=None, 
 		line=_gdi.Pen(color=color, width=width, style=style))
+
+
+
+
+
+def bubble(
+		x:_Iterable,
+		y:_Iterable,  
+		size:_Iterable,
+		color:str = None,
+		mode:str = "A",
+		scale:int=100,
+		label:str=None):
+	"""
+	Plots bubble chart
+
+	## Input:
+	x, y, size:	x- and y- and size data \n
+	color: color (str) \n
+	mode: "A" area "W" diameter \n
+	scale: size scale (0, 200] \n
+	label: Name of the series	
+	"""
+	assert \
+		isinstance(x, _Iterable) and \
+		isinstance(y, _Iterable) and \
+		isinstance(size, _Iterable), "x, y and size must be iterable objects."
+
+	assert len(x) == len(y) and len(y) == len(size), "x, y and size must have same lengths"
+
+	return _pltDLL.c_plot_bubble((), {
+		"x":x, "y":y , "size":size, "color":color,"mode":mode, "scale":scale, "label":label})
 
 	

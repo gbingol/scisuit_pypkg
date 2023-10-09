@@ -1,6 +1,6 @@
 from .funcs import figure, legend, show, title, xlabel, ylabel
 from .gdi import Pen, Brush, Color
-from .charts import bar, barh, boxplot, dirfield, histogram, line, \
+from .charts import bar, barh, boxplot, bubble, dirfield, histogram, line, \
 			pie, plot, psychrometry, qqnorm, qqplot, quiver, scatter
 
 from .defs import CLUSTER, STACKED, PERCENTSTK, \
