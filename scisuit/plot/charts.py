@@ -294,8 +294,7 @@ def scatter(
 		y:_Iterable,  
 		label:str=None, 
 		smooth:bool=False, 
-		bubble:dict=None, 
-		marker:_defs.Marker=_defs.Marker(), 
+		marker:_defs.Marker=None, 
 		line:_gdi.Pen=None, 
 		trendline:_defs.Trendline=None):
 	"""
@@ -307,22 +306,20 @@ def scatter(
 	smooth: Smooth lines \n
 
 	Bubble Properties \n
-	size:	size data (list), color: color (str), \n
-	mode: "A" area "W" diameter, scale: size scale (0, 200]
+	size:	size data (list),\n
+	color: color (str), \n
+	mode: "A" area "W" diameter, \n
+	scale: size scale (0, 200]
 	"""
 	assert isinstance(x, _Iterable), "x must be iterable object"
 	assert isinstance(y, _Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
-
-	if isinstance(trendline, _defs.Trendline):
-		trendline=vars(trendline)
 
 	return _pltDLL.c_plot_scatter((), {
 		"x":x, 
 		"y":y , 
 		"name":label, 
 		"smooth":smooth, 
-		"bubble":bubble, 
 		"marker":dict(marker) if marker!=None else None, 
 		"line":vars(line) if line!=None else None, 
 		"trendline":dict(trendline) if trendline!=None else None})

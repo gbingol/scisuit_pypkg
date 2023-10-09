@@ -152,13 +152,20 @@ def boxplot():
 
 
 import scisuit.plot as plt
-import numpy as np
 
-x=np.arange(0.0, 12.0, 1.0)
-y=np.arange(0, 100, 10.0)
 
-x, y = np.meshgrid(x,y)
-f= 9.8 - y/5 #dy/dx = 9.8 - y/5
+x = [1, 2, 3, 4]
+y = [1, 3, 7, 14]
+plt.scatter(
+	x=x, 
+	y=y,
+	trendline=plt.Trendline(
+		style =plt.Trendline.STYLE.POLY,
+		degree=3, 
+		intercept=-10,
+		line=plt.Pen(color="255 0 0")
+		)
+	)
 
-plt.dirfield(x, y, f)
+
 plt.show()
