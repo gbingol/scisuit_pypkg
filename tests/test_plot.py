@@ -158,5 +158,7 @@ life = [80.66, 79.84, 78.6, 72.73,80.05, 72.49, 68.09, 81.55, 68.6, 78.09]
 fertil = [1.67, 1.36, 1.84, 2.78, 2, 1.7, 4.77, 2.96, 1.54, 2.05] 
 pop = [33739900, 81902307, 5523095, 79716203, 61801570, 73137148, 31090763, 7485600, 141850000, 307007000]  
 
-plt.bubble(x = life, y = fertil, size = pop, color= "255 0 0", scale= 70)
+plt.scatter(x = life, y = fertil, 
+		trendline=plt.Trendline(style=plt.Trendline.STYLE.POLY, degree=3, show_equation=True, show_stats=True)
+)
 plt.show()

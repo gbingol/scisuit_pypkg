@@ -36,7 +36,9 @@ class Trendline:
 		degree:int=2, 
 		intercept:float=None, 
 		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=_gdi.Pen.STYLE.LONGDASH),
-		label:str = None
+		label:str = None,
+		show_stats:bool = False,
+		show_equation:bool=False
 		) -> None:
 
 		self._style = style
@@ -44,6 +46,8 @@ class Trendline:
 		self._intercept = intercept
 		self._label = style if label == None else label
 		self._line = vars(line) if line != None else None
+		self._show_stats = show_stats
+		self._show_equation = show_equation
 
 
 	def __iter__(self):
@@ -52,7 +56,9 @@ class Trendline:
 			("degree", self._degree),
 			("intercept", self._intercept),
 			("label", self._label),
-			("line", dict(self._line) if self._line != None else None)
+			("line", dict(self._line) if self._line != None else None),
+			("show_stats", self._show_stats),
+			("show_equation", self._show_equation)
 		])
 
 
