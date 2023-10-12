@@ -1,4 +1,4 @@
-from ._ctypeslib import coreDLL as _core
+from ._ctypeslib import pydll as _pydll
 import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
@@ -56,14 +56,14 @@ def lagrange(x:Iterable, y:Iterable, val:float)->float:
 	"""
 	assert issubclass(val, _numbers.Real)
 
-	return _core.c_fit_lagrange(x, y, _ct.c_double(val))
+	return _pydll.c_fit_lagrange(x, y, _ct.c_double(val))
 
 
 def spline(x:Iterable, y:Iterable)->list[SplineResult]:
 	"""
 	Constructs natural cubic spline polynomials from x, y
 	"""
-	lst = _core.c_fit_spline(x, y)
+	lst = _pydll.c_fit_spline(x, y)
 	
 	return  [SplineResult(_Polynomial.Polynomial(l[0]), l[1], l[2]) for l in lst]
 
@@ -84,7 +84,7 @@ def expfit(x, y, intercept=None)->list:
 	if(intercept!=None):
 		assert issubclass(intercept, _numbers.Real)
 
-	return _core.c_fit_expfit(x, y, intercept)
+	return _pydll.c_fit_expfit(x, y, intercept)
 
 
 def logfit(x:Iterable, y:Iterable)->list:
@@ -94,7 +94,7 @@ def logfit(x:Iterable, y:Iterable)->list:
 
 	"""
 
-	return _core.c_fit_logfit(x, y)
+	return _pydll.c_fit_logfit(x, y)
 
 
 def logistfit(x:Iterable, y:Iterable, limit = None)->list:
@@ -108,7 +108,7 @@ def logistfit(x:Iterable, y:Iterable, limit = None)->list:
 	if(limit!=None):
 		assert issubclass(limit, _numbers.Real)
 
-	return _core.c_fit_logistfit(x, y, limit)
+	return _pydll.c_fit_logistfit(x, y, limit)
 
 
 def polyfit(x, y, deg)->tuple:
@@ -129,4 +129,4 @@ def powfit(x:Iterable, y:Iterable)->list:
 	Fits x,y to the equation y = a*x^n
 	returns [a, n]
 	"""
-	return _core.c_fit_powfit(x,y)
+	return _pydll.c_fit_powfit(x,y)

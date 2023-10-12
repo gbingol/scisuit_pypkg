@@ -1,7 +1,7 @@
 import ctypes as _ct
 from typing import Iterable as _Iterable
 
-from .._ctypeslib import pltDLL as _pltDLL
+from .._ctypeslib import pydll as _pydll
 
 import scisuit.plot.defs as _defs
 import scisuit.plot.gdi as _gdi
@@ -25,7 +25,7 @@ def bar(
 	labels: Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return _pltDLL.c_plot_bar((),	{
+	return _pydll.c_plot_bar((),	{
 			"height":height, 
     			"labels":labels, 
 			"style":style, 
@@ -49,7 +49,7 @@ def barh(
 	labels : Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return _pltDLL.c_plot_barh((),{
+	return _pydll.c_plot_barh((),{
 		"width":width, 
 		"labels":labels, 
 		"style":style, 
@@ -74,7 +74,7 @@ def boxplot(
 	data : Data to be plotted \n
 	label: Name of the series
 	"""
-	return _pltDLL.c_plot_boxplot((), {
+	return _pydll.c_plot_boxplot((), {
 		"data":data, 
 		"name":label, 
 		"fill":vars(fill) if fill != None else None, 
@@ -102,7 +102,7 @@ def histogram(
 	cumulative : True, cumulative distribution \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
-	return _pltDLL.c_plot_histogram((), {
+	return _pydll.c_plot_histogram((), {
 			"data":data, 
 			"mode":mode, 
 			"cumulative":cumulative, 
@@ -132,7 +132,7 @@ def line(
 	style: CLUSTER, STACKED or PERCENTSTK \n
 	label: Label of the individual series 
 	"""
-	return _pltDLL.c_plot_line((), {
+	return _pydll.c_plot_line((), {
 			"y":y, 
 			"labels":labels, 
 			"name":label, 
@@ -163,7 +163,7 @@ def pie(
 	explode: Explosion level \n
 	startangle:	Start angle of first slice 
 	"""
-	return _pltDLL.c_plot_pie((),
+	return _pydll.c_plot_pie((),
 				{"data":data, "labels":labels, "colors":colors, 
      				"explode":explode, "startangle":startangle})
 
@@ -183,7 +183,7 @@ def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 	RH: A list in increasing order containing the requested relative humidity (%) lines \n
 	P: Absolute pressure (Pa)
 	"""
-	return _pltDLL.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
+	return _pydll.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
 
 
@@ -206,7 +206,7 @@ def qqnorm(
 		data: Data \n
 		show: Whether to show theoretical line or not 
 		"""
-		return _pltDLL.c_plot_qqnorm((),{
+		return _pydll.c_plot_qqnorm((),{
 			"data":data, 
 			"name": label, 
 			"show":show, 
@@ -227,7 +227,7 @@ def qqplot(
 	## Input
 	x, y: Data
 	"""
-	return _pltDLL.c_plot_qqplot((),{
+	return _pydll.c_plot_qqplot((),{
 			"x":x, 
 			"y":y,
 			"marker":dict(marker) if marker != None else None})
@@ -254,7 +254,7 @@ def quiver(
 	u, v: length in x and y directions, 2D ndarray \n
 	scale: Whether to scale the length of the arrows
 	"""
-	return _pltDLL.c_plot_quiver((),{
+	return _pydll.c_plot_quiver((),{
 			"x":x.flatten().tolist(), 
 			"y":y.flatten().tolist(),
 			"u":u.flatten().tolist(), 
@@ -307,7 +307,7 @@ def scatter(
 	assert isinstance(y, _Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
 
-	return _pltDLL.c_plot_scatter((), {
+	return _pydll.c_plot_scatter((), {
 		"x":x, 
 		"y":y , 
 		"name":label, 
@@ -372,7 +372,7 @@ def bubble(
 
 	assert len(x) == len(y) and len(y) == len(size), "x, y and size must have same lengths"
 
-	return _pltDLL.c_plot_bubble((), {
+	return _pydll.c_plot_bubble((), {
 		"x":x, "y":y , "size":size, "color":color,"mode":mode, "scale":scale, "label":label})
 
 	

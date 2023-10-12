@@ -186,4 +186,4 @@ def beta():
 
 from scisuit.stats import dlnorm, plnorm, qlnorm
 
-print(dlnorm(-0.1))
+print(dlnorm(0.1))

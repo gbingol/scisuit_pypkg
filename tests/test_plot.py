@@ -160,3 +160,4 @@ plt.histogram(x,
 		fill=plt.Brush(color=plt.Color.RED), 
 		line=plt.Pen(color="0 255 0", width=2))
 plt.show()
+print(x)

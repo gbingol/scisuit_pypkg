@@ -11,7 +11,7 @@ BASIC STATISTICAL TESTS:
 
 import math
 import numpy as _np
-from .._ctypeslib import coreDLL as _core
+from .._ctypeslib import pydll as _pydll
 
 from dataclasses import dataclass
 from .distributions import pbinom, pf, qf, pt, qt, pnorm, qnorm
@@ -38,7 +38,7 @@ class TestNormRes:
 	A2:float
 
 def test_norm_ad(x):
-	pval, A2 = _core.c_stat_test_norm_ad(x)
+	pval, A2 = _pydll.c_stat_test_norm_ad(x)
 	return TestNormRes(pval, A2)
 
 

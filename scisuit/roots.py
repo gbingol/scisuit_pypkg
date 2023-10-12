@@ -1,4 +1,4 @@
-from ._ctypeslib import coreDLL as _core
+from ._ctypeslib import pydll as _pydll
 import ctypes as _ct
 import numbers as _numbers
 import types as _types
@@ -49,7 +49,7 @@ def bisect(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	root, lst =_core.c_root_bisect(f, _ct.c_double(a), _ct.c_double(b), 
+	root, lst =_pydll.c_root_bisect(f, _ct.c_double(a), _ct.c_double(b), 
 			_ct.c_double(tol), 
 			_ct.c_int(maxiter), 
 			_ct.c_char_p(method.encode('utf-8')),
@@ -81,7 +81,7 @@ def brentq(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	root, lst = _core.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
@@ -108,7 +108,7 @@ def muller(
 	assert callable(f), "f must be function"
 	assert isinstance(x0, _numbers.Complex), "x0 must be a Complex/Real number"
 	
-	root, lst = _core.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
@@ -141,7 +141,7 @@ def newton(
 	else:
 		assert callable(fprime), "If fprime is provided, it must be of type function."
 
-	root, lst = _core.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
@@ -167,7 +167,7 @@ def ridder(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 	
-	root, lst = _core.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 

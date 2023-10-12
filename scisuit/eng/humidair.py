@@ -1,5 +1,5 @@
 
-from .._ctypeslib import coreDLL as _ctcore
+from .._ctypeslib import pydll as _pydll
 
 
 
@@ -112,4 +112,4 @@ def psychrometry(**kwargs):
 	p.H # access only to enthalpy
 
 	"""
-	return PsychrometryResult(_ctcore.c_eng_psychrometry(kwargs))
+	return PsychrometryResult(_pydll.c_eng_psychrometry(kwargs))

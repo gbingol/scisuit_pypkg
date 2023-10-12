@@ -1,7 +1,6 @@
 import ctypes as _ct
 
-from .._ctypeslib import coreDLL as _core
-from dataclasses import dataclass as _dataclass    
+from dataclasses import dataclass as _dataclass
 
 
 

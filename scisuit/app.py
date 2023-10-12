@@ -1,17 +1,17 @@
 import ctypes as _ct
-from ._ctypeslib import pltDLL
+from ._ctypeslib import pydll
 
-pltDLL.c_plot_app.argtypes = []
-pltDLL.c_plot_app.restype = None
+pydll.c_plot_app.argtypes = []
+pydll.c_plot_app.restype = None
 
-pltDLL.c_plot_mainloop.argtypes = [_ct.c_bool]
-pltDLL.c_plot_mainloop.restype=_ct.c_bool
+pydll.c_plot_mainloop.argtypes = [_ct.c_bool]
+pydll.c_plot_mainloop.restype=_ct.c_bool
 
-pltDLL.c_plot_ismainlooprunning.argtypes = []
-pltDLL.c_plot_ismainlooprunning.restype=_ct.c_bool
+pydll.c_plot_ismainlooprunning.argtypes = []
+pydll.c_plot_ismainlooprunning.restype=_ct.c_bool
 
-pltDLL.c_plot_exitmainloop.argtypes = []
-pltDLL.c_plot_exitmainloop.restype=_ct.c_bool
+pydll.c_plot_exitmainloop.argtypes = []
+pydll.c_plot_exitmainloop.restype=_ct.c_bool
 
 
 
@@ -23,7 +23,7 @@ class App:
 		"""
 		#IMPORTANT: if not set colors/text of plots looks blurry
 		_ct.windll.shcore.SetProcessDpiAwareness(True)
-		pltDLL.c_plot_app()
+		pydll.c_plot_app()
 	
 
 	def mainloop(self, shared=False):
@@ -33,14 +33,14 @@ class App:
 
 		returns True if mainloop is started
 		"""
-		return pltDLL.c_plot_mainloop(_ct.c_bool(shared))
+		return pydll.c_plot_mainloop(_ct.c_bool(shared))
 
 
 	def ismainlooprunning(self):
 		"""
 		Is the main loop initiated by scisuit library running
 		"""
-		return pltDLL.c_plot_ismainlooprunning()
+		return pydll.c_plot_ismainlooprunning()
 
 
 	def exitmainloop(self):
@@ -50,4 +50,4 @@ class App:
 
 		returns True if main loop is exited.
 		"""
-		return pltDLL.c_plot_exitmainloop()
+		return pydll.c_plot_exitmainloop()

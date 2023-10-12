@@ -2,7 +2,7 @@ import numpy as _np
 import math as _math
 
 import ctypes as _ct
-from .._ctypeslib import coreDLL as _core
+from .._ctypeslib import pydll as _pydll
 
 
 
@@ -66,7 +66,7 @@ def mode(y:_np.ndarray | list)->tuple:
 
 
 def moveavg(x, y, period=2):
-	return _core.c_stat_moveavg(x, y, _ct.c_int(period))
+	return _pydll.c_stat_moveavg(x, y, _ct.c_int(period))
 
 
 
@@ -94,7 +94,7 @@ class rolling:
 		assert isinstance(y, list) or isinstance(y, _np.ndarray), "y must be of type list/ndarray"
 		assert isinstance(period, int), "period must be of type int"
 
-		self._m_X, self._m_Windows = _core.c_stat_rolling(x=x, y=y, period=period)
+		self._m_X, self._m_Windows = _pydll.c_stat_rolling(x=x, y=y, period=period)
 		
 
 	def __compute(self, func)->list:
