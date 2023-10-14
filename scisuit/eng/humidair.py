@@ -13,11 +13,11 @@ class PsychrometryResult:
 	"""
 
 	def __init__(self, psyresult):
-		self.m_Results = psyresult
+		self._Results = psyresult
 
 	def __str__(self) -> str:
 
-		if(len(self.m_Results) == 0):
+		if(len(self._Results) == 0):
 			return ""
 		
 		s=""
@@ -36,57 +36,57 @@ class PsychrometryResult:
 	@property
 	def P(self): 
 		"""Pressure in kPa"""
-		return self.m_Results.get("P")
+		return self._Results.get("P")
 
 	@property
 	def Tdb(self): 
 		"""Dry bulb temperature in Celcius"""
-		return self.m_Results.get("Tdb")
+		return self._Results.get("Tdb")
 
 	@property
 	def Twb(self): 
 		"""Wet bulb temperature in Celcius"""
-		return self.m_Results.get("Twb")
+		return self._Results.get("Twb")
 
 	@property
 	def Tdp(self): 
 		"""Dew point temperature in Celcius"""
-		return self.m_Results.get("Tdp")
+		return self._Results.get("Tdp")
 
 	@property
 	def H(self):
 		"""Enthalpy in kJ/kg da""" 
-		return self.m_Results.get("H")
+		return self._Results.get("H")
 
 	@property
 	def RH(self): 
 		"""Relative Humidity in %"""
-		return self.m_Results.get("RH")
+		return self._Results.get("RH")
 
 	@property
 	def W(self):
 		"""Absolute Humidity in kg/kg da""" 
-		return self.m_Results.get("W")
+		return self._Results.get("W")
 
 	@property
 	def V(self): 
 		"""Specific volume in m3/kg da"""
-		return self.m_Results.get("V")
+		return self._Results.get("V")
 
 	@property
 	def Pws(self):
 		"""water vapor pressure at saturation in kPa"""
-		return self.m_Results.get("Pws")
+		return self._Results.get("Pws")
 
 	@property
 	def Pw(self):
 		"""water vapor pressure in kPa"""
-		return self.m_Results.get("Pw")
+		return self._Results.get("Pw")
 
 	@property
 	def Ws(self):
 		"""Absolute humidity at saturation kg/kg da"""
-		return self.m_Results.get("Ws")
+		return self._Results.get("Ws")
 
 
 
