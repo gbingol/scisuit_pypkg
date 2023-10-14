@@ -1,6 +1,6 @@
 
 from .._ctypeslib import pydll as _pydll
-
+from numbers import Real as _Real
 
 
 class PsychrometryResult:
@@ -90,21 +90,26 @@ class PsychrometryResult:
 
 
 
-def psychrometry(**kwargs):
+def psychrometry(
+		P:_Real=None,
+		Tdb:_Real=None, 
+		Twb:_Real=None, 
+		Tdp:_Real=None, 
+		W:_Real=None, 
+		RH:_Real=None, 
+		H:_Real=None, 
+		V:_Real=None):
 		
 	"""
-	Computes thermodynamic properties of humid-air.
+	Computes thermodynamic properties of humid-air.\n 
+	Only 3 parameters must have Real values
 
 	## Input: 
-	3 keyword arguments containing only the following keys: \n
-	1) P: Pressure (kPa)
-	2) Tdb: Dry-bulb temperature (Celcius)
-	3) Twb: Wet-bulb temperature (Celcius)
-	4) Tdb: Wet-bulb temperature (Celcius)
-	5) W: Absolute humidity (kg/kg da)
-	6) RH: Relative humidity (%)
-	7) H: Enthalpy (kJ/kg da)
-	8) V: Specific Volume (m3/ kg da)
+	P: Pressure (kPa)
+	Tdb, Twb, Tdp: Dry-bulb, wet-bulb and dew point temperatures (°C)
+	W, RH: Absolute(kg/kg da) and relative humidity (%)
+	H: Enthalpy (kJ/kg da)
+	V: Specific Volume (m3/ kg da)
 
 	## Example
 	p=psychrometry(P=100, Tdb=50, RH=60) \n
@@ -112,4 +117,9 @@ def psychrometry(**kwargs):
 	p.H # access only to enthalpy
 
 	"""
-	return PsychrometryResult(_pydll.c_eng_psychrometry(kwargs))
+	d = {"P": P, "Tdb":Tdb, "Twb":Twb, "Tdp":Tdp, "W":W, "RH":RH, "H":H, "V":V}
+
+	filtered = {k:v for k, v in d.items() if isinstance(v, _Real)}
+	assert len(filtered)==3, "Exactly 3 parameters with real values expected."
+
+	return PsychrometryResult(_pydll.c_eng_psychrometry(filtered))
