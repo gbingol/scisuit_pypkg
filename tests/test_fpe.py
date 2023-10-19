@@ -70,8 +70,6 @@ plt.legend()
 plt.show()
 
 
-# detailed definition of CHO 
-carbs = fpe.CHO(glucose = 40, fructose = 60) 
+milk = fpe.Food(water=88.13, protein=3.15, cho=4.80, lipid=3.25, ash=0.67)
 
-#food made of water and CHO (glucose + fructose)
-food = fpe.Food(CHO = 40* carbs, water = 60)
+print(f"cp={milk.cp()}")
