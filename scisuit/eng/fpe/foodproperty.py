@@ -51,13 +51,12 @@ class Aw():
 
 	def FerroFontan_Chirife_Boquet(self)->float:
 		"""
-		CHO is considered as fructose \n
-		protein is considered as alanine \n
-		lipid is considered as glycerol
+		Assumptions: 
+		CHO (fructose), protein (alanine), lipid (glycerol)
 		"""
-		MW_CHO = 180.16
-		MW_LIPID = 92.0944
-		MW_PROTEIN = 89.09
+		MW_CHO = 180.16 #fructose
+		MW_LIPID = 92.0944 #glycerol
+		MW_PROTEIN = 89.09 #alanine
 
 		fd = self._food
 
