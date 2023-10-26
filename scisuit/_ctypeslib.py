@@ -1,8 +1,8 @@
 import ctypes as _ct
 from .util import parent_path as _parent_path
 
-#TODO: Change to release version
-_path = _parent_path(__file__) / "scisuit_pybind_d"
+#TODO: Change to debug version
+_path = _parent_path(__file__) / "scisuit_pybind"
 pydll = _ct.PyDLL(str(_path))
 
 
