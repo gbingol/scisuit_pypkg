@@ -184,6 +184,14 @@ def beta():
 	print(qbeta(p=0.1, shape1=0.5, shape2=1))
 
 
-from scisuit.stats import dlnorm, plnorm, qlnorm
+import scisuit.stats as st
 
-print(dlnorm(0.1))
+#Normal distribution
+print(st.dnorm(0.1, mean=1, sd=2))
+print(st.pnorm(0.1, mean=1, sd=2))
+
+print("\n************************* \n")
+
+#log-normal distribution
+print(st.dlnorm(0.1, meanlog=1, sdlog=2))
+print(st.plnorm(0.1, meanlog=1, sdlog=2))

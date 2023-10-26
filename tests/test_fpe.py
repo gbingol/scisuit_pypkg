@@ -67,9 +67,20 @@ T_exp = [26.268, 28.933, 31.393, 33.828, 36.028, 38.173, 40.093, 41.778, 43.443,
 plt.scatter(x=t_sim, y=T_sim, label="simulation")
 plt.scatter(x=t_exp, y=T_exp, label="experimental")
 plt.legend()
-plt.show()
+#plt.show()
 
+carcass = fpe.Meat(water=57.26, protein=17.32, lipid=24.05)
+eps = carcass.dielectric()
+print(eps.constant)
+print(eps.loss)
 
-milk = fpe.Food(water=88.13, protein=3.15, cho=4.80, lipid=3.25, ash=0.67)
+#import food process engineering
+import scisuit.eng.fpe as fpe
 
-print(f"cp={milk.cp()}")
+milk = fpe.Dairy(
+	water=88.13, 
+	protein=3.15, 
+	cho=4.8, 
+	lipid=3.25, 
+	ash=0.67)
+print(milk)
