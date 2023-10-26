@@ -1035,9 +1035,17 @@ class Meat(Food):
 			dc_ = 23.6 + 0.0767*T - 0.231*water
 			dl_ = 9.8 + 0.028*T- 0.0117*water 
 		
-		else:
+		elif water>0 and ash>0:
 			dc_ = water*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
 			dl_ = water*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
+		
+		#calay et al -> Raw beef
+		elif 0<T<70:
+			dc_=-37.1-0.145*T+ 1.2*water
+			dl_ = -12.7 + 0.082*T + 0.405*water
+
+		else:
+			raise RuntimeError("None of the equations matched given conditions.")
 		
 		return Dielectric(dc_, dl_)
 

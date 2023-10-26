@@ -74,13 +74,3 @@ eps = carcass.dielectric()
 print(eps.constant)
 print(eps.loss)
 
-#import food process engineering
-import scisuit.eng.fpe as fpe
-
-milk = fpe.Dairy(
-	water=88.13, 
-	protein=3.15, 
-	cho=4.8, 
-	lipid=3.25, 
-	ash=0.67)
-print(milk)
