@@ -1,7 +1,8 @@
 <h2>A computing library for engineers.</h2>
 
+<p>Tested with Python 3.10 and 3.11</p>
 
-<p>Contains apps and the following:</p>
+<p>Contains the following:</p>
 <ol>
 	<li>Integration, fitting, root finding methods ...</li>
 	<li><b>eng:</b> Food, psychrometry, refrigerants ...</li>
