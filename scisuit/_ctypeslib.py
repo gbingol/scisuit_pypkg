@@ -2,9 +2,10 @@ import sys
 import ctypes as _ct
 from .util import parent_path as _parent_path
 
-_DLLname = "scisuit_pybind"
-if sys.version_info.minor == 10:
-	_DLLname = "scisuit_pybind310"
+"""
+Tested with: 3.10.6, 3.11.6, 3.12.0
+"""
+_DLLname = "scisuit_pybind" + str(sys.version_info.major) + str(sys.version_info.minor)
 
 #TODO: Change to debug version
 _path = _parent_path(__file__) / _DLLname
