@@ -1,6 +1,6 @@
 <h2>A computing library for engineers.</h2>
 
-<p>Tested with Python 3.10 and 3.11</p>
+<p>Tested with Python 3.10, 3.11 and 3.12</p>
 
 <p>Contains the following:</p>
 <ol>
