@@ -7,32 +7,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pybind", "pybind\pybind.vcx
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug_310|x64 = Debug_310|x64
-		Debug_310|x86 = Debug_310|x86
 		Rls_310|x64 = Rls_310|x64
-		Rls_310|x86 = Rls_310|x86
 		Rls_311|x64 = Rls_311|x64
-		Rls_311|x86 = Rls_311|x86
 		Rls_312|x64 = Rls_312|x64
-		Rls_312|x86 = Rls_312|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Debug_310|x64.ActiveCfg = Debug_310|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Debug_310|x64.Build.0 = Debug_310|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Debug_310|x86.ActiveCfg = Debug_310|Win32
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Debug_310|x86.Build.0 = Debug_310|Win32
 		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_310|x64.ActiveCfg = Rls_310|x64
 		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_310|x64.Build.0 = Rls_310|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_310|x86.ActiveCfg = Rls_310|Win32
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_310|x86.Build.0 = Rls_310|Win32
 		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_311|x64.ActiveCfg = Rls_311|x64
 		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_311|x64.Build.0 = Rls_311|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_311|x86.ActiveCfg = Rls_311|Win32
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_311|x86.Build.0 = Rls_311|Win32
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_312|x64.ActiveCfg = Debug_310|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_312|x64.Build.0 = Debug_310|x64
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_312|x86.ActiveCfg = Rls_312|Win32
-		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_312|x86.Build.0 = Rls_312|Win32
+		{D93EBB24-7184-478D-B44A-259528C6DA11}.Rls_312|x64.ActiveCfg = Rls_312|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
