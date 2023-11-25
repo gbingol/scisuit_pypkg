@@ -203,7 +203,7 @@
       <AdditionalDependencies>python312.lib;python3.lib;wxmsw32u.lib;wxexpat.lib;wxjpeg.lib;wxpng.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;scisuit_core.lib;scisuit_gui.lib;scisuit_plotter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)312.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\scisuit\scisuit_$(ProjectName)312.dll"</Command>
+      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)312.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\src\scisuit\scisuit_$(ProjectName)312.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Rls_311|x64'">
@@ -231,7 +231,7 @@
       <AdditionalDependencies>python311.lib;python3.lib;wxmsw32u.lib;wxexpat.lib;wxjpeg.lib;wxpng.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;scisuit_core.lib;scisuit_gui.lib;scisuit_plotter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)311.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\scisuit\scisuit_$(ProjectName)311.dll"</Command>
+      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)311.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\src\scisuit\scisuit_$(ProjectName)311.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Rls_310|x64'">
@@ -259,7 +259,7 @@
       <AdditionalDependencies>python310.lib;python3.lib;wxmsw32u.lib;wxexpat.lib;wxjpeg.lib;wxpng.lib;wxscintilla.lib;wxtiff.lib;wxzlib.lib;scisuit_core.lib;scisuit_gui.lib;scisuit_plotter.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)310.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\scisuit\scisuit_$(ProjectName)310.dll"</Command>
+      <Command>copy /Y "$(TargetDir)scisuit_$(ProjectName)310.dll" "$(VisualStudioDir)\Projects\scisuit_pypkg\src\scisuit\scisuit_$(ProjectName)310.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
