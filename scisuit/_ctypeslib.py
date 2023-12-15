@@ -58,6 +58,16 @@ pydll.c_fit_spline.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_fit_spline.restype = _ct.py_object
 
 
+"""      INTEG PACKAGE        """
+pydll.c_integ_simpson.argtypes = [_ct.py_object, _ct.py_object]
+pydll.c_integ_simpson.restype = _ct.py_object
+
+pydll.c_integ_romberg.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int]
+pydll.c_integ_romberg.restype = _ct.py_object
+
+pydll.c_integ_fixed_quad.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_int]
+pydll.c_integ_fixed_quad.restype = _ct.py_object
+
 
 """        STATS PACKAGE           """
 
