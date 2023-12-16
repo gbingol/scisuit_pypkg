@@ -6,6 +6,8 @@ import ctypes as _ct
 import types as _types
 from typing import Iterable
 
+
+
 def trapz(x:list|_np.ndarray, y:list|_np.ndarray)->float:
     """
     Computes area using trapezoidal method and uses Numpy's trapz method.
@@ -59,6 +61,7 @@ def simpson(x:Iterable, y:Iterable)->float:
 	return _pydll.c_integ_simpson(x, y)
 
 
+
 def romberg(f:_types.FunctionType, 
 	a:float, 
 	b:float, 
@@ -76,6 +79,8 @@ def romberg(f:_types.FunctionType,
 	assert callable(f), "f must be function"
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert isinstance(tol, _numbers.Real), "tol must be real number"
+	assert isinstance(maxiter, _numbers.Integral), "maxiter must be int"
 
 	return _pydll.c_integ_romberg(
 		f, 
@@ -83,6 +88,7 @@ def romberg(f:_types.FunctionType,
 		_ct.c_double(b), 
 		_ct.c_double(tol), 
 		_ct.c_int(maxiter))
+
 
 
 def fixed_quad(f:_types.FunctionType, 
@@ -100,7 +106,7 @@ def fixed_quad(f:_types.FunctionType,
 	assert callable(f), "f must be function"
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
-	assert isinstance(n, _numbers.Integral, "n must be int")
+	assert isinstance(n, _numbers.Integral), "n must be int"
 
 	return _pydll.c_integ_fixed_quad(
 		f, 
