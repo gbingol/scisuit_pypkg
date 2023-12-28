@@ -629,13 +629,13 @@ def test_z(x, sd, mu, alternative="two.sided", conflevel=0.95):
 			pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) + pnorm(-zcritical, 0.0, 1.0)
 
 	elif alternative == "greater":
-			pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) #area on the right
+		pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) #area on the right
 
 	elif alternative == "less":
-			pvalue = pnorm(zcritical, 0.0, 1.0) #area on the left
+		pvalue = pnorm(zcritical, 0.0, 1.0) #area on the left
 
 	else:
-		raise ValueError("Values for arg 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
+		raise ValueError("'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
 	
 	
 	CI_upper = xaver - qnorm(alpha / 2.0, 0.0, 1.0) * SE
