@@ -60,7 +60,7 @@ class test_f_Result:
 
 
 
-def test_f(x, y, alternative:str = "two.sided", ratio:float = 1.0, conflevel:float = 0.95)->tuple:
+def test_f(x, y, ratio:float = 1.0, alternative:str = "two.sided", conflevel:float = 0.95)->tuple:
 	"""
 	Performs F test
 
