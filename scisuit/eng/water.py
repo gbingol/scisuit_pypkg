@@ -15,13 +15,7 @@ class Water:
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
-		Cp_w = _np.polynomial.Polynomial([5.4731E-6, -9.0864E-5, 4.1289][::-1])
-		"""
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""
-
+		Cp_w = _np.polynomial.Polynomial([4.1289, -9.0864e-05, 5.4731e-06])
 		T = self.__T
 
 		return Cp_w(T)
@@ -29,12 +23,7 @@ class Water:
 
 	def conductivity(self)->float:
 		"""Thermal conductivity, result W/mK"""
-		k_w =  _np.polynomial.Polynomial([-6.7036E-6, 1.7625E-3, 5.7109E-01][::-1])
-		"""
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""	
+		k_w =  _np.polynomial.Polynomial([0.57109, 0.0017625, -6.7036e-06])
 		T=self.__T
 
 		return k_w(T)	
@@ -43,12 +32,7 @@ class Water:
 	def density(self)->float:
 		"""returns kg/m3"""
 
-		rho_w =  _np.polynomial.Polynomial([-3.7574E-3, 3.1439E-3, 997.18][::-1])
-		"""
-		Note that previously scisuit.core polynomial was used and the list conforms
-		to this (ax^n +... + a0). 
-		However, new numpy polynomial uses reverse order and that's why [::-1]
-		"""	
+		rho_w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574])
 		T=self.__T
 
 		return rho_w(T)
