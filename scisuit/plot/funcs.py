@@ -44,5 +44,5 @@ def show(maximize = False, shared = False):
 	shared: if there is any other application using a main loop
 	"""
 	_pydll.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
-	_app.mainloop()
+	_app.mainloop(shared)
 	
