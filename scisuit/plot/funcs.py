@@ -43,6 +43,5 @@ def show(maximize = False, shared = False):
 	maximize: Whether to show chart as maximized (good for Psychrometric chart) \n
 	shared: if there is any other application using a main loop
 	"""
-	_pydll.c_plot_show(_ct.c_bool(maximize), _ct.c_bool(shared))
+	_pydll.c_plot_show(_ct.c_bool(maximize))
 	_app.mainloop(shared)
-	

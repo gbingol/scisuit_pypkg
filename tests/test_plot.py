@@ -9,8 +9,6 @@ sys.path.insert(0, os.getcwd())
 import scisuit.stats as stat
 import scisuit.plot as plt
 
-import matplotlib.pyplot as plt2
-
 
 def bar():
 	categ=["Q1", "Q2", "Q3", "Q4"]

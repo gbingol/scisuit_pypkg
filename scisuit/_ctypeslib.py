@@ -7,7 +7,7 @@ Tested with: 3.10.6, 3.11.6, 3.12.0
 """
 _DLLname = "scisuit_pybind" + str(sys.version_info.major) + str(sys.version_info.minor)
 
-#TODO: Change to debug version
+
 _path = _parent_path(__file__) / _DLLname
 pydll = _ct.PyDLL(str(_path))
 
@@ -274,7 +274,7 @@ pydll.c_plot_ylabel.restype=None
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
 
-pydll.c_plot_show.argtypes = [_ct.c_bool, _ct.c_bool]
+pydll.c_plot_show.argtypes = [_ct.c_bool]
 pydll.c_plot_show.restype=None
 
 
