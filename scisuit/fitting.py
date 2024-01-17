@@ -5,18 +5,9 @@ import numbers as _numbers
 from numpy.polynomial import polynomial as _Polynomial
 from typing import Iterable
 
+
 __all__ = ['linearinterp', 'lagrange', 'spline', 'expfit', 'logfit', 'logistfit', 'polyfit', 'powfit', 'SplineResult']
 
-
-@_dc.dataclass
-class SplineResult:
-	"""
-	poly: Numpy polynomial
-	lower, upper: lower and upper bounds of the polynomial
-	"""
-	poly:_Polynomial.Polynomial = None
-	lower:float = None
-	upper: float = None
 
 
 
@@ -59,6 +50,20 @@ def lagrange(x:Iterable, y:Iterable, val:float)->float:
 	return _pydll.c_fit_lagrange(x, y, _ct.c_double(val))
 
 
+########################################################################################
+
+
+@_dc.dataclass
+class SplineResult:
+	"""
+	poly: Numpy polynomial
+	lower, upper: lower and upper bounds of the polynomial
+	"""
+	poly:_Polynomial.Polynomial = None
+	lower:float = None
+	upper: float = None
+
+
 def spline(x:Iterable, y:Iterable)->list[SplineResult]:
 	"""
 	Constructs natural cubic spline polynomials from x, y
@@ -66,6 +71,9 @@ def spline(x:Iterable, y:Iterable)->list[SplineResult]:
 	lst = _pydll.c_fit_spline(x, y)
 	
 	return  [SplineResult(_Polynomial.Polynomial(l[0]), l[1], l[2]) for l in lst]
+
+
+########################################################################################
 
 
 def expfit(x, y, intercept=None)->list:
