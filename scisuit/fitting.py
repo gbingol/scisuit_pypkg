@@ -27,7 +27,7 @@ def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 	if(x1 == x2): 
 		return y1 
 	
-	m,n=0, 0
+	m,n = 0, 0
 	m = (y2 - y1) / (x2 - x1)
 	n = y2 - m * x2
 
@@ -79,7 +79,7 @@ def spline(x:Iterable, y:Iterable)->list[SplineResult]:
 def expfit(x, y, intercept=None)->list:
 	"""
 	Fits x,y to the equation y = a*exp(b*x) \n
-	return list is [a, b]
+	Returns [a, b]
 
 	## Inputs:
 	x, y: list/ndarray \n
@@ -98,8 +98,7 @@ def expfit(x, y, intercept=None)->list:
 def logfit(x:Iterable, y:Iterable)->list:
 	"""
 	Fits x,y to the equation y = a*ln(x) + b \n
-	return list is [a, b]
-
+	Returns [a, b]
 	"""
 
 	return _pydll.c_fit_logfit(x, y)
@@ -107,8 +106,8 @@ def logfit(x:Iterable, y:Iterable)->list:
 
 def logistfit(x:Iterable, y:Iterable, limit = None)->list:
 	"""
-	Fits x,y to the equation y = L / (1 + exp(b0 + b1*x)) \n
-	return list is [L, b0, b1] or [b0, b1]
+	Fits to the equation y = L / (1 + exp(b0 + b1*x)) \n
+	Returns either [L, b0, b1] or [b0, b1]
 
 	## Inputs:
 	limit: None or float
@@ -121,8 +120,8 @@ def logistfit(x:Iterable, y:Iterable, limit = None)->list:
 
 def polyfit(x, y, deg)->tuple:
 	"""
-	uses NumPy's polynomial fitting (numpy.polynomial.polynomial.polyfit) \n
-	returns (coefficients, residuals)
+	Uses numpy.polynomial.polynomial.polyfit \n
+	Returns (coefficients, residuals)
 
 	## Inputs:
 	x, y: list/ndarray
@@ -132,9 +131,9 @@ def polyfit(x, y, deg)->tuple:
 	return coeffs, stats[0]
 
 
-def powfit(x:Iterable, y:Iterable)->list:
+def powfit(x:Iterable, y:Iterable)->list[float]:
 	"""
-	Fits x,y to the equation y = a*x^n
-	returns [a, n]
+	Fits to the equation y = a*x^n \n
+	Returns [a, n]
 	"""
 	return _pydll.c_fit_powfit(x,y)
