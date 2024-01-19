@@ -2,7 +2,7 @@ import types as _types
 import math
 
 
-class Derivative:
+class FiniteDiff:
 	"""
 	Computes the nth derivative of a function using forward, backward or central
 	finite difference methods 
@@ -11,7 +11,7 @@ class Derivative:
 		assert dx>0, "dx>0 expected"
 		self._func = f
 		self._x = x
-		self._dx = x*dx
+		self._dx = dx
 		self._n = n
 
 
@@ -56,11 +56,23 @@ class Derivative:
 		return numerator/dx**n
 
 
+def richardson(f:_types.FunctionType, x:float, dx=1E-4, n=1)->float:
+	"""
+	Richardson Extrapolation for 1st order derivative
+	Uses central differences
+	"""
+	h = dx
+	d1 = FiniteDiff(f, x, dx=h)
+	d2 = FiniteDiff(f, x, dx=h/2)
+
+	return 4/3*d2.central() - 1/3*d1.central()
 
 
 if __name__ == "__main__":
-	f = lambda x: x**5 
-	d = Derivative(f, 2, n=1)
+	f = lambda x: -0.1*x**4 - 0.15*x**3 - 0.5*x**2 - 0.25*x + 1.2
+	d = FiniteDiff(f, x=0.5, n=1, dx=0.25)
 	print(d.forward())
 	print(d.backward())
 	print(d.central())
+
+	print(richardson(f, x=0.5, dx=0.25))
