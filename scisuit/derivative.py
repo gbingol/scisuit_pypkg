@@ -28,8 +28,6 @@ class FiniteDiff:
 		return numerator/dx**n
 
 		
-
-
 	def backward(self)->float:
 		f = self._func
 		x = self._x

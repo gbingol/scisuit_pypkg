@@ -174,7 +174,11 @@ def ridder(
 
 
 
-def fsolve(F:list, x0:list, tol=1E-5, maxiter=100 )->tuple:
+def fsolve(
+		F:list[_types.FunctionType], 
+		x0:list[float], 
+		tol=1E-5, 
+		maxiter=100 )->tuple:
 	"""
 	Solves a system of non-linear equations using Newton's approach. \n
 	Functions are in the format of f(x1,x2,...)=0
@@ -185,7 +189,7 @@ def fsolve(F:list, x0:list, tol=1E-5, maxiter=100 )->tuple:
 	x0: a list of initial guesses \n
 
 
-	## USAGE EXAMPLE
+	## EXAMPLE
 	x^2 + y^2 = 5 \n
 	x^2 - y^2 = 1 \n
 
@@ -207,10 +211,10 @@ def fsolve(F:list, x0:list, tol=1E-5, maxiter=100 )->tuple:
 	
 	"""
 	assert isinstance(F, list), "F must be a list of functions"
-	assert isinstance(x0, list), "a must be a number"
+	assert isinstance(x0, list), "x0 must be a list of numbers"
 
-	assert isinstance(tol, _numbers.Number) and tol>0, "tol must be a positive number"
-	assert isinstance(maxiter, int) and maxiter>0, "maxiter must be a positive integer"
+	assert isinstance(tol, _numbers.Number) and tol>0, "tol>0 expected."
+	assert isinstance(maxiter, int) and maxiter>0, "maxiter>0 expected."
 
 	dim = len(F)
 
@@ -263,7 +267,7 @@ def fsolve(F:list, x0:list, tol=1E-5, maxiter=100 )->tuple:
 			return v.tolist(),  iter
 
 		DetJacobi = abs(_np.linalg.det(Jacobi))
-            
+
 		if(DetJacobi <= tol):
 			raise RuntimeError("At iter="+ str(iter) + " Jacobian Det=" + str(DetJacobi) + ", try different initial values") 
 			
