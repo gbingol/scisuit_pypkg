@@ -142,6 +142,8 @@ def matplotlib_mixed():
 	plt.plot([1,2,3], [1, 4, 9])
 	plt.show()
 
+
+
 def boxplot():
 	x = [2, 1, 3, 6, 4]
 	y = [7, 7, 8, 4, 2]
@@ -152,50 +154,20 @@ def boxplot():
 
 
 
+x = [1, 2, 3, 4]
+y = [1, 3, 7, 14]
 
-app = wx.App()
-
-class MyFrame( wx.Frame ):
-
-	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, size = wx.Size( 500,300 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
-
-		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
-
-		bSizer1 = wx.BoxSizer( wx.VERTICAL )
-
-		self.m_btn = wx.Button( self, wx.ID_ANY, u"MyButton", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer1.Add( self.m_btn, 0, wx.ALL, 5 )
-
-
-		self.SetSizer( bSizer1 )
-		self.Layout()
-
-		self.Centre( wx.BOTH )
-
-		self.m_btn.Bind( wx.EVT_BUTTON, self.OnBtn )
-
-
-	def OnBtn( self, event ):
-		x = [1, 2, 3, 4]
-		y = [1, 3, 7, 14]
-
-		plt.scatter(
-		x=x, 
-		y=y,
-		trendline=plt.Trendline
-			(
-			style =plt.Trendline.STYLE.POLY,
-			degree=3,
-			intercept=-10,
-			line=plt.Pen(color="255 0 0", width=2),
-			show_equation=True,
-			show_stats=True
-			)
-		)
-		plt.show()
-		event.Skip()
-
-frm = MyFrame(None)
-frm.Show()
-app.MainLoop()
+plt.scatter(
+x=x, 
+y=y,
+trendline=plt.Trendline
+	(
+	style =plt.Trendline.STYLE.POLY,
+	degree=3,
+	intercept=-10,
+	line=plt.Pen(color="255 0 0", width=2),
+	show_equation=True,
+	show_stats=True
+	)
+)
+plt.show()
