@@ -247,11 +247,11 @@ class Food:
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
-		w = lambda x: 4.1289 - 9.0864e-05*x + 5.4731e-06*x**2
-		p = lambda x: 2.0082 + 0.0012089*x - 1.3129e-06*x**2
-		f = lambda x: 1.9842 + 0.0014733*x -4.8008e-06*x**2
-		cho = lambda x: 1.5488 + 0.0019625*x -5.9399e-06*x**2
-		ash = lambda x: 1.0926 + 0.0018896*x -3.6817e-06*x**2
+		w = lambda x: 4.1289 - x*(9.0864e-05 - 5.4731e-06*x)
+		p = lambda x: 2.0082 + x*(0.0012089 - 1.3129e-06*x)
+		f = lambda x: 1.9842 + x*(0.0014733 -4.8008e-06*x)
+		cho = lambda x: 1.5488 + x*(0.0019625 -5.9399e-06*x)
+		ash = lambda x: 1.0926 + x*(0.0018896 -3.6817e-06*x)
 		salt =  0.88
 
 		t = T if T != None else self.T
@@ -266,11 +266,11 @@ class Food:
 		If T (in °C) is not specified then Food's current temperature will be used.\n
 		Returns conductivity in W/mK
 		"""
-		w = lambda x: 0.457109 + 0.0017625*x - 6.7036e-06*x**2
-		p = lambda x: 0.17881 + 0.0011958*x - 2.7178e-06*x**2
-		f = lambda x: 0.18071 - 0.00027604*x - 1.7749e-07*x**2
-		cho = lambda x: 0.20141 + 0.0013874*x - 4.3312e-06*x**2
-		ash = lambda x: 0.32962 + 0.0014011*x - 2.9069e-06*x**2
+		w = lambda x: 0.457109 + x*(0.0017625 - 6.7036e-06*x)
+		p = lambda x: 0.17881 + x*(0.0011958 - 2.7178e-06*x)
+		f = lambda x: 0.18071 - x*(0.00027604 + 1.7749e-07*x)
+		cho = lambda x: 0.20141 + x*(0.0013874 - 4.3312e-06*x)
+		ash = lambda x: 0.32962 + x*(0.0014011 - 2.9069e-06*x)
 		salt =  0.574
 		"""
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
@@ -294,7 +294,7 @@ class Food:
 		If T (in °C) is not specified then Food's current temperature will be used.\n
 		Returns density in kg/m3
 		"""
-		w = lambda x: 997.18 + 0.0031439*x - 0.0037574*x**2 #water
+		w = lambda x: 997.18 + x*(0.0031439 - 0.0037574*x) #water
 		p = lambda x: 1329.9 - 0.5184*x #protein
 		f = lambda x: 925.59 - 0.41757*x #lipid
 		c = lambda x: 1599.1 - 0.31046*x #cho
