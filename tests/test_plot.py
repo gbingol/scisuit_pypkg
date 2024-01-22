@@ -152,22 +152,25 @@ def boxplot():
 	plt.boxplot(data=y)
 
 
+def scatter():
+	x = [1, 2, 3, 4]
+	y = [1, 3, 7, 14]
 
-
-x = [1, 2, 3, 4]
-y = [1, 3, 7, 14]
-
-plt.scatter(
-x=x, 
-y=y,
-trendline=plt.Trendline
-	(
-	style =plt.Trendline.STYLE.POLY,
-	degree=3,
-	intercept=-10,
-	line=plt.Pen(color="255 0 0", width=2),
-	show_equation=True,
-	show_stats=True
+	plt.scatter(
+	x=x, 
+	y=y,
+	trendline=plt.Trendline
+		(
+		style =plt.Trendline.STYLE.POLY,
+		degree=3,
+		intercept=-10,
+		line=plt.Pen(color="255 0 0", width=2),
+		show_equation=True,
+		show_stats=True
+		)
 	)
-)
-plt.show()
+	plt.show()
+
+
+
+histogram()
