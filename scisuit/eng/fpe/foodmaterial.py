@@ -61,7 +61,7 @@ class Food:
 		by sum forces it to be in the range of [0, 1]
 		"""
 		Sum = self._water + self._cho + self._protein + self._lipid + self._ash + self._salt
-		assert Sum>0, "At least one ingredient must be present"
+		assert Sum>0, "At least one ingredient must be present."
 
 		self._water /= Sum
 		self._cho /= Sum
@@ -87,7 +87,7 @@ class Food:
 
 	def __eq__(self, other:Food)->bool:
 
-		assert isinstance(other, Food), "Food can only be compared with Food"
+		assert isinstance(other, Food), "Food can only be compared with Food."
 		
 		if type(self) != type(other):
 			return False
@@ -152,10 +152,10 @@ class Food:
 	
 
 	def __sub__(self, B:Food)->Food:
-		assert type(self) == type(B), "Foods must have same type"
+		assert type(self) == type(B), "Foods must have same type."
 
 		ma, mb = self.weight,  B.weight		
-		assert (ma - mb) > 0, "weight A > weight B expected"
+		assert (ma - mb) > 0, "weight A > weight B expected."
 
 		Ta, Tb = self.T, B.T
 		assert _math.isclose(Ta, Tb, abs_tol=T_TOL), "Temperature differences must be negligible."
@@ -175,7 +175,7 @@ class Food:
 			_ing = None
 			if fB.get(k) != None:	
 				_ing = ma*v - mb*fB[k]
-				assert _ing>=0, "Weight of " + k + " can not be smaller than zero"
+				assert _ing>=0, "Weight of " + k + " can not be smaller than zero."
 				
 				if _math.isclose(_ing, 0.0, abs_tol=1E-5): _ing = 0
 			else:
@@ -198,7 +198,7 @@ class Food:
 
 
 	def __mul__(self, m:float)->Food:
-		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers"
+		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers."
 
 		obj = type(self)
 		f = obj(**self.ingredients())
@@ -211,7 +211,7 @@ class Food:
 
 
 	def __rmul__(self, m:float)->Food:
-		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers"
+		assert isinstance(m, _numbers.Number), "Foods can only be multiplied by numbers."
 
 		obj = type(self)
 		f = obj(**self.ingredients())
@@ -247,11 +247,11 @@ class Food:
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
-		w = _np.polynomial.Polynomial([4.1289, -9.0864e-05, 5.4731e-06])
-		p =  _np.polynomial.Polynomial([2.0082, 0.0012089, -1.3129e-06])
-		f =  _np.polynomial.Polynomial([1.9842, 0.0014733, -4.8008e-06])
-		cho =  _np.polynomial.Polynomial([1.5488, 0.0019625, -5.9399e-06])
-		ash =  _np.polynomial.Polynomial([1.0926, 0.0018896, -3.6817e-06])
+		w = lambda x: 4.1289 - 9.0864e-05*x + 5.4731e-06*x**2
+		p = lambda x: 2.0082 + 0.0012089*x - 1.3129e-06*x**2
+		f = lambda x: 1.9842 + 0.0014733*x -4.8008e-06*x**2
+		cho = lambda x: 1.5488 + 0.0019625*x -5.9399e-06*x**2
+		ash = lambda x: 1.0926 + 0.0018896*x -3.6817e-06*x**2
 		salt =  0.88
 
 		t = T if T != None else self.T
@@ -266,11 +266,11 @@ class Food:
 		If T (in °C) is not specified then Food's current temperature will be used.\n
 		Returns conductivity in W/mK
 		"""
-		w =  _np.polynomial.Polynomial([0.457109, 0.0017625, -6.7036e-06])
-		p =  _np.polynomial.Polynomial([0.17881, 0.0011958, -2.7178e-06])
-		f =  _np.polynomial.Polynomial([0.18071, -0.00027604, -1.7749e-07])
-		cho =  _np.polynomial.Polynomial([0.20141, 0.0013874, -4.3312e-06])
-		ash =  _np.polynomial.Polynomial([0.32962, 0.0014011, -2.9069e-06])
+		w = lambda x: 0.457109 + 0.0017625*x - 6.7036e-06*x**2
+		p = lambda x: 0.17881 + 0.0011958*x - 2.7178e-06*x**2
+		f = lambda x: 0.18071 - 0.00027604*x - 1.7749e-07*x**2
+		cho = lambda x: 0.20141 + 0.0013874*x - 4.3312e-06*x**2
+		ash = lambda x: 0.32962 + 0.0014011*x - 2.9069e-06*x**2
 		salt =  0.574
 		"""
 		For salt: 5.704 molal solution at 20C, Riedel L. (1962),
@@ -294,11 +294,11 @@ class Food:
 		If T (in °C) is not specified then Food's current temperature will be used.\n
 		Returns density in kg/m3
 		"""
-		w =  _np.polynomial.Polynomial([997.18, 0.0031439, -0.0037574]) #water
-		p =  _np.polynomial.Polynomial([1329.9, -0.5184]) #protein
-		f =  _np.polynomial.Polynomial([925.59, -0.41757]) #lipid
-		c =  _np.polynomial.Polynomial([1599.1, -0.31046]) #cho
-		a =  _np.polynomial.Polynomial([2423.8, -0.28063]) #ash
+		w = lambda x: 997.18 + 0.0031439*x - 0.0037574*x**2 #water
+		p = lambda x: 1329.9 - 0.5184*x #protein
+		f = lambda x: 925.59 - 0.41757*x #lipid
+		c = lambda x: 1599.1 - 0.31046*x #cho
+		a = lambda x: 2423.8 - 0.28063*x #ash
 		s =  2165 #salt, Wikipedia
 		
 		t = T if T != None else self.T
@@ -325,7 +325,6 @@ class Food:
 		water, cho, lipid, protein = self._water, self._cho, self._lipid, self._protein
 		ash, salt = self._ash, self._salt 
 
-
 		#Virtually no water or 99.99% water
 		if water < 0.01 or water > 0.9999:
 			return water
@@ -347,7 +346,6 @@ class Food:
 		if 0 < Msolute < 0.01: 
 			return 0.99
 	
-
 		_Aw = Aw(self)
 
 		#salt solution?
@@ -921,6 +919,8 @@ class Fruit(Food):
 		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
+
+
 
 #--------------------------------------------------------------------------
 
