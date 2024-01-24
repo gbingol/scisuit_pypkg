@@ -172,5 +172,30 @@ def scatter():
 	plt.show()
 
 
+def matplot_overlay():
+	import math
+	from scisuit.stats import rbinom
+	import matplotlib.pyplot as plt
 
-histogram()
+	n=60
+	p=0.4
+
+	#Generate random numbers from a binomial distribution
+	x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
+
+	#z-ratio
+	z = (x - n*p)/math.sqrt(n*p*(1-p))
+
+	#DeMoivre's equation
+	f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
+
+	#Density scaled histogram
+	plt.hist(z, bins=6, density=True, color = "green", ec="red")
+
+	#Overlay scatter plot
+	plt.scatter(x=z, y=f, marker="x")
+
+	plt.show()
+
+
+matplot_overlay()
