@@ -212,13 +212,12 @@ def scisuit_hist_scatter():
 	plt.show()
 
 
-import matplotlib.pyplot as plt
+
 np.random.seed(19680801)
 all_data = [np.random.normal(0, std, size=100) for std in range(1, 4)]
 labels = ['x1', 'x2', 'x3']
 
-plt.boxplot(all_data,vert=True,  # vertical box alignment
-                     patch_artist=True,  # fill with color
-                     labels=labels)  # will be used to label x-ticks
-plt.plot([1,2,3], [1, 4, 9])
+for dat in all_data:
+	plt.boxplot(dat)
+
 plt.show()
