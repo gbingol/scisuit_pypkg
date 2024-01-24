@@ -41,7 +41,7 @@ class Water:
 		mu_ref=1002 #micro-Pascal*second (at 20C)
 		
 		u = 20 - T
-		temp1 =u/(T+96)*(u*(1.2378-0.001303 + 0.00000306*u + 0.0000000255*u**2))
+		temp1 =u/(T+96)*(1.2378 + u*(-0.001303 + 0.00000306*u + 0.0000000255*u**2))
 		mu = 10**temp1*mu_ref #micro-Pascal*second
 	
 		return mu/1E6
