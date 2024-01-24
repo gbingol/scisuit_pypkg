@@ -198,4 +198,26 @@ def matplot_overlay():
 	plt.show()
 
 
-matplot_overlay()
+
+import math
+from scisuit.stats import rbinom
+
+n=60
+p=0.4
+
+#Generate random numbers from a binomial distribution
+x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
+
+#z-ratio
+z = (x - n*p)/math.sqrt(n*p*(1-p))
+
+#DeMoivre's equation
+f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
+
+#Density scaled histogram
+plt.histogram(z, mode = plt.defs.HIST_DENSITY)
+
+#Overlay scatter plot
+plt.scatter(x=z, y=f)
+
+plt.show()
