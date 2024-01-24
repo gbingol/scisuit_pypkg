@@ -13,19 +13,19 @@ class Water:
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
 		T = self.__T
-		return 4.1289 - 9.0864e-05*T + 5.4731e-06*T**2
+		return 4.1289 + T*(-9.0864e-05 + 5.4731e-06*T)
 	
 
 	def conductivity(self)->float:
 		"""Thermal conductivity, result W/mK"""
 		T=self.__T
-		return 0.57109 + 0.0017625*T - 6.7036e-06*T**2	
+		return 0.57109 + T*(0.0017625 - 6.7036e-06*T)	
 
 	
 	def density(self)->float:
 		"""returns kg/m3"""
 		T=self.__T
-		return 997.18 + 0.0031439*T - 0.0037574*T**2
+		return 997.18 + T*(0.0031439 - 0.0037574*T)
 
 	
 	def viscosity(self)->float:
@@ -40,7 +40,8 @@ class Water:
 		T=self.__T
 		mu_ref=1002 #micro-Pascal*second (at 20C)
 		
-		temp1 =(20-T)/(T+96)*(1.2378-0.001303*(20-T) + 0.00000306*(20-T)**2 + 0.0000000255*(20-T)**3)
+		u = 20 - T
+		temp1 =u/(T+96)*(u*(1.2378-0.001303 + 0.00000306*u + 0.0000000255*u**2))
 		mu = 10**temp1*mu_ref #micro-Pascal*second
 	
 		return mu/1E6
