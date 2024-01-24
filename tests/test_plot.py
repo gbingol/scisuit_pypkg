@@ -131,18 +131,6 @@ def dirfield():
 	plt.dirfield(t,y,f1) 
 
 
-def matplotlib_mixed():
-	import matplotlib.pyplot as plt
-	fruits = ['apple', 'blueberry', 'cherry', 'orange']
-	counts = [40, 100, 30, 55]
-	bar_labels = ['red', 'blue', '_red', 'orange']
-	bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
-
-	plt.bar(fruits, counts, label=bar_labels, color=bar_colors)
-	plt.plot([1,2,3], [1, 4, 9])
-	plt.show()
-
-
 
 def boxplot():
 	x = [2, 1, 3, 6, 4]
@@ -198,26 +186,39 @@ def matplot_overlay():
 	plt.show()
 
 
+def scisuit_hist_scatter():
 
-import math
-from scisuit.stats import rbinom
+	import math
+	from scisuit.stats import rbinom
 
-n=60
-p=0.4
+	n=60
+	p=0.4
 
-#Generate random numbers from a binomial distribution
-x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
+	#Generate random numbers from a binomial distribution
+	x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
 
-#z-ratio
-z = (x - n*p)/math.sqrt(n*p*(1-p))
+	#z-ratio
+	z = (x - n*p)/math.sqrt(n*p*(1-p))
 
-#DeMoivre's equation
-f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
+	#DeMoivre's equation
+	f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
-#Density scaled histogram
-plt.histogram(z, mode = plt.defs.HIST_DENSITY)
+	#Density scaled histogram
+	plt.histogram(z, mode = plt.defs.HIST_DENSITY)
 
-#Overlay scatter plot
-plt.scatter(x=z, y=f)
+	#Overlay scatter plot
+	plt.scatter(x=z, y=f)
 
+	plt.show()
+
+
+import matplotlib.pyplot as plt
+np.random.seed(19680801)
+all_data = [np.random.normal(0, std, size=100) for std in range(1, 4)]
+labels = ['x1', 'x2', 'x3']
+
+plt.boxplot(all_data,vert=True,  # vertical box alignment
+                     patch_artist=True,  # fill with color
+                     labels=labels)  # will be used to label x-ticks
+plt.plot([1,2,3], [1, 4, 9])
 plt.show()
