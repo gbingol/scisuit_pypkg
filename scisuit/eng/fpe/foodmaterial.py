@@ -21,14 +21,7 @@ T_TOL = 0.1
 class Food:
 	"""A class to compute thermal and physical properties of food materials"""
 	
-	def __init__(
-			self, 
-			water=0.0, 
-			cho=0.0, 
-			protein=0.0, 
-			lipid=0.0, 
-			ash=0.0, 
-			salt=0.0):
+	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
 		"""
 		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
@@ -37,14 +30,15 @@ class Food:
 		f1 = Food(cho=30, water=70) \n
 		f2 = Food(cho=0.3, water=0.7)
 		"""
-		isOK = water>=0 and isinstance(water, _numbers.Real) and \
-			cho>=0 and isinstance(cho, _numbers.Real) and \
-			protein>=0 and isinstance(protein, _numbers.Real) and \
-			lipid>=0 and isinstance(lipid, _numbers.Real) and \
-			ash>=0 and isinstance(ash, _numbers.Real) and \
-			salt>=0 and isinstance(salt, _numbers.Real)
-			
-		assert isOK, "Ingredients must have non-negative real values."
+		typesOK = isinstance(water, _numbers.Real) and isinstance(cho, _numbers.Real) and \
+				isinstance(protein, _numbers.Real) and isinstance(lipid, _numbers.Real) and \
+				isinstance(ash, _numbers.Real) and isinstance(salt, _numbers.Real)
+		if(not typesOK):
+			raise TypeError("Ingredients must have real (int/float) types")
+		
+		isValuesOK = water>=0 and cho>=0 and protein>=0 and lipid>=0 and ash>=0 and salt>=0
+		if(not isValuesOK):
+			raise ValueError("Ingredients must have non-negative values.")
 
 		self._water = water
 		self._cho = cho
@@ -83,7 +77,6 @@ class Food:
 		self._Weight = 1.0 #Unit weight
 		
 	
-
 
 	def __eq__(self, other:Food)->bool:
 
