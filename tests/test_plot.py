@@ -229,11 +229,6 @@ def scatter_quiver():
 	plt.show()
 
 
-treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
-control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-
-plt.scatter(x=[1, 2, 3], y = [1, 4, 6])
-plt.qqplot(control, treatment)
-
+plt.bubble(x=[1,2,3], y=[4,5,6], size=[1,5,3])
 plt.show()
