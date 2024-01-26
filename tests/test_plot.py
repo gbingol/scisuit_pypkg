@@ -212,17 +212,28 @@ def scisuit_hist_scatter():
 	plt.show()
 
 
+def scatter_quiver():
+	t=np.arange(0.0, 2.0, 0.2)
+	y=np.arange(-5.0, 0.0, 0.2)
 
-np.random.seed(19680801)
-all_data = [np.random.normal(0, std, size=100) for std in range(1, 4)]
-labels = ['x1', 'x2', 'x3']
+	t, y = np.meshgrid(t,y) 
 
-for dat in all_data:
-	plt.boxplot(dat)
+	f1= 4-t+2*y
 
-x = [1,2,3]
-y = [1, 4, 9]
+	x1 = [1, 2, 3]
+	y1 = [-1, -4, -6]
 
-plt.scatter(x=x, y=y)
+	plt.dirfield(t,y,f1) 
+	plt.scatter(x=x1, y=y1)
+
+	plt.show()
+
+
+treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+
+
+plt.scatter(x=[1, 2, 3], y = [1, 4, 6])
+plt.qqplot(control, treatment)
 
 plt.show()
