@@ -3,16 +3,23 @@
         {
             "name": "Win32",
             "includePath": [
-				"C:/Python/Python311/include",
-				"C:/_libs/wxWidgets/include",
-				"C:/_libs/wxWidgets/lib/mswu",
-				"${env:VSPROJ}/sci_libs",
+                "C:/Python/Python311/include",
+                "C:/_libs/wxWidgets/include",
+                "C:/_libs/wxWidgets/lib/mswu",
+                "${env:VSPROJ}/sci_libs",
                 "${workspaceFolder}/**"
             ],
             "defines": [
-                "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+				"PYBINDLIBRARY_EXPORTS",
+				"_WINDOWS",
+				"__WXMSW__",
+				"wxUSE_NATIVE_DATAVIEWCTRL",
+				"WXUSINGDLL",
+				"_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS",
+				"_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS",
+				"_CRT_SECURE_NO_WARNINGS"
             ],
             "windowsSdkVersion": "10.0.22621.0",
             "compilerPath": "cl.exe",

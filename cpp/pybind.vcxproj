@@ -182,14 +182,6 @@
   <ItemGroup>
     <ResourceCompile Include="core.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\core\core.vcxproj">
-      <Project>{d68a7376-8281-4391-9481-e62dff597d03}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\plotter\plotter.vcxproj">
-      <Project>{b9cb3436-9b37-450c-a428-a7ddc807a64d}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
