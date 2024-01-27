@@ -5,6 +5,7 @@
             "includePath": [
 				"C:/Python/Python311/include",
 				"C:/_libs/wxWidgets/include",
+				"C:/_libs/wxWidgets/lib/mswu",
 				"${env:VSPROJ}/sci_libs",
                 "${workspaceFolder}/**"
             ],
