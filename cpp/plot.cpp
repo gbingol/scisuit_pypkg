@@ -411,7 +411,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 		if (std::holds_alternative<std::vector<double>>(Breaks))
 		{
-			IF_PYERRRUNTIME_RET(series->SetBreakPoints(std::get<std::vector<double>>(Breaks)) == false, "Invalid break points");
+			const auto& v = std::get<std::vector<double>>(Breaks);
+			IF_PYERRRUNTIME_RET(series->SetBreakPoints(v) == false, "Invalid break points");
 		}
 
 		else if (std::holds_alternative<int>(Breaks))
