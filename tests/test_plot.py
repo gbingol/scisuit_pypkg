@@ -17,7 +17,6 @@ def bar():
 
 	plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
 	plt.bar(height=B, style=plt.PERCENTSTK)
-	plt.show()
 
 
 def histogram():
@@ -27,7 +26,6 @@ def histogram():
 	plt.histogram(x,  
 			fill=plt.Brush(color=plt.Color.RED), 
 			line=plt.Pen(color="0 255 0", width=2))
-	plt.show()
 
 
 
@@ -157,7 +155,6 @@ def scatter():
 		show_stats=True
 		)
 	)
-	plt.show()
 
 
 def matplot_overlay():
@@ -209,8 +206,6 @@ def scisuit_hist_scatter():
 	#Overlay scatter plot
 	plt.scatter(x=z, y=f)
 
-	plt.show()
-
 
 def scatter_quiver():
 	t=np.arange(0.0, 2.0, 0.2)
@@ -226,9 +221,8 @@ def scatter_quiver():
 	plt.dirfield(t,y,f1) 
 	plt.scatter(x=x1, y=y1)
 
-	plt.show()
 
 
-
-plt.bubble(x=[1,2,3], y=[4,5,6], size=[1,5,3])
+scisuit_hist_scatter()
+scatter_quiver()
 plt.show()
