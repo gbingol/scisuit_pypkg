@@ -1,16 +1,31 @@
 cmake_minimum_required(VERSION 3.27.2)
 set(CMAKE_CXX_STANDARD 20)
 
+#set(VARPY scisuit_pybind310)
 set(VARPY scisuit_pybind311)
+#set(VARPY scisuit_pybind312)
 
 project(${VARPY})
+
+
+
+if(${VARPY} STREQUAL "scisuit_pybind310")
+	set(PYLIB "python310")
+	set(PYHOME "C:/Python/Python3106/")
+elseif(${VARPY} STREQUAL "scisuit_pybind311")
+	set(PYLIB "python311")
+	set(PYHOME "C:/Python/Python311/")
+elseif(${VARPY} STREQUAL "scisuit_pybind312")
+	set(PYLIB "python312")
+	set(PYHOME "C:/Python/Python3121/")
+endif()
 
 #wxWidgets directories
 include_directories(C:/_libs/wxWidgets/include)
 include_directories(C:/_libs/wxWidgets/lib/mswu)
 
 #Python (3.11) directory
-include_directories(C:/Python/Python311/include)
+include_directories(${PYHOME}/include)
 
 # core, gui and plot
 include_directories($ENV{VSPROJ}/sci_libs)
@@ -29,12 +44,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 target_link_directories(${PROJECT_NAME} PRIVATE C:/_libs/wxWidgets/lib)
 target_link_directories(${PROJECT_NAME} PRIVATE $ENV{VSPROJ}/sci_libs/libs)
+target_link_directories(${PROJECT_NAME} PRIVATE ${PYHOME}/libs)
 
-if(${VARPY} STREQUAL "scisuit_pybind311")
-	target_link_directories(${PROJECT_NAME} PRIVATE C:/Python/Python311/libs)
 
-	target_link_libraries(${PROJECT_NAME} 
-	python3 python311 
+target_link_libraries(${PROJECT_NAME} 
+	python3 ${PYLIB} 
 	wxmsw32u wxexpat wxjpeg wxpng wxscintilla wxtiff wxzlib 
 	scisuit_core scisuit_gui scisuit_plotter)
-endif()
