@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.27.2)
 set(CMAKE_CXX_STANDARD 20)
 
+if(NOT WIN32)
+	message(FATAL_ERROR "Works only under Win32")
+endif()
+
 #set(VARPY scisuit_pybind310)
 set(VARPY scisuit_pybind311)
 #set(VARPY scisuit_pybind312)
@@ -26,7 +30,7 @@ endif()
 include_directories(C:/_libs/wxWidgets/include)
 include_directories(C:/_libs/wxWidgets/lib/mswu)
 
-#Python (3.11) directory
+#Python directory
 include_directories(${PYHOME}/include)
 
 # core, gui and plot
