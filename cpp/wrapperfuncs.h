@@ -21,7 +21,6 @@ namespace core
     class CObject;
     class CVector;
     class CArray;
-    class CPolynomial;
 }
 
 extern PyTypeObject PythPoly_Type;
@@ -142,7 +141,6 @@ core::CArray Iterable_AsArray(PyObject* Obj);
 
 //PyObject can contain any type derived from CObject
 std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj);
-PyObject* PyObject_FromCObject(const core::CObject* variant);
 
 /*
     callableObj: Python callable object.

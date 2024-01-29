@@ -163,32 +163,3 @@ std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj)
 
     return nullptr;
 }
-
-
-
-PyObject* PyObject_FromCObject(const core::CObject* variant)
-{
-    if (variant->GetType() == (int)core::CObject::TYPE::DOUBLE)
-        return Py_BuildValue("d", variant->to_double().value());
-
-    else if (variant->GetType() == (int)core::CObject::TYPE::INT)
-        return Py_BuildValue("i", variant->to_int().value());
-
-    else if (variant->GetType() == (int)core::CObject::TYPE::STRING)
-    {
-        auto str = variant->to_string();
-        return Py_BuildValue("u", str.c_str());
-    }
-
-    else if (variant->GetType() == (int)core::CObject::TYPE::COMPLEX)
-    {
-        std::complex<double> Complex = variant->to_complex().value();
-        return PyComplex_FromDoubles(Complex.real(), Complex.imag());
-    }
-
-    else if (variant->GetType() == (int)core::CObject::TYPE::NONE)
-        return Py_BuildValue("");
-
-
-    return nullptr;
-}
