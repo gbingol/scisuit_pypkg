@@ -223,18 +223,36 @@ def scatter_quiver():
 
 
 
+import math
 import numpy as np
-
-np.random.seed(5)
-x = np.arange(1, 101)
-y = 20 + 3 * x + np.random.normal(0, 60, 100)
-plt.scatter(x=x, y=y)
+import scisuit.plot as plt
 
 
-# draw vertical line from (70,100) to (70, 250)
-plt.plot([70, 70], [100, 250], width=5, style=plt.PEN_LONGDASH)
+T = [0, 20, 100] #temperatures
 
-# draw diagonal line from (70, 90) to (90, 200)
-plt.plot([70, 90], [90, 200], width=2)
+#Energy absorbed at different temperatures
+data = np.array([
+	[52, 58, 82, 35, 84], #0C
+	[48, 66, 74, 86, 78], #20
+	[73.5, 82, 72, 80, 79] #100C
+])
+
+mean  = np.mean(data, axis=1)
+std = np.std(data, axis=1, ddof=1)
+se = std/ math.sqrt(data.shape[1])
+
+plt.scatter(x=T, y=mean)
+for i in range(len(T)):
+	x1 = T[i]
+	x2 = x1
+	y1, y2 = mean[i] + se[i], mean[i] - se[i]
+	plt.plot(
+		x=[x1, x2], 
+		y=[y1, y2], 
+		color = plt.Color.BLACK, 
+		style = plt.PEN_LONGDASH,
+		width=2)
 
 plt.show()
+
+
