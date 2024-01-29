@@ -6,55 +6,20 @@
 
 
 
-bool IsNumpyInt(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    bool Int32 = std::strcmp(TypeName.c_str(), "numpy.int32") == 0 ? true : false;
-    bool Int64 = std::strcmp(TypeName.c_str(), "numpy.int64") == 0 ? true : false;
-
-    return Int32 || Int64;
-}
-
-
-bool IsNumpyFloat(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    bool Float32 = std::strcmp(TypeName.c_str(), "numpy.float32") == 0 ? true : false;
-    bool Float64 = std::strcmp(TypeName.c_str(), "numpy.float64") == 0 ? true : false;
-
-    return Float32 || Float64;
-}
-
-
-bool IsNumpyBool(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    return std::strcmp(TypeName.c_str(), "numpy.bool_") == 0 ? true : false;
-}
-
-
-bool IsNumpyString(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    return std::strcmp(TypeName.c_str(), "numpy.str_") == 0 ? true : false;
-}
-
-
 std::optional<double> ExtractRealNumber(PyObject* obj)
 {
     if (!obj)
         return std::nullopt;
 
-    if (IsSubTypeFloat(obj) || IsNumpyFloat(obj))
+    if (IsSubTypeFloat(obj))
         return PyFloat_AsDouble(obj);
 
-    else if (IsSubTypeLong(obj) || IsNumpyInt(obj))
+    else if (IsSubTypeLong(obj))
         return (double)PyLong_AsLong(obj);
 
     return std::nullopt;
 }
 
-    
 
 
 PyObject* List_FromCVector(const core::CVector& Vec)
@@ -170,20 +135,20 @@ std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj)
 
     else if (IsSubTypeRealNumber(Obj))
     {
-        if (PyLong_CheckExact(Obj) || IsNumpyInt(Obj))
+        if (PyLong_CheckExact(Obj))
         {
             int Val = PyLong_AsLong(Obj);
             return std::make_unique<core::CInteger>(Val);
         }
 
-        else if (PyFloat_CheckExact(Obj) || IsNumpyFloat(Obj))
+        else if (PyFloat_CheckExact(Obj))
         {
             double Val = PyFloat_AsDouble(Obj);
             return std::make_unique<core::CDouble>(Val);
         }
     }
 
-    else if (IsExactTypeString(Obj) || IsNumpyString(Obj))
+    else if (IsExactTypeString(Obj))
     {
         return std::make_unique<core::CString>(PyUnicode_AsWideCharString(Obj, nullptr));
     }

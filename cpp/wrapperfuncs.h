@@ -28,11 +28,6 @@ extern PyTypeObject PythPoly_Type;
 
 
 
-DLLPYBIND bool IsNumpyInt(PyObject* obj);
-DLLPYBIND bool IsNumpyFloat(PyObject* obj);
-DLLPYBIND bool IsNumpyBool(PyObject* obj);
-DLLPYBIND bool IsNumpyString(PyObject* obj);
-
 //extract real number (float or integer) from obj
 DLLPYBIND std::optional<double> ExtractRealNumber(PyObject* obj);
 
@@ -87,10 +82,7 @@ static bool IsExactTypeFloat(PyObject* obj)
 //is obj a real number (Python float or Python integer or bool)
 static bool IsSubTypeRealNumber(PyObject* obj)
 {
-    return IsSubTypeLong(obj) ||
-        IsSubTypeFloat(obj) ||
-        IsNumpyInt(obj) ||
-        IsNumpyFloat(obj);
+    return IsSubTypeLong(obj) || IsSubTypeFloat(obj);
 }
 
 
@@ -98,10 +90,7 @@ static bool IsSubTypeRealNumber(PyObject* obj)
 //is obj a real number
 static bool IsExactTypeRealNumber(PyObject* obj)
 {
-    return IsExactTypeLong(obj) ||
-        IsExactTypeFloat(obj) ||
-        IsNumpyInt(obj) ||
-        IsNumpyFloat(obj);
+    return IsExactTypeLong(obj) || IsExactTypeFloat(obj);
 }
 
 
@@ -136,7 +125,7 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 
         else if constexpr (std::is_integral_v<T>)
         {
-            if (IsSubTypeLong(item) || IsNumpyInt(item))
+            if (IsSubTypeLong(item))
                 Vec.push_back(PyLong_AsLong(item));
         }
 
