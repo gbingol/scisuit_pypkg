@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.27.2)
 set(CMAKE_CXX_STANDARD 20)
-project(scisuit_pybind311)
+
+set(VARPY scisuit_pybind311)
+
+project(${VARPY})
 
 #wxWidgets directories
 include_directories(C:/_libs/wxWidgets/include)
@@ -24,8 +27,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE PYBINDLIBRARY_EXPORTS _WINDOW
 wxUSE_MENUBAR WXUSINGDLL _CRT_SECURE_NO_WARNINGS _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
 
 target_link_directories(${PROJECT_NAME} PRIVATE C:/_libs/wxWidgets/lib)
-target_link_directories(${PROJECT_NAME} PRIVATE C:/Python/Python311/libs)
 target_link_directories(${PROJECT_NAME} PRIVATE $ENV{VSPROJ}/sci_libs/libs)
+
+if(${VARPY} STREQUAL "scisuit_pybind311")
+	target_link_directories(${PROJECT_NAME} PRIVATE C:/Python/Python311/libs)
+endif()
+
 target_link_libraries(${PROJECT_NAME} 
 python3 python311 
 wxmsw32u wxexpat wxjpeg wxpng wxscintilla wxtiff wxzlib 
