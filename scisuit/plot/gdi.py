@@ -41,29 +41,12 @@ class Color:
 
 @_dc.dataclass
 class Pen:
-	class STYLE:
-		SOLID = 100
-		DOT = 101
-		LONGDASH = 102
-		SHORTDASH = 103
-		DOTDASH = 104
-		TRANSPARENT = 106
 	color:Color = None
 	width:int = 1
-	style:int= STYLE.SOLID
+	style:int= 100 #solid pen
 
 
 @_dc.dataclass
 class Brush:
-	class STYLE:
-		SOLID = 100
-		TRANSPARENT = 106
-		BDIAGHATCH = 111
-		CROSSDIAGHATCH = 112
-		FDIAGHATCH = 113
-		CROSSHATCH = 114
-		HORIZHATCH =115
-		VERTHATCH = 116
-
 	color:Color = None
-	style:int = STYLE.SOLID
+	style:int = 100 #solid brush

@@ -223,6 +223,18 @@ def scatter_quiver():
 
 
 
-scisuit_hist_scatter()
-scatter_quiver()
+import numpy as np
+
+np.random.seed(5)
+x = np.arange(1, 101)
+y = 20 + 3 * x + np.random.normal(0, 60, 100)
+plt.scatter(x=x, y=y)
+
+
+# draw vertical line from (70,100) to (70, 250)
+plt.plot([70, 70], [100, 250], width=5, style=plt.PEN_LONGDASH)
+
+# draw diagonal line from (70, 90) to (90, 200)
+plt.plot([70, 90], [90, 200], width=2)
+
 plt.show()

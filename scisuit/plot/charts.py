@@ -320,12 +320,16 @@ def scatter(
 
 
 #convenience function
-def plot(x:_Iterable, y:_Iterable, 
-	label:str=None, color:str = None, width:int = 1,
-	style:int = _gdi.Pen.STYLE.SOLID,
-	smooth:bool=False):
+def plot(
+		x:_Iterable, 
+		y:_Iterable, 
+		label:str=None, 
+		color:str = None, 
+		width:int = 1,
+		style:int = _defs.PEN_SOLID,
+		smooth:bool=False):
 	"""
-	A convenience function to plot scatter chart without markers
+	A convenience function to plot scatter chart without markers (with lines only)
 
 	## Input:
 	x, y:	x- and y-data \n

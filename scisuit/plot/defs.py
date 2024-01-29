@@ -11,7 +11,24 @@ HIST_DENSITY = "d"
 HIST_FREQUENCY = "f"
 HIST_RELFREQUENCY = "r"
 
+#Pen styles
+PEN_SOLID = 100
+PEN_DOT = 101
+PEN_LONGDASH = 102
+PEN_SHORTDASH = 103
+PEN_DOTDASH = 104
+PEN_TRANSPARENT = 106
 
+#Brush styles
+
+BRUSH_SOLID = 100
+BRUSH_TRANSPARENT = 106
+BRUSH_BDIAGHATCH = 111
+BRUSH_CROSSDIAGHATCH = 112
+BRUSH_FDIAGHATCH = 113
+BRUSH_CROSSHATCH = 114
+BRUSH_HORIZHATCH =115
+BRUSH_VERTHATCH = 116
 
 
 class Trendline:
@@ -35,7 +52,7 @@ class Trendline:
 		style:str=STYLE.LINEAR,
 		degree:int=2, 
 		intercept:float=None, 
-		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=_gdi.Pen.STYLE.LONGDASH),
+		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=PEN_LONGDASH),
 		label:str = None,
 		show_stats:bool = False,
 		show_equation:bool=False
