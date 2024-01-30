@@ -13,7 +13,8 @@
 /******************************   ROOTS    **************************************/
 
 
-EXTERN PyObject * c_root_bisect(PyObject * FuncObj,
+EXTERN PyObject * c_root_bisect(
+	PyObject * FuncObj,
 	double a,
 	double b,
 	double tol = 1e-5,
@@ -22,14 +23,16 @@ EXTERN PyObject * c_root_bisect(PyObject * FuncObj,
 	bool modified = false);
 
 
-EXTERN PyObject * c_root_brentq(PyObject * FuncObj,
+EXTERN PyObject * c_root_brentq(
+	PyObject * FuncObj,
 	double a,
 	double b,
 	double tol = 1e-5,
 	int maxiter = 100);
 
 
-EXTERN PyObject * c_root_muller(PyObject * FuncObj,
+EXTERN PyObject * c_root_muller(
+	PyObject * FuncObj,
 	PyObject * x0,
 	PyObject * h = nullptr,
 	PyObject * x1 = nullptr,
@@ -56,22 +59,43 @@ EXTERN PyObject * c_root_ridder(PyObject * FuncObj,
 
 
 /*******************************   FITTING   ****************************************/
-EXTERN PyObject* c_fit_expfit(PyObject* X, PyObject* Y, PyObject* InterceptObj);
+EXTERN PyObject* c_fit_expfit(
+	PyObject* X, 
+	PyObject* Y, 
+	PyObject* InterceptObj);
 
-EXTERN PyObject* c_fit_lagrange(PyObject* X, PyObject* Y, double Value);
 
-EXTERN PyObject* c_fit_logfit(PyObject* X, PyObject* Y);
+EXTERN PyObject* c_fit_lagrange(
+	PyObject* X, 
+	PyObject* Y, 
+	double Value);
 
-EXTERN PyObject* c_fit_logistfit(PyObject* X, PyObject* Y, PyObject* LimitObj);
+EXTERN PyObject* c_fit_logfit(
+	PyObject* X, 
+	PyObject* Y);
 
-EXTERN PyObject* c_fit_powfit(PyObject* X, PyObject* Y);
 
-EXTERN PyObject* c_fit_spline(PyObject* X, PyObject* Y);
+EXTERN PyObject* c_fit_logistfit(
+	PyObject* X, 
+	PyObject* Y, 
+	PyObject* LimitObj);
+
+
+EXTERN PyObject* c_fit_powfit(
+	PyObject* X, 
+	PyObject* Y);
+
+
+EXTERN PyObject* c_fit_spline(
+	PyObject* X, 
+	PyObject* Y);
 
 
 
 /*******************************   INTEGRATION   ****************************************/
-EXTERN PyObject* c_integ_simpson(PyObject* X, PyObject* Y);
+EXTERN PyObject* c_integ_simpson(
+	PyObject* X, 
+	PyObject* Y);
 
 EXTERN PyObject* c_integ_romberg(
 	PyObject* FuncObj,
