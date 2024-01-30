@@ -227,7 +227,7 @@ import numpy as np
 import scisuit.plot as plt
 
 
-T = [0, 20, 100] #temperatures
+measurement = [0, 20, 100] #temperatures
 
 #Energy absorbed at different temperatures
 data = np.array([
@@ -240,9 +240,9 @@ mean  = np.mean(data, axis=1)
 std = np.std(data, axis=1, ddof=1)
 se = std/ math.sqrt(data.shape[1])
 
-plt.scatter(x=T, y=mean)
-for i in range(len(T)):
-	x1 = T[i]
+plt.scatter(x = measurement, y = mean)
+for i in range(len(measurement)):
+	x1 = measurement[i]
 	x2 = x1
 	y1, y2 = mean[i] + se[i], mean[i] - se[i]
 	plt.plot(
