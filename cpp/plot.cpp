@@ -34,14 +34,14 @@ static wxApp* s_APP = nullptr;
 static CFrmPythonPlot* s_CurPlotWnd = nullptr;
 static std::list< CFrmPythonPlot*> s_PlotWndList;
 
-
-
-#define MAKE_BAR_LINE_CHART(TYPE) \
-	if (!s_CurPlotWnd){ \
-		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!");\
-		frmPlot = new CFrmPythonPlot(nullptr); \
-		auto ChartBase = std::make_unique<TYPE>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());\
-		frmPlot->SetChart(std::move(ChartBase));\
+#define MAKE_BAR_LINE_CHART(TYPE)                                                 \
+	if (!s_CurPlotWnd)                                                            \
+	{                                                                             \
+		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); \
+		frmPlot = new CFrmPythonPlot(nullptr);                                    \
+		auto Rect = frmPlot->GetClientRect(); \
+		auto ChartBase = std::make_unique<TYPE>(frmPlot, Rect); \
+		frmPlot->SetChart(std::move(ChartBase)); \
 		s_CurPlotWnd = frmPlot;\
 	}\
 	else{\
@@ -268,7 +268,8 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CBoxWhiskerChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -375,7 +376,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CHistogramChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CHistogramChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -617,7 +619,8 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CPieChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CPieChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -767,7 +770,8 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -841,7 +845,8 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -924,7 +929,8 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CQuiverChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CQuiverChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -994,7 +1000,8 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
@@ -1105,7 +1112,8 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPythonPlot(nullptr);
-			auto ChartBase = std::make_unique<CBubbleChart>(frmPlot, wxPoint(0, 0), frmPlot->GetClientSize());
+			auto Rect = frmPlot->GetClientRect();
+			auto ChartBase = std::make_unique<CBubbleChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
 
 			s_CurPlotWnd = frmPlot;
