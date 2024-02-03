@@ -8,16 +8,13 @@
 #include <core/dtypes/array.h>
 #include <core/dtypes/datatable.h>
 
-#include <plotter/charts/bubblechart.h>
+#include <plotter/charts/scatterchart.h>
 #include <plotter/charts/barchart.h>
 #include <plotter/charts/boxwhiskerchart.h>
 #include <plotter/charts/histogramchart.h>
 #include <plotter/charts/linechart.h>
 #include <plotter/charts/piechart.h>
-#include <plotter/charts/quiverchart.h>
-#include <plotter/charts/psychrometricchart.h>
 
-#include <plotter/series/qqseries.h>
 
 #include <plotter/windows/frmsingleplot.h>
 #include <plotter/elems/chartelement.h>

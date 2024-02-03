@@ -8,7 +8,7 @@
 #include <wx/wx.h>
 
 #include <plotter/charts/chartbase.h>
-#include <plotter/charts/scatterchartbase.h>
+#include <plotter/charts/scatterchart.h>
 
 #include <plotter/windows/frmsingleplot.h>
 #include <plotter/elems/chartelement.h>
