@@ -28,14 +28,14 @@
 using namespace charts;
 
 static wxApp* s_APP = nullptr;
-static CFrmPythonPlot* s_CurPlotWnd = nullptr;
-static std::list< CFrmPythonPlot*> s_PlotWndList;
+static CFrmPlot* s_CurPlotWnd = nullptr;
+static std::list< CFrmPlot*> s_PlotWndList;
 
 #define MAKE_BAR_LINE_CHART(TYPE)                                                 \
 	if (!s_CurPlotWnd)                                                            \
 	{                                                                             \
 		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); \
-		frmPlot = new CFrmPythonPlot(nullptr);                                    \
+		frmPlot = new CFrmPlot(nullptr);                                    \
 		auto Rect = frmPlot->GetClientRect(); \
 		auto ChartBase = std::make_unique<TYPE>(frmPlot, Rect); \
 		frmPlot->SetChart(std::move(ChartBase)); \
@@ -83,7 +83,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		if (StyleObj != Py_None)
 			Type = CheckString(StyleObj, "style must be string.");
 
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 
 		if (Type == "c") {
 			MAKE_BAR_LINE_CHART(CBarVertClusterChart);
@@ -184,7 +184,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 		}
 
 
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 
 		if (Type == "c") {
 			MAKE_BAR_LINE_CHART(CBarHorizClusterChart);
@@ -260,11 +260,11 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -369,10 +369,10 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		}
 
 			
-		CFrmPythonPlot* frmPlot{ nullptr };
+		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CHistogramChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -473,7 +473,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 			Style = CheckString(StyleObj, "type must be string.");
 
 
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 			
 		if (Style == "c") {
 			MAKE_BAR_LINE_CHART(CLineClusterChart);
@@ -612,10 +612,10 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		}
 
 
-		CFrmPythonPlot* frmPlot{ nullptr };
+		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CPieChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -721,7 +721,7 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 			IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values.");
 		}
 
-		auto frmPlot = new CFrmPythonPlot(nullptr);
+		auto frmPlot = new CFrmPlot(nullptr);
 		auto PsyChart = std::make_unique<charts::CPsychrometricChart>(frmPlot, Tdb, RH, P);
 		frmPlot->SetChart(std::move(PsyChart));
 
@@ -763,10 +763,10 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 			LineShown = CheckBool(ShowObj, "show must be bool.");
 
 			
-		CFrmPythonPlot* frmPlot{ nullptr };
+		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -838,10 +838,10 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPythonPlot* frmPlot{ nullptr };
+		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -922,10 +922,10 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPythonPlot* frmPlot{ nullptr };
+		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CQuiverChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -992,11 +992,11 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -1104,11 +1104,11 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPythonPlot* frmPlot = nullptr;
+		CFrmPlot* frmPlot = nullptr;
 
 		if (!s_CurPlotWnd)
 		{
-			frmPlot = new CFrmPythonPlot(nullptr);
+			frmPlot = new CFrmPlot(nullptr);
 			auto Rect = frmPlot->GetClientRect();
 			auto ChartBase = std::make_unique<CBubbleChart>(frmPlot, Rect);
 			frmPlot->SetChart(std::move(ChartBase));
@@ -1310,12 +1310,12 @@ bool c_plot_mainloop(bool sharedLoop)
 	if (!s_APP)
 		return true;
 
-	CFrmPythonPlot::SetApp(s_APP);
+	CFrmPlot::SetApp(s_APP);
 
 	if (!sharedLoop)
-		CFrmPythonPlot::SetCloseMode(CFrmPythonPlot::CLOSEMODE::NORMAL);
+		CFrmPlot::SetCloseMode(CFrmPlot::CLOSE::NORMAL);
 	else
-		CFrmPythonPlot::SetCloseMode(CFrmPythonPlot::CLOSEMODE::HIDE_DESTROY);
+		CFrmPlot::SetCloseMode(CFrmPlot::CLOSE::HIDE_DESTROY);
 
 
 	if (!s_APP->IsMainLoopRunning())

@@ -269,8 +269,6 @@ z = (x - n*p)/math.sqrt(n*p*(1-p))
 #DeMoivre's equation
 f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
-print(isinstance(z[0], float))
-
 #Density scaled histogram
 plt.histogram(z, mode = plt.HIST_DENSITY)
 
