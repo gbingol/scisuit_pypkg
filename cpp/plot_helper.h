@@ -56,7 +56,7 @@ static bool CheckBool(PyObject* Obj, const char* ErrMsg)
 static std::pair<wxColor, std::string> StringToColor(PyObject* Obj)
 {
 	if (!PyUnicode_Check(Obj))
-		return std::make_pair(wxNullColour, "color values must be type string");
+		return std::make_pair(wxNullColour, "color must be string.");
 
 	std::string ColorStr = PyUnicode_AsUTF8(Obj);
 	std::stringstream ss(ColorStr);
@@ -66,13 +66,13 @@ static std::pair<wxColor, std::string> StringToColor(PyObject* Obj)
 	while (ss >> c)
 	{
 		if (c > 255 || c < 0)
-			return std::make_pair(wxNullColour, "RGB components must be in [0, 255].");
+			return std::make_pair(wxNullColour, "RGB must be in [0, 255].");
 
 		rgb.push_back(c);
 	}
 
 	if (rgb.size() != 3)
-		return std::make_pair(wxNullColour, "Ill-formed color components.");
+		return std::make_pair(wxNullColour, "Ill-formed color.");
 
 	return std::make_pair(wxColor(rgb[0], rgb[1], rgb[2]), "");
 }
@@ -117,16 +117,16 @@ static std::vector<int> ExplodeDataPoints(PyObject* Obj)
 {
 	PyObject* iterator = PyObject_GetIter(Obj);
 	if (!iterator)
-		throw std::exception("An iterable object expected");
+		throw std::exception("An iterable object expected.");
 
 	std::vector<int> DP;
 	PyObject* item{ nullptr };
 	while ((item = PyIter_Next(iterator)) != nullptr)
 	{
-		int Value = CheckInt(item, "explode must contain only integer items");
+		int Value = CheckInt(item, "explode must contain only integer items.");
 
 		if (Value < 0 || Value>10)
-			throw std::exception("explode point: [0, 10] expected");
+			throw std::exception("explode point: [0, 10] expected.");
 
 		DP.push_back(Value);
 
@@ -164,7 +164,7 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 
 		else if (ObjValue != Py_None && key == "width")
 		{
-			int Width = CheckInt(ObjValue, "width must be type int");
+			int Width = CheckInt(ObjValue, "width must be int.");
 			if (Width < 0)
 				throw std::exception("Width of the line must be int and >0.");
 
@@ -173,7 +173,7 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 
 		else if (ObjValue != Py_None && key == "style")
 		{
-			int Style = CheckInt(ObjValue, "pen style must be type int");
+			int Style = CheckInt(ObjValue, "pen style must be int.");
 			pen.SetStyle((wxPenStyle)Style);
 		}
 	}	
@@ -202,7 +202,7 @@ static void PrepareBrush(PyObject* Dict, wxBrush& brush)
 
 		else if (ObjValue != Py_None && key == "style")
 		{
-			auto Style = CheckInt(ObjValue, "brush style must be type int");
+			auto Style = CheckInt(ObjValue, "brush style must be int.");
 			brush.SetStyle((wxBrushStyle)Style);
 		}
 	}
@@ -239,7 +239,7 @@ static void PrepareMarker(PyObject* Dict, charts::CSeriesBase* Series)
 
 		else if (ObjValue != Py_None && key == "size")
 		{
-			int Size = CheckInt(ObjValue, "'size' must be type int.");
+			int Size = CheckInt(ObjValue, "'size' must be int.");
 			if (Size <= 0)
 				throw std::exception("'size'>0 expected.");
 			Series->SetMarkerSize(Size);
@@ -298,13 +298,13 @@ static void PrepareTrendline(
 			PreparePen(ObjValue, pen);
 
 		else if (key == "label")
-			Label = CheckString(ObjValue, "trendline name must be type string");
+			Label = CheckString(ObjValue, "trendline name must be string.");
 
 		else if (key == "show_stats")
-			show_stats = CheckBool(ObjValue, "'show_stats' must be bool");
+			show_stats = CheckBool(ObjValue, "'show_stats' must be bool.");
 
 		else if (key == "show_equation")
-			show_equation = CheckBool(ObjValue, "'show_equation' must be bool");
+			show_equation = CheckBool(ObjValue, "'show_equation' must be bool.");
 	}
 
 	std::shared_ptr<charts::CTrendline> tline = nullptr;
