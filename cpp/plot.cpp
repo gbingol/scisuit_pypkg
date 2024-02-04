@@ -955,7 +955,7 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 
 		series->PrepareForDrawing();
 		Chart->AddSeries(std::move(series));
-		Chart->ChartBoundsChanged();
+		Chart->BoundsChanged();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 

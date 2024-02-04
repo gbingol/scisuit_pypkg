@@ -27,6 +27,9 @@ extern PyTypeObject PythPoly_Type;
 
 
 
+DLLPYBIND bool IsNumpyInt(PyObject* obj);
+DLLPYBIND bool IsNumpyFloat(PyObject* obj);
+
 //extract real number (float or integer) from obj
 DLLPYBIND std::optional<double> ExtractRealNumber(PyObject* obj);
 
