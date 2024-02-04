@@ -10,7 +10,6 @@
 #include <plotter/charts/chartbase.h>
 #include <plotter/charts/scatterchart.h>
 
-#include <plotter/windows/frmsingleplot.h>
 #include <plotter/elems/chartelement.h>
 #include <plotter/elems/trendline.h>
 
@@ -18,16 +17,16 @@
 
 static std::wstring CheckString(PyObject* Obj, const char* ErrMsg)
 {
-	if (PyUnicode_Check(Obj))
-		return PyUnicode_AsWideCharString(Obj, nullptr);
-	else
+	if (!PyUnicode_Check(Obj))
 		throw std::exception(ErrMsg);
+
+	return PyUnicode_AsWideCharString(Obj, nullptr);		
 }
 
 
 static int CheckInt(PyObject* Obj, const char* ErrMsg)
 {
-	if (PyLong_CheckExact(Obj) == false)
+	if (!PyLong_CheckExact(Obj))
 		throw std::exception(ErrMsg);
 
 	return PyLong_AsLong(Obj);
@@ -36,7 +35,7 @@ static int CheckInt(PyObject* Obj, const char* ErrMsg)
 
 static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 {
-	if (IsExactTypeRealNumber((Obj)) == false)
+	if (!IsExactTypeRealNumber(Obj))
 		throw std::exception(ErrMsg);
 
 	return ExtractRealNumber(Obj).value();
@@ -46,7 +45,7 @@ static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 
 static bool CheckBool(PyObject* Obj, const char* ErrMsg)
 {
-	if (IsExactTypeBool((Obj)) == false)
+	if (!IsExactTypeBool(Obj))
 		throw std::exception(ErrMsg);
 
 	return PyObject_IsTrue(Obj);
@@ -59,24 +58,21 @@ static std::pair<wxColor, std::string> StringToColor(PyObject* Obj)
 	if (!PyUnicode_Check(Obj))
 		return std::make_pair(wxNullColour, "color values must be type string");
 
-	std::vector<int> rgb;
-
 	std::string ColorStr = PyUnicode_AsUTF8(Obj);
-
 	std::stringstream ss(ColorStr);
 
+	std::vector<int> rgb;
 	int c;
 	while (ss >> c)
 	{
 		if (c > 255 || c < 0)
-			return std::make_pair(wxNullColour, "RGB components must be in [0, 255]");
+			return std::make_pair(wxNullColour, "RGB components must be in [0, 255].");
 
 		rgb.push_back(c);
 	}
 
 	if (rgb.size() != 3)
-		return std::make_pair(wxNullColour, "Ill-formed color components");
-
+		return std::make_pair(wxNullColour, "Ill-formed color components.");
 
 	return std::make_pair(wxColor(rgb[0], rgb[1], rgb[2]), "");
 }
@@ -96,12 +92,11 @@ static wxColor CheckColor(PyObject* Obj)
 
 static std::vector<wxColor> CheckColors(PyObject* Obj)
 {
-	std::vector<wxColor> retColors;
-
 	PyObject* iterator = PyObject_GetIter(Obj);
 	if (!iterator)
-		throw std::exception("An iterable object expected");
+		throw std::exception("An iterable object expected.");
 
+	std::vector<wxColor> retColors;
 	PyObject* item{ nullptr };
 	while ((item = PyIter_Next(iterator)) != nullptr)
 	{
@@ -120,12 +115,11 @@ static std::vector<wxColor> CheckColors(PyObject* Obj)
 
 static std::vector<int> ExplodeDataPoints(PyObject* Obj)
 {
-	std::vector<int> DP;
-
 	PyObject* iterator = PyObject_GetIter(Obj);
 	if (!iterator)
 		throw std::exception("An iterable object expected");
 
+	std::vector<int> DP;
 	PyObject* item{ nullptr };
 	while ((item = PyIter_Next(iterator)) != nullptr)
 	{

@@ -16,7 +16,7 @@
 #include <plotter/charts/piechart.h>
 
 
-#include <plotter/windows/frmsingleplot.h>
+#include <plotter/windows/frmplot.h>
 #include <plotter/elems/chartelement.h>
 #include <plotter/elems/trendline.h>
 
