@@ -81,7 +81,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		}
 
 		if (StyleObj != Py_None)
-			Type = CheckString(StyleObj, "style must be type string");
+			Type = CheckString(StyleObj, "style must be string.");
 
 		CFrmPythonPlot* frmPlot = nullptr;
 
@@ -101,7 +101,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		}
 		else
 		{
-			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and %-stacked");
+			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
 			return nullptr;
 		}
 
@@ -175,12 +175,12 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 		if (TypeObj != Py_None)
 		{
-			Type = CheckString(TypeObj, "type must be type string");
+			Type = CheckString(TypeObj, "type must be string.");
 
 			std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
 
 			bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
-			IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked");
+			IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
 		}
 
 
@@ -297,7 +297,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 		}
 
 		if (NameObj != Py_None)
-			series->SetName(CheckString(NameObj, "name must be type string"));
+			series->SetName(CheckString(NameObj, "name must be string."));
 
 		BW_Chrt->AddSeries(std::move(series));
 	}
@@ -333,12 +333,12 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	std::variant<std::monostate, std::vector<double>, int> Breaks;
 
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element");
+	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element.");
 	try
 	{
 		if (ModeObj != Py_None)
 		{
-			auto distmode = CheckString(ModeObj, "mode must be type string");
+			auto distmode = CheckString(ModeObj, "mode must be string.");
 
 			if (distmode == "d") BinMode = CHistogramSeries::Mode::Density;
 			else if (distmode == "f") BinMode = CHistogramSeries::Mode::Frequency;
@@ -347,7 +347,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 		if (CumulObj != Py_None)
 		{
-			IsCumulative = CheckBool(CumulObj, "cumulative must be type bool");
+			IsCumulative = CheckBool(CumulObj, "cumulative must be bool.");
 		}
 
 		if (BreaksObj != Py_None)
@@ -355,14 +355,14 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 			if (PyLong_CheckExact(BreaksObj))
 			{
 				int Brk = PyLong_AsLong(BreaksObj);
-				CHECKPOSITIVE_RET(Brk, "breaks, if int then must be >0");
+				CHECKPOSITIVE_RET(Brk, "breaks, if int then must be >0 .");
 
 				Breaks = Brk;
 			}
 			else
 			{
 				auto Brk = Iterable_As1DVector(BreaksObj);
-				IF_PYERRVALUE_RET(Brk.size() == 0, "breaks do not contain any valid number");
+				IF_PYERRVALUE_RET(Brk.size() == 0, "breaks do not contain any valid number.");
 
 				Breaks = std::move(Brk);
 			}
@@ -411,7 +411,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		if (std::holds_alternative<std::vector<double>>(Breaks))
 		{
 			const auto& v = std::get<std::vector<double>>(Breaks);
-			IF_PYERRRUNTIME_RET(series->SetBreakPoints(v) == false, "Invalid break points");
+			IF_PYERRRUNTIME_RET(series->SetBreakPoints(v) == false, "Invalid break points.");
 		}
 
 		else if (std::holds_alternative<int>(Breaks))
@@ -419,7 +419,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 			int NBins = std::get<int>(Breaks) + 1;
 			IF_PYERRRUNTIME_RET(NBins <= 0, "Number of breaks >0 expected");
 
-			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks");
+			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
 		}
 
 		series->PrepareForDrawing();
@@ -461,7 +461,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 	try
 	{
 		if (NameObj != Py_None)
-			Name = CheckString(NameObj, "name must be type string");
+			Name = CheckString(NameObj, "name must be string.");
 
 		if (LabelsObj != Py_None)
 		{
@@ -470,7 +470,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		}
 
 		if (StyleObj != Py_None)
-			Style = CheckString(StyleObj, "type must be type string");
+			Style = CheckString(StyleObj, "type must be string.");
 
 
 		CFrmPythonPlot* frmPlot = nullptr;
@@ -665,7 +665,7 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		{
 			for (size_t i = 0; i < Explode.size(); ++i)
 			{
-				IF_PYERRRUNTIME_RET(PieSeries->ExplodeNthDataPoint(i, Explode[i]) == false, "Cannot explode data point");
+				IF_PYERRRUNTIME_RET(PieSeries->ExplodeNthDataPoint(i, Explode[i]) == false, "Cannot explode data point.");
 			}
 		}
 
@@ -718,7 +718,7 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 		if (RHObj && RHObj != Py_None)
 		{
 			RH = Iterable_As1DVector(RHObj);
-			IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values");
+			IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values.");
 		}
 
 		auto frmPlot = new CFrmPythonPlot(nullptr);
@@ -754,13 +754,13 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(DataObj);
 
-	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element");
-	IF_PYERRVALUE_RET(Data.size() < 2, "data must contain at least 2 numeric values");
+	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element.");
+	IF_PYERRVALUE_RET(Data.size() < 2, "data must contain at least 2 numeric values.");
 
 	try
 	{
 		if (ShowObj != Py_None)
-			LineShown = CheckBool(ShowObj, "show must be type bool");
+			LineShown = CheckBool(ShowObj, "show must be bool.");
 
 			
 		CFrmPythonPlot* frmPlot{ nullptr };
@@ -829,12 +829,12 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 	CScatterChart* QQChart = nullptr;
 
 	auto DataX = Iterable_As1DVector(XObj);
-	IF_PYERRVALUE_RET(DataX.size() == 0, "x does not have any valid element");
-	IF_PYERRVALUE_RET(DataX.size() < 2, "x must contain at least 2 numeric values");
+	IF_PYERRVALUE_RET(DataX.size() == 0, "x does not have any valid element.");
+	IF_PYERRVALUE_RET(DataX.size() < 2, "x must contain at least 2 numeric values.");
 
 	auto DataY = Iterable_As1DVector(YObj);
-	IF_PYERRVALUE_RET(DataY.size() == 0, "y does not have any valid element");
-	IF_PYERRVALUE_RET(DataY.size() < 2, "y must contain at least 2 numeric values");
+	IF_PYERRVALUE_RET(DataY.size() == 0, "y does not have any valid element.");
+	IF_PYERRVALUE_RET(DataY.size() < 2, "y must contain at least 2 numeric values.");
 
 	try
 	{
@@ -853,8 +853,8 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 
 		QQChart = ((CScatterChart*)frmPlot->GetChart());
 
-		IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid");
-		IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid");
+		IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid.");
+		IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid.");
 
 		auto DataTable = std::make_unique<core::CRealDataTable>();
 		auto ColX = std::make_shared<core::CRealColData>(DataX);
@@ -938,7 +938,7 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		Chart = ((CQuiverChart*)frmPlot->GetChart());
 
 		if (ScaleObj != Py_None)
-			IsScaled = CheckBool(ScaleObj, "scale must be boolean");
+			IsScaled = CheckBool(ScaleObj, "scale must be boolean.");
 
 		Chart->SetScaled(IsScaled);
 
@@ -1018,7 +1018,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 		bool IsSmooth = false;
 		if (SmoothObj && SmoothObj != Py_None)
-			IsSmooth = CheckBool(SmoothObj, "smooth must be bool type");
+			IsSmooth = CheckBool(SmoothObj, "smooth must be bool.");
 
 			
 		bool MarkerDef = MarkerObj && MarkerObj != Py_None;
@@ -1145,7 +1145,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		{
 			auto mode = charts::CBubbleSeries::SIZEMODE::AREA;
 
-			auto s = CheckString(ModeObj, "mode must be type string");
+			auto s = CheckString(ModeObj, "mode must be string.");
 			if (s == "w" || s == "W")
 				mode = charts::CBubbleSeries::SIZEMODE::WIDTH;
 				
@@ -1223,7 +1223,7 @@ void c_plot_title(PyObject* TitleObj )
 	if (TitleObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
-	auto Title = CheckString(TitleObj, "title must be type string");
+	auto Title = CheckString(TitleObj, "title must be string.");
 
 	auto Chart = s_CurPlotWnd->GetChart();
 
@@ -1243,7 +1243,7 @@ void c_plot_xlabel(PyObject* xlblObj)
 	if (xlblObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
-	auto XLabel = CheckString(xlblObj, "xlab must be type string");
+	auto XLabel = CheckString(xlblObj, "xlab must be string.");
 
 	auto Chart = s_CurPlotWnd->GetChart();
 
@@ -1263,7 +1263,7 @@ void c_plot_ylabel(PyObject* YlabObj)
 	if (YlabObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
-	auto YLabel = CheckString(YlabObj, "ylab must be type string");
+	auto YLabel = CheckString(YlabObj, "ylab must be string.");
 
 	auto Chart = s_CurPlotWnd->GetChart();
 	auto TextBox = Chart->GetVertAxisTitle();
