@@ -222,36 +222,61 @@ def scatter_quiver():
 
 
 
+def scatter_errorbar():
+
+	import math
+	import numpy as np
+	import scisuit.plot as plt
+
+
+	measurement = [0, 20, 100] #temperatures
+
+	#Energy absorbed at different temperatures
+	data = np.array([
+		[52, 58, 82, 35, 84], #0C
+		[48, 66, 74, 86, 78], #20
+		[73.5, 82, 72, 80, 79] #100C
+	])
+
+	mean  = np.mean(data, axis=1)
+	std = np.std(data, axis=1, ddof=1)
+	se = std/ math.sqrt(data.shape[1])
+
+	plt.scatter(x = measurement, y = mean)
+	for i in range(len(measurement)):
+		x1 = measurement[i]
+		x2 = x1
+		y1, y2 = mean[i] + se[i], mean[i] - se[i]
+		plt.plot(
+			x=[x1, x2], 
+			y=[y1, y2], 
+			color = plt.Color.BLACK, 
+			style = plt.PEN_LONGDASH,
+			width=2)
+
 import math
-import numpy as np
-import scisuit.plot as plt
+from scisuit.stats import rbinom
 
+n=60
+p=0.4
 
-measurement = [0, 20, 100] #temperatures
+#Generate random numbers from a binomial distribution
+x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
 
-#Energy absorbed at different temperatures
-data = np.array([
-	[52, 58, 82, 35, 84], #0C
-	[48, 66, 74, 86, 78], #20
-	[73.5, 82, 72, 80, 79] #100C
-])
+#z-ratio
+z = (x - n*p)/math.sqrt(n*p*(1-p))
 
-mean  = np.mean(data, axis=1)
-std = np.std(data, axis=1, ddof=1)
-se = std/ math.sqrt(data.shape[1])
+#DeMoivre's equation
+f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
-plt.scatter(x = measurement, y = mean)
-for i in range(len(measurement)):
-	x1 = measurement[i]
-	x2 = x1
-	y1, y2 = mean[i] + se[i], mean[i] - se[i]
-	plt.plot(
-		x=[x1, x2], 
-		y=[y1, y2], 
-		color = plt.Color.BLACK, 
-		style = plt.PEN_LONGDASH,
-		width=2)
+print(isinstance(z[0], float))
 
+#Density scaled histogram
+plt.histogram(z, mode = plt.HIST_DENSITY)
+
+#Overlay scatter plot
+plt.scatter(x=z, y=f)
 plt.show()
+
 
 
