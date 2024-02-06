@@ -385,11 +385,17 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		auto Rect = frmPlot->GetClientRect();
 		auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
 
+		CHistogramChart *Chart = nullptr;
+		if(frmPlot->GetActiveChart())
+			Chart = (CHistogramChart*)frmPlot->GetActiveChart();
+		else
+			Chart = Histogram.get();
+
 		auto NumData = std::make_shared<core::CRealColData>(Data);
 		auto DataTbl = std::make_unique<core::CRealDataTable>();
 		DataTbl->append_col(NumData);
 
-		auto series = std::make_unique<CHistogramSeries>(Histogram.get(), std::move(DataTbl));
+		auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl));
 
 		wxPen Pen = series->GetPen();
 		if (LineObj != Py_None)
@@ -424,7 +430,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		}
 
 		series->PrepareForDrawing();
-		Histogram->AddSeries(std::move(series), false);
+		Chart->AddSeries(std::move(series), false);
 
 		frmPlot->AddChart(std::move(Histogram));
 	}
@@ -1000,7 +1006,16 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 		auto Rect = frmPlot->GetClientRect();
 		auto ScatterChrt = std::make_unique<CScatterChart>(frmPlot, Rect);
-		auto series = std::make_unique<CScatterSeries>(ScatterChrt.get(), std::move(DTbl));
+		
+		CScatterChart *Chart = nullptr;
+		if(frmPlot->GetActiveChart())
+			Chart = (CScatterChart*)frmPlot->GetActiveChart();
+		else
+			Chart = ScatterChrt.get();
+
+		std::cout << frmPlot->GetActiveChart() << std::endl;
+
+		auto series = std::make_unique<CScatterSeries>(Chart, std::move(DTbl));
 
 		bool IsSmooth = false;
 		if (SmoothObj && SmoothObj != Py_None)
@@ -1040,7 +1055,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			
 
 		if (TrendObj && TrendObj != Py_None)
-			PrepareTrendline(TrendObj, ScatterChrt->GetNextColor(), series.get());
+			PrepareTrendline(TrendObj, Chart->GetNextColor(), series.get());
 			 
 		if (NameObj && PyUnicode_Check(NameObj))
 		{
@@ -1048,7 +1063,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			series->SetName(SeriesName);
 		}
 
-		ScatterChrt->AddSeries(std::move(series));
+		Chart->AddSeries(std::move(series));
 
 		frmPlot->AddChart(std::move(ScatterChrt));
 	}
