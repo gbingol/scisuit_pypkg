@@ -31,30 +31,12 @@ static wxApp* s_APP = nullptr;
 static CFrmPlot* s_CurPlotWnd = nullptr;
 static std::list< CFrmPlot*> s_PlotWndList;
 
-#define MAKE_BAR_LINE_CHART(TYPE)                                                 \
-	if (!s_CurPlotWnd)                                                            \
-	{                                                                             \
-		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); \
-		frmPlot = new CFrmPlot(nullptr);                                    \
-		auto Rect = frmPlot->GetClientRect(); \
-		auto ChartBase = std::make_unique<TYPE>(frmPlot, Rect); \
-		frmPlot->SetChart(std::move(ChartBase)); \
-		s_CurPlotWnd = frmPlot;\
-	}\
-	else{\
-		frmPlot = s_CurPlotWnd;\
-	}
-
-
-
 
 
 
 
 PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 {
-	CBarVertChart* ColChrt = nullptr;
-
 	core::CArray LabelData;
 		
 	//Default type is clustered
@@ -72,6 +54,46 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(HeightObj);
 
+	CFrmPlot* frmPlot{ nullptr };
+	if (!s_CurPlotWnd) {  
+		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
+		frmPlot = new CFrmPlot(nullptr);  
+		s_CurPlotWnd = frmPlot;
+	}
+	else{
+		frmPlot = s_CurPlotWnd;
+	}
+
+	auto Rect = frmPlot->GetClientRect(); 
+
+	CBarVertChart *ColChrt{nullptr};
+
+	if (Type == "c") {
+		auto ChartBase = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
+		ColChrt = (CBarVertClusterChart*)ChartBase.get();
+
+		frmPlot->AddChart(std::move(ChartBase)); 
+	}
+
+	else if (Type == "s") {
+		auto ChartBase = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
+		ColChrt = (CBarVertStkChart*)ChartBase.get();
+
+		frmPlot->AddChart(std::move(ChartBase)); 
+	}
+
+	else if (Type == "%") {
+		auto ChartBase = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
+		ColChrt = (CBarVertPerStkChart*)ChartBase.get();
+
+		frmPlot->AddChart(std::move(ChartBase)); 
+	}
+	else
+	{
+		PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
+		return nullptr;
+	}
+
 	try
 	{
 		if (LabelsObj != Py_None)
@@ -81,29 +103,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		}
 
 		if (StyleObj != Py_None)
-			Type = CheckString(StyleObj, "style must be string.");
-
-		CFrmPlot* frmPlot = nullptr;
-
-		if (Type == "c") {
-			MAKE_BAR_LINE_CHART(CBarVertClusterChart);
-			ColChrt = ((CBarVertClusterChart*)frmPlot->GetChart());
-		}
-
-		else if (Type == "s") {
-			MAKE_BAR_LINE_CHART(CBarVertStkChart);
-			ColChrt = ((CBarVertStkChart*)frmPlot->GetChart());
-		}
-
-		else if (Type == "%") {
-			MAKE_BAR_LINE_CHART(CBarVertPerStkChart);
-			ColChrt = ((CBarVertPerStkChart*)frmPlot->GetChart());
-		}
-		else
-		{
-			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-			return nullptr;
-		}
+			Type = CheckString(StyleObj, "style must be string.");		
 
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
@@ -121,6 +121,12 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		else if (Type == "%")
 			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)ColChrt, std::move(DataTbl));
 
+		else
+		{
+			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
+			return nullptr;
+		}
+
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
 			PreparePen(LineObj, Pen);
@@ -134,6 +140,8 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 		auto UniqueSeries = std::unique_ptr<CBarVertSeries>(Series);
 		ColChrt->AddSeries(std::move(UniqueSeries));
+
+		
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -146,8 +154,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 {
-	CBarHorizChart* BarHorChart = nullptr;
-
+	/*
 	core::CArray LabelData;
 		
 	//Default type is clustered
@@ -164,7 +171,19 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	}
 
 	auto Data = Iterable_As1DVector(WidthObj);
+	CFrmPlot* frmPlot{ nullptr };
+	if (!s_CurPlotWnd) {  
+		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
+		frmPlot = new CFrmPlot(nullptr);  
+		s_CurPlotWnd = frmPlot;
+	}
+	else{
+		frmPlot = s_CurPlotWnd;
+	}
 
+	auto Rect = frmPlot->GetClientRect(); 
+	auto ChartBase = std::make_unique<CBarHorizChart>(frmPlot, Rect);
+	
 	try
 	{
 		if (LabelsObj != Py_None)
@@ -184,23 +203,6 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 		}
 
 
-		CFrmPlot* frmPlot = nullptr;
-
-		if (Type == "c") {
-			MAKE_BAR_LINE_CHART(CBarHorizClusterChart);
-			BarHorChart = ((CBarHorizClusterChart*)frmPlot->GetChart());
-		}
-
-		else if (Type == "s") {
-			MAKE_BAR_LINE_CHART(CBarHorizStkChart);
-			BarHorChart = ((CBarHorizStkChart*)frmPlot->GetChart());
-		}
-
-		else if (Type == "%") {
-			MAKE_BAR_LINE_CHART(CBarHorizPerStkChart);
-			BarHorChart = ((CBarHorizPerStkChart*)frmPlot->GetChart());
-		}
-
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
 		auto DataTbl = std::make_unique<core::CGenericDataTable>();
@@ -209,13 +211,13 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 		CBarHorizSeries* Series = nullptr;
 		if (Type == "c")
-			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)BarHorChart, std::move(DataTbl));
+			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)ChartBase.get(), std::move(DataTbl));
 
 		else if (Type == "s")
-			Series = new CBarHorizStkSeries((CBarHorizStkChart*)BarHorChart, std::move(DataTbl));
+			Series = new CBarHorizStkSeries((CBarHorizStkChart*)ChartBase.get(), std::move(DataTbl));
 
 		else if (Type == "%")
-			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)BarHorChart, std::move(DataTbl));
+			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)ChartBase.get(), std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
@@ -230,9 +232,13 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 
 		auto UniqueSeries = std::unique_ptr<CBarHorizSeries>(Series);
-		BarHorChart->AddSeries(std::move(UniqueSeries));
+		ChartBase->AddSeries(std::move(UniqueSeries));
+
+		frmPlot->AddChart(std::move(ChartBase));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
+
+	*/
 
 	Py_RETURN_NONE;
 }
@@ -261,26 +267,22 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	try
 	{
 		CFrmPlot* frmPlot = nullptr;
-
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		BW_Chrt = ((CBoxWhiskerChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
 
 		auto DataTbl = std::make_unique<core::CRealDataTable>();
 		auto NumData = std::make_shared<core::CRealColData>(Data);
 		DataTbl->append_col(NumData);
 
-		auto series = std::make_unique<CBoxWhiskerSeries>(BW_Chrt, std::move(DataTbl));
+		auto series = std::make_unique<CBoxWhiskerSeries>(BW_Chrt.get(), std::move(DataTbl));
 
 		if (LineObj != Py_None)
 		{
@@ -300,6 +302,8 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 			series->SetName(CheckString(NameObj, "name must be string."));
 
 		BW_Chrt->AddSeries(std::move(series));
+
+		frmPlot->AddChart(std::move(BW_Chrt));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -373,22 +377,19 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CHistogramChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Histogram = ((CHistogramChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
 
 		auto NumData = std::make_shared<core::CRealColData>(Data);
 		auto DataTbl = std::make_unique<core::CRealDataTable>();
 		DataTbl->append_col(NumData);
 
-		auto series = std::make_unique<CHistogramSeries>(Histogram, std::move(DataTbl));
+		auto series = std::make_unique<CHistogramSeries>(Histogram.get(), std::move(DataTbl));
 
 		wxPen Pen = series->GetPen();
 		if (LineObj != Py_None)
@@ -424,6 +425,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 		series->PrepareForDrawing();
 		Histogram->AddSeries(std::move(series), false);
+
+		frmPlot->AddChart(std::move(Histogram));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -437,8 +440,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 {
-	CLineChartBase* LineChart = nullptr;
-
+	/*
 	core::CArray LabelData;
 
 	//Default type is clustered (unstacked)
@@ -457,6 +459,18 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(YObj);
 
+	CFrmPlot* frmPlot = nullptr;
+	if (!s_CurPlotWnd) {  
+		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
+		frmPlot = new CFrmPlot(nullptr);  
+		s_CurPlotWnd = frmPlot;
+	}
+	else{
+		frmPlot = s_CurPlotWnd;
+	}
+
+	auto Rect = frmPlot->GetClientRect(); 
+	auto ChartBase = std::make_unique<CLineChartBase>(frmPlot, Rect);
 		
 	try
 	{
@@ -471,24 +485,6 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 		if (StyleObj != Py_None)
 			Style = CheckString(StyleObj, "type must be string.");
-
-
-		CFrmPlot* frmPlot = nullptr;
-			
-		if (Style == "c") {
-			MAKE_BAR_LINE_CHART(CLineClusterChart);
-			LineChart = ((CLineClusterChart*)frmPlot->GetChart());
-		}
-
-		else if (Style == "s") {
-			MAKE_BAR_LINE_CHART(CStackedLineChart);
-			LineChart = ((CStackedLineChart*)frmPlot->GetChart());
-		}
-
-		else if (Style == "%") {
-			MAKE_BAR_LINE_CHART(CPercentStackedLineChart);
-			LineChart = ((CPercentStackedLineChart*)frmPlot->GetChart());
-		}
 
 
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
@@ -521,13 +517,13 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		szMarker = CSeriesBase::GetDefMarkerSize();
 
 		if (Style == "c")
-			Series = new CLineClusterSeries((CLineClusterChart*)LineChart, std::move(DataTbl), szMarker);
+			Series = new CLineClusterSeries((CLineClusterChart*)ChartBase.get(), std::move(DataTbl), szMarker);
 
 		else if (Style == "s")
-			Series = new CStackedLineSeries((CStackedLineChart*)LineChart, std::move(DataTbl), szMarker);
+			Series = new CStackedLineSeries((CStackedLineChart*)ChartBase.get(), std::move(DataTbl), szMarker);
 
 		else if (Style == "%")
-			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)LineChart, std::move(DataTbl), szMarker);
+			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)ChartBase.get(), std::move(DataTbl), szMarker);
 
 		if (!Name.empty())
 			Series->SetName(Name);
@@ -539,10 +535,13 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		PrepareMarker(MarkerObj, Series);
 
 		auto UniqueSeries = std::unique_ptr<CLineSeriesBase>(Series);
-		LineChart->AddSeries(std::move(UniqueSeries));
+		ChartBase->AddSeries(std::move(UniqueSeries));
+
+		frmPlot->AddChart(std::move(ChartBase));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
-
+	
+	*/
 	Py_RETURN_NONE;
 }
 
@@ -569,8 +568,6 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 	{
 		return nullptr;
 	}
-
-	CPieChart* PieChart = nullptr;
 
 	core::CArray Labels;
 	std::vector<wxColor> Colors;
@@ -616,16 +613,13 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CPieChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		PieChart = ((CPieChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto PieChart = std::make_unique<CPieChart>(frmPlot, Rect);
 			
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 
@@ -654,7 +648,7 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(LabelCol);
 		DataTbl->append_col(DataCol);
 
-		auto PieSeries = std::make_unique<CPieSeries>(PieChart, std::move(DataTbl));
+		auto PieSeries = std::make_unique<CPieSeries>(PieChart.get(), std::move(DataTbl));
 
 		if (Colors.size() > 0)
 			PieSeries->SetSliceColors(Colors);
@@ -678,6 +672,8 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		}
 
 		PieChart->AddSeries(std::move(PieSeries));
+
+		frmPlot->AddChart(std::move(PieChart));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -723,7 +719,7 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 
 		auto frmPlot = new CFrmPlot(nullptr);
 		auto PsyChart = std::make_unique<charts::CPsychrometricChart>(frmPlot, Tdb, RH, P);
-		frmPlot->SetChart(std::move(PsyChart));
+		frmPlot->AddChart(std::move(PsyChart));
 
 		s_CurPlotWnd = frmPlot;
 	}
@@ -749,7 +745,6 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	CScatterChart* QQChart = nullptr;
 	bool LineShown = true;
 
 	auto Data = Iterable_As1DVector(DataObj);
@@ -767,22 +762,19 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		QQChart = ((CScatterChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
 
 		auto ColX = std::make_shared<core::CRealColData>(Data);
 		auto DataTable = std::make_unique<core::CRealDataTable>();
 		DataTable->append_col(ColX);
 
-		auto series = std::make_unique<CQQSeries>(QQChart, std::move(DataTable));
+		auto series = std::make_unique<CQQSeries>(QQChart.get(), std::move(DataTable));
 
 		if (MarkerObj != Py_None)
 			PrepareMarker(MarkerObj, series.get());
@@ -804,6 +796,8 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 
 		series->PrepareForDrawing();
 		QQChart->AddSeries(std::move(series));
+
+		frmPlot->AddChart(std::move(QQChart));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -826,8 +820,6 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	CScatterChart* QQChart = nullptr;
-
 	auto DataX = Iterable_As1DVector(XObj);
 	IF_PYERRVALUE_RET(DataX.size() == 0, "x does not have any valid element.");
 	IF_PYERRVALUE_RET(DataX.size() < 2, "x must contain at least 2 numeric values.");
@@ -842,16 +834,13 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		QQChart = ((CScatterChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
 
 		IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid.");
 		IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid.");
@@ -861,13 +850,15 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 		auto ColY = std::make_shared<core::CRealColData>(DataY);
 		DataTable->append_col(ColX);
 		DataTable->append_col(ColY);
-		auto series = std::make_unique<CQQSeries>(QQChart, std::move(DataTable));
+		auto series = std::make_unique<CQQSeries>(QQChart.get(), std::move(DataTable));
 
 		if (MarkerObj != Py_None)
 			PrepareMarker(MarkerObj, series.get());
 
 		series->PrepareForDrawing();
 		QQChart->AddSeries(std::move(series));
+
+		frmPlot->AddChart(std::move(QQChart));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -890,7 +881,6 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	CQuiverChart* Chart = nullptr;
 	std::vector<double> DataX, DataY, DataU, DataV;
 	bool IsScaled = false;
 
@@ -926,21 +916,18 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CQuiverChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		Chart = ((CQuiverChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto Quiver = std::make_unique<CQuiverChart>(frmPlot, Rect);
 
 		if (ScaleObj != Py_None)
 			IsScaled = CheckBool(ScaleObj, "scale must be boolean.");
 
-		Chart->SetScaled(IsScaled);
+		Quiver->SetScaled(IsScaled);
 
 		auto DataTable = std::make_unique<core::CRealDataTable>();
 		auto ColX = std::make_shared<core::CRealColData>(DataX);
@@ -951,11 +938,13 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		DataTable->append_col(ColY);
 		DataTable->append_col(ColU);
 		DataTable->append_col(ColV);
-		auto series = std::make_unique<CQuiverSeries>(Chart, std::move(DataTable));
+		auto series = std::make_unique<CQuiverSeries>(Quiver.get(), std::move(DataTable));
 
 		series->PrepareForDrawing();
-		Chart->AddSeries(std::move(series));
-		Chart->BoundsChanged();
+		Quiver->AddSeries(std::move(series));
+		Quiver->BoundsChanged();
+
+		frmPlot->AddChart(std::move(Quiver));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -997,10 +986,6 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
@@ -1013,8 +998,9 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		DTbl->append_col(XData);
 		DTbl->append_col(YData);
 
-		auto Chart = ((CScatterChart*)frmPlot->GetChart());
-		auto series = std::make_unique<CScatterSeries>(Chart, std::move(DTbl));
+		auto Rect = frmPlot->GetClientRect();
+		auto ScatterChrt = std::make_unique<CScatterChart>(frmPlot, Rect);
+		auto series = std::make_unique<CScatterSeries>(ScatterChrt.get(), std::move(DTbl));
 
 		bool IsSmooth = false;
 		if (SmoothObj && SmoothObj != Py_None)
@@ -1054,7 +1040,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			
 
 		if (TrendObj && TrendObj != Py_None)
-			PrepareTrendline(TrendObj, Chart->GetNextColor(), series.get());
+			PrepareTrendline(TrendObj, ScatterChrt->GetNextColor(), series.get());
 			 
 		if (NameObj && PyUnicode_Check(NameObj))
 		{
@@ -1062,7 +1048,9 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			series->SetName(SeriesName);
 		}
 
-		Chart->AddSeries(std::move(series));
+		ScatterChrt->AddSeries(std::move(series));
+
+		frmPlot->AddChart(std::move(ScatterChrt));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -1109,16 +1097,13 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		if (!s_CurPlotWnd)
 		{
 			frmPlot = new CFrmPlot(nullptr);
-			auto Rect = frmPlot->GetClientRect();
-			auto ChartBase = std::make_unique<CBubbleChart>(frmPlot, Rect);
-			frmPlot->SetChart(std::move(ChartBase));
-
 			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = ((CBubbleChart*)frmPlot->GetChart());
+		auto Rect = frmPlot->GetClientRect();
+		auto BubbleChrt = std::make_unique<CBubbleChart>(frmPlot, Rect);
 
 		auto XData = std::make_shared<core::CRealColData>(xdata);
 		auto YData = std::make_shared<core::CRealColData>(ydata);
@@ -1129,7 +1114,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		DTable->append_col(YData);
 		DTable->append_col(SizeData);
 
-		auto series = std::make_unique<CBubbleSeries>(Chart, std::move(DTable));
+		auto series = std::make_unique<CBubbleSeries>(BubbleChrt.get(), std::move(DTable));
 
 		if (ColorObj && ColorObj != Py_None)
 		{
@@ -1167,7 +1152,9 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 			series->SetName(lbl);
 		}
 
-		Chart->AddSeries(std::move(series));
+		BubbleChrt->AddSeries(std::move(series));
+
+		frmPlot->AddChart(std::move(BubbleChrt));
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -1225,7 +1212,7 @@ void c_plot_title(PyObject* TitleObj )
 
 	auto Title = CheckString(TitleObj, "title must be string.");
 
-	auto Chart = s_CurPlotWnd->GetChart();
+	auto Chart = s_CurPlotWnd->GetActiveChart();
 
 	auto TextBox = Chart->GetChartTitle();
 	if (TextBox == nullptr)
@@ -1245,7 +1232,7 @@ void c_plot_xlabel(PyObject* xlblObj)
 
 	auto XLabel = CheckString(xlblObj, "xlab must be string.");
 
-	auto Chart = s_CurPlotWnd->GetChart();
+	auto Chart = s_CurPlotWnd->GetActiveChart();
 
 	auto TextBox = Chart->GetHorizAxisTitle();
 	if (TextBox == nullptr)
@@ -1265,7 +1252,7 @@ void c_plot_ylabel(PyObject* YlabObj)
 
 	auto YLabel = CheckString(YlabObj, "ylab must be string.");
 
-	auto Chart = s_CurPlotWnd->GetChart();
+	auto Chart = s_CurPlotWnd->GetActiveChart();
 	auto TextBox = Chart->GetVertAxisTitle();
 	if (TextBox == nullptr)
 	{
@@ -1282,7 +1269,7 @@ void c_plot_legend()
 	if(s_CurPlotWnd == nullptr)
 		return;
 
-	s_CurPlotWnd->GetChart()->CreateElement(CChartBase::Elems::LEGEND);
+	s_CurPlotWnd->GetActiveChart()->CreateElement(CChartBase::Elems::LEGEND);
 }
 
 
