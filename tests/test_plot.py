@@ -252,7 +252,7 @@ plt.subplot(0,0, nrows=2, ncols=1)
 plt.histogram(z, mode = plt.HIST_DENSITY)
 
 plt.subplot(0,1)
-boxplot()
+dirfield()
 
 plt.subplot(1,1)
 #Overlay scatter plot

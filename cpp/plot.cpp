@@ -949,22 +949,31 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd)
+		CFrmPlot* frmPlot = nullptr;
+
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto Quiver = std::make_unique<CQuiverChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(Quiver));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto Quiver = std::make_unique<CQuiverChart>(frmPlot, Rect);
+		auto Chart = (CQuiverChart*)frmPlot->GetActiveChart();
 
 		if (ScaleObj != Py_None)
 			IsScaled = CheckBool(ScaleObj, "scale must be boolean.");
 
-		Quiver->SetScaled(IsScaled);
+		Chart->SetScaled(IsScaled);
 
 		auto DataTable = std::make_unique<core::CRealDataTable>();
 		auto ColX = std::make_shared<core::CRealColData>(DataX);
@@ -975,13 +984,13 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		DataTable->append_col(ColY);
 		DataTable->append_col(ColU);
 		DataTable->append_col(ColV);
-		auto series = std::make_unique<CQuiverSeries>(Quiver.get(), std::move(DataTable));
+		auto series = std::make_unique<CQuiverSeries>(Chart, std::move(DataTable));
 
 		series->PrepareForDrawing();
-		Quiver->AddSeries(std::move(series));
-		Quiver->BoundsChanged();
+		Chart->AddSeries(std::move(series));
+		Chart->BoundsChanged();
 
-		frmPlot->AddChart(std::move(Quiver));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
