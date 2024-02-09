@@ -269,9 +269,13 @@ z = (x - n*p)/math.sqrt(n*p*(1-p))
 #DeMoivre's equation
 f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
+plt.layout(2,2)
+
+plt.subplot(0,0, nrows=2, ncols=1)
 #Density scaled histogram
 plt.histogram(z, mode = plt.HIST_DENSITY)
 
+plt.subplot(1,1)
 #Overlay scatter plot
 plt.scatter(x=z, y=f)
 plt.show()
