@@ -31,6 +31,25 @@ static wxApp* s_APP = nullptr;
 static CFrmPlot* s_CurPlotWnd = nullptr;
 static std::list< CFrmPlot*> s_PlotWndList;
 
+//Layout
+static char s_NROWS = -1, s_NCOLS = -1;
+
+
+/*
+	After each call to charts s_SubPlotInfo is reset
+	this is not a problem if the following happens:
+	>>subplot(0,0) ; scatter()
+	>>subplot(1,1); scatter()
+
+	However, it might seem a problem if:
+	>> subplot(0,0)
+	>> scatter(); histogram()
+
+	Here the mixed plot works because histogram has
+	pointer access to scatter (both inherits from CNumericChart):
+	>> auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
+*/
+static SubPlotInfo s_SubPlotInfo;
 
 
 
@@ -372,24 +391,26 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 			}
 		}
 
-			
 		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd)
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(Histogram));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
-
-		CHistogramChart *Chart = nullptr;
-		if(frmPlot->GetActiveChart())
-			Chart = (CHistogramChart*)frmPlot->GetActiveChart();
-		else
-			Chart = Histogram.get();
+		auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
+		
 
 		auto NumData = std::make_shared<core::CRealColData>(Data);
 		auto DataTbl = std::make_unique<core::CRealDataTable>();
@@ -432,7 +453,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		series->PrepareForDrawing();
 		Chart->AddSeries(std::move(series), false);
 
-		frmPlot->AddChart(std::move(Histogram));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -989,13 +1010,24 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 	{
 		CFrmPlot* frmPlot = nullptr;
 
-		if (!s_CurPlotWnd)
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto Scatter = std::make_unique<CScatterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(Scatter));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
+
+		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
 					
 		auto YData = std::make_shared<core::CRealColData>(ydata);
 		auto XData = std::make_shared<core::CRealColData>(xdata);
@@ -1003,17 +1035,6 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		auto DTbl = std::make_unique<core::CRealDataTable>();
 		DTbl->append_col(XData);
 		DTbl->append_col(YData);
-
-		auto Rect = frmPlot->GetClientRect();
-		auto ScatterChrt = std::make_unique<CScatterChart>(frmPlot, Rect);
-		
-		CScatterChart *Chart = nullptr;
-		if(frmPlot->GetActiveChart())
-			Chart = (CScatterChart*)frmPlot->GetActiveChart();
-		else
-			Chart = ScatterChrt.get();
-
-		std::cout << frmPlot->GetActiveChart() << std::endl;
 
 		auto series = std::make_unique<CScatterSeries>(Chart, std::move(DTbl));
 
@@ -1065,7 +1086,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 		Chart->AddSeries(std::move(series));
 
-		frmPlot->AddChart(std::move(ScatterChrt));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -1187,12 +1208,35 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 ************************************************************************************
 */
 
+void c_plot_layout(char nrows, char ncols)
+{
+	s_NROWS = nrows;
+	s_NCOLS = ncols;
+}
+
+
+void c_plot_subplot(
+	char row,
+	char col,
+	unsigned char nrows,
+	unsigned char ncols)
+{
+	s_SubPlotInfo.row = row;
+	s_SubPlotInfo.col = col;
+	s_SubPlotInfo.nrows = nrows;
+	s_SubPlotInfo.ncols = ncols;
+}
+
+
 void c_plot_figure()
 {
 	s_PlotWndList.push_back(s_CurPlotWnd);
 
 	//Reset plot window so that a new plot window will be created by the calling chart
 	s_CurPlotWnd = nullptr;
+
+	//reset static variables
+	s_NROWS = s_NCOLS = -1;
 }
 
 	
@@ -1215,6 +1259,9 @@ void c_plot_show(bool maximize)
 
 	s_PlotWndList.clear();
 	s_CurPlotWnd = nullptr;
+
+	//reset static variables
+	s_NROWS = s_NCOLS = -1;
 
 	//c_plot_mainloop(sharedLoop);
 }

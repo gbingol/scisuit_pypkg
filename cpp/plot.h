@@ -69,6 +69,14 @@ EXTERN PyObject * c_plot_scatter(
 	PyObject* kwargs);
 
 
+EXTERN void c_plot_layout(char nrows, char ncols);
+
+EXTERN void c_plot_subplot(
+	char row,
+	char col,
+	unsigned char nrows = unsigned char(1),
+	unsigned char ncols = unsigned char(1));
+
 //start a new plot window
 EXTERN void c_plot_figure();
 
