@@ -286,22 +286,32 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	try
 	{
 		CFrmPlot* frmPlot = nullptr;
-		if (!s_CurPlotWnd)
+
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BW_Chrt));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
+
+		auto Chart = (CBoxWhiskerChart*)frmPlot->GetActiveChart();
 
 		auto DataTbl = std::make_unique<core::CRealDataTable>();
 		auto NumData = std::make_shared<core::CRealColData>(Data);
 		DataTbl->append_col(NumData);
 
-		auto series = std::make_unique<CBoxWhiskerSeries>(BW_Chrt.get(), std::move(DataTbl));
+		auto series = std::make_unique<CBoxWhiskerSeries>(Chart, std::move(DataTbl));
 
 		if (LineObj != Py_None)
 		{
@@ -320,9 +330,9 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 		if (NameObj != Py_None)
 			series->SetName(CheckString(NameObj, "name must be string."));
 
-		BW_Chrt->AddSeries(std::move(series));
+		Chart->AddSeries(std::move(series));
 
-		frmPlot->AddChart(std::move(BW_Chrt));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
