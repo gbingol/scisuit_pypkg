@@ -1,4 +1,4 @@
-from .funcs import figure, legend, show, title, xlabel, ylabel
+from .funcs import layout, subplot, figure, legend, show, title, xlabel, ylabel
 from .gdi import Pen, Brush, Color
 from .charts import bar, barh, boxplot, bubble, dirfield, histogram, line, \
 			pie, plot, psychrometry, qqnorm, qqplot, quiver, scatter
