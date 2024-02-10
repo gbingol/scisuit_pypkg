@@ -773,11 +773,11 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 {
 	PyObject* DataObj = Py_None;
 	PyObject* ShowObj = Py_None, *LineObj = Py_None, *MarkerObj = Py_None;
-	PyObject* NameObj = Py_None;
+	PyObject* LabelObj = Py_None;
 		
-	const char* kwlist[] = { "data","name", "show", "line", "marker",  NULL };
+	const char* kwlist[] = { "data","label", "show", "line", "marker",  NULL };
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOO", const_cast<char**>(kwlist),
-		&DataObj, &NameObj, &ShowObj, &LineObj, &MarkerObj))
+		&DataObj, &LabelObj, &ShowObj, &LineObj, &MarkerObj))
 	{
 		return nullptr;
 	}
@@ -833,10 +833,10 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 			series->SetLinePen(LinePen);
 		}
 
-		if (NameObj && PyUnicode_Check(NameObj))
+		if (LabelObj && PyUnicode_Check(LabelObj))
 		{
-			auto SeriesName = PyUnicode_AsWideCharString(NameObj, nullptr);
-			series->SetName(SeriesName);
+			auto Lbl = PyUnicode_AsWideCharString(LabelObj, nullptr);
+			series->SetName(Lbl);
 		}
 
 		series->PrepareForDrawing();

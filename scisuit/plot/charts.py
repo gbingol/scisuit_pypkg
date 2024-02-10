@@ -208,7 +208,7 @@ def qqnorm(
 		"""
 		return _pydll.c_plot_qqnorm((),{
 			"data":data, 
-			"name": label, 
+			"label": label, 
 			"show":show, 
 			"marker":dict(marker) if marker != None else None, 
 			"line":vars(line) if line != None else None})
