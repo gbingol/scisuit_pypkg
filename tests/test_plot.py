@@ -92,7 +92,7 @@ def qqplot():
 	treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
 	control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-	plt.qqplot(x=control, y=treatment, marker = plt.Marker(style = plt.Marker.STYLE.CIRCLE))
+	plt.qqplot(x=control, y=treatment, marker = plt.Marker(style = plt.MARKER_CIRCLE))
 
 
 
@@ -170,7 +170,7 @@ def scisuit_hist_scatter():
 	f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
 	#Density scaled histogram
-	plt.histogram(z, mode = plt.defs.HIST_DENSITY)
+	plt.histogram(z, mode = plt.HIST_DENSITY)
 
 	#Overlay scatter plot
 	plt.scatter(x=z, y=f)

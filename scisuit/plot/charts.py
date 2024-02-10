@@ -14,7 +14,7 @@ import scisuit.plot.gdi as _gdi
 def bar(
 	height:_Iterable, 
 	labels:list[str]=None, 
-	style:str = _defs.CLUSTER,
+	style:str = "c", #clustered
 	fill:_gdi.Brush=None, 
 	line:_gdi.Pen=None):
 	"""
@@ -38,7 +38,7 @@ def bar(
 def barh(
 	width:_Iterable, 
 	labels:list[str]=None, 
-	style:str=_defs.CLUSTER,
+	style:str= "c", #cluster
 	fill:_gdi.Brush=None, 
 	line:_gdi.Pen=None):
 	"""
@@ -88,7 +88,7 @@ def boxplot(
 
 def histogram(
 		data:_Iterable, 
-		mode:str=_defs.HIST_FREQUENCY, 
+		mode:str= "f", #frequency 
 		cumulative=False, 
 		breaks:int|_Iterable = None, 
 		fill:_gdi.Brush=None, 
@@ -119,7 +119,7 @@ def histogram(
 def line(
 	y:_Iterable, 
 	labels:list[str]=None, 
-	style=_defs.CLUSTER,
+	style:str= "c", #cluster
 	label:str=None,  
 	marker:_defs.Marker=None, 
 	line:_gdi.Pen=None):
@@ -326,7 +326,7 @@ def plot(
 		label:str=None, 
 		color:str = None, 
 		width:int = 1,
-		style:int = _defs.PEN_SOLID,
+		style:int = 100, #solid pen
 		smooth:bool=False):
 	"""
 	A convenience function to plot scatter chart without markers (with lines only)

@@ -1,43 +1,7 @@
 import scisuit.plot.gdi as _gdi
 
 
-#BAR Charts and Line Charts
-CLUSTER = "c"
-STACKED = "s"
-PERCENTSTK = "%"
-
-#Histogram Modes
-HIST_DENSITY = "d"
-HIST_FREQUENCY = "f"
-HIST_RELFREQUENCY = "r"
-
-#Pen styles
-PEN_SOLID = 100
-PEN_DOT = 101
-PEN_LONGDASH = 102
-PEN_SHORTDASH = 103
-PEN_DOTDASH = 104
-PEN_TRANSPARENT = 106
-
-#Brush styles
-
-BRUSH_SOLID = 100
-BRUSH_TRANSPARENT = 106
-BRUSH_BDIAGHATCH = 111
-BRUSH_CROSSDIAGHATCH = 112
-BRUSH_FDIAGHATCH = 113
-BRUSH_CROSSHATCH = 114
-BRUSH_HORIZHATCH =115
-BRUSH_VERTHATCH = 116
-
-
 class Trendline:
-	class STYLE:
-		LINEAR = "linear"
-		POLY = "poly"
-		EXP = "exp"
-		LOG = "log"
-		POW = "pow"
 	"""
 	A class to define Trendline properties
 
@@ -49,10 +13,10 @@ class Trendline:
 	"""
 	def __init__(
 		self, 
-		style:str=STYLE.LINEAR,
+		style:str= "linear",
 		degree:int=2, 
 		intercept:float=None, 
-		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=PEN_LONGDASH),
+		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=102), #PEN_LONGDASH
 		label:str = None,
 		show_stats:bool = False,
 		show_equation:bool=False
@@ -80,14 +44,7 @@ class Trendline:
 
 
 
-
-
 class Marker:
-	class STYLE:
-		CIRCLE = "c"
-		TRIANGLE = "t"
-		SQUARE = "s"
-		XMARKER = "x"
 	"""
 	A class to define marker properties
 
@@ -98,7 +55,7 @@ class Marker:
 	"""
 	def __init__(
 		self,
-		style:str = STYLE.CIRCLE,
+		style:str = "c",
 		size:int = 5 ,
 		fill:_gdi.Brush = None,
 		line:_gdi.Pen = None) -> None:
