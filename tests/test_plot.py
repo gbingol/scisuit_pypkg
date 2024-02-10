@@ -92,11 +92,7 @@ def qqplot():
 	treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
 	control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-	plt.qqplot(x=control, y=treatment)
-
-	marker = {'fill': plt.Color.WHITE, 'linecolor': plt.Color.BLUE, 'type': plt.MARKER_SQUARE, 'linewidth': 2, 'size':5}
-	plt.qqplot(x=control, y=treatment, marker = marker)
-
+	plt.qqplot(x=control, y=treatment, marker = plt.Marker(style = plt.Marker.STYLE.CIRCLE))
 
 
 
@@ -245,7 +241,7 @@ z = (x - n*p)/math.sqrt(n*p*(1-p))
 #DeMoivre's equation
 f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
-plt.layout(2,2)
+plt.layout(3,3)
 
 plt.subplot(0,0, nrows=2, ncols=1)
 #Density scaled histogram
@@ -253,6 +249,9 @@ plt.histogram(z, mode = plt.HIST_DENSITY)
 
 plt.subplot(0,1)
 dirfield()
+
+plt.subplot(0,2)
+qqplot()
 
 plt.subplot(1,1)
 #Overlay scatter plot

@@ -795,23 +795,31 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 			LineShown = CheckBool(ShowObj, "show must be bool.");
 
 			
-		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd)
+		CFrmPlot* frmPlot = nullptr;
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(QQChart));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
-
+		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
+		
 		auto ColX = std::make_shared<core::CRealColData>(Data);
 		auto DataTable = std::make_unique<core::CRealDataTable>();
 		DataTable->append_col(ColX);
 
-		auto series = std::make_unique<CQQSeries>(QQChart.get(), std::move(DataTable));
+		auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
 
 		if (MarkerObj != Py_None)
 			PrepareMarker(MarkerObj, series.get());
@@ -832,9 +840,9 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 		}
 
 		series->PrepareForDrawing();
-		QQChart->AddSeries(std::move(series));
+		Chart->AddSeries(std::move(series));
 
-		frmPlot->AddChart(std::move(QQChart));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -867,17 +875,25 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd)
+		CFrmPlot* frmPlot = nullptr;
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(QQChart));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
+		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
 
 		IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid.");
 		IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid.");
@@ -887,15 +903,15 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 		auto ColY = std::make_shared<core::CRealColData>(DataY);
 		DataTable->append_col(ColX);
 		DataTable->append_col(ColY);
-		auto series = std::make_unique<CQQSeries>(QQChart.get(), std::move(DataTable));
+		auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
 
 		if (MarkerObj != Py_None)
 			PrepareMarker(MarkerObj, series.get());
 
 		series->PrepareForDrawing();
-		QQChart->AddSeries(std::move(series));
+		Chart->AddSeries(std::move(series));
 
-		frmPlot->AddChart(std::move(QQChart));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -1149,17 +1165,25 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 	{
 		CFrmPlot* frmPlot = nullptr;
 
-		if (!s_CurPlotWnd)
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto BubbleChrt = std::make_unique<CBubbleChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BubbleChrt));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto BubbleChrt = std::make_unique<CBubbleChart>(frmPlot, Rect);
-
+		auto Chart = (CBubbleChart*)frmPlot->GetActiveChart();
+		
 		auto XData = std::make_shared<core::CRealColData>(xdata);
 		auto YData = std::make_shared<core::CRealColData>(ydata);
 		auto SizeData = std::make_shared<core::CRealColData>(sizedata);
@@ -1169,7 +1193,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		DTable->append_col(YData);
 		DTable->append_col(SizeData);
 
-		auto series = std::make_unique<CBubbleSeries>(BubbleChrt.get(), std::move(DTable));
+		auto series = std::make_unique<CBubbleSeries>(Chart, std::move(DTable));
 
 		if (ColorObj && ColorObj != Py_None)
 		{
@@ -1207,16 +1231,14 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 			series->SetName(lbl);
 		}
 
-		BubbleChrt->AddSeries(std::move(series));
+		Chart->AddSeries(std::move(series));
 
-		frmPlot->AddChart(std::move(BubbleChrt));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
 	Py_RETURN_NONE;
 }
-
-
 
 
 
