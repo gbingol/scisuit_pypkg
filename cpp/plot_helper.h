@@ -14,6 +14,14 @@
 #include <plotter/elems/trendline.h>
 
 
+namespace
+{
+	unsigned char LINETHICK = 1;
+	unsigned char MARKERSIZE = 5;
+	unsigned char MARKERLINEWIDTH = 1;
+}
+
+
 
 static std::wstring CheckString(PyObject* Obj, const char* ErrMsg)
 {
@@ -275,7 +283,7 @@ static void PrepareTrendline(
 	std::optional<double> Intercept = std::nullopt;
 	bool show_stats = false, show_equation = false;
 
-	wxPen pen(DefaultColor, charts::CScatterSeries::GetDefLineThick());
+	wxPen pen(DefaultColor, LINETHICK);
 	pen.SetStyle(wxPenStyle::wxPENSTYLE_LONG_DASH);
 
 	PyObject* ObjKey, * ObjValue;

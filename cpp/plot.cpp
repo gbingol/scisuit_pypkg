@@ -25,6 +25,8 @@
 #include "plot_helper.h"
 
 
+
+
 using namespace charts;
 
 static wxApp* s_APP = nullptr;
@@ -1091,7 +1093,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		if (MarkerDef)
 		{
 			//give a default marker size (otherwise it is 0)	
-			series->SetMarkerSize(series->GetDefMarkerSize());
+			series->SetMarkerSize(MARKERSIZE);
 
 			//user can modify however they want
 			PrepareMarker(MarkerObj, series.get());
