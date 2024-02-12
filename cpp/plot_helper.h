@@ -14,14 +14,6 @@
 #include <plotter/elems/trendline.h>
 
 
-namespace
-{
-	unsigned char LINETHICK = 1;
-	unsigned char MARKERSIZE = 5;
-	unsigned char MARKERLINEWIDTH = 1;
-}
-
-
 
 static std::wstring CheckString(PyObject* Obj, const char* ErrMsg)
 {
