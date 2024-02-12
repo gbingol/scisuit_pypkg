@@ -74,7 +74,15 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	}
 
 	if (StyleObj != Py_None)
+	{
 		Type = CheckString(StyleObj, "style must be string.");
+		IF_PYERRVALUE_RET(Type.empty(), "'s', 'c' or '%' expected.");
+		
+		std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
+
+		bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
+		IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
+	}
 
 	auto Data = Iterable_As1DVector(HeightObj);
 
@@ -107,11 +115,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		{
 			auto BarChrt = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
-		}
-		else
-		{
-			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-			return nullptr;
 		}
 	}
 	else
