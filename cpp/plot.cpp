@@ -73,6 +73,9 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
+	if (StyleObj != Py_None)
+		Type = CheckString(StyleObj, "style must be string.");
+
 	auto Data = Iterable_As1DVector(HeightObj);
 
 	CFrmPlot* frmPlot{ nullptr };
@@ -88,19 +91,19 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 
 		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		if (Type == "c")
+		if (Type  == L"c")
 		{
 			auto BarChrt = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == "s") 
+		else if (Type == L"s") 
 		{
 			auto BarChrt = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == "%") 
+		else if (Type == L"%") 
 		{
 			auto BarChrt = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
@@ -116,11 +119,11 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 	CBarVertChart* Chart{nullptr};
 	
-	if (Type == "c")
+	if (Type == L"c")
 		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
-	else if (Type == "s") 
+	else if (Type == L"s") 
 		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
-	else if (Type == "%") 
+	else if (Type == L"%") 
 		Chart = (CBarVertPerStkChart*)frmPlot->GetActiveChart();
 
 	try
@@ -129,10 +132,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		{
 			LabelData = Iterable_AsArray(LabelsObj);
 			IF_PYERRVALUE_RET(LabelData.size() < 2, "At least 2 labels expected.")
-		}
-
-		if (StyleObj != Py_None)
-			Type = CheckString(StyleObj, "style must be string.");		
+		}		
 
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
@@ -141,13 +141,13 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(DataCol);
 
 		CBarVertSeries* Series = nullptr;
-		if (Type == "c")
+		if (Type == L"c")
 			Series = new CBarVertClusterSeries((CBarVertClusterChart*)Chart, std::move(DataTbl));
 
-		else if (Type == "s")
+		else if (Type == L"s")
 			Series = new CBarVertStkSeries((CBarVertStkChart*)Chart, std::move(DataTbl));
 
-		else if (Type == "%")
+		else if (Type == L"%")
 			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();

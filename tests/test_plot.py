@@ -14,8 +14,8 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.bar(labels=categ, height=A)
-	plt.bar(height=B)
+	plt.bar(labels=categ, height=A, style=plt.STACKED)
+	plt.bar(height=B, style=plt.STACKED)
 
 
 def histogram():
