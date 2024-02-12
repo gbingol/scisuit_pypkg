@@ -18,6 +18,15 @@ def bar():
 	plt.bar(height=B, style=plt.STACKED)
 
 
+def barh():
+	categ=["Q1", "Q2", "Q3", "Q4"]
+	A = [44, 55, 41, 67]
+	B = [13, 23, 8, 13]
+
+	plt.barh(labels=categ, width=A, style=plt.CLUSTER)
+	plt.barh(width=B, style=plt.CLUSTER)
+
+
 def histogram():
 	import scisuit.stats as stat
 
@@ -251,7 +260,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-bar()
+barh()
 
 plt.subplot(1,1)
 #Overlay scatter plot

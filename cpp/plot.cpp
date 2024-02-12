@@ -180,7 +180,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 {
-	/*
+	
 	core::CArray LabelData;
 		
 	//Default type is clustered
@@ -196,19 +196,61 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	auto Data = Iterable_As1DVector(WidthObj);
-	CFrmPlot* frmPlot{ nullptr };
-	if (!s_CurPlotWnd) {  
-		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
-		frmPlot = new CFrmPlot(nullptr);  
-		s_CurPlotWnd = frmPlot;
-	}
-	else{
-		frmPlot = s_CurPlotWnd;
+	if (TypeObj != Py_None)
+	{
+		Type = CheckString(TypeObj, "style must be string.");
+		IF_PYERRVALUE_RET(Type.empty(), "'s', 'c' or '%' expected.");
+		
+		std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
+
+		bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
+		IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
 	}
 
-	auto Rect = frmPlot->GetClientRect(); 
-	auto ChartBase = std::make_unique<CBarHorizChart>(frmPlot, Rect);
+	auto Data = Iterable_As1DVector(WidthObj);
+
+	CFrmPlot* frmPlot{ nullptr };
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
+		{
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
+		}
+		else
+			frmPlot = s_CurPlotWnd;
+
+
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		if (Type  == L"c")
+		{
+			auto BarChrt = std::make_unique<CBarHorizClusterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+
+		else if (Type == L"s") 
+		{
+			auto BarChrt = std::make_unique<CBarHorizStkChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+
+		else if (Type == L"%") 
+		{
+			auto BarChrt = std::make_unique<CBarHorizPerStkChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+	}
+	else
+		frmPlot = s_CurPlotWnd;
+
+	CBarHorizChart* Chart{nullptr};
+	
+	if (Type == L"c")
+		Chart = (CBarHorizClusterChart*)frmPlot->GetActiveChart();
+	else if (Type == L"s") 
+		Chart = (CBarHorizStkChart*)frmPlot->GetActiveChart();
+	else if (Type == L"%") 
+		Chart = (CBarHorizPerStkChart*)frmPlot->GetActiveChart();
 	
 	try
 	{
@@ -218,17 +260,6 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 			IF_PYERRVALUE_RET(LabelData.size() < 2, "At least 2 labels expected.")
 		}
 
-		if (TypeObj != Py_None)
-		{
-			Type = CheckString(TypeObj, "type must be string.");
-
-			std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
-
-			bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
-			IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-		}
-
-
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
 		auto DataTbl = std::make_unique<core::CGenericDataTable>();
@@ -237,13 +268,13 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 		CBarHorizSeries* Series = nullptr;
 		if (Type == "c")
-			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)ChartBase.get(), std::move(DataTbl));
+			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)Chart, std::move(DataTbl));
 
 		else if (Type == "s")
-			Series = new CBarHorizStkSeries((CBarHorizStkChart*)ChartBase.get(), std::move(DataTbl));
+			Series = new CBarHorizStkSeries((CBarHorizStkChart*)Chart, std::move(DataTbl));
 
 		else if (Type == "%")
-			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)ChartBase.get(), std::move(DataTbl));
+			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
@@ -258,13 +289,12 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 
 		auto UniqueSeries = std::unique_ptr<CBarHorizSeries>(Series);
-		ChartBase->AddSeries(std::move(UniqueSeries));
+		Chart->AddSeries(std::move(UniqueSeries));
 
-		frmPlot->AddChart(std::move(ChartBase));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
-	*/
 
 	Py_RETURN_NONE;
 }
