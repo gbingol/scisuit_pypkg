@@ -76,44 +76,52 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	auto Data = Iterable_As1DVector(HeightObj);
 
 	CFrmPlot* frmPlot{ nullptr };
-	if (!s_CurPlotWnd) {  
-		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
-		frmPlot = new CFrmPlot(nullptr);  
-		s_CurPlotWnd = frmPlot;
-	}
-	else{
-		frmPlot = s_CurPlotWnd;
-	}
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
+		{
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
+		}
+		else
+			frmPlot = s_CurPlotWnd;
 
-	auto Rect = frmPlot->GetClientRect(); 
 
-	CBarVertChart *ColChrt{nullptr};
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		if (Type == "c")
+		{
+			auto BarChrt = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
 
-	if (Type == "c") {
-		auto ChartBase = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
-		ColChrt = (CBarVertClusterChart*)ChartBase.get();
+		else if (Type == "s") 
+		{
+			auto BarChrt = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
 
-		frmPlot->AddChart(std::move(ChartBase)); 
-	}
-
-	else if (Type == "s") {
-		auto ChartBase = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
-		ColChrt = (CBarVertStkChart*)ChartBase.get();
-
-		frmPlot->AddChart(std::move(ChartBase)); 
-	}
-
-	else if (Type == "%") {
-		auto ChartBase = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
-		ColChrt = (CBarVertPerStkChart*)ChartBase.get();
-
-		frmPlot->AddChart(std::move(ChartBase)); 
+		else if (Type == "%") 
+		{
+			auto BarChrt = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+		else
+		{
+			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
+			return nullptr;
+		}
 	}
 	else
-	{
-		PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-		return nullptr;
-	}
+		frmPlot = s_CurPlotWnd;
+
+	CBarVertChart* Chart{nullptr};
+	
+	if (Type == "c")
+		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
+	else if (Type == "s") 
+		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
+	else if (Type == "%") 
+		Chart = (CBarVertPerStkChart*)frmPlot->GetActiveChart();
 
 	try
 	{
@@ -134,19 +142,13 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 		CBarVertSeries* Series = nullptr;
 		if (Type == "c")
-			Series = new CBarVertClusterSeries((CBarVertClusterChart*)ColChrt, std::move(DataTbl));
+			Series = new CBarVertClusterSeries((CBarVertClusterChart*)Chart, std::move(DataTbl));
 
 		else if (Type == "s")
-			Series = new CBarVertStkSeries((CBarVertStkChart*)ColChrt, std::move(DataTbl));
+			Series = new CBarVertStkSeries((CBarVertStkChart*)Chart, std::move(DataTbl));
 
 		else if (Type == "%")
-			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)ColChrt, std::move(DataTbl));
-
-		else
-		{
-			PyErr_SetString(PyExc_ValueError, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-			return nullptr;
-		}
+			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
@@ -160,9 +162,9 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		Series->SetBrush(Brush);
 
 		auto UniqueSeries = std::unique_ptr<CBarVertSeries>(Series);
-		ColChrt->AddSeries(std::move(UniqueSeries));
+		Chart->AddSeries(std::move(UniqueSeries));
 
-		
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 

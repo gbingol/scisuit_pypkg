@@ -14,8 +14,8 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
-	plt.bar(height=B, style=plt.PERCENTSTK)
+	plt.bar(labels=categ, height=A)
+	plt.bar(height=B)
 
 
 def histogram():
@@ -251,7 +251,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-qqplot()
+bar()
 
 plt.subplot(1,1)
 #Overlay scatter plot
