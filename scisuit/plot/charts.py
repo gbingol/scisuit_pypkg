@@ -251,6 +251,12 @@ def qqnorm(
 		data: Data \n
 		show: Whether to show theoretical line or not 
 		"""
+		assert isinstance(data, _Iterable), "'data' must be iterable"
+		if label!=None:
+			assert isinstance(label, str), "'label' must be string"
+		
+		assert isinstance(show, bool), "'show' must be bool"
+
 		return _pydll.c_plot_qqnorm((),{
 			"data":data, 
 			"label": label, 
@@ -272,6 +278,9 @@ def qqplot(
 	## Input
 	x, y: Data
 	"""
+	assert isinstance(x, _Iterable), "'x' must be iterable"
+	assert isinstance(y, _Iterable), "'y' must be iterable"
+
 	return _pydll.c_plot_qqplot((),{
 			"x":x, 
 			"y":y,
@@ -299,6 +308,13 @@ def quiver(
 	u, v: length in x and y directions, 2D ndarray \n
 	scale: Whether to scale the length of the arrows
 	"""
+	assert isinstance(x, _np.ndarray), "'x' must be ndarray"
+	assert isinstance(y, _np.ndarray), "'y' must be ndarray"
+	assert isinstance(u, _np.ndarray), "'u' must be ndarray"
+	assert isinstance(v, _np.ndarray), "'v' must be ndarray"
+
+	assert isinstance(scale, bool), "'scale' must bool"
+
 	return _pydll.c_plot_quiver((),{
 			"x":x.flatten().tolist(), 
 			"y":y.flatten().tolist(),
@@ -308,7 +324,10 @@ def quiver(
 
 
 
-def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
+def dirfield(
+		x:_np.ndarray, 
+		y:_np.ndarray, 
+		slope:_np.ndarray):
 	"""
 	Plots the direction field for a given function f=dy/dx \n
 
@@ -316,6 +335,10 @@ def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 	x, y: 2D numpy array (after using meshgrid) \n
 	slope: 2D array resulting from evaluation of f=dy/dx, first order ODE
 	"""
+
+	assert isinstance(x, _np.ndarray), "'x' must be ndarray"
+	assert isinstance(y, _np.ndarray), "'y' must be ndarray"
+	assert isinstance(slope, _np.ndarray), "'slope' must be ndarray"
 
 	# angle of inclination
 	t = _np.arctan(slope)
