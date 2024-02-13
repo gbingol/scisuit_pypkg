@@ -42,20 +42,9 @@ def linechart():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	#Line (Unstacked)
-	plt.line(labels=categories, y=A)
-
 	#Clustered line chart with two series
-	hwnd = plt.line(labels=categories, y=A)
-	plt.line(y=B, hwnd=hwnd)
-
-	#Stacked line chart with two series
-	hwnd = plt.line(labels=categories, y=A, type=plt.Line_Type.STACKED)
-	plt.line(y=B, type=plt.Line_Type.STACKED, hwnd=hwnd)
-
-	#%-stacked with two series
-	hwnd = plt.line(labels=categories, y=A, type=plt.Line_Type.PERCENTSTK)
-	plt.line(y=B, type=plt.Line_Type.PERCENTSTK, hwnd=hwnd)
+	plt.line(labels=categories, y=A)
+	plt.line(y=B)
 
 
 
@@ -260,7 +249,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-bar()
+linechart()
 
 plt.subplot(1,1)
 #Overlay scatter plot

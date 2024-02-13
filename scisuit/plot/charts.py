@@ -118,10 +118,24 @@ def histogram(
 
 	## Input
 	data:	Numeric data \n
-	mode : density, frequency and relative frequency.\n
+	mode : density (d), frequency (f) and relative frequency (r).\n
 	cumulative : True, cumulative distribution \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
+	assert isinstance(mode, str), "'mode' must be string"
+	if mode.lower() not in ["d", "f", "r"]:
+		raise ValueError("'style' must be c, s or %")
+	
+	assert isinstance(cumulative, bool), "'cumulative' must be bool"
+
+	if breaks != None:
+		assert isinstance(breaks, int) or isinstance(breaks, _Iterable), "'breaks' must be int/Iterable"
+		if isinstance(breaks, int):
+			assert breaks>0, "'breaks' if integer, must be >0"
+		else:
+			Nums = [i for i in breaks if isinstance(i, int)]
+			assert len(Nums)>0, "'breaks' (iterable) do not contain any integer"
+
 	return _pydll.c_plot_histogram((), {
 			"data":data, 
 			"mode":mode, 
@@ -138,9 +152,9 @@ def histogram(
 
 def line(
 	y:_Iterable, 
-	labels:list[str]=None, 
+	labels:_Iterable = None, 
 	style:str= "c", #cluster
-	label:str=None,  
+	label:str = None,  
 	marker:_defs.Marker=None, 
 	line:_gdi.Pen=None):
 	"""
@@ -152,14 +166,21 @@ def line(
 	style: CLUSTER, STACKED or PERCENTSTK \n
 	label: Label of the individual series 
 	"""
+	assert isinstance(y, _Iterable), "'y' must be iterable"
+
+	if labels != None:
+		assert isinstance(labels, _Iterable), "'labels' must be iterable"
+		assert len(labels)>=2, "At least 2 labels expected"
+
 	assert isinstance(style, str), "'style' must be string"
 	if style.lower() not in ["c", "s", "%"]:
 		raise ValueError("'style' must be c, s or %")
 	
+	
 	return _pydll.c_plot_line((), {
 			"y":y, 
 			"labels":labels, 
-			"name":label, 
+			"label":label, 
 			"style":style, 
 			"marker":dict(marker) if marker != None else None, 
 			"line":vars(line) if line != None else None})
@@ -314,22 +335,27 @@ def dirfield(x:_np.ndarray, y:_np.ndarray, slope:_np.ndarray):
 def scatter(
 		x:_Iterable,
 		y:_Iterable,  
-		label:str=None, 
-		smooth:bool=False, 
-		marker:_defs.Marker=None, 
-		line:_gdi.Pen=None, 
-		trendline:_defs.Trendline=None):
+		label:str = None, 
+		smooth:bool = False, 
+		marker:_defs.Marker = None, 
+		line:_gdi.Pen = None, 
+		trendline:_defs.Trendline = None):
 	"""
 	Plot scatter charts
 
 	## Input:
 	x, y:	x- and y-data \n
-	label: Name of the series \n
-	smooth: Smooth lines
+	label: Label of the series \n
+	smooth: Uses smoothing algorith to smooth lines (instead of broken)
 	"""
 	assert isinstance(x, _Iterable), "x must be iterable object"
 	assert isinstance(y, _Iterable), "y must be iterable object"
 	assert len(x) == len(y), "x and y must have same lengths"
+
+	assert isinstance(smooth, bool), "'smooth' must be bool"
+
+	if label != None:
+		assert isinstance(label, str), "'label' must be string"
 
 	return _pydll.c_plot_scatter((), {
 		"x":x, 

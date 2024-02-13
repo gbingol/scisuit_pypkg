@@ -80,7 +80,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	IF_PYERRVALUE_RET(Data.size() == 0, "height does not contain any numeric element.");
 
 	CFrmPlot* frmPlot{ nullptr };
-	CBarVertChart* Chart{nullptr};
 
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 	{
@@ -115,7 +114,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	else
 		frmPlot = s_CurPlotWnd;
 
-	
+	CBarVertChart* Chart{nullptr};
 	if (Type == L"c")
 		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
 	else if (Type == L"s") 
@@ -383,7 +382,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	}
 
 	bool IsCumulative = false;
-	CHistogramSeries::Mode BinMode = CHistogramSeries::Mode::Frequency;
+	auto BinMode = CHistogramSeries::Mode::Frequency;
 	std::variant<std::monostate, std::vector<double>, int> Breaks;
 
 	auto Data = Iterable_As1DVector(DataObj);
@@ -393,34 +392,23 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	{
 		if (ModeObj != Py_None)
 		{
-			auto distmode = CheckString(ModeObj, "mode must be string.");
+			#define MODE CHistogramSeries::Mode
+			std::wstring distmode = PyUnicode_AsWideCharString(ModeObj, nullptr);
 
-			if (distmode == "d") BinMode = CHistogramSeries::Mode::Density;
-			else if (distmode == "f") BinMode = CHistogramSeries::Mode::Frequency;
-			else if (distmode == "r") BinMode = CHistogramSeries::Mode::RelativeFreq;
+			if (distmode == "d") BinMode = MODE::Density;
+			else if (distmode == "f") BinMode = MODE::Frequency;
+			else if (distmode == "r") BinMode = MODE::RelativeFreq;
 		}
 
 		if (CumulObj != Py_None)
-		{
-			IsCumulative = CheckBool(CumulObj, "cumulative must be bool.");
-		}
+			IsCumulative = PyObject_IsTrue(CumulObj);
 
 		if (BreaksObj != Py_None)
 		{
 			if (PyLong_CheckExact(BreaksObj))
-			{
-				int Brk = PyLong_AsLong(BreaksObj);
-				CHECKPOSITIVE_RET(Brk, "breaks, if int then must be >0 .");
-
-				Breaks = Brk;
-			}
+				Breaks = (int)PyLong_AsLong(BreaksObj);
 			else
-			{
-				auto Brk = Iterable_As1DVector(BreaksObj);
-				IF_PYERRVALUE_RET(Brk.size() == 0, "breaks do not contain any valid number.");
-
-				Breaks = std::move(Brk);
-			}
+				Breaks = std::move(Iterable_As1DVector(BreaksObj));
 		}
 
 		CFrmPlot* frmPlot{ nullptr };
@@ -499,54 +487,84 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 {
-	/*
+	
 	core::CArray LabelData;
 
 	//Default type is clustered (unstacked)
 	std::wstring Style = L"c";
-	std::wstring Name{}, Title{};
+	std::wstring Label{};
 
-	PyObject* LabelsObj = Py_None, * YObj = Py_None, *NameObj = Py_None;
+	PyObject *LabelsObj = Py_None, *YObj = Py_None;
+	PyObject* LabelObj = Py_None; //series label
 	PyObject* StyleObj = Py_None, *MarkerObj = Py_None, *LineObj = Py_None;
 
-	const char* kwlist[] = { "y", "labels", "name", "style", "marker", "line", NULL };
+	const char* kwlist[] = { "y", "labels", "label", "style", "marker", "line", NULL };
 	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOO", const_cast<char**>(kwlist),
-		&YObj, &LabelsObj, &NameObj, &StyleObj, &MarkerObj, &LineObj))
+		&YObj, &LabelsObj, &LabelObj, &StyleObj, &MarkerObj, &LineObj))
 	{
 		return nullptr;
 	}
 
+
 	auto Data = Iterable_As1DVector(YObj);
 
-	CFrmPlot* frmPlot = nullptr;
-	if (!s_CurPlotWnd) {  
-		IF_PYERRRUNTIME_RET(LabelsObj == Py_None, "'labels' must be specified!"); 
-		frmPlot = new CFrmPlot(nullptr);  
-		s_CurPlotWnd = frmPlot;
-	}
-	else{
-		frmPlot = s_CurPlotWnd;
-	}
+	if (LabelObj != Py_None)
+		Label = PyUnicode_AsWideCharString(LabelObj, nullptr);
 
-	auto Rect = frmPlot->GetClientRect(); 
-	auto ChartBase = std::make_unique<CLineChartBase>(frmPlot, Rect);
+	if (LabelsObj != Py_None)
+		LabelData = Iterable_AsArray(LabelsObj);
+
+	if (StyleObj != Py_None)
+		Style = PyUnicode_AsWideCharString(StyleObj, nullptr);
+
+
+	CFrmPlot* frmPlot{ nullptr };
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
+		{
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
+		}
+		else
+			frmPlot = s_CurPlotWnd;
+
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+
+		if (Style  == L"c")
+		{
+			auto BarChrt = std::make_unique<CLineClusterChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+
+		else if (Style == L"s") 
+		{
+			auto BarChrt = std::make_unique<CStackedLineChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+
+		else if (Style == L"%") 
+		{
+			auto BarChrt = std::make_unique<CPercentStackedLineChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(BarChrt));
+		}
+	}
+	else
+		frmPlot = s_CurPlotWnd;
+
+	CLineChartBase* Chart{nullptr};
+	if (Style == L"c")
+		Chart = (CLineClusterChart*)frmPlot->GetActiveChart();
+	else if (Style == L"s") 
+		Chart = (CStackedLineChart*)frmPlot->GetActiveChart();
+	else if (Style == L"%") 
+		Chart = (CPercentStackedLineChart*)frmPlot->GetActiveChart();
 		
 	try
 	{
-		if (NameObj != Py_None)
-			Name = CheckString(NameObj, "name must be string.");
-
-		if (LabelsObj != Py_None)
-		{
-			LabelData = Iterable_AsArray(LabelsObj);
-			IF_PYERRVALUE_RET(LabelData.size() < 2, "At least 2 labels expected.")
-		}
-
-		if (StyleObj != Py_None)
-			Style = CheckString(StyleObj, "type must be string.");
-
-
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
+		
 		std::shared_ptr<core::CStrColData> LabelCol;
 		if (LabelData.size() == 0)
 			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
@@ -571,21 +589,19 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(LabelCol);
 		DataTbl->append_col(DataCol);
 
-		size_t szMarker = 0;
+		
 		CLineSeriesBase* Series = nullptr;
-		szMarker = CSeriesBase::GetDefMarkerSize();
+		if (Style == L"c")
+			Series = new CLineClusterSeries((CLineClusterChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		if (Style == "c")
-			Series = new CLineClusterSeries((CLineClusterChart*)ChartBase.get(), std::move(DataTbl), szMarker);
+		else if (Style == L"s")
+			Series = new CStackedLineSeries((CStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		else if (Style == "s")
-			Series = new CStackedLineSeries((CStackedLineChart*)ChartBase.get(), std::move(DataTbl), szMarker);
+		else if (Style == L"%")
+			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		else if (Style == "%")
-			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)ChartBase.get(), std::move(DataTbl), szMarker);
-
-		if (!Name.empty())
-			Series->SetName(Name);
+		if (!Label.empty())
+			Series->SetName(Label);
 
 		wxPen LinePen = Series->GetLinePen();
 		PreparePen(LineObj, LinePen);
@@ -594,13 +610,12 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		PrepareMarker(MarkerObj, Series);
 
 		auto UniqueSeries = std::unique_ptr<CLineSeriesBase>(Series);
-		ChartBase->AddSeries(std::move(UniqueSeries));
+		Chart->AddSeries(std::move(UniqueSeries));
 
-		frmPlot->AddChart(std::move(ChartBase));
+		s_SubPlotInfo = SubPlotInfo();
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 	
-	*/
 	Py_RETURN_NONE;
 }
 
