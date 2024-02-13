@@ -89,6 +89,11 @@ def boxplot(
 	data : Data to be plotted \n
 	label: Name of the series
 	"""
+	assert isinstance(data, _Iterable), "'data' must be iterable"
+	
+	if label != None:
+		assert isinstance(label, str), "'label' must be string"
+
 	return _pydll.c_plot_boxplot((), {
 		"data":data, 
 		"name":label, 
@@ -103,8 +108,8 @@ def boxplot(
 
 def histogram(
 		data:_Iterable, 
-		mode:str= "f", #frequency 
-		cumulative=False, 
+		mode = "f", #frequency 
+		cumulative = False, 
 		breaks:int|_Iterable = None, 
 		fill:_gdi.Brush=None, 
 		line:_gdi.Pen=None):

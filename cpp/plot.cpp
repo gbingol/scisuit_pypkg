@@ -349,7 +349,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 		}
 
 		if (NameObj != Py_None)
-			series->SetName(CheckString(NameObj, "name must be string."));
+			series->SetName(PyUnicode_AsWideCharString(NameObj, nullptr));
 
 		Chart->AddSeries(std::move(series));
 
