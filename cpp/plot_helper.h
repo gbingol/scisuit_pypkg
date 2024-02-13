@@ -15,15 +15,6 @@
 
 
 
-static int CheckInt(PyObject* Obj, const char* ErrMsg)
-{
-	if (!PyLong_CheckExact(Obj))
-		throw std::exception(ErrMsg);
-
-	return PyLong_AsLong(Obj);
-}
-
-
 static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 {
 	if (!IsExactTypeRealNumber(Obj))
@@ -77,33 +68,6 @@ static std::vector<wxColor> CheckColors(PyObject* Obj)
 	Py_DECREF(iterator);
 
 	return retColors;
-}
-
-
-
-static std::vector<int> ExplodeDataPoints(PyObject* Obj)
-{
-	PyObject* iterator = PyObject_GetIter(Obj);
-	if (!iterator)
-		throw std::exception("An iterable object expected.");
-
-	std::vector<int> DP;
-	PyObject* item{ nullptr };
-	while ((item = PyIter_Next(iterator)) != nullptr)
-	{
-		int Value = CheckInt(item, "explode must contain only integer items.");
-
-		if (Value < 0 || Value>10)
-			throw std::exception("explode point: [0, 10] expected.");
-
-		DP.push_back(Value);
-
-		Py_DECREF(item);
-	}
-
-	Py_DECREF(iterator);
-
-	return DP;
 }
 
 
@@ -214,7 +178,7 @@ static void PrepareTrendline(
 	wxColor DefaultColor, 
 	charts::CScatterSeriesBase* Series)
 {
-	std::wstring style = L"linear";
+	std::string style = "linear";
 	std::wstring Label{};
 	int Degree = 2;
 	std::optional<double> Intercept = std::nullopt;
@@ -231,10 +195,10 @@ static void PrepareTrendline(
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && key == "style")
-			style = PyUnicode_AsWideCharString(ObjValue, nullptr);
+			style = PyUnicode_AsUTF8(ObjValue);
 
 		else if (ObjValue != Py_None && key == "degree")
-			Degree = CheckInt(ObjValue, "'degree' must be int.");
+			Degree = PyLong_AsLong(ObjValue);
 
 		else if (ObjValue != Py_None && key == "intercept")
 			Intercept = CheckNumber(ObjValue, "intercept must be real number.");

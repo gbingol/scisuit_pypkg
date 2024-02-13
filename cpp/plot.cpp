@@ -648,11 +648,8 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 	int StartAngle = 0; // in degrees
 	int ExplodeSeries = 0; //for whole series
 	std::vector<int> Explode; //for individual data points if defined
-	std::wstring Title{};
 		
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element");
-	IF_PYERRVALUE_RET(Data.size() < 2, "data must contain at least 2 numeric values");
 
 	try
 	{
@@ -666,34 +663,47 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		}
 
 		if (StartAngleObj != Py_None)
-		{
-			StartAngle = CheckInt(StartAngleObj, "startangle must be type int");
-			IF_PYERRVALUE_RET(StartAngle < 0 || StartAngle>359, "[0, 359] expected");
-		}
+			StartAngle = PyLong_AsLong(StartAngleObj);
 
 		if (ExplodeObj != Py_None)
 		{
 			if (PyLong_CheckExact(ExplodeObj))
-			{
-				ExplodeSeries = CheckInt(ExplodeObj, "explode must be int/list");
-				IF_PYERRVALUE_RET(ExplodeSeries < 0 || ExplodeSeries>10, "explode pie: [0, 10] expected");
-			}
+				ExplodeSeries = PyLong_AsLong(ExplodeObj);
 			else
-				Explode = ExplodeDataPoints(ExplodeObj);
+			{
+				PyObject* iterator = PyObject_GetIter(ExplodeObj);
+
+				PyObject* item{ nullptr };
+				while ((item = PyIter_Next(iterator)) != nullptr)
+				{
+					Explode.push_back(PyLong_AsLong(item));
+					Py_DECREF(item);
+				}
+
+				Py_DECREF(iterator);
+			}
 		}
 
 
 		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd)
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 		{
-			frmPlot = new CFrmPlot(nullptr);
-			s_CurPlotWnd = frmPlot;
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto PieChrt = std::make_unique<CPieChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(PieChrt));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Rect = frmPlot->GetClientRect();
-		auto PieChart = std::make_unique<CPieChart>(frmPlot, Rect);
+		auto Chart = (CPieChart*)frmPlot->GetActiveChart();
 			
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 
@@ -722,7 +732,7 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(LabelCol);
 		DataTbl->append_col(DataCol);
 
-		auto PieSeries = std::make_unique<CPieSeries>(PieChart.get(), std::move(DataTbl));
+		auto PieSeries = std::make_unique<CPieSeries>(Chart, std::move(DataTbl));
 
 		if (Colors.size() > 0)
 			PieSeries->SetSliceColors(Colors);
@@ -737,6 +747,7 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 			}
 		}
 
+		//if defined by user
 		if (StartAngle > 0)
 		{
 			const float PI = 3.141592654f;
@@ -745,9 +756,9 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 			PieSeries->SetAngleFirstSlice(InRadians);
 		}
 
-		PieChart->AddSeries(std::move(PieSeries));
+		Chart->AddSeries(std::move(PieSeries));
 
-		frmPlot->AddChart(std::move(PieChart));
+		s_CurPlotWnd = frmPlot;
 	}
 	CATCHRUNTIMEEXCEPTION_RET();
 
@@ -1114,7 +1125,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 		if (SmoothObj && SmoothObj != Py_None)
 			IsSmooth = PyObject_IsTrue(SmoothObj);
 
-				bool MarkerDef = MarkerObj && MarkerObj != Py_None;
+		bool MarkerDef = MarkerObj && MarkerObj != Py_None;
 		bool LineDef = LineObj && LineObj != Py_None;
 
 		//Has the user defined marker or line properties

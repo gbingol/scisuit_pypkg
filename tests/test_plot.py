@@ -54,6 +54,7 @@ def pie():
 	#labels have been automatically assigned as 1, 2 and 3.
 	plt.pie(data)
 
+"""
 	#Labels explicitly defined
 	plt.pie(data, labels=["A", "B", "C"])
 
@@ -67,11 +68,11 @@ def pie():
 	plt.pie(data, explode = [1] )
 
 	#arbitrary colors for each slice.
-	plt.pie(data, colors = [plt.Color.GREEN, plt.Color.RED, plt.Color.CHOCOLATE] )
+	plt.pie(data, colors = [plt.COLOR_GREEN, plt.COLOR_RED, plt.COLOR_CHOCOLATE] )
 
 	#set the angle of first slice to 45°.
 	plt.pie(data, startangle=45)
-
+"""
 
 
 def qqnorm():
@@ -249,7 +250,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-linechart()
+pie()
 
 plt.subplot(1,1)
 #Overlay scatter plot
