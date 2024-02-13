@@ -15,15 +15,6 @@
 
 
 
-static std::wstring CheckString(PyObject* Obj, const char* ErrMsg)
-{
-	if (!PyUnicode_Check(Obj))
-		throw std::exception(ErrMsg);
-
-	return PyUnicode_AsWideCharString(Obj, nullptr);		
-}
-
-
 static int CheckInt(PyObject* Obj, const char* ErrMsg)
 {
 	if (!PyLong_CheckExact(Obj))
@@ -43,21 +34,8 @@ static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 
 
 
-static bool CheckBool(PyObject* Obj, const char* ErrMsg)
+static wxColour StringToColor(PyObject* Obj)
 {
-	if (!IsExactTypeBool(Obj))
-		throw std::exception(ErrMsg);
-
-	return PyObject_IsTrue(Obj);
-}
-
-
-
-static std::pair<wxColor, std::string> StringToColor(PyObject* Obj)
-{
-	if (!PyUnicode_Check(Obj))
-		return std::make_pair(wxNullColour, "color must be string.");
-
 	std::string ColorStr = PyUnicode_AsUTF8(Obj);
 	std::stringstream ss(ColorStr);
 
@@ -66,27 +44,17 @@ static std::pair<wxColor, std::string> StringToColor(PyObject* Obj)
 	while (ss >> c)
 	{
 		if (c > 255 || c < 0)
-			return std::make_pair(wxNullColour, "RGB must be in [0, 255].");
+			throw std::runtime_error("RGB must be in [0, 255].");
 
 		rgb.push_back(c);
 	}
 
 	if (rgb.size() != 3)
-		return std::make_pair(wxNullColour, "Ill-formed color.");
+		throw std::runtime_error("Ill-formed color.");
 
-	return std::make_pair(wxColor(rgb[0], rgb[1], rgb[2]), "");
+	return wxColor(rgb[0], rgb[1], rgb[2]);
 }
 
-
-
-static wxColor CheckColor(PyObject* Obj)
-{
-	auto Color = StringToColor(Obj);
-	if (Color.first == wxNullColour)
-		throw std::exception(Color.second.c_str());
-
-	return Color.first;
-}
 
 
 
@@ -100,7 +68,7 @@ static std::vector<wxColor> CheckColors(PyObject* Obj)
 	PyObject* item{ nullptr };
 	while ((item = PyIter_Next(iterator)) != nullptr)
 	{
-		auto Color = CheckColor(item);
+		auto Color = StringToColor(item);
 		retColors.push_back(Color);
 
 		Py_DECREF(item);
@@ -157,25 +125,13 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-		{
-			auto Color = CheckColor(ObjValue);
-			pen.SetColour(Color);
-		}
+			pen.SetColour(StringToColor(ObjValue));
 
 		else if (ObjValue != Py_None && key == "width")
-		{
-			int Width = CheckInt(ObjValue, "width must be int.");
-			if (Width < 0)
-				throw std::exception("Width of the line must be int and >0.");
-
-			pen.SetWidth(Width);
-		}
+			pen.SetWidth(PyLong_AsLong(ObjValue));
 
 		else if (ObjValue != Py_None && key == "style")
-		{
-			int Style = CheckInt(ObjValue, "pen style must be int.");
-			pen.SetStyle((wxPenStyle)Style);
-		}
+			pen.SetStyle((wxPenStyle) PyLong_AsLong(ObjValue));
 	}	
 }
 
@@ -195,16 +151,10 @@ static void PrepareBrush(PyObject* Dict, wxBrush& brush)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-		{
-			auto Fill = CheckColor(ObjValue);
-			brush.SetColour(Fill);
-		}
+			brush.SetColour(StringToColor(ObjValue));
 
 		else if (ObjValue != Py_None && key == "style")
-		{
-			auto Style = CheckInt(ObjValue, "brush style must be int.");
-			brush.SetStyle((wxBrushStyle)Style);
-		}
+			brush.SetStyle((wxBrushStyle)PyLong_AsLong(ObjValue));
 	}
 }
 
@@ -227,7 +177,7 @@ static void PrepareMarker(PyObject* Dict, charts::CSeriesBase* Series)
 
 		if (ObjValue != Py_None && key == "style")
 		{
-			auto Type = CheckString(ObjValue, "'style' must be string.");
+			std::string Type = PyUnicode_AsUTF8(ObjValue);
 
 			if (Type == "s")
 				Series->SetMarkerType((int)charts::IMarker::TYPE::RECT);
@@ -238,12 +188,7 @@ static void PrepareMarker(PyObject* Dict, charts::CSeriesBase* Series)
 		}
 
 		else if (ObjValue != Py_None && key == "size")
-		{
-			int Size = CheckInt(ObjValue, "'size' must be int.");
-			if (Size <= 0)
-				throw std::exception("'size'>0 expected.");
-			Series->SetMarkerSize(Size);
-		}
+			Series->SetMarkerSize(PyLong_AsLong(ObjValue));
 
 		else if (ObjValue != Py_None && key == "fill")
 		{
@@ -286,7 +231,7 @@ static void PrepareTrendline(
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && key == "style")
-			style = CheckString(ObjValue, "'style' must be string.");
+			style = PyUnicode_AsWideCharString(ObjValue, nullptr);
 
 		else if (ObjValue != Py_None && key == "degree")
 			Degree = CheckInt(ObjValue, "'degree' must be int.");
@@ -298,13 +243,13 @@ static void PrepareTrendline(
 			PreparePen(ObjValue, pen);
 
 		else if (key == "label")
-			Label = CheckString(ObjValue, "trendline name must be string.");
+			Label = PyUnicode_AsWideCharString(ObjValue, nullptr);
 
 		else if (key == "show_stats")
-			show_stats = CheckBool(ObjValue, "'show_stats' must be bool.");
+			show_stats = PyObject_IsTrue(ObjValue);
 
 		else if (key == "show_equation")
-			show_equation = CheckBool(ObjValue, "'show_equation' must be bool.");
+			show_equation = PyObject_IsTrue(ObjValue);
 	}
 
 	std::shared_ptr<charts::CTrendline> tline = nullptr;

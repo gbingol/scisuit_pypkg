@@ -829,7 +829,7 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 	try
 	{
 		if (ShowObj != Py_None)
-			LineShown = CheckBool(ShowObj, "show must be bool.");
+			LineShown = PyObject_IsTrue(ShowObj);
 
 			
 		CFrmPlot* frmPlot = nullptr;
@@ -1024,7 +1024,7 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 		auto Chart = (CQuiverChart*)frmPlot->GetActiveChart();
 
 		if (ScaleObj != Py_None)
-			IsScaled = CheckBool(ScaleObj, "scale must be boolean.");
+			IsScaled = PyObject_IsTrue(ScaleObj);
 
 		Chart->SetScaled(IsScaled);
 
@@ -1112,10 +1112,9 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 		bool IsSmooth = false;
 		if (SmoothObj && SmoothObj != Py_None)
-			IsSmooth = CheckBool(SmoothObj, "smooth must be bool.");
+			IsSmooth = PyObject_IsTrue(SmoothObj);
 
-			
-		bool MarkerDef = MarkerObj && MarkerObj != Py_None;
+				bool MarkerDef = MarkerObj && MarkerObj != Py_None;
 		bool LineDef = LineObj && LineObj != Py_None;
 
 		//Has the user defined marker or line properties
@@ -1233,7 +1232,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 		if (ColorObj && ColorObj != Py_None)
 		{
-			auto Color = CheckColor(ColorObj);
+			auto Color = StringToColor(ColorObj);
 			auto Brush = series->GetBrush();
 
 			//modify existing brush
