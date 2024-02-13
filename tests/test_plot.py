@@ -250,7 +250,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-pie()
+bar()
 
 plt.subplot(1,1)
 #Overlay scatter plot
