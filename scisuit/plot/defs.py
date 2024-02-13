@@ -22,6 +22,15 @@ class Trendline:
 		show_equation:bool=False
 		) -> None:
 
+		assert isinstance(style, str), "'style' must be string"
+		assert isinstance(degree, int), "'degree' must be int"
+		assert isinstance(intercept, float), "'intercept' must be float"
+		assert isinstance(show_stats, bool), "'show_stats' must be bool"
+		assert isinstance(show_equation, bool), "'show_equation' must be bool"
+
+		if label != None:
+			assert isinstance(label, str), "'label' must be string"
+
 		self._style = style
 		self._degree = degree
 		self._intercept = intercept
@@ -60,7 +69,10 @@ class Marker:
 		fill:_gdi.Brush = None,
 		line:_gdi.Pen = None) -> None:
 
-		assert style!=None,"'style' cannot be None"
+		assert isinstance(style, str),"'style' must be string"
+		assert isinstance(size, int), "'size' must be integer"
+		assert size>0, "size>0 expected"
+
 		self._style = style
 		self._size = size
 		self._fill = vars(fill) if fill != None else None
