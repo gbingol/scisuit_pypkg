@@ -13,7 +13,7 @@ import scisuit.plot.gdi as _gdi
 
 def bar(
 	height:_Iterable, 
-	labels:list[str]=None, 
+	labels:_Iterable = None, 
 	style:str = "c", #clustered
 	fill:_gdi.Brush=None, 
 	line:_gdi.Pen=None):
@@ -25,22 +25,30 @@ def bar(
 	labels: Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
-	return _pydll.c_plot_bar((),	{
+	assert isinstance(style, str), "'style' must be string"
+	if style.lower() not in ["c", "s", "%"]:
+		raise ValueError("'style' must be c, s or %")
+	
+	if labels != None:
+		assert len(labels)>=2, "at least 2 labels expected"
+	
+	return _pydll.c_plot_bar((), {
 			"height":height, 
-    			"labels":labels, 
+			"labels":labels, 
 			"style":style, 
 			"fill":vars(fill) if fill != None else None, 
 			"line":vars(line) if line != None else None})
 
 
+#-----------------------------------------------------------------------------------
 
 
 def barh(
 	width:_Iterable, 
-	labels:list[str]=None, 
-	style:str= "c", #cluster
-	fill:_gdi.Brush=None, 
-	line:_gdi.Pen=None):
+	labels:_Iterable = None, 
+	style:str = "c", #cluster
+	fill:_gdi.Brush = None, 
+	line:_gdi.Pen = None):
 	"""
 	Plots horizontal bar chart
 
@@ -49,6 +57,13 @@ def barh(
 	labels : Category labels \n
 	style: CLUSTER, STACKED or PERCENTSTK
 	"""
+	assert isinstance(style, str), "'style' must be string"
+	if style.lower() not in ["c", "s", "%"]:
+		raise ValueError("'style' must be c, s or %")
+	
+	if labels != None:
+		assert len(labels)>=2, "at least 2 labels expected"
+	
 	return _pydll.c_plot_barh((),{
 		"width":width, 
 		"labels":labels, 
@@ -64,9 +79,9 @@ def barh(
 
 def boxplot(
 	data:_Iterable, 
-	label:str=None, 
-	fill:_gdi.Brush=None, 
-	line:_gdi.Pen=None):
+	label:str = None, 
+	fill:_gdi.Brush = None, 
+	line:_gdi.Pen = None):
 	"""
 	Plots box-whisker chart.
 
@@ -132,6 +147,10 @@ def line(
 	style: CLUSTER, STACKED or PERCENTSTK \n
 	label: Label of the individual series 
 	"""
+	assert isinstance(style, str), "'style' must be string"
+	if style.lower() not in ["c", "s", "%"]:
+		raise ValueError("'style' must be c, s or %")
+	
 	return _pydll.c_plot_line((), {
 			"y":y, 
 			"labels":labels, 
@@ -376,7 +395,14 @@ def bubble(
 
 	assert len(x) == len(y) and len(y) == len(size), "x, y and size must have same lengths"
 
+	assert isinstance(mode, str), "'mode' must be string"
+	assert isinstance(label, str), "'label' must be string"
+	assert isinstance(color, str), "'color' must be string"
+
+	assert isinstance(scale, int), "'scale' must be int"
+	assert 0<scale<200, "'scale' must be in range (0, 200)"
+
 	return _pydll.c_plot_bubble((), {
-		"x":x, "y":y , "size":size, "color":color,"mode":mode, "scale":scale, "label":label})
+		"x":x, "y":y , "size":size, "color":color,"mode":mode.lower(), "scale":scale, "label":label})
 
 	

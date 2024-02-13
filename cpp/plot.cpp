@@ -74,19 +74,14 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	}
 
 	if (StyleObj != Py_None)
-	{
-		Type = CheckString(StyleObj, "style must be string.");
-		IF_PYERRVALUE_RET(Type.empty(), "'s', 'c' or '%' expected.");
-		
-		std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
-
-		bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
-		IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-	}
+		Type = PyUnicode_AsWideCharString(StyleObj, nullptr);
 
 	auto Data = Iterable_As1DVector(HeightObj);
+	IF_PYERRVALUE_RET(Data.size() == 0, "height does not contain any numeric element.");
 
 	CFrmPlot* frmPlot{ nullptr };
+	CBarVertChart* Chart{nullptr};
+
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
@@ -120,7 +115,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	else
 		frmPlot = s_CurPlotWnd;
 
-	CBarVertChart* Chart{nullptr};
 	
 	if (Type == L"c")
 		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
@@ -129,13 +123,11 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	else if (Type == L"%") 
 		Chart = (CBarVertPerStkChart*)frmPlot->GetActiveChart();
 
+
 	try
 	{
 		if (LabelsObj != Py_None)
-		{
 			LabelData = Iterable_AsArray(LabelsObj);
-			IF_PYERRVALUE_RET(LabelData.size() < 2, "At least 2 labels expected.")
-		}		
 
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
@@ -197,19 +189,14 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	}
 
 	if (TypeObj != Py_None)
-	{
-		Type = CheckString(TypeObj, "style must be string.");
-		IF_PYERRVALUE_RET(Type.empty(), "'s', 'c' or '%' expected.");
-		
-		std::transform(Type.begin(), Type.end(), Type.begin(), ::tolower);
-
-		bool AcceptableType = Type == "s" || Type == "c" || Type == "%";
-		IF_PYERRVALUE_RET(!AcceptableType, "'s', 'c' or '%' for stacked, clustered and percent-stacked.");
-	}
+		Type = PyUnicode_AsWideCharString(TypeObj, nullptr);
 
 	auto Data = Iterable_As1DVector(WidthObj);
+	IF_PYERRVALUE_RET(Data.size() == 0, "width does not contain any numeric element.");
 
 	CFrmPlot* frmPlot{ nullptr };
+	CBarHorizChart* Chart{nullptr};
+	
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
@@ -243,7 +230,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	else
 		frmPlot = s_CurPlotWnd;
 
-	CBarHorizChart* Chart{nullptr};
+	
 	
 	if (Type == L"c")
 		Chart = (CBarHorizClusterChart*)frmPlot->GetActiveChart();
@@ -255,10 +242,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	try
 	{
 		if (LabelsObj != Py_None)
-		{
 			LabelData = Iterable_AsArray(LabelsObj);
-			IF_PYERRVALUE_RET(LabelData.size() < 2, "At least 2 labels expected.")
-		}
 
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
@@ -318,7 +302,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	}
 
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "Data does not contain any valid element.");
+	IF_PYERRVALUE_RET(Data.size() == 0, "Data does not contain any numeric element.");
 
 	try
 	{
@@ -403,7 +387,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	std::variant<std::monostate, std::vector<double>, int> Breaks;
 
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element.");
+	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any numeric element.");
+
 	try
 	{
 		if (ModeObj != Py_None)
@@ -1186,7 +1171,6 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-
 	auto xdata = Iterable_As1DVector(XObj);
 	auto ydata = Iterable_As1DVector(YObj);
 	auto sizedata = Iterable_As1DVector(SizeObj);
@@ -1244,29 +1228,18 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 		if (ModeObj && ModeObj != Py_None)
 		{
-			auto mode = charts::CBubbleSeries::SIZEMODE::AREA;
-
-			auto s = CheckString(ModeObj, "mode must be string.");
-			if (s == "w" || s == "W")
-				mode = charts::CBubbleSeries::SIZEMODE::WIDTH;
+			#define enm charts::CBubbleSeries::SIZEMODE
+			std::wstring s = PyUnicode_AsWideCharString(ModeObj, nullptr);
+			auto mode = s == "w"? enm::WIDTH: enm::AREA;
 				
 			series->SetSizeMode(mode);
 		}
 
 		if (ScaleObj && ScaleObj != Py_None)
-		{
-			int scl = CheckInt(ScaleObj, "scale must be type int");
-			if (scl < 0 || scl>200)
-				throw std::exception("scale must be an integer in the interval (0,200].");
-
-			series->SetScalingFactor(scl);
-		}
+			series->SetScalingFactor(PyLong_AsLong(ScaleObj));
 
 		if (LabelObj && PyUnicode_Check(LabelObj))
-		{
-			auto lbl = PyUnicode_AsWideCharString(LabelObj, nullptr);
-			series->SetName(lbl);
-		}
+			series->SetName(PyUnicode_AsWideCharString(LabelObj, nullptr));
 
 		Chart->AddSeries(std::move(series));
 
@@ -1345,12 +1318,10 @@ void c_plot_show(bool maximize)
 }
 
 
-void c_plot_title(PyObject* TitleObj )
+void c_plot_title(PyObject* LabelObj )
 {
-	if (TitleObj == nullptr || s_CurPlotWnd == nullptr)
+	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
-
-	auto Title = CheckString(TitleObj, "title must be string.");
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 
@@ -1361,16 +1332,15 @@ void c_plot_title(PyObject* TitleObj )
 		TextBox = Chart->GetChartTitle();
 	}
 
-	TextBox->SetText(Title);
+	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+		TextBox->SetText(Label);
 }
 
 
-void c_plot_xlabel(PyObject* xlblObj)
+void c_plot_xlabel(PyObject* LabelObj)
 {
-	if (xlblObj == nullptr || s_CurPlotWnd == nullptr)
+	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
-
-	auto XLabel = CheckString(xlblObj, "xlab must be string.");
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 
@@ -1381,16 +1351,15 @@ void c_plot_xlabel(PyObject* xlblObj)
 		TextBox = Chart->GetHorizAxisTitle();
 	}
 
-	TextBox->SetText(XLabel);
+	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+		TextBox->SetText(Label);
 }
 
 
-void c_plot_ylabel(PyObject* YlabObj)
+void c_plot_ylabel(PyObject* LabelObj)
 {
-	if (YlabObj == nullptr || s_CurPlotWnd == nullptr)
+	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
-
-	auto YLabel = CheckString(YlabObj, "ylab must be string.");
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 	auto TextBox = Chart->GetVertAxisTitle();
@@ -1400,7 +1369,8 @@ void c_plot_ylabel(PyObject* YlabObj)
 		TextBox = Chart->GetVertAxisTitle();
 	}
 
-	TextBox->SetText(YLabel);
+	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+		TextBox->SetText(Label);
 }
 
 
