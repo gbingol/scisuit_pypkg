@@ -57,9 +57,7 @@ static SubPlotInfo s_SubPlotInfo;
 
 
 PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
-{
-	core::CArray LabelData;
-		
+{	
 	//Default type is clustered
 	const char* Style = "c";
 
@@ -67,7 +65,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	PyObject* FillObj = Py_None, * LineObj = Py_None;
 
 	const char* kwlist[] = { "height", "labels", "style", "fill", "line", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOO", const_cast<char**>(kwlist),
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOO", const_cast<char**>(kwlist),
 		&HeightObj, &LabelsObj, &StyleObj, &FillObj, &LineObj))
 	{
 		return nullptr;
@@ -78,6 +76,12 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(HeightObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "height does not contain any numeric element.");
+
+	core::CArray LabelData = Iterable_AsArray(LabelsObj);
+	IF_PYERRVALUE_RET(LabelData.size() == 0, "labels does not contain any element.");
+
+	IF_PYERRVALUE_RET(LabelData.size() != Data.size(), "len(height) = len(labels) expected.");
+
 
 	CFrmPlot* frmPlot{ nullptr };
 
@@ -125,9 +129,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 	try
 	{
-		if (LabelsObj != Py_None)
-			LabelData = Iterable_AsArray(LabelsObj);
-
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
 		auto DataTbl = std::make_unique<core::CGenericDataTable>();
@@ -171,9 +172,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 {
-	
-	core::CArray LabelData;
-		
 	//Default Style is clustered
 	const char* Style = "c";
 
@@ -181,7 +179,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	PyObject* FillObj = Py_None, *LineObj = Py_None;
 	
 	const char* kwlist[] = { "width", "labels", "style", "fill", "line", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOO", const_cast<char**>(kwlist),
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOO", const_cast<char**>(kwlist),
 		&WidthObj, &LabelsObj, &TypeObj, &FillObj, &LineObj))
 	{
 		return nullptr;
@@ -192,6 +190,11 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(WidthObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "width does not contain any numeric element.");
+
+	core::CArray LabelData = Iterable_AsArray(LabelsObj);
+	IF_PYERRVALUE_RET(LabelData.size() == 0, "labels does not contain any element.");
+
+	IF_PYERRVALUE_RET(LabelData.size() != Data.size(), "len(width) = len(labels) expected.");
 
 	CFrmPlot* frmPlot{ nullptr };
 	CBarHorizChart* Chart{nullptr};
@@ -240,9 +243,6 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	
 	try
 	{
-		if (LabelsObj != Py_None)
-			LabelData = Iterable_AsArray(LabelsObj);
-
 		auto DataCol = std::make_shared<core::CRealColData>(Data);
 		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
 		auto DataTbl = std::make_unique<core::CGenericDataTable>();

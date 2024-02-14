@@ -14,8 +14,8 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.bar(labels=categ, height=A, style=plt.PERCENTSTK)
-	plt.bar(height=B,  style=plt.PERCENTSTK)
+	plt.bar(labels=categ, height=A)
+	plt.bar(height=B, labels=categ)
 
 
 def barh():
@@ -24,7 +24,7 @@ def barh():
 	B = [13, 23, 8, 13]
 
 	plt.barh(labels=categ, width=A, style=plt.CLUSTER)
-	plt.barh(width=B, style=plt.CLUSTER)
+	plt.barh(width=B, labels=categ, style=plt.CLUSTER)
 
 
 def histogram():
@@ -251,6 +251,9 @@ dirfield()
 
 plt.subplot(0,2)
 bar()
+
+plt.subplot(2,2)
+barh()
 
 plt.subplot(1,1)
 #Overlay scatter plot

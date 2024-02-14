@@ -13,7 +13,7 @@ import scisuit.plot.gdi as _gdi
 
 def bar(
 	height:_Iterable, 
-	labels:_Iterable = None, 
+	labels:_Iterable, 
 	style:str = "c", #clustered
 	fill:_gdi.Brush=None, 
 	line:_gdi.Pen=None):
@@ -29,8 +29,10 @@ def bar(
 	if style.lower() not in ["c", "s", "%"]:
 		raise ValueError("'style' must be c, s or %")
 	
-	if labels != None:
-		assert len(labels)>=2, "at least 2 labels expected"
+	assert isinstance(height, _Iterable), "'height' must be iterable"
+	assert isinstance(labels, _Iterable), "'labels' must be iterable"
+	assert len(labels)>=2, "at least 2 labels expected"
+	assert len(labels) == len(height), "len(labels) == len(height) expected"
 	
 	return _pydll.c_plot_bar((), {
 			"height":height, 
@@ -45,7 +47,7 @@ def bar(
 
 def barh(
 	width:_Iterable, 
-	labels:_Iterable = None, 
+	labels:_Iterable, 
 	style:str = "c", #cluster
 	fill:_gdi.Brush = None, 
 	line:_gdi.Pen = None):
@@ -61,8 +63,10 @@ def barh(
 	if style.lower() not in ["c", "s", "%"]:
 		raise ValueError("'style' must be c, s or %")
 	
-	if labels != None:
-		assert len(labels)>=2, "at least 2 labels expected"
+	assert isinstance(width, _Iterable), "'width' must be iterable"
+	assert isinstance(labels, _Iterable), "'labels' must be iterable"
+	assert len(labels)>=2, "at least 2 labels expected"
+	assert len(labels) == len(width), "len(labels) == len(width) expected"
 	
 	return _pydll.c_plot_barh((),{
 		"width":width, 
