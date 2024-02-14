@@ -61,7 +61,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	core::CArray LabelData;
 		
 	//Default type is clustered
-	std::wstring Type = L"c";
+	const char* Style = "c";
 
 	PyObject* LabelsObj = Py_None, * HeightObj = Py_None, *StyleObj = Py_None;
 	PyObject* FillObj = Py_None, * LineObj = Py_None;
@@ -74,7 +74,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 	}
 
 	if (StyleObj != Py_None)
-		Type = PyUnicode_AsWideCharString(StyleObj, nullptr);
+		Style = PyUnicode_AsUTF8(StyleObj);
 
 	auto Data = Iterable_As1DVector(HeightObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "height does not contain any numeric element.");
@@ -93,19 +93,19 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 
 		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		if (Type  == L"c")
+		if (strcmp(Style, "c") == 0)
 		{
 			auto BarChrt = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == L"s") 
+		else if (strcmp(Style, "s") == 0) 
 		{
 			auto BarChrt = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == L"%") 
+		else if (strcmp(Style, "%") == 0) 
 		{
 			auto BarChrt = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
@@ -115,11 +115,11 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		frmPlot = s_CurPlotWnd;
 
 	CBarVertChart* Chart{nullptr};
-	if (Type == L"c")
+	if (strcmp(Style, "c") == 0)
 		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
-	else if (Type == L"s") 
+	else if (strcmp(Style, "s") == 0) 
 		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
-	else if (Type == L"%") 
+	else if (strcmp(Style, "%") == 0) 
 		Chart = (CBarVertPerStkChart*)frmPlot->GetActiveChart();
 
 
@@ -135,13 +135,13 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(DataCol);
 
 		CBarVertSeries* Series = nullptr;
-		if (Type == L"c")
+		if (strcmp(Style, "c") == 0)
 			Series = new CBarVertClusterSeries((CBarVertClusterChart*)Chart, std::move(DataTbl));
 
-		else if (Type == L"s")
+		else if (strcmp(Style, "s") == 0)
 			Series = new CBarVertStkSeries((CBarVertStkChart*)Chart, std::move(DataTbl));
 
-		else if (Type == L"%")
+		else if (strcmp(Style, "%") == 0)
 			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
@@ -174,8 +174,8 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	
 	core::CArray LabelData;
 		
-	//Default type is clustered
-	std::wstring Type = L"c";
+	//Default Style is clustered
+	const char* Style = "c";
 
 	PyObject* LabelsObj = Py_None, * WidthObj = Py_None, *TypeObj = Py_None;
 	PyObject* FillObj = Py_None, *LineObj = Py_None;
@@ -188,7 +188,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 	}
 
 	if (TypeObj != Py_None)
-		Type = PyUnicode_AsWideCharString(TypeObj, nullptr);
+		Style = PyUnicode_AsUTF8(TypeObj);
 
 	auto Data = Iterable_As1DVector(WidthObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "width does not contain any numeric element.");
@@ -208,19 +208,19 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 
 		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		if (Type  == L"c")
+		if (strcmp(Style, "c") == 0)
 		{
 			auto BarChrt = std::make_unique<CBarHorizClusterChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == L"s") 
+		else if (strcmp(Style, "s") == 0) 
 		{
 			auto BarChrt = std::make_unique<CBarHorizStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Type == L"%") 
+		else if (strcmp(Style, "%") == 0) 
 		{
 			auto BarChrt = std::make_unique<CBarHorizPerStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
@@ -231,11 +231,11 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 	
 	
-	if (Type == L"c")
+	if (strcmp(Style, "c") == 0)
 		Chart = (CBarHorizClusterChart*)frmPlot->GetActiveChart();
-	else if (Type == L"s") 
+	else if (strcmp(Style, "s") == 0) 
 		Chart = (CBarHorizStkChart*)frmPlot->GetActiveChart();
-	else if (Type == L"%") 
+	else if (strcmp(Style, "%") == 0) 
 		Chart = (CBarHorizPerStkChart*)frmPlot->GetActiveChart();
 	
 	try
@@ -250,13 +250,13 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 		DataTbl->append_col(DataCol);
 
 		CBarHorizSeries* Series = nullptr;
-		if (Type == "c")
+		if (strcmp(Style, "c") == 0)
 			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)Chart, std::move(DataTbl));
 
-		else if (Type == "s")
+		else if (strcmp(Style, "s") == 0)
 			Series = new CBarHorizStkSeries((CBarHorizStkChart*)Chart, std::move(DataTbl));
 
-		else if (Type == "%")
+		else if (strcmp(Style, "%") == 0)
 			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
@@ -381,7 +381,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	bool IsCumulative = false;
+	bool IsCumulative{false};
 	auto BinMode = CHistogramSeries::Mode::Frequency;
 	std::variant<std::monostate, std::vector<double>, int> Breaks;
 
@@ -393,11 +393,11 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		if (ModeObj != Py_None)
 		{
 			#define MODE CHistogramSeries::Mode
-			std::wstring distmode = PyUnicode_AsWideCharString(ModeObj, nullptr);
+			const char* distmode = PyUnicode_AsUTF8(ModeObj);
 
-			if (distmode == "d") BinMode = MODE::Density;
-			else if (distmode == "f") BinMode = MODE::Frequency;
-			else if (distmode == "r") BinMode = MODE::RelativeFreq;
+			if (strcmp(distmode, "d") == 0) BinMode = MODE::Density;
+			else if (strcmp(distmode, "f") == 0) BinMode = MODE::Frequency;
+			else if (strcmp(distmode, "r") == 0) BinMode = MODE::RelativeFreq;
 		}
 
 		if (CumulObj != Py_None)
@@ -491,8 +491,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 	core::CArray LabelData;
 
 	//Default type is clustered (unstacked)
-	std::wstring Style = L"c";
-	std::wstring Label{};
+	const char* Style = "c";
 
 	PyObject *LabelsObj = Py_None, *YObj = Py_None;
 	PyObject* LabelObj = Py_None; //series label
@@ -508,14 +507,11 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 	auto Data = Iterable_As1DVector(YObj);
 
-	if (LabelObj != Py_None)
-		Label = PyUnicode_AsWideCharString(LabelObj, nullptr);
-
 	if (LabelsObj != Py_None)
 		LabelData = Iterable_AsArray(LabelsObj);
 
 	if (StyleObj != Py_None)
-		Style = PyUnicode_AsWideCharString(StyleObj, nullptr);
+		Style = PyUnicode_AsUTF8(StyleObj);
 
 
 	CFrmPlot* frmPlot{ nullptr };
@@ -532,19 +528,19 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
 
-		if (Style  == L"c")
+		if (strcmp(Style, "c") == 0)
 		{
 			auto BarChrt = std::make_unique<CLineClusterChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Style == L"s") 
+		else if (strcmp(Style, "s") == 0) 
 		{
 			auto BarChrt = std::make_unique<CStackedLineChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (Style == L"%") 
+		else if (strcmp(Style, "%") == 0) 
 		{
 			auto BarChrt = std::make_unique<CPercentStackedLineChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
@@ -554,11 +550,11 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		frmPlot = s_CurPlotWnd;
 
 	CLineChartBase* Chart{nullptr};
-	if (Style == L"c")
+	if (strcmp(Style, "c") == 0)
 		Chart = (CLineClusterChart*)frmPlot->GetActiveChart();
-	else if (Style == L"s") 
+	else if (strcmp(Style, "s") == 0) 
 		Chart = (CStackedLineChart*)frmPlot->GetActiveChart();
-	else if (Style == L"%") 
+	else if (strcmp(Style, "%") == 0) 
 		Chart = (CPercentStackedLineChart*)frmPlot->GetActiveChart();
 		
 	try
@@ -591,17 +587,20 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 		
 		CLineSeriesBase* Series = nullptr;
-		if (Style == L"c")
+		if (strcmp(Style, "c") == 0)
 			Series = new CLineClusterSeries((CLineClusterChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		else if (Style == L"s")
+		else if (strcmp(Style, "s") == 0)
 			Series = new CStackedLineSeries((CStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		else if (Style == L"%")
+		else if (strcmp(Style, "%") == 0)
 			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		if (!Label.empty())
+		if (LabelObj != Py_None)
+		{
+			auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr);
 			Series->SetName(Label);
+		}
 
 		wxPen LinePen = Series->GetLinePen();
 		PreparePen(LineObj, LinePen);
@@ -1254,8 +1253,8 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 		if (ModeObj && ModeObj != Py_None)
 		{
 			#define enm charts::CBubbleSeries::SIZEMODE
-			std::wstring s = PyUnicode_AsWideCharString(ModeObj, nullptr);
-			auto mode = s == "w"? enm::WIDTH: enm::AREA;
+			auto s = PyUnicode_AsUTF8(ModeObj);
+			auto mode = strcmp(s, "w") == 0 ? enm::WIDTH: enm::AREA;
 				
 			series->SetSizeMode(mode);
 		}
