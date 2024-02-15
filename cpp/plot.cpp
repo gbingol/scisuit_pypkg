@@ -381,36 +381,12 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	bool IsCumulative{false};
-	auto BinMode = CHistogramSeries::Mode::Frequency;
-	std::variant<std::monostate, std::vector<double>, int> Breaks;
 
 	auto Data = Iterable_As1DVector(DataObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any numeric element.");
 
 	try
 	{
-		if (ModeObj != Py_None)
-		{
-			#define MODE CHistogramSeries::Mode
-			const char* distmode = PyUnicode_AsUTF8(ModeObj);
-
-			if (strcmp(distmode, "d") == 0) BinMode = MODE::Density;
-			else if (strcmp(distmode, "f") == 0) BinMode = MODE::Frequency;
-			else if (strcmp(distmode, "r") == 0) BinMode = MODE::RelativeFreq;
-		}
-
-		if (CumulObj != Py_None)
-			IsCumulative = PyObject_IsTrue(CumulObj);
-
-		if (BreaksObj != Py_None)
-		{
-			if (PyLong_CheckExact(BreaksObj))
-				Breaks = (int)PyLong_AsLong(BreaksObj);
-			else
-				Breaks = std::move(Iterable_As1DVector(BreaksObj));
-		}
-
 		CFrmPlot* frmPlot{ nullptr };
 		if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
 		{
@@ -450,25 +426,32 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 		series->SetBrush(Brush);
 
 
+		//From Python side value is either "f" or "d"
+		auto BinMode = CHistogramSeries::Mode::Frequency;
+		if (strcmp(PyUnicode_AsUTF8(ModeObj), "d") == 0) 
+			BinMode = CHistogramSeries::Mode::Density;
+		
 		series->SetMode(BinMode);
 
-		if (IsCumulative && BinMode != CHistogramSeries::Mode::Density)
-			series->MakeCumulative(true);
+		//Guaranteed to have bool value from Python side
+		series->MakeCumulative(PyObject_IsTrue(CumulObj));
 
 
-		if (std::holds_alternative<std::vector<double>>(Breaks))
+		if (BreaksObj != Py_None)
 		{
-			const auto& v = std::get<std::vector<double>>(Breaks);
-			IF_PYERRRUNTIME_RET(series->SetBreakPoints(v) == false, "Invalid break points.");
+			if (PyLong_CheckExact(BreaksObj))
+			{
+				int Breaks = (int)PyLong_AsLong(BreaksObj);
+				int NBins = Breaks + 1;
+
+				IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
+			}
+			else{
+				auto Breaks = std::move(Iterable_As1DVector(BreaksObj));
+				IF_PYERRRUNTIME_RET(series->SetBreakPoints(Breaks) == false, "Invalid break points.");
+			}
 		}
 
-		else if (std::holds_alternative<int>(Breaks))
-		{
-			int NBins = std::get<int>(Breaks) + 1;
-			IF_PYERRRUNTIME_RET(NBins <= 0, "Number of breaks >0 expected");
-
-			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
-		}
 
 		series->PrepareForDrawing();
 		Chart->AddSeries(std::move(series), false);

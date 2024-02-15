@@ -123,8 +123,12 @@ def hist(
 	## Input
 	data:	Numeric data \n
 	density : density histogram if true otherwise frequency.\n
-	cumulative : True, cumulative distribution (density must be False) \n
+	cumulative : True, cumulative distribution  \n
 	breaks : Number of breaks or the break points, int/iterable
+
+	## Note
+	If density=True and cumulative=True, then the histogram is 
+	normalized so that the cumulative end-value is 1.0
 	"""
 	assert isinstance(density, bool), "'density' must be bool"
 	assert isinstance(cumulative, bool), "'cumulative' must be bool"
@@ -134,13 +138,13 @@ def hist(
 		if isinstance(breaks, int):
 			assert breaks>0, "'breaks' if integer, must be >0"
 		else:
-			Nums = [i for i in breaks if isinstance(i, int)]
-			assert len(Nums)>0, "'breaks' (iterable) do not contain any integer"
+			Nums = [i for i in breaks if isinstance(i, int) or isinstance(i, float)]
+			assert len(Nums)>0, "'breaks' (iterable) do not contain any number"
 
 	return _pydll.c_plot_histogram((), {
 			"data":data, 
 			"mode":"f" if not density else "d", 
-			"cumulative":cumulative if not density else False, 
+			"cumulative":cumulative , 
 			"breaks":breaks, 
 			"fill":vars(fill) if fill != None else None, 
 			"line":vars(line) if line != None else None})
