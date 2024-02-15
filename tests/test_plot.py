@@ -44,7 +44,7 @@ def linechart():
 
 	#Clustered line chart with two series
 	plt.line(labels=categories, y=A)
-	plt.line(y=B)
+	plt.line(labels=categories, y=B)
 
 
 
@@ -250,7 +250,7 @@ plt.subplot(0,1)
 dirfield()
 
 plt.subplot(0,2)
-bar()
+linechart()
 
 plt.subplot(2,2)
 barh()

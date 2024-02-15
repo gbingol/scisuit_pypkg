@@ -156,7 +156,7 @@ def histogram(
 
 def line(
 	y:_Iterable, 
-	labels:_Iterable = None, 
+	labels:_Iterable, 
 	style:str= "c", #cluster
 	label:str = None,  
 	marker:_defs.Marker=None, 
@@ -171,10 +171,12 @@ def line(
 	label: Label of the individual series 
 	"""
 	assert isinstance(y, _Iterable), "'y' must be iterable"
+	assert len(y)>=2, "At least 2 data points expected"
 
-	if labels != None:
-		assert isinstance(labels, _Iterable), "'labels' must be iterable"
-		assert len(labels)>=2, "At least 2 labels expected"
+	assert isinstance(labels, _Iterable), "'labels' must be iterable"
+	assert len(labels)>=2, "At least 2 labels expected"
+
+	assert len(y) == len(labels), "len(y) == len(labels) expected"
 
 	assert isinstance(style, str), "'style' must be string"
 	if style.lower() not in ["c", "s", "%"]:

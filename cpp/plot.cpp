@@ -487,9 +487,6 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 {
-	
-	core::CArray LabelData;
-
 	//Default type is clustered (unstacked)
 	const char* Style = "c";
 
@@ -498,7 +495,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 	PyObject* StyleObj = Py_None, *MarkerObj = Py_None, *LineObj = Py_None;
 
 	const char* kwlist[] = { "y", "labels", "label", "style", "marker", "line", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOO", const_cast<char**>(kwlist),
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOOO", const_cast<char**>(kwlist),
 		&YObj, &LabelsObj, &LabelObj, &StyleObj, &MarkerObj, &LineObj))
 	{
 		return nullptr;
@@ -506,9 +503,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 
 	auto Data = Iterable_As1DVector(YObj);
-
-	if (LabelsObj != Py_None)
-		LabelData = Iterable_AsArray(LabelsObj);
+	auto LabelData = Iterable_AsArray(LabelsObj);
 
 	if (StyleObj != Py_None)
 		Style = PyUnicode_AsUTF8(StyleObj);
