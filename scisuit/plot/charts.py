@@ -110,9 +110,9 @@ def boxplot(
 
 #-----------------------------------------------------------------------------------
 
-def histogram(
+def hist(
 		data:_Iterable, 
-		mode = "f", #frequency 
+		density = False, #frequency 
 		cumulative = False, 
 		breaks:int|_Iterable = None, 
 		fill:_gdi.Brush=None, 
@@ -122,14 +122,11 @@ def histogram(
 
 	## Input
 	data:	Numeric data \n
-	mode : density (d), frequency (f) and relative frequency (r).\n
-	cumulative : True, cumulative distribution \n
+	density : density histogram if true otherwise frequency.\n
+	cumulative : True, cumulative distribution (density must be False) \n
 	breaks : Number of breaks or the break points, int/iterable
 	"""
-	assert isinstance(mode, str), "'mode' must be string"
-	if mode.lower() not in ["d", "f", "r"]:
-		raise ValueError("'style' must be c, s or %")
-	
+	assert isinstance(density, bool), "'density' must be bool"
 	assert isinstance(cumulative, bool), "'cumulative' must be bool"
 
 	if breaks != None:
@@ -142,8 +139,8 @@ def histogram(
 
 	return _pydll.c_plot_histogram((), {
 			"data":data, 
-			"mode":mode, 
-			"cumulative":cumulative, 
+			"mode":"f" if not density else "d", 
+			"cumulative":cumulative if not density else False, 
 			"breaks":breaks, 
 			"fill":vars(fill) if fill != None else None, 
 			"line":vars(line) if line != None else None})

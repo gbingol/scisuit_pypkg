@@ -31,8 +31,8 @@ def histogram():
 	import scisuit.stats as stat
 
 	x=stat.rnorm(500)
-	plt.histogram(x,  
-			fill=plt.Brush(color=plt.Color.RED), 
+	plt.hist(x,  
+			fill=plt.Brush(color=plt.COLOR_RED), 
 			line=plt.Pen(color="0 255 0", width=2))
 
 
@@ -244,7 +244,7 @@ plt.layout(3,3)
 
 plt.subplot(0,0, nrows=2, ncols=1)
 #Density scaled histogram
-plt.histogram(z, mode = plt.HIST_DENSITY)
+plt.hist(z)
 
 plt.subplot(0,1)
 dirfield()
