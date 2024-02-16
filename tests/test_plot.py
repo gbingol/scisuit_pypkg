@@ -232,7 +232,7 @@ n=60
 p=0.4
 
 #Generate random numbers from a binomial distribution
-x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
+x = np.array(rbinom(n=100, size=n, prob=p), dtype=np.float32)
 
 #z-ratio
 z = (x - n*p)/math.sqrt(n*p*(1-p))
