@@ -147,12 +147,9 @@ core::CArray Iterable_AsArray(PyObject* Obj)
 
 std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj)
 {
-    if (IsSubTypeNone(Obj))
-    {
-        return std::make_unique<core::CNone>();
-    }
+    IF_PYERRRUNTIME_RET(IsSubTypeNone(Obj),  "None type found");
 
-    else if (IsSubTypeRealNumber(Obj))
+    if (IsSubTypeRealNumber(Obj))
     {
         if (PyLong_CheckExact(Obj))
         {
