@@ -108,12 +108,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 			auto BarChrt = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
-
-		else if (strcmp(Style, "%") == 0) 
-		{
-			auto BarChrt = std::make_unique<CBarVertPerStkChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BarChrt));
-		}
 	}
 	else
 		frmPlot = s_CurPlotWnd;
@@ -123,8 +117,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
 	else if (strcmp(Style, "s") == 0) 
 		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
-	else if (strcmp(Style, "%") == 0) 
-		Chart = (CBarVertPerStkChart*)frmPlot->GetActiveChart();
 
 
 	try
@@ -141,9 +133,6 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 		else if (strcmp(Style, "s") == 0)
 			Series = new CBarVertStkSeries((CBarVertStkChart*)Chart, std::move(DataTbl));
-
-		else if (strcmp(Style, "%") == 0)
-			Series = new CBarVertPerStkSeries((CBarVertPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
@@ -222,24 +211,15 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 			auto BarChrt = std::make_unique<CBarHorizStkChart>(frmPlot, Rect);
 			frmPlot->AddChart(std::move(BarChrt));
 		}
-
-		else if (strcmp(Style, "%") == 0) 
-		{
-			auto BarChrt = std::make_unique<CBarHorizPerStkChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BarChrt));
-		}
 	}
 	else
 		frmPlot = s_CurPlotWnd;
 
 	
-	
 	if (strcmp(Style, "c") == 0)
 		Chart = (CBarHorizClusterChart*)frmPlot->GetActiveChart();
 	else if (strcmp(Style, "s") == 0) 
 		Chart = (CBarHorizStkChart*)frmPlot->GetActiveChart();
-	else if (strcmp(Style, "%") == 0) 
-		Chart = (CBarHorizPerStkChart*)frmPlot->GetActiveChart();
 	
 	try
 	{
@@ -255,9 +235,6 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 		else if (strcmp(Style, "s") == 0)
 			Series = new CBarHorizStkSeries((CBarHorizStkChart*)Chart, std::move(DataTbl));
-
-		else if (strcmp(Style, "%") == 0)
-			Series = new CBarHorizPerStkSeries((CBarHorizPerStkChart*)Chart, std::move(DataTbl));
 
 		wxPen Pen = Series->GetPen();
 		if (LineObj != Py_None)
@@ -518,11 +495,6 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 			frmPlot->AddChart(std::move(BarChrt));
 		}
 
-		else if (strcmp(Style, "%") == 0) 
-		{
-			auto BarChrt = std::make_unique<CPercentStackedLineChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BarChrt));
-		}
 	}
 	else
 		frmPlot = s_CurPlotWnd;
@@ -532,8 +504,6 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		Chart = (CLineClusterChart*)frmPlot->GetActiveChart();
 	else if (strcmp(Style, "s") == 0) 
 		Chart = (CStackedLineChart*)frmPlot->GetActiveChart();
-	else if (strcmp(Style, "%") == 0) 
-		Chart = (CPercentStackedLineChart*)frmPlot->GetActiveChart();
 		
 	try
 	{
@@ -571,8 +541,6 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		else if (strcmp(Style, "s") == 0)
 			Series = new CStackedLineSeries((CStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
-		else if (strcmp(Style, "%") == 0)
-			Series = new CPercentStackedLineSeries((CPercentStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
 
 		if (LabelObj != Py_None)
 		{

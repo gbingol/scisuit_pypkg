@@ -14,7 +14,7 @@ import scisuit.plot.gdi as _gdi
 def bar(
 	height:_Iterable, 
 	labels:_Iterable, 
-	style:str = "c", #clustered
+	stacked = False, 
 	fill:_gdi.Brush=None, 
 	line:_gdi.Pen=None):
 	"""
@@ -23,21 +23,20 @@ def bar(
 	## Input
 	height: Numeric data \n
 	labels: Category labels \n
-	style: CLUSTER, STACKED or PERCENTSTK
+	stacked: if True stacked bar chart, otherwise clustered
 	"""
-	assert isinstance(style, str), "'style' must be string"
-	if style.lower() not in ["c", "s", "%"]:
-		raise ValueError("'style' must be c, s or %")
 	
 	assert isinstance(height, _Iterable), "'height' must be iterable"
 	assert isinstance(labels, _Iterable), "'labels' must be iterable"
+
+	assert isinstance(stacked, bool), "'stacked' must be bool" 
 	assert len(labels)>=2, "at least 2 labels expected"
 	assert len(labels) == len(height), "len(labels) == len(height) expected"
 	
 	return _pydll.c_plot_bar((), {
 			"height":height, 
 			"labels":labels, 
-			"style":style, 
+			"style": "c" if not stacked else "s", 
 			"fill":vars(fill) if fill != None else None, 
 			"line":vars(line) if line != None else None})
 
@@ -48,7 +47,7 @@ def bar(
 def barh(
 	width:_Iterable, 
 	labels:_Iterable, 
-	style:str = "c", #cluster
+	stacked = False,
 	fill:_gdi.Brush = None, 
 	line:_gdi.Pen = None):
 	"""
@@ -57,21 +56,20 @@ def barh(
 	## Input
 	width : Numeric data \n
 	labels : Category labels \n
-	style: CLUSTER, STACKED or PERCENTSTK
+	stacked: if True stacked chart, otherwise clustered
 	"""
-	assert isinstance(style, str), "'style' must be string"
-	if style.lower() not in ["c", "s", "%"]:
-		raise ValueError("'style' must be c, s or %")
 	
 	assert isinstance(width, _Iterable), "'width' must be iterable"
 	assert isinstance(labels, _Iterable), "'labels' must be iterable"
+
+	assert isinstance(stacked, bool), "'stacked' must be bool" 
 	assert len(labels)>=2, "at least 2 labels expected"
 	assert len(labels) == len(width), "len(labels) == len(width) expected"
 	
 	return _pydll.c_plot_barh((),{
 		"width":width, 
 		"labels":labels, 
-		"style":style, 
+		"style":"c" if not stacked else "s",  
 		"fill":vars(fill) if fill != None else None, 
 		"line":vars(line) if line != None else None})
 
@@ -158,7 +156,7 @@ def hist(
 def line(
 	y:_Iterable, 
 	labels:_Iterable, 
-	style:str= "c", #cluster
+	stacked = False,
 	label:str = None,  
 	marker:_defs.Marker=None, 
 	line:_gdi.Pen=None):
@@ -168,27 +166,23 @@ def line(
 	## Input:
 	y : An iterable containing numeric data \n
 	labels : Category labels \n
-	style: CLUSTER, STACKED or PERCENTSTK \n
+	stacked: if True stacked chart, otherwise clustered \n
 	label: Label of the individual series 
 	"""
 	assert isinstance(y, _Iterable), "'y' must be iterable"
 	assert len(y)>=2, "At least 2 data points expected"
 
+	assert isinstance(stacked, bool), "'stacked' must be bool" 
 	assert isinstance(labels, _Iterable), "'labels' must be iterable"
 	assert len(labels)>=2, "At least 2 labels expected"
 
 	assert len(y) == len(labels), "len(y) == len(labels) expected"
-
-	assert isinstance(style, str), "'style' must be string"
-	if style.lower() not in ["c", "s", "%"]:
-		raise ValueError("'style' must be c, s or %")
-	
 	
 	return _pydll.c_plot_line((), {
 			"y":y, 
 			"labels":labels, 
 			"label":label, 
-			"style":style, 
+			"style":"c" if not stacked else "s",  
 			"marker":dict(marker) if marker != None else None, 
 			"line":vars(line) if line != None else None})
 

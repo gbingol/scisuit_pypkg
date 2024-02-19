@@ -14,11 +14,6 @@ TRENDLINE_LOG = "log"
 TRENDLINE_POW = "pow"
 
 
-"""BAR Charts and Line Charts"""
-CLUSTER = "c"
-STACKED = "s"
-PERCENTSTK = "%"
-
 
 """Pen styles"""
 PEN_SOLID = 100
