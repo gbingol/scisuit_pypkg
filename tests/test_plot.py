@@ -23,8 +23,8 @@ def barh():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.barh(labels=categ, width=A, style=plt.CLUSTER)
-	plt.barh(width=B, labels=categ, style=plt.CLUSTER)
+	plt.barh(labels=categ, width=A)
+	plt.barh(width=B, labels=categ)
 
 
 def histogram():
