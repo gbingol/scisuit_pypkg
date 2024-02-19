@@ -169,7 +169,7 @@ def scisuit_hist_scatter():
 	f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
 
 	#Density scaled histogram
-	plt.histogram(z, mode = plt.HIST_DENSITY)
+	plt.hist(z, density=True)
 
 	#Overlay scatter plot
 	plt.scatter(x=z, y=f)

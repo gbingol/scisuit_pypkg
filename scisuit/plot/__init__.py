@@ -19,10 +19,6 @@ CLUSTER = "c"
 STACKED = "s"
 PERCENTSTK = "%"
 
-"""Histogram Modes"""
-HIST_DENSITY = "d"
-HIST_FREQUENCY = "f"
-HIST_RELFREQUENCY = "r"
 
 """Pen styles"""
 PEN_SOLID = 100
