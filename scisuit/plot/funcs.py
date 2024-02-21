@@ -24,8 +24,8 @@ def layout(nrows:int, ncols:int)->None:
 	assert 0<ncols<=255, "0<ncols<=255 expected"
 
 	_pydll.c_plot_layout(
-		_ct.c_char(nrows), 
-		_ct.c_char(ncols))
+		_ct.c_int(nrows), 
+		_ct.c_int(ncols))
 
 
 
@@ -49,10 +49,10 @@ def subplot(row:int, col:int, nrows:int = 1, ncols:int = 1)->None:
 	assert 0 < ncols <=255, "0 < ncols <=255 expected"
 
 	_pydll.c_plot_subplot(
-		_ct.c_char(row), 
-		_ct.c_char(col), 
-		_ct.c_ubyte(nrows), 
-		_ct.c_ubyte(ncols))
+		_ct.c_int(row), 
+		_ct.c_int(col), 
+		_ct.c_int(nrows), 
+		_ct.c_int(ncols))
 
 
 def figure():

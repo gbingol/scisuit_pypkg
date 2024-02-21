@@ -34,7 +34,7 @@ static CFrmPlot* s_CurPlotWnd = nullptr;
 static std::list< CFrmPlot*> s_PlotWndList;
 
 //Layout
-static char s_NROWS = -1, s_NCOLS = -1;
+static int s_NROWS = -1, s_NCOLS = -1;
 
 
 /*
@@ -1229,7 +1229,9 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 ************************************************************************************
 */
 
-void c_plot_layout(char nrows, char ncols)
+void c_plot_layout(
+	int nrows, 
+	int ncols)
 {
 	s_NROWS = nrows;
 	s_NCOLS = ncols;
@@ -1237,10 +1239,10 @@ void c_plot_layout(char nrows, char ncols)
 
 
 void c_plot_subplot(
-	char row,
-	char col,
-	unsigned char nrows,
-	unsigned char ncols)
+	int row,
+	int col,
+	int nrows,
+	int ncols)
 {
 	s_SubPlotInfo.row = row;
 	s_SubPlotInfo.col = col;

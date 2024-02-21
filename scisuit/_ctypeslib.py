@@ -259,10 +259,10 @@ pydll.c_plot_scatter.restype=_ct.py_object
 pydll.c_plot_bubble.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_bubble.restype=_ct.py_object
 
-pydll.c_plot_layout.argtypes = [_ct.c_char, _ct.c_char]
+pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]
 pydll.c_plot_layout.restype=None
 
-pydll.c_plot_subplot.argtypes = [_ct.c_char, _ct.c_char, _ct.c_ubyte, _ct.c_ubyte]
+pydll.c_plot_subplot.argtypes = [_ct.c_int, _ct.c_int, _ct.c_int, _ct.c_int]
 pydll.c_plot_subplot.restype=None
 
 pydll.c_plot_figure.argtypes = []
