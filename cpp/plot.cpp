@@ -30,11 +30,11 @@
 using namespace charts;
 
 static wxApp* s_APP = nullptr;
-static CFrmPlot* s_CurPlotWnd = nullptr;
+static constinit CFrmPlot* s_CurPlotWnd = nullptr;
 static std::list< CFrmPlot*> s_PlotWndList;
 
 //Layout
-static int s_NROWS = -1, s_NCOLS = -1;
+static constinit int s_NROWS = 1, s_NCOLS = 1;
 
 
 /*
@@ -51,7 +51,7 @@ static int s_NROWS = -1, s_NCOLS = -1;
 	pointer access to scatter (both inherits from CNumericChart):
 	>> auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
 */
-static SubPlotInfo s_SubPlotInfo;
+static constinit SubPlotInfo s_SubPlotInfo = SubPlotInfo();
 
 
 
@@ -1235,6 +1235,8 @@ void c_plot_layout(
 {
 	s_NROWS = nrows;
 	s_NCOLS = ncols;
+
+	s_CurPlotWnd = nullptr;
 }
 
 
@@ -1284,9 +1286,7 @@ void c_plot_show(bool maximize)
 	s_CurPlotWnd = nullptr;
 
 	//reset static variables
-	s_NROWS = s_NCOLS = -1;
-
-	//c_plot_mainloop(sharedLoop);
+	s_NROWS = s_NCOLS = 1;
 }
 
 
@@ -1369,6 +1369,10 @@ void c_plot_app()
 		
 	s_APP = new wxApp();
 	s_APP->SetUseBestVisual(true);
+
+	//initialize static variables
+	s_CurPlotWnd = nullptr;
+	s_NCOLS = s_NROWS = 1;
 
 	wxInitialize();
 }
