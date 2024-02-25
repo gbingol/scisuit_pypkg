@@ -225,39 +225,41 @@ def scatter_errorbar():
 
 
 
-import math
+from math import sqrt, pi
 from scisuit.stats import rbinom
+import scisuit.plot as plt
 
-n=60
-p=0.4
+n=60 ; p=0.4
 
-#Generate random numbers from a binomial distribution
-x = np.array(rbinom(n=100, size=n, prob=p), dtype=np.float32)
+#Generate random numbers from a binomial dist
+x = np.array(rbinom(n=100, size=n, prob=p))
+z = (x - n*p)/sqrt(n*p*(1-p))
+f = 1.0/sqrt(2*pi)*np.exp(-z**2/2.0)
 
-#z-ratio
-z = (x - n*p)/math.sqrt(n*p*(1-p))
+plt.layout(2,2)
 
-#DeMoivre's equation
-f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
+plt.subplot(0, 0, nrows=1, ncols=2)
+plt.hist(z, density=True)
+plt.scatter(x=z, y=f)
 
-plt.layout(3,3)
+#new chart
+t = np.arange(0.0, 2.0, 0.2)
+y = np.arange(-5.0, 0.0, 0.2)
+t, y = np.meshgrid(t,y) 
+f1= 4-t+2*y #dy/dt
 
-plt.subplot(0,0, nrows=2, ncols=1)
-#Density scaled histogram
-plt.hist(z)
+plt.subplot(1,0)
+plt.dirfield(t,y,f1) 
 
-plt.subplot(0,1)
-dirfield()
-
-plt.subplot(0,2)
-linechart()
-
-plt.subplot(2,2)
-barh()
+#new chart
+categ=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
 
 plt.subplot(1,1)
-#Overlay scatter plot
-plt.scatter(x=z, y=f)
+plt.bar(labels=categ, height=A)
+plt.bar(height=B, labels=categ)
+
 plt.show()
 
 
