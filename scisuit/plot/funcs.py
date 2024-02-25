@@ -35,8 +35,8 @@ def subplot(row:int, col:int, nrows:int = 1, ncols:int = 1)->None:
 
 	row: row position of the cell (must be less than partition's number of rows),
 	col: column position of the cell (must be less than partition's number of columns),
-	nrows: number of rows the cell should span (default is 1)
-	ncols: number of columns the cell should span (default is 1)
+	nrows: number of rows the cell should span 
+	ncols: number of columns the cell should span 
 	"""
 	assert isinstance(row, int), "row must be integer"
 	assert isinstance(col, int), "col must be integer"
