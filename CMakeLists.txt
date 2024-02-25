@@ -33,7 +33,7 @@ include_directories(C:/_libs/wxWidgets/lib/mswu)
 #Python directory
 include_directories(${PYHOME}/include)
 
-# core, gui and plot
+# core and plot
 include_directories($ENV{VSPROJ}/sci_libs)
 
 file(GLOB cppfiles
