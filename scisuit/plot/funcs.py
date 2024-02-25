@@ -83,12 +83,11 @@ def legend():
 	_pydll.c_plot_legend()
 
 
-def show(maximize = False, shared = False):
+def show(shared = False):
 	"""
 	Starts main loop and shows the chart(s) \n
 	
-	maximize: Whether to show chart as maximized (good for Psychrometric chart) \n
 	shared: if there is any other application using a main loop
 	"""
-	_pydll.c_plot_show(_ct.c_bool(maximize))
+	_pydll.c_plot_show()
 	_app.mainloop(shared)

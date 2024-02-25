@@ -280,7 +280,7 @@ pydll.c_plot_ylabel.restype=None
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
 
-pydll.c_plot_show.argtypes = [_ct.c_bool]
+pydll.c_plot_show.argtypes = []
 pydll.c_plot_show.restype=None
 
 

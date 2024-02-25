@@ -80,7 +80,7 @@ EXTERN void c_plot_subplot(
 //start a new plot window
 EXTERN void c_plot_figure();
 
-EXTERN void c_plot_show(bool maximize = false);
+EXTERN void c_plot_show();
 
 EXTERN void c_plot_title(PyObject* title);
 EXTERN void c_plot_xlabel(PyObject* xlabel);

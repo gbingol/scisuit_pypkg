@@ -1261,26 +1261,19 @@ void c_plot_figure()
 	s_CurPlotWnd = nullptr;
 
 	//reset static variables
-	s_NROWS = s_NCOLS = -1;
+	s_NROWS = s_NCOLS = 1;
 }
 
 	
-void c_plot_show(bool maximize)
+void c_plot_show()
 {
-	if (s_CurPlotWnd == nullptr)
+	if (!s_CurPlotWnd)
 		return;
 
 	s_PlotWndList.push_back(s_CurPlotWnd);
 
-	//c_plot_app();
-
-	for (const auto& Wnd : s_PlotWndList)
-	{
-		if (maximize)
-			Wnd->Maximize();
-
+	for (auto Wnd : s_PlotWndList)
 		Wnd->Show();
-	}
 
 	s_PlotWndList.clear();
 	s_CurPlotWnd = nullptr;
