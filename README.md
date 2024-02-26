@@ -27,7 +27,10 @@ Windows and Python 3.10, 3.11 and 3.12.
 Completely interactive charts (Bar, Box-Whisker, Bubble, Histogram, Line, Pie, Psychrometry, 
 QQnorm, QQplot, Quiver, Scatter).
 
-Let's demonstrate with a simple scatter chart example:
+![Multiple charts](chart_multiple.png)
+
+
+A simple scatter chart example:
 
 
 ```python
@@ -41,8 +44,6 @@ plt.scatter(x=x, y=y)
 plt.show()
 ```
 
-![Scatter chart](scatterplot.png)
-
 Once the chart is displayed, let's say a trendline is wished to be added:
 
 1. Click on one of the data points to select the series,
@@ -51,7 +52,7 @@ Once the chart is displayed, let's say a trendline is wished to be added:
 
 Just right-click again and select "Format Trendline" and following options will be shown:
 
-![Scatter with trendline options](scatterplot_trendlineopt.png)
+![Scatter with trendline options](chart_scatter_trendline.png)
 
 
 
