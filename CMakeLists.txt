@@ -23,7 +23,7 @@ elseif(${VARPY} STREQUAL "scisuit_pybind311")
 
 elseif(${VARPY} STREQUAL "scisuit_pybind312")
 	set(PYLIB "python312")
-	set(PYHOME "C:/Python/Python3121/")
+	set(PYHOME "C:/Python/Python312/")
 endif()
 
 #wxWidgets directories
