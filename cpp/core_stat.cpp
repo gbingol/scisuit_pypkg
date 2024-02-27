@@ -4,9 +4,9 @@
 #include <cmath>
 
 #include <core/core_funcs.h>
-#include <core/math/stats/dist.h>
-#include <core/math/stats/tests.h>
-#include <core/math/numerics/fitting.h>
+#include <core/math/stat_dist.h>
+#include <core/math/stat_tests.h>
+#include <core/math/fitting.h>
 
 #include "wrapperfuncs.h"
 

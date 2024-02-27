@@ -4,9 +4,9 @@
 #include <cmath>
 
 #include <core/core_funcs.h>
-#include <core/math/numerics/fitting.h>
-#include <core/math/numerics/integrate.h>
-#include <core/math/numerics/roots.h>
+#include <core/math/fitting.h>
+#include <core/math/integrate.h>
+#include <core/math/roots.h>
 #include <core/eng/psychrometry.h>
 
 #include "wrapperfuncs.h"
