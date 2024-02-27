@@ -179,7 +179,7 @@ static void PrepareTrendline(
 	charts::CScatterSeriesBase* Series)
 {
 	std::string style = "linear";
-	std::wstring Label{};
+	std::string Label{};
 	int Degree = 2;
 	std::optional<double> Intercept = std::nullopt;
 	bool show_stats = false, show_equation = false;
@@ -207,7 +207,7 @@ static void PrepareTrendline(
 			PreparePen(ObjValue, pen);
 
 		else if (key == "label")
-			Label = PyUnicode_AsWideCharString(ObjValue, nullptr);
+			Label = PyUnicode_AsUTF8(ObjValue);
 
 		else if (key == "show_stats")
 			show_stats = PyObject_IsTrue(ObjValue);

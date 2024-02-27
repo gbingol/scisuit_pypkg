@@ -325,7 +325,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 		}
 
 		if (NameObj != Py_None)
-			series->SetName(PyUnicode_AsWideCharString(NameObj, nullptr));
+			series->SetName(PyUnicode_AsUTF8(NameObj));
 
 		Chart->AddSeries(std::move(series));
 
@@ -544,7 +544,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 		if (LabelObj != Py_None)
 		{
-			auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr);
+			auto Label = PyUnicode_AsUTF8(LabelObj);
 			Series->SetName(Label);
 		}
 
@@ -828,7 +828,7 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 
 		if (LabelObj && PyUnicode_Check(LabelObj))
 		{
-			auto Lbl = PyUnicode_AsWideCharString(LabelObj, nullptr);
+			auto Lbl = PyUnicode_AsUTF8(LabelObj);
 			series->SetName(Lbl);
 		}
 
@@ -1107,7 +1107,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			 
 		if (NameObj && PyUnicode_Check(NameObj))
 		{
-			auto SeriesName = PyUnicode_AsWideCharString(NameObj, nullptr);
+			auto SeriesName = PyUnicode_AsUTF8(NameObj);
 			series->SetName(SeriesName);
 		}
 
@@ -1209,7 +1209,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 			series->SetScalingFactor(PyLong_AsLong(ScaleObj));
 
 		if (LabelObj && PyUnicode_Check(LabelObj))
-			series->SetName(PyUnicode_AsWideCharString(LabelObj, nullptr));
+			series->SetName(PyUnicode_AsUTF8(LabelObj));
 
 		Chart->AddSeries(std::move(series));
 
@@ -1297,7 +1297,7 @@ void c_plot_title(PyObject* LabelObj )
 		TextBox = Chart->GetChartTitle();
 	}
 
-	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
 }
 
@@ -1316,7 +1316,7 @@ void c_plot_xlabel(PyObject* LabelObj)
 		TextBox = Chart->GetHorizAxisTitle();
 	}
 
-	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
 }
 
@@ -1334,7 +1334,7 @@ void c_plot_ylabel(PyObject* LabelObj)
 		TextBox = Chart->GetVertAxisTitle();
 	}
 
-	if(auto Label = PyUnicode_AsWideCharString(LabelObj, nullptr))
+	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
 }
 
