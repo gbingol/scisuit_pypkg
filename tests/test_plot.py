@@ -252,7 +252,7 @@ plt.subplot(1,0)
 plt.dirfield(t,y,f1) 
 
 #new chart
-categ=["Q1", "Q2", "Q3", "Q4"]
+categ=["\xF0\x9F\x98\x81", "Q2", "Q3", "Q4"]
 A = [44, 55, 41, 67]
 B = [13, 23, 8, 13]
 
