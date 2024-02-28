@@ -520,7 +520,10 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		{
 			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
 			for (size_t i = 0; const auto & Lbl:LabelData)
-				LabelCol->set(i++, Lbl->to_string());
+			{
+				if (auto s = dynamic_cast<core::CString*>(Lbl.get()))
+					LabelCol->set(i++, s->data());
+			}
 		}
 		else //too many labels
 		{
@@ -663,7 +666,10 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		{
 			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
 			for (size_t i = 0; const auto & Lbl:Labels)
-				LabelCol->set(i++, Lbl->to_string());
+			{
+				if (auto s = dynamic_cast<core::CString*>(Lbl.get()))
+					LabelCol->set(i++, s->data());
+			}
 		}
 		else //too many labels
 		{
