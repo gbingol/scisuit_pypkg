@@ -5,7 +5,6 @@
 #include <wx/wx.h>
 
 #include <core/dtypes/basetypes.h>
-#include <core/dtypes/array.h>
 #include <core/dtypes/datatable.h>
 
 #include <plotter/charts/scatterchart.h>

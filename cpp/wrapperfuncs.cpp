@@ -2,7 +2,7 @@
 
 #include <core/core_funcs.h>
 #include <core/dtypes/mathdtypes.h>
-#include <core/dtypes/array.h>
+#include <core/dtypes/basetypes.h>
 
 
 bool IsNumpyInt(PyObject* obj)
@@ -165,16 +165,12 @@ std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj)
     }
 
     else if (IsExactTypeString(Obj))
-    {
         return std::make_unique<core::CString>(PyUnicode_AsUTF8(Obj));
-    }
 
     else if (PyComplex_Check(Obj))
     {
         auto CComplex = PyComplex_AsCComplex(Obj);
-        auto Complex = core::CComplexNumber(CComplex.real, CComplex.imag);
-
-        return std::make_unique<core::CComplexNumber>(Complex);
+        return std::make_unique<core::CComplexNumber>(CComplex.real, CComplex.imag);
     }
 
     return nullptr;
