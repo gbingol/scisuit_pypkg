@@ -48,6 +48,26 @@ class Brush:
 
 
 
+@_dc.dataclass
+class Font:
+	facename:str = "Arial"
+	color:str = "0 0 0" #black
+	size = 11 # 11 points
+	italic:bool = False
+	bold: bool = False
+
+	def __post_init__(self):
+		if self.color != None:
+			assert isinstance(self.color, str), "'color' must be string"
+
+		assert isinstance(self.size, int), "'size' must be integer"
+		assert self.size>0, "size>0 expected"
+
+		assert isinstance(self.italic, bool), "'italic' must be bool"
+		assert isinstance(self.italic, bool), "'italic' must be bool"
+
+
+
 def line(p1:tuple, p2:tuple, pen:Pen = Pen("0 0 0", 2))->None:
 	"""
 	p1: (x1, y1)
