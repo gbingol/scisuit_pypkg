@@ -240,9 +240,13 @@ f = 1.0/sqrt(2*pi)*np.exp(-z**2/2.0)
 plt.layout(2,2)
 
 plt.subplot(0, 0, nrows=1, ncols=2)
+
 plt.hist(z, density=True)
 plt.scatter(x=z, y=f)
-gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 3, plt.PEN_DOTDASH))
+
+gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
+gdi.rect(tl =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
+
 
 #new chart
 t = np.arange(0.0, 2.0, 0.2)
@@ -252,6 +256,7 @@ f1= 4-t+2*y #dy/dt
 
 plt.subplot(1,0)
 plt.dirfield(t,y,f1) 
+
 
 #new chart
 categ=["😁", "Q2", "😍", "Q4"]

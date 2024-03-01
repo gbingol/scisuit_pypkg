@@ -6,11 +6,22 @@ import numbers
 
 
 
+"""
+Not meant to be used outside gdi module.
+Constants are already available at __init__
+Defined here for clarity
+"""
+_PEN_SOLID = 100
+_BRUSH_TRANSPARENT = 106
+
+
+
+
 @_dc.dataclass
 class Pen:
 	color:str = None
 	width:int = 1
-	style:int= 100 #solid pen
+	style:int= _PEN_SOLID
 
 	def __post_init__(self):
 		if self.color != None:
@@ -45,6 +56,7 @@ def line(p1:tuple, p2:tuple, pen:Pen = Pen("0 0 0", 2))->None:
 	"""
 	assert isinstance(p1, tuple), "p1 must be tuple"
 	assert isinstance(p2, tuple), "p2 must be tuple"
+	assert isinstance(pen, Pen), "pen must be Pen object"
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
@@ -58,6 +70,40 @@ def line(p1:tuple, p2:tuple, pen:Pen = Pen("0 0 0", 2))->None:
 			_ct.c_double(p2[0]),
 			_ct.c_double(p2[1]),
 			vars(pen))
+	
+
+def rect(
+		tl:tuple, 
+		width:numbers.Real, 
+		height:numbers.Real, 
+		pen:Pen = Pen("0 0 0", 1), 
+		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
+	"""
+	tl: 	(x, y), top-left corner of the rectangle,
+	width: 	width of rectangle (>0),
+	height: height of rectangle (>0),
+	pen: 	Pen object to specify width, color, style of boundaries,
+	brush: 	Brush object to specify color, style of internal 
+	"""
+	assert isinstance(tl, tuple), "p1 must be tuple"
+	assert isinstance(width, numbers.Real), "width must be real number"
+	assert isinstance(height, numbers.Real), "height must be real number"
+	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(brush, Brush), "brush must be Brush object"
+
+	assert width>0, "width>0 expected"
+	assert height>0, "height>0 expected"
+
+	_p1 = [i for i in tl if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "tl must contain exactly two real numbers"
+
+	_pydll.c_plot_gdi_rect(
+			_ct.c_double(tl[0]),
+			_ct.c_double(tl[1]),
+			_ct.c_double(width),
+			_ct.c_double(height),
+			vars(pen),
+			vars(brush))
 
 
 	

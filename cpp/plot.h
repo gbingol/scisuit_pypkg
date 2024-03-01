@@ -81,6 +81,15 @@ EXTERN void c_plot_gdi_line(
 	PyObject* PenObj);
 
 
+EXTERN void c_plot_gdi_rect(
+	double x1,
+	double y1,
+	double width,
+	double height,
+	PyObject* PenObj,
+	PyObject* BrushObj);
+
+
 
 
 /************************************************************************************/
