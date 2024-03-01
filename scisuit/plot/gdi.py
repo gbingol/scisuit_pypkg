@@ -93,19 +93,19 @@ def line(p1:tuple, p2:tuple, pen:Pen = Pen("0 0 0", 2))->None:
 	
 
 def rect(
-		tl:tuple, 
+		p:tuple, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		pen:Pen = Pen("0 0 0", 1), 
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
-	tl: 	(x, y), top-left corner of the rectangle,
+	p: 		(x, y), top-left corner of the rectangle,
 	width: 	width of rectangle (>0),
 	height: height of rectangle (>0),
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
-	assert isinstance(tl, tuple), "p1 must be tuple"
+	assert isinstance(p, tuple), "p must be tuple"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 	assert isinstance(pen, Pen), "pen must be Pen object"
@@ -114,12 +114,12 @@ def rect(
 	assert width>0, "width>0 expected"
 	assert height>0, "height>0 expected"
 
-	_p1 = [i for i in tl if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "tl must contain exactly two real numbers"
+	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
 	_pydll.c_plot_gdi_rect(
-			_ct.c_double(tl[0]),
-			_ct.c_double(tl[1]),
+			_ct.c_double(p[0]),
+			_ct.c_double(p[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
 			vars(pen),
@@ -129,19 +129,19 @@ def rect(
 
 
 def ellipse(
-		c:tuple, 
+		p:tuple, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		pen:Pen = Pen("0 0 0", 1), 
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
-	c: 		(x, y), center,
+	p:	 	(x, y), center,
 	width: 	half width (>0),
 	height: half height (>0),
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
-	assert isinstance(c, tuple), "c must be tuple"
+	assert isinstance(p, tuple), "p must be tuple"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 	assert isinstance(pen, Pen), "pen must be Pen object"
@@ -150,14 +150,41 @@ def ellipse(
 	assert width>0, "width>0 expected"
 	assert height>0, "height>0 expected"
 
-	_p1 = [i for i in c if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "c must contain exactly two real numbers"
+	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
 	_pydll.c_plot_gdi_ellipse(
-			_ct.c_double(c[0]),
-			_ct.c_double(c[1]),
+			_ct.c_double(p[0]),
+			_ct.c_double(p[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
 			vars(pen),
 			vars(brush))	
 	
+
+def text(
+		p:tuple, 
+		text:str,
+		angle:float = 0.0,
+		font:Font = Font())->None:
+	"""
+	p: 		(x, y), top-left,
+	text: 	text to be drawn,
+	angle: 	rotation angle (>0 is counterclockwise; the full angle is 360 degrees)
+	font: 	Font object to specify color, point size, facename, italic, bold 
+	"""
+	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(angle, numbers.Real), "angle must be real number"
+	assert isinstance(font, Font), "font must be Font object"
+
+
+	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "p must contain exactly two real numbers"
+
+	_pydll.c_plot_gdi_ellipse(
+			_ct.c_double(p[0]),
+			_ct.c_double(p[1]),
+			_ct.c_char_p(text.encode('utf-8')),
+			_ct.c_double(angle),
+			vars(font),
+			_ct.c_char_p(font.color.encode('utf-8')))	

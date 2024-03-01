@@ -123,6 +123,40 @@ static void PrepareBrush(PyObject* Dict, wxBrush& brush)
 }
 
 
+//if properties are not defined in the dictionary then use the default color and style
+static void PrepareFont(PyObject* Dict, wxFont& font)
+{
+	if (!Dict) return;
+	
+	PyObject* ObjKey, * ObjValue;
+	Py_ssize_t pos = 0;
+
+	while (PyDict_Next(Dict, &pos, &ObjKey, &ObjValue))
+	{
+		std::string key = PyUnicode_AsUTF8(ObjKey);
+
+		if (ObjValue != Py_None && key == "facename")
+			font.SetFaceName(PyUnicode_AsUTF8(ObjValue));
+
+		else if (ObjValue != Py_None && key == "size")
+			font.SetPointSize(PyLong_AsLong(ObjValue));
+
+		else if (ObjValue != Py_None && key == "italic")
+		{
+			if(Py_IsTrue(ObjValue))
+				font.MakeItalic();
+		}
+
+		else if (ObjValue != Py_None && key == "bold")
+		{
+			if(Py_IsTrue(ObjValue))
+				font.MakeBold();
+		}
+		
+	}
+}
+
+
 
 //read from dictionary and set the marker properties of Series
 static void PrepareMarker(PyObject* Dict, charts::CSeriesBase* Series)

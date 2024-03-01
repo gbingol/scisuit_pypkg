@@ -1331,6 +1331,35 @@ void c_plot_gdi_ellipse(
 
 
 
+void c_plot_gdi_text(
+	double x,
+	double y,
+	std::string text, 
+	double angle,//positive angles are counterclockwise; the full angle is 360 degrees
+	PyObject* FontObj,
+	PyObject* ColorObj)
+
+{
+	if (s_CurPlotWnd == nullptr)
+		return;
+
+	wxFont font(wxFontInfo(11).FaceName("Arial"));
+	PrepareFont(FontObj, font);
+
+	wxColor textColor = StringToColor(ColorObj);
+
+	auto Chart = s_CurPlotWnd->GetActiveChart();	
+	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
+
+	if(NumChart == nullptr) 
+	{
+		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
+		return;
+	};
+
+	NumChart->DrawText(x, y, text, angle, font, textColor);
+}
+
 
 
 /*

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 
 #include <Python.h>
 #include "dllimpexp.h"
@@ -98,9 +99,14 @@ EXTERN void c_plot_gdi_ellipse(
 	PyObject* PenObj,
 	PyObject* BrushObj);
 
-
-
-
+//(x,y) top-left
+EXTERN void c_plot_gdi_text(
+	double x,
+	double y,
+	std::string text, 
+	double angle, //positive angles are counterclockwise; the full angle is 360 degrees
+	PyObject* FontObj,
+	PyObject* ColorObj); 
 
 /************************************************************************************/
 

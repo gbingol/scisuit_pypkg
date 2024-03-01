@@ -245,9 +245,9 @@ plt.hist(z, density=True)
 plt.scatter(x=z, y=f)
 
 gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
-gdi.rect(tl =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
+gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
 
-gdi.ellipse(c = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
+gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
 
 
 #new chart
