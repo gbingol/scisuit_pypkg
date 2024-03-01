@@ -1,9 +1,9 @@
-from .funcs import layout, subplot, figure, legend, show, title, xlabel, ylabel
+from .charts import layout, subplot, figure, legend, show, title, xlabel, ylabel
 from .gdi import Pen, Brush
 from .charts import bar, barh, boxplot, bubble, dirfield, hist, line, \
 			pie, plot, psychrometry, qqnorm, qqplot, quiver, scatter
 
-from .defs import Marker, Trendline
+from .chartelems import Marker, Trendline
 
 
 """Trendline styles"""

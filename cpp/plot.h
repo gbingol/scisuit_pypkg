@@ -77,6 +77,9 @@ EXTERN void c_plot_subplot(
 	int nrows = 1,
 	int ncols = 1);
 
+
+
+
 //start a new plot window
 EXTERN void c_plot_figure();
 
