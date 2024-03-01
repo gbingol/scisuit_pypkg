@@ -46,6 +46,27 @@ static wxColour StringToColor(PyObject* Obj)
 	return wxColor(rgb[0], rgb[1], rgb[2]);
 }
 
+static wxColour StringToColor(const char* Obj)
+{
+	std::string ColorStr = Obj;
+	std::stringstream ss(ColorStr);
+
+	std::vector<int> rgb;
+	int c;
+	while (ss >> c)
+	{
+		if (c > 255 || c < 0)
+			throw std::runtime_error("RGB must be in [0, 255].");
+
+		rgb.push_back(c);
+	}
+
+	if (rgb.size() != 3)
+		throw std::runtime_error("Ill-formed color.");
+
+	return wxColor(rgb[0], rgb[1], rgb[2]);
+}
+
 
 
 

@@ -166,6 +166,9 @@ std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj)
 
     else if (IsExactTypeString(Obj))
         return std::make_unique<core::CString>(PyUnicode_AsUTF8(Obj));
+	
+	else if(PyBytes_Check(Obj))
+		return std::make_unique<core::CString>(PyBytes_AsString(Obj));
 
     else if (PyComplex_Check(Obj))
     {

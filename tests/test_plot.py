@@ -249,6 +249,8 @@ gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
 
 gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
 
+gdi.text(p = (-1, 0.3), text="hello world", angle=180)
+
 
 #new chart
 t = np.arange(0.0, 2.0, 0.2)

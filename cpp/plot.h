@@ -103,10 +103,10 @@ EXTERN void c_plot_gdi_ellipse(
 EXTERN void c_plot_gdi_text(
 	double x,
 	double y,
-	std::string text, 
+	const char* text, 
 	double angle, //positive angles are counterclockwise; the full angle is 360 degrees
-	PyObject* FontObj,
-	PyObject* ColorObj); 
+	const char* color,
+	PyObject* FontObj); 
 
 /************************************************************************************/
 

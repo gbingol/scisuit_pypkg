@@ -52,7 +52,7 @@ class Brush:
 class Font:
 	facename:str = "Arial"
 	color:str = "0 0 0" #black
-	size = 11 # 11 points
+	size:int = 11 # 11 points
 	italic:bool = False
 	bold: bool = False
 
@@ -181,10 +181,10 @@ def text(
 	_p1 = [i for i in p if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
-	_pydll.c_plot_gdi_ellipse(
+	_pydll.c_plot_gdi_text(
 			_ct.c_double(p[0]),
 			_ct.c_double(p[1]),
-			_ct.c_char_p(text.encode('utf-8')),
+			_ct.c_char_p(text.encode()),
 			_ct.c_double(angle),
-			vars(font),
-			_ct.c_char_p(font.color.encode('utf-8')))	
+			_ct.c_char_p(font.color.encode()),
+			vars(font))

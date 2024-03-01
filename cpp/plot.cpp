@@ -1334,10 +1334,10 @@ void c_plot_gdi_ellipse(
 void c_plot_gdi_text(
 	double x,
 	double y,
-	std::string text, 
+	const char* text, 
 	double angle,//positive angles are counterclockwise; the full angle is 360 degrees
-	PyObject* FontObj,
-	PyObject* ColorObj)
+	const char* color,
+	PyObject* FontObj)
 
 {
 	if (s_CurPlotWnd == nullptr)
@@ -1346,7 +1346,7 @@ void c_plot_gdi_text(
 	wxFont font(wxFontInfo(11).FaceName("Arial"));
 	PrepareFont(FontObj, font);
 
-	wxColor textColor = StringToColor(ColorObj);
+	wxColor textColor = StringToColor(color);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	auto NumChart = dynamic_cast<CNumericChart*>(Chart);

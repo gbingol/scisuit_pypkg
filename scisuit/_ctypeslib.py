@@ -335,7 +335,15 @@ pydll.c_plot_gdi_ellipse.argtypes = [
 pydll.c_plot_gdi_ellipse.restype=None
 
 
+pydll.c_plot_gdi_text.argtypes = [
+					_ct.c_double, # x of top-left
+					_ct.c_double, # y of top-left
+					_ct.c_char_p, # text
+					_ct.c_double, # rotation
+					_ct.c_char_p, # color
+					_ct.py_object] #dictionary for Font
 
+pydll.c_plot_gdi_text.restype=None
 
 
 #---------------------------------------------
