@@ -312,6 +312,7 @@ pydll.c_plot_gdi_line.argtypes = [
 					
 pydll.c_plot_gdi_line.restype=None
 
+
 pydll.c_plot_gdi_rect.argtypes = [
 					_ct.c_double, #x of top-left
 					_ct.c_double, #y of top-left
@@ -320,7 +321,18 @@ pydll.c_plot_gdi_rect.argtypes = [
 					_ct.py_object, #dictionary for Pen
 					_ct.py_object] #dictionary for Brush
 
-pydll.c_plot_gdi_rect.restype=None
+pydll.c_plot_gdi_ellipse.restype=None
+
+
+pydll.c_plot_gdi_ellipse.argtypes = [
+					_ct.c_double, # x of center
+					_ct.c_double, # y of center
+					_ct.c_double, # half width
+					_ct.c_double, # half height
+					_ct.py_object, #dictionary for Pen
+					_ct.py_object] #dictionary for Brush
+
+pydll.c_plot_gdi_ellipse.restype=None
 
 
 

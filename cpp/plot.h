@@ -82,12 +82,22 @@ EXTERN void c_plot_gdi_line(
 
 
 EXTERN void c_plot_gdi_rect(
-	double x1,
-	double y1,
+	double x,
+	double y,
 	double width,
 	double height,
 	PyObject* PenObj,
 	PyObject* BrushObj);
+
+
+EXTERN void c_plot_gdi_ellipse(
+	double x,
+	double y,
+	double width,
+	double height,
+	PyObject* PenObj,
+	PyObject* BrushObj);
+
 
 
 

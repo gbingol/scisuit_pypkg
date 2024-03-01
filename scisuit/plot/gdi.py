@@ -106,5 +106,38 @@ def rect(
 			vars(brush))
 
 
-	
+
+
+def ellipse(
+		c:tuple, 
+		width:numbers.Real, 
+		height:numbers.Real, 
+		pen:Pen = Pen("0 0 0", 1), 
+		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
+	"""
+	c: 		(x, y), center,
+	width: 	half width (>0),
+	height: half height (>0),
+	pen: 	Pen object to specify width, color, style of boundaries,
+	brush: 	Brush object to specify color, style of internal 
+	"""
+	assert isinstance(c, tuple), "c must be tuple"
+	assert isinstance(width, numbers.Real), "width must be real number"
+	assert isinstance(height, numbers.Real), "height must be real number"
+	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(brush, Brush), "brush must be Brush object"
+
+	assert width>0, "width>0 expected"
+	assert height>0, "height>0 expected"
+
+	_p1 = [i for i in c if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "c must contain exactly two real numbers"
+
+	_pydll.c_plot_gdi_ellipse(
+			_ct.c_double(c[0]),
+			_ct.c_double(c[1]),
+			_ct.c_double(width),
+			_ct.c_double(height),
+			vars(pen),
+			vars(brush))	
 	

@@ -1264,9 +1264,10 @@ void c_plot_gdi_line(
 }
 
 
+//(x, y) top-left
 void c_plot_gdi_rect(
-	double x1,
-	double y1,
+	double x,
+	double y,
 	double width,
 	double height,
 	PyObject* PenObj,
@@ -1292,7 +1293,40 @@ void c_plot_gdi_rect(
 		return;
 	};
 
-	NumChart->DrawRect(x1, y1, width, height, pen, brush);
+	NumChart->DrawRect(x, y, width, height, pen, brush);
+}
+
+
+//(x, y) center
+void c_plot_gdi_ellipse(
+	double x,
+	double y,
+	double width, //half width
+	double height, //half height
+	PyObject* PenObj,
+	PyObject* BrushObj)
+{
+	if (s_CurPlotWnd == nullptr)
+		return;
+
+	//default pen (black, width=1 pixels, solid)
+	wxPen pen = wxPen(wxColour(0, 0, 0), 1);
+	PreparePen(PenObj, pen);
+
+	//default brush (white and transparent)
+	wxBrush brush = wxBrush(wxColour(255, 255, 255), wxBRUSHSTYLE_TRANSPARENT);
+	PrepareBrush(BrushObj, brush);
+
+	auto Chart = s_CurPlotWnd->GetActiveChart();	
+	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
+
+	if(NumChart == nullptr) 
+	{
+		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
+		return;
+	};
+
+	NumChart->DrawEllipse(x, y, width, height, pen, brush);
 }
 
 
