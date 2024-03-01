@@ -69,6 +69,22 @@ EXTERN PyObject * c_plot_scatter(
 	PyObject* kwargs);
 
 
+
+/************************************************************************************/
+
+
+EXTERN void c_plot_gdi_line(
+	double x1,
+	double y1,
+	double x2,
+	double y2,
+	PyObject* PenObj);
+
+
+
+
+/************************************************************************************/
+
 EXTERN void c_plot_layout(int nrows, int ncols);
 
 EXTERN void c_plot_subplot(
@@ -90,6 +106,9 @@ EXTERN void c_plot_xlabel(PyObject* xlabel);
 EXTERN void c_plot_ylabel(PyObject* ylabel);
 EXTERN void c_plot_legend();
 
+
+
+/**********************************************************************************/
 	
 EXTERN void c_plot_app();
 EXTERN bool c_plot_mainloop(bool sharedLoop = false);

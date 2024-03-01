@@ -228,6 +228,7 @@ def scatter_errorbar():
 from math import sqrt, pi
 from scisuit.stats import rbinom
 import scisuit.plot as plt
+import scisuit.plot.gdi as gdi
 
 n=60 ; p=0.4
 
@@ -241,6 +242,7 @@ plt.layout(2,2)
 plt.subplot(0, 0, nrows=1, ncols=2)
 plt.hist(z, density=True)
 plt.scatter(x=z, y=f)
+gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 3, plt.PEN_DOTDASH))
 
 #new chart
 t = np.arange(0.0, 2.0, 0.2)

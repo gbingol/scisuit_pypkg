@@ -1234,6 +1234,44 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 ************************************************************************************
 */
 
+
+
+
+void c_plot_gdi_line(
+	double x1,
+	double y1,
+	double x2,
+	double y2,
+	PyObject* PenObj)
+{
+	if (s_CurPlotWnd == nullptr)
+	return;
+
+	//default pen (black, width=2 pixels, solid)
+	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
+	PreparePen(PenObj, pen);
+
+	auto Chart = s_CurPlotWnd->GetActiveChart();	
+	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
+
+	if(NumChart == nullptr) 
+	{
+		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
+		return;
+	};
+
+	NumChart->DrawLine(x1, y1, x2, y2, pen);
+}
+
+
+
+
+
+/*
+************************************************************************************
+************************************************************************************
+*/
+
 void c_plot_layout(
 	int nrows, 
 	int ncols)

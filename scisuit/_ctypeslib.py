@@ -13,8 +13,15 @@ pydll = _ct.PyDLL(str(_path))
 
 
 
+__all__ = ['pydll']
 
-"""       ENGINEERING               """
+
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------  ENGINEERING --------------------------------------- 
+"""
 
 pydll.c_eng_psychrometry.argtypes = [_ct.py_object]
 pydll.c_eng_psychrometry.restype = _ct.py_object
@@ -22,7 +29,12 @@ pydll.c_eng_psychrometry.restype = _ct.py_object
 
 
 
-"""        ROOTS PACKAGE           """
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------    ROOTS  --------------------------------------- 
+"""
 
 pydll.c_root_bisect.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int, _ct.c_char_p, _ct.c_bool]
 pydll.c_root_bisect.restype = _ct.py_object
@@ -42,7 +54,14 @@ pydll.c_root_ridder.restype = _ct.py_object
 
 
 
-"""                 FITTING PACKAGE"""
+
+
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------  FITTING PACKAGE --------------------------------------- 
+"""
 
 pydll.c_fit_expfit.argtypes = [_ct.py_object, _ct.py_object, _ct.py_object]
 pydll.c_fit_expfit.restype = _ct.py_object
@@ -58,7 +77,14 @@ pydll.c_fit_spline.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_fit_spline.restype = _ct.py_object
 
 
-"""      INTEG PACKAGE        """
+
+
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------  INTEGRATION --------------------------------------- 
+"""
 pydll.c_integ_simpson.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_integ_simpson.restype = _ct.py_object
 
@@ -69,7 +95,13 @@ pydll.c_integ_fixed_quad.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, 
 pydll.c_integ_fixed_quad.restype = _ct.py_object
 
 
-"""        STATS PACKAGE           """
+
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------  STATS --------------------------------------- 
+"""
 
 pydll.c_stat_dbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
 pydll.c_stat_dbeta.restype=_ct.py_object
@@ -221,7 +253,14 @@ pydll.c_stat_test_norm_ad.argtypes = [_ct.py_object]
 pydll.c_stat_test_norm_ad.restype=_ct.py_object
 
 
-""" -----------  PLOT LIBRARY ----------------------"""
+
+
+
+
+"""
+--------------------------------------------------------------------------------
+----------------------------  PLOT LIBRARY --------------------------------------
+"""
 
 pydll.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_bar.restype=_ct.py_object
@@ -259,6 +298,26 @@ pydll.c_plot_scatter.restype=_ct.py_object
 pydll.c_plot_bubble.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_bubble.restype=_ct.py_object
 
+
+
+
+#-----------------------------------------
+
+pydll.c_plot_gdi_line.argtypes = [
+					_ct.c_double, #x1
+					_ct.c_double, #y1
+					_ct.c_double, #x2
+					_ct.c_double, #y2
+					_ct.py_object #dictionary for Pen
+					]
+pydll.c_plot_gdi_line.restype=None
+
+
+
+
+
+#---------------------------------------------
+
 pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]
 pydll.c_plot_layout.restype=None
 
@@ -284,4 +343,3 @@ pydll.c_plot_show.argtypes = []
 pydll.c_plot_show.restype=None
 
 
-__all__ = ['pydll']
