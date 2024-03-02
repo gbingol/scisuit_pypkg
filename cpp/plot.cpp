@@ -1229,6 +1229,74 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 
 
+/****************************** Empty Chart ***************************************/
+
+PyObject* c_plot_empty(PyObject* args, PyObject* kwargs)
+{
+	PyObject* XObj = nullptr, * YObj = nullptr;
+
+	const char* kwlist[] = { "x","y", NULL };
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO", const_cast<char**>(kwlist),
+		&XObj, &YObj))
+	{
+		return nullptr;
+	}
+
+	//lower and upper bounds of x and y
+	auto xdata = Iterable_As1DVector(XObj);
+	auto ydata = Iterable_As1DVector(YObj);
+
+	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
+	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
+
+
+	try
+	{
+		CFrmPlot* frmPlot = nullptr;
+
+		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		{
+			if (!s_CurPlotWnd)
+			{
+				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+				s_CurPlotWnd = frmPlot;
+			}
+			else
+				frmPlot = s_CurPlotWnd;
+
+			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+			auto Empty = std::make_unique<CEmptyChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(Empty));
+		}
+		else
+			frmPlot = s_CurPlotWnd;
+
+		auto Chart = (CEmptyChart*)frmPlot->GetActiveChart();
+					
+		auto YData = std::make_shared<core::CRealColData>(ydata);
+		auto XData = std::make_shared<core::CRealColData>(xdata);
+
+		auto DTbl = std::make_unique<core::CRealDataTable>();
+		DTbl->append_col(XData);
+		DTbl->append_col(YData);
+
+		auto series = std::make_unique<CEmptySeries>(Chart, std::move(DTbl));
+
+		Chart->AddSeries(std::move(series));
+
+		s_SubPlotInfo = SubPlotInfo();
+	}
+	CATCHRUNTIMEEXCEPTION_RET();
+
+	Py_RETURN_NONE;
+}
+
+
+
+
+
+
+
 /*
 ************************************************************************************
 ************************************************************************************

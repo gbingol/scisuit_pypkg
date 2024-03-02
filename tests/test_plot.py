@@ -230,46 +230,53 @@ from scisuit.stats import rbinom
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 
-n=60 ; p=0.4
 
-#Generate random numbers from a binomial dist
-x = np.array(rbinom(n=100, size=n, prob=p))
-z = (x - n*p)/sqrt(n*p*(1-p))
-f = 1.0/sqrt(2*pi)*np.exp(-z**2/2.0)
+def layout_test():
+	n=60 ; p=0.4
 
-plt.layout(2,2)
+	#Generate random numbers from a binomial dist
+	x = np.array(rbinom(n=100, size=n, prob=p))
+	z = (x - n*p)/sqrt(n*p*(1-p))
+	f = 1.0/sqrt(2*pi)*np.exp(-z**2/2.0)
 
-plt.subplot(0, 0, nrows=1, ncols=2)
+	plt.layout(2,2)
 
-plt.hist(z, density=True)
-plt.scatter(x=z, y=f)
+	plt.subplot(0, 0, nrows=1, ncols=2)
 
-gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
-gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
+	plt.hist(z, density=True)
+	plt.scatter(x=z, y=f)
 
-gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
+	gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
+	gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
 
-gdi.text(p = (-1, 0.3), text="hello world", angle=180)
+	gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
 
-
-#new chart
-t = np.arange(0.0, 2.0, 0.2)
-y = np.arange(-5.0, 0.0, 0.2)
-t, y = np.meshgrid(t,y) 
-f1= 4-t+2*y #dy/dt
-
-plt.subplot(1,0)
-plt.dirfield(t,y,f1) 
+	gdi.text(p = (-1, 0.3), text="hello world", angle=180)
 
 
-#new chart
-categ=["😁", "Q2", "😍", "Q4"]
-A = [44, 55, 41, 67]
-B = [13, 23, 8, 13]
+	#new chart
+	t = np.arange(0.0, 2.0, 0.2)
+	y = np.arange(-5.0, 0.0, 0.2)
+	t, y = np.meshgrid(t,y) 
+	f1= 4-t+2*y #dy/dt
 
-plt.subplot(1,1)
-plt.bar(labels=categ, height=A)
-plt.bar(height=B, labels=categ)
+	plt.subplot(1,0)
+	plt.dirfield(t,y,f1) 
+
+
+	#new chart
+	categ=["😁", "Q2", "😍", "Q4"]
+	A = [44, 55, 41, 67]
+	B = [13, 23, 8, 13]
+
+	plt.subplot(1,1)
+	plt.bar(labels=categ, height=A)
+	plt.bar(height=B, labels=categ)
+
+
+plt.empty(x=(1,10), y=(1,10))
+gdi.line(p1=(1, 1), p2=(5, 5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
+gdi.rect(p =(5, 5), width=4, height=3, pen=gdi.Pen(plt.COLOR_GREEN))
 
 plt.show()
 

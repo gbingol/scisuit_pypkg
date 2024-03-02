@@ -493,6 +493,21 @@ def bubble(
 
 
 
+def empty(x:_Iterable, y:_Iterable):
+	"""
+	Plot empty chart (shows axes)
+
+	## Input:
+	x, y:	x- and y-data for horizontal and vertical axis bounds \n
+	"""
+	assert isinstance(x, _Iterable), "x must be iterable object"
+	assert isinstance(y, _Iterable), "y must be iterable object"
+	assert len(x) == len(y), "x and y must have same lengths"
+
+
+	return _pydll.c_plot_empty((), {"x":x, "y":y})
+
+
 
 
 """

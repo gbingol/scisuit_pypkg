@@ -70,6 +70,10 @@ EXTERN PyObject * c_plot_scatter(
 	PyObject* kwargs);
 
 
+EXTERN PyObject * c_plot_empty(
+	PyObject * args, 
+	PyObject* kwargs);
+
 
 /************************************************************************************/
 
@@ -99,6 +103,7 @@ EXTERN void c_plot_gdi_ellipse(
 	PyObject* PenObj,
 	PyObject* BrushObj);
 
+
 //(x,y) top-left
 EXTERN void c_plot_gdi_text(
 	double x,
@@ -107,6 +112,8 @@ EXTERN void c_plot_gdi_text(
 	double angle, //positive angles are counterclockwise; the full angle is 360 degrees
 	const char* color,
 	PyObject* FontObj); 
+
+
 
 /************************************************************************************/
 
