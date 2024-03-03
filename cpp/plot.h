@@ -70,7 +70,7 @@ EXTERN PyObject * c_plot_scatter(
 	PyObject* kwargs);
 
 
-EXTERN PyObject * c_plot_empty(
+EXTERN PyObject * c_plot_canvas(
 	PyObject * args, 
 	PyObject* kwargs);
 

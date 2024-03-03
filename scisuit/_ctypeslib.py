@@ -298,8 +298,8 @@ pydll.c_plot_scatter.restype=_ct.py_object
 pydll.c_plot_bubble.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_bubble.restype=_ct.py_object
 
-pydll.c_plot_empty.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_empty.restype=_ct.py_object
+pydll.c_plot_canvas.argtypes = [_ct.py_object, _ct.py_object]
+pydll.c_plot_canvas.restype=_ct.py_object
 
 
 

@@ -1231,7 +1231,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 /****************************** Empty Chart ***************************************/
 
-PyObject* c_plot_empty(PyObject* args, PyObject* kwargs)
+PyObject* c_plot_canvas(PyObject* args, PyObject* kwargs)
 {
 	PyObject* XObj = nullptr, * YObj = nullptr;
 
@@ -1265,13 +1265,13 @@ PyObject* c_plot_empty(PyObject* args, PyObject* kwargs)
 				frmPlot = s_CurPlotWnd;
 
 			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto Empty = std::make_unique<CEmptyChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(Empty));
+			auto Canvas = std::make_unique<CCanvasChart>(frmPlot, Rect);
+			frmPlot->AddChart(std::move(Canvas));
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CEmptyChart*)frmPlot->GetActiveChart();
+		auto Chart = (CCanvasChart*)frmPlot->GetActiveChart();
 					
 		auto YData = std::make_shared<core::CRealColData>(ydata);
 		auto XData = std::make_shared<core::CRealColData>(xdata);
@@ -1280,7 +1280,7 @@ PyObject* c_plot_empty(PyObject* args, PyObject* kwargs)
 		DTbl->append_col(XData);
 		DTbl->append_col(YData);
 
-		auto series = std::make_unique<CEmptySeries>(Chart, std::move(DTbl));
+		auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
 
 		Chart->AddSeries(std::move(series));
 

@@ -493,9 +493,9 @@ def bubble(
 
 
 
-def empty(x:_Iterable, y:_Iterable):
+def canvas(x:_Iterable, y:_Iterable):
 	"""
-	Plot empty chart (shows axes)
+	Shows a canvas (an empty chart with axes)
 
 	## Input:
 	x, y:	x- and y-data for horizontal and vertical axis bounds \n
@@ -505,7 +505,7 @@ def empty(x:_Iterable, y:_Iterable):
 	assert len(x) == len(y), "x and y must have same lengths"
 
 
-	return _pydll.c_plot_empty((), {"x":x, "y":y})
+	return _pydll.c_plot_canvas((), {"x":x, "y":y})
 
 
 

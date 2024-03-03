@@ -274,7 +274,7 @@ def layout_test():
 	plt.bar(height=B, labels=categ)
 
 
-plt.empty(x=(1,10), y=(1,10))
+plt.canvas(x=(1,10), y=(1,10))
 gdi.line(p1=(1, 1), p2=(5, 5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
 gdi.rect(p =(5, 5), width=4, height=3, pen=gdi.Pen(plt.COLOR_GREEN))
 
