@@ -274,14 +274,21 @@ def layout_test():
 	plt.bar(height=B, labels=categ)
 
 
-plt.canvas(x=(1,10), y=(1,10))
+plt.canvas(x=(-10,10), y=(-1, 1))
 
-
+#will not be shown (out of bounds)
 gdi.arc(center = (4,3), 
 		p1=(6, 3), 
 		p2=(2,3),  
 		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
 		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
+
+x= np.linspace(-10, 10, 100)
+y = np.sin(x)
+y2 = np.sin(x + np.pi/4)
+
+gdi.curve(x, y)
+gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
 
 plt.show()
 

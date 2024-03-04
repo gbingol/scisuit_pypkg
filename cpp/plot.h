@@ -125,6 +125,12 @@ EXTERN void c_plot_gdi_arc(
 	PyObject* BrushObj);
 
 
+EXTERN void c_plot_gdi_curve(
+	PyObject* XObj,
+	PyObject* YObj,
+	PyObject* PenObj);
+
+
 
 /************************************************************************************/
 

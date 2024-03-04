@@ -360,6 +360,15 @@ pydll.c_plot_gdi_text.argtypes = [
 pydll.c_plot_gdi_text.restype=None
 
 
+pydll.c_plot_gdi_curve.argtypes = [
+					_ct.py_object, #x-values (iterable)
+					_ct.py_object,#y-values (iterable)
+					_ct.py_object] #dictionary for Pen
+
+pydll.c_plot_gdi_curve.restype=None
+
+
+
 #---------------------------------------------
 
 pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]

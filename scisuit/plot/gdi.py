@@ -1,4 +1,6 @@
 import ctypes as _ct
+from typing import Iterable as _Iterable
+
 from .._ctypeslib import pydll as _pydll
 
 import dataclasses as _dc
@@ -233,3 +235,35 @@ def arc(
 			_ct.c_double(center[1]),
 			vars(pen),
 			vars(brush))
+	
+
+def curve(
+		x: _Iterable, 
+		y:_Iterable, 
+		pen:Pen = Pen("0 0 0", 2))->None:
+	"""
+	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
+	The curve is only guaranteed to pass from (x1, y1) and (xn, yn).
+
+	`x:` x values
+	`y:` y values
+	`pen:` Pen object to specify width, color, style
+	"""
+
+	assert isinstance(x, _Iterable), "x must be Iterable"
+	assert isinstance(y, _Iterable), "y must be Iterable"
+	assert isinstance(pen, Pen), "pen must be Pen object"
+
+	#pre-check
+	assert len(x) == len(y), "x and y must have same lengths"
+
+	_x = [i for i in x if isinstance(i, numbers.Real)]
+	assert len(_x) >= 3, "x must contain at least 3 real numbers"
+
+	_y = [i for i in y if isinstance(i, numbers.Real)]
+	assert len(_y) >= 3, "y must contain at least 3 real numbers"
+
+	#processed-check
+	assert len(_x) == len(_y), "x and y must have same lengths"
+
+	_pydll.c_plot_gdi_curve(x, y, vars(pen))
