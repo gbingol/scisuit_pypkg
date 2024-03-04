@@ -274,21 +274,27 @@ def layout_test():
 	plt.bar(height=B, labels=categ)
 
 
-plt.canvas(x=(-10,10), y=(-1, 1))
 
-#will not be shown (out of bounds)
-gdi.arc(center = (4,3), 
-		p1=(6, 3), 
-		p2=(2,3),  
-		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
-		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
 
-x= np.linspace(-10, 10, 100)
-y = np.sin(x)
-y2 = np.sin(x + np.pi/4)
+#gdi.arc(center = (4,3), p1=(6, 3), p2=(2,3),  
+#		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
+#		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
 
-gdi.curve(x, y)
-gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
+def heart1():
+	t= np.linspace(-10, 10, 1000)
+	#x=np.sin(t)*np.cos(t)*np.log(np.abs(t))
+	#y=np.abs(t)**0.3*np.sqrt(np.cos(t))
+
+def heart2():
+	t= np.linspace(-10, 10, 1000)
+	x = 16*np.sin(t)**3
+	y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
+
+	plt.canvas(x=(-20, 20), y=(-20, 20))
+
+	gdi.curve(x, y, pen = gdi.Pen(plt.COLOR_RED))
+	gdi.text((-5,-5), "Some text", 45, font= gdi.Font(size=15, color=plt.COLOR_GREEN))
+	#gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
 
 plt.show()
 
