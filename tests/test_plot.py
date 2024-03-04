@@ -275,8 +275,13 @@ def layout_test():
 
 
 plt.canvas(x=(1,10), y=(1,10))
-gdi.line(p1=(1, 1), p2=(5, 5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
-gdi.rect(p =(5, 5), width=4, height=3, pen=gdi.Pen(plt.COLOR_GREEN))
+
+
+gdi.arc(center = (4,3), 
+		p1=(6, 3), 
+		p2=(2,3),  
+		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
+		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
 
 plt.show()
 

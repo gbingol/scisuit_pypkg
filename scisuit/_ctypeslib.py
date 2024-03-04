@@ -304,6 +304,18 @@ pydll.c_plot_canvas.restype=_ct.py_object
 
 
 #-----------------------------------------
+pydll.c_plot_gdi_arc.argtypes = [
+					_ct.c_double, #x1
+					_ct.c_double, #y1
+					_ct.c_double, #x2
+					_ct.c_double, #y2
+					_ct.c_double, #xcenter
+					_ct.c_double, #ycenter
+					_ct.py_object, #dictionary for Pen
+					_ct.py_object] #dictionary for Brush
+					
+pydll.c_plot_gdi_arc.restype=None
+
 
 pydll.c_plot_gdi_line.argtypes = [
 					_ct.c_double, #x1

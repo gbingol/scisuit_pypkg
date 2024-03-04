@@ -113,6 +113,17 @@ EXTERN void c_plot_gdi_text(
 	const char* color,
 	PyObject* FontObj); 
 
+// (x1,y1): start, (x2, y2):end, (xc, yc): center
+EXTERN void c_plot_gdi_arc(
+	double x1,
+	double y1,
+	double x2,
+	double y2,
+	double xc,
+	double yc,
+	PyObject* PenObj,
+	PyObject* BrushObj);
+
 
 
 /************************************************************************************/

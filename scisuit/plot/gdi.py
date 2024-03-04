@@ -188,3 +188,48 @@ def text(
 			_ct.c_double(angle),
 			_ct.c_char_p(font.color.encode()),
 			vars(font))
+	
+
+def arc(
+		center:tuple, 
+		p1:tuple, 
+		p2:tuple, 
+		pen:Pen = Pen("0 0 0", 2),
+		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
+	"""
+	`center:` (x, y) -> center point of arc
+	`p1:` (x1, y1) -> start of arc
+	`p2:` (x2, y2) -> end of arc
+	`pen:` Pen object to specify width, color, style
+	`brush:` Brush object to specify color, style of internal
+
+	## Note:
+	To plot the arc correctly, the plot area must be a square 
+	rather than a rectangle. When `plt.canvas` starts, it ensures 
+	that the initial plot area is a square.
+	"""
+
+	assert isinstance(center, tuple), "center must be tuple"
+	assert isinstance(p1, tuple), "p1 must be tuple"
+	assert isinstance(p2, tuple), "p2 must be tuple"
+	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(brush, Brush), "brush must be Brush object"
+
+	_c = [i for i in center if isinstance(i, numbers.Real)]
+	assert len(_c) == 2, "center must contain exactly two real numbers"
+
+	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
+
+	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
+	assert len(_p2) == 2, "p2 must contain exactly two real numbers"
+
+	_pydll.c_plot_gdi_arc(
+			_ct.c_double(p1[0]),
+			_ct.c_double(p1[1]),
+			_ct.c_double(p2[0]),
+			_ct.c_double(p2[1]),
+			_ct.c_double(center[0]),
+			_ct.c_double(center[1]),
+			vars(pen),
+			vars(brush))
