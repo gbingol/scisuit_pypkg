@@ -78,6 +78,16 @@ EXTERN PyObject * c_plot_canvas(
 /************************************************************************************/
 
 
+EXTERN void c_plot_gdi_arrow(
+	double x1,
+	double y1,
+	double x2,
+	double y2,
+	double angle,
+	double length,
+	PyObject* PenObj);
+
+
 EXTERN void c_plot_gdi_line(
 	double x1,
 	double y1,

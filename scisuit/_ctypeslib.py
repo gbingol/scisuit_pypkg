@@ -318,6 +318,18 @@ pydll.c_plot_gdi_arc.argtypes = [
 pydll.c_plot_gdi_arc.restype=None
 
 
+pydll.c_plot_gdi_arrow.argtypes = [
+					_ct.c_double, #x1
+					_ct.c_double, #y1
+					_ct.c_double, #x2
+					_ct.c_double, #y2
+					_ct.c_double, #angle
+					_ct.c_double, #length
+					_ct.py_object] #dictionary for Pen
+					
+pydll.c_plot_gdi_arrow.restype=None
+
+
 pydll.c_plot_gdi_line.argtypes = [
 					_ct.c_double, #x1
 					_ct.c_double, #y1

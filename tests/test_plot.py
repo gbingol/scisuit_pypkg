@@ -1,5 +1,6 @@
 import sys, os
 import numpy as np
+import math
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
@@ -299,8 +300,12 @@ def heart2():
 
 x = [0, 3, 6]
 y = [0, 4, 0]
-plt.canvas(x=(0, 6), y=(0, 5))
-gdi.polygon(x, y)
+plt.canvas(x=(-1, 1), y=(-1, 1))
+#gdi.polygon(x, y)
+
+#gdi.arrow((1,1), (3,3), angle=45, length=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
+gdi.line((0,0), (1,-1), label="hi there", labeldist=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
+
 
 plt.show()
 
