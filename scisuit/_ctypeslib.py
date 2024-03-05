@@ -389,6 +389,17 @@ pydll.c_plot_gdi_polygon.argtypes = [
 
 pydll.c_plot_gdi_polygon.restype=None
 
+
+pydll.c_plot_gdi_marker.argtypes = [
+					_ct.c_double, # x of centroid
+					_ct.c_double, # y of centroid
+					_ct.c_char_p, # type
+					_ct.c_uint8, # size
+					_ct.py_object, # dictionary for Pen
+					_ct.py_object] #dictionary for Brush
+
+pydll.c_plot_gdi_marker.restype=None
+
 #---------------------------------------------
 
 pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]

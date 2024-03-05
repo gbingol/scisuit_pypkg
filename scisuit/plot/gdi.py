@@ -13,7 +13,7 @@ Defined here for clarity
 """
 _PEN_SOLID = 100
 _BRUSH_TRANSPARENT = 106
-
+_BRUSH_SOLID = 100
 
 
 
@@ -96,6 +96,39 @@ def text(
 			_ct.c_char_p(font.color.encode()),
 			vars(font))
 
+
+def marker(
+		p:tuple, 
+		type:str = "c",
+		size:int = 5,
+		pen:Pen = Pen("255 0 0", 2),
+		brush:Brush = Brush("255 0 0", _BRUSH_SOLID))->None:
+	"""
+	`p:`	(x, y), centroid,
+	`type:`	type of the marker, "c", "t", "r", "x",
+	`size:`	size of the marker in pixels
+	`pen:` 	Pen object to specify width, color, style
+	`brush:` Brush object to specify color, style of internal
+
+	"""
+	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(type, str), "type must be string"
+	assert isinstance(size, int), "size must be int"
+	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(brush, Brush), "brush must be Brush object"
+
+	assert 1<size<=20, "1 < size <= 20 expected"
+
+	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	assert len(_p1) == 2, "p must contain exactly two real numbers"
+
+	_pydll.c_plot_gdi_marker(
+			_ct.c_double(p[0]),
+			_ct.c_double(p[1]),
+			_ct.c_char_p(type.encode()),
+			_ct.c_uint8(size),
+			vars(pen),
+			vars(brush))
 
 
 

@@ -1550,6 +1550,36 @@ void c_plot_gdi_polygon(
 }
 
 
+void c_plot_gdi_marker(
+	double x, 
+	double y, 
+	const char *Type, 
+	std::uint8_t Size, 
+	PyObject *PenObj, 
+	PyObject *BrushObj)
+{
+	if (s_CurPlotWnd == nullptr)
+		return;
+
+	//default pen (black, width=2 pixels, solid)
+	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
+	PreparePen(PenObj, pen);
+
+	//default brush (white and transparent)
+	wxBrush brush = wxBrush(wxColour(255, 255, 255), wxBRUSHSTYLE_TRANSPARENT);
+	PrepareBrush(BrushObj, brush);
+
+	auto Chart = s_CurPlotWnd->GetActiveChart();	
+	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
+
+	if(NumChart == nullptr) 
+	{
+		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
+		return;
+	};
+
+	NumChart->DrawMarker(x, y, Type, Size, pen, brush);
+}
 
 /*
 ************************************************************************************

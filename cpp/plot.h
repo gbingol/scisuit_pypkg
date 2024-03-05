@@ -148,6 +148,16 @@ EXTERN void c_plot_gdi_polygon(
 	PyObject* BrushObj);
 
 
+//(x,y) centroid
+EXTERN void c_plot_gdi_marker(
+	double x,
+	double y,
+	const char* Type, 
+	std::uint8_t Size,
+	PyObject* PenObj,
+	PyObject* BrushObj); 
+
+
 
 /************************************************************************************/
 
