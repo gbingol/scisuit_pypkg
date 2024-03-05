@@ -1,5 +1,6 @@
-import sys
 import ctypes as _ct
+import sys
+
 from .util import parent_path as _parent_path
 
 """
@@ -368,6 +369,13 @@ pydll.c_plot_gdi_curve.argtypes = [
 pydll.c_plot_gdi_curve.restype=None
 
 
+pydll.c_plot_gdi_polygon.argtypes = [
+					_ct.py_object, #x-values (iterable)
+					_ct.py_object,#y-values (iterable)
+					_ct.py_object, #dictionary for Pen
+					_ct.py_object] #dictionary for brush
+
+pydll.c_plot_gdi_polygon.restype=None
 
 #---------------------------------------------
 

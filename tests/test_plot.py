@@ -296,6 +296,12 @@ def heart2():
 	gdi.text((-5,-5), "Some text", 45, font= gdi.Font(size=15, color=plt.COLOR_GREEN))
 	#gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
 
+
+x = [0, 3, 6]
+y = [0, 4, 0]
+plt.canvas(x=(0, 6), y=(0, 5))
+gdi.polygon(x, y)
+
 plt.show()
 
 

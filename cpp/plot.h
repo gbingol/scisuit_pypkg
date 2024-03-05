@@ -131,6 +131,13 @@ EXTERN void c_plot_gdi_curve(
 	PyObject* PenObj);
 
 
+EXTERN void c_plot_gdi_polygon(
+	PyObject* XObj,
+	PyObject* YObj,
+	PyObject* PenObj,
+	PyObject* BrushObj);
+
+
 
 /************************************************************************************/
 
