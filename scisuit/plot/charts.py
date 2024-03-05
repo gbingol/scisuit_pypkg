@@ -2,14 +2,107 @@ import ctypes as _ct
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
-
-import scisuit.plot.chartelems as _defs
 import scisuit.plot.gdi as _gdi
 
 from ..app import App as _App
 
 
 _app = _App()
+
+
+
+class Marker:
+	"""
+	A class to define marker properties
+
+	## Input:
+	style: "c", "s", "t", "x"  \n	
+	size: 5 #>0 expected \n
+	fill: if specified, RGB "255 255 0" \n
+	"""
+	def __init__(
+		self,
+		style:str = "c",
+		size:int = 5 ,
+		fill:_gdi.Brush = None,
+		line:_gdi.Pen = None) -> None:
+
+		assert isinstance(style, str),"'style' must be string"
+		assert isinstance(size, int), "'size' must be integer"
+		assert size>0, "size>0 expected"
+
+		self._style = style
+		self._size = size
+		self._fill = vars(fill) if fill != None else None
+		self._line = vars(line) if line != None else None
+	
+	def __iter__(self):
+		return iter([
+			("style",self._style),
+			("size", self._size),
+			("fill", dict(self._fill) if self._fill != None else None),
+			("line", dict(self._line) if self._line != None else None)
+		])
+
+
+
+class Trendline:
+	"""
+	A class to define Trendline properties
+
+	## Input:
+	style: "linear", "poly", "exp", "log","pow" (Use STYLE class) \n
+	degree: 2, >=2 expected when type is polynomial \n
+	intercept: number expected \n
+	line: line properties
+	"""
+	def __init__(
+		self, 
+		style:str= "linear",
+		degree:int=2, 
+		intercept:float=None, 
+		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style=102), #PEN_LONGDASH
+		label:str = None,
+		show_stats:bool = False,
+		show_equation:bool=False
+		) -> None:
+
+		assert isinstance(style, str), "'style' must be string"
+		assert isinstance(degree, int), "'degree' must be int"
+		assert isinstance(intercept, float), "'intercept' must be float"
+		assert isinstance(show_stats, bool), "'show_stats' must be bool"
+		assert isinstance(show_equation, bool), "'show_equation' must be bool"
+
+		if label != None:
+			assert isinstance(label, str), "'label' must be string"
+
+		self._style = style
+		self._degree = degree
+		self._intercept = intercept
+		self._label = style if label == None else label
+		self._line = vars(line) if line != None else None
+		self._show_stats = show_stats
+		self._show_equation = show_equation
+
+
+	def __iter__(self):
+		return iter([
+			("style",self._style),
+			("degree", self._degree),
+			("intercept", self._intercept),
+			("label", self._label),
+			("line", dict(self._line) if self._line != None else None),
+			("show_stats", self._show_stats),
+			("show_equation", self._show_equation)
+		])	
+
+
+
+
+"""
+---------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+"""
 
 
 
@@ -160,7 +253,7 @@ def line(
 	labels:_Iterable, 
 	stacked = False,
 	label:str = None,  
-	marker:_defs.Marker=None, 
+	marker:Marker=None, 
 	line:_gdi.Pen=None):
 	"""
 	Plots line chart
@@ -272,7 +365,7 @@ def qqnorm(
 		label:str=None, 
 		show:bool=True, 
 		line:_gdi.Pen=None, 
-		marker:_defs.Marker=None):
+		marker:Marker=None):
 		"""
 		Normal Quantile-quantile chart \n
 		x-axis="Theoretical Quantiles" \n  
@@ -302,7 +395,7 @@ def qqnorm(
 def qqplot(
 		x:_Iterable,
 		y:_Iterable,
-		marker:_defs.Marker=None):
+		marker:Marker=None):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 
@@ -391,9 +484,9 @@ def scatter(
 		y:_Iterable,  
 		label:str = None, 
 		smooth:bool = False, 
-		marker:_defs.Marker = None, 
+		marker:Marker = None, 
 		line:_gdi.Pen = None, 
-		trendline:_defs.Trendline = None):
+		trendline:Trendline = None):
 	"""
 	Plot scatter charts
 
