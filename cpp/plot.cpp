@@ -1455,49 +1455,6 @@ void c_plot_gdi_text(
 }
 
 
-PyObject *c_plot_gdi_textsize(
-	const char *text, 
-	PyObject *FontObj)
-{
-	IF_PYERRRUNTIME_RET(s_CurPlotWnd == nullptr, "There is no active chart.");
-
-	wxFont font(wxFontInfo(11).FaceName("Arial"));
-	PrepareFont(FontObj, font);
-
-	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	IF_PYERRRUNTIME_RET(NumChart == nullptr, "drawing functions are only supported by Numeric Charts.");
-
-	wxClientDC dc(NumChart->GetPrntWnd());
-	auto szTxt = dc.GetTextExtent(wxString::FromUTF8(text)); 
-
-	auto HAxis = NumChart->GetHorizAxis();
-	auto VAxis = NumChart->GetVertAxis();
-
-	auto Bnd = HAxis->GetBounds();
-	auto Len = HAxis->GetLength();
-	auto diff = Bnd.second - Bnd.first;
-
-	auto W = szTxt.GetWidth()*diff/Len;
-
-	std::cout<<Len;
-
-	Bnd = VAxis->GetBounds();
-	Len = VAxis->GetLength();
-	diff = Bnd.second - Bnd.first;
-
-	auto H = szTxt.GetHeight()*diff/Len;
-
-	auto Tuple = PyTuple_New(2);
-	PyTuple_SetItem(Tuple, 0, Py_BuildValue("d", W));
-	PyTuple_SetItem(Tuple, 1, Py_BuildValue("d", H));
-
-	return Tuple;
-}
-
-
-
 void c_plot_gdi_arc(
 	double x1,
 	double y1,

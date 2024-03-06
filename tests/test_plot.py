@@ -307,7 +307,6 @@ plt.canvas(x=(-1, 1), y=(-1, 1))
 gdi.line((0,0), (1,-1), label="hi there", labeldist=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
 
 gdi.marker((0.5, 0.5), size=20, type="t")
-print(gdi.textsize("Hello there"))
 plt.show()
 
 

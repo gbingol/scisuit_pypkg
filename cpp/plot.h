@@ -124,10 +124,6 @@ EXTERN void c_plot_gdi_text(
 	PyObject* FontObj); 
 
 
-EXTERN PyObject* c_plot_gdi_textsize(
-	const char* text, 
-	PyObject* FontObj); 
-
 // (x1,y1): start, (x2, y2):end, (xc, yc): center
 EXTERN void c_plot_gdi_arc(
 	double x1,

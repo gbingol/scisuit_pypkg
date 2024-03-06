@@ -97,18 +97,6 @@ def text(
 			vars(font))
 
 
-def textsize(
-		label:str,
-		font:Font = Font())->tuple[float]:
-	"""
-	label: 	text
-	font: 	Font object that specified point size, facename, italic, bold of the text
-	"""
-	assert isinstance(label, str), "label must be string"
-	assert isinstance(font, Font), "font must be Font object"
-
-	return _pydll.c_plot_gdi_textsize(_ct.c_char_p(label.encode()), vars(font))
-
 
 def marker(
 		p:tuple, 
