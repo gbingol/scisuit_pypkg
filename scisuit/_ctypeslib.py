@@ -373,6 +373,14 @@ pydll.c_plot_gdi_text.argtypes = [
 pydll.c_plot_gdi_text.restype=None
 
 
+pydll.c_plot_gdi_textsize.argtypes = [
+					_ct.c_char_p, # text
+					_ct.py_object] #dictionary for Font
+
+pydll.c_plot_gdi_textsize.restype = _ct.py_object
+
+
+
 pydll.c_plot_gdi_curve.argtypes = [
 					_ct.py_object, #x-values (iterable)
 					_ct.py_object,#y-values (iterable)
