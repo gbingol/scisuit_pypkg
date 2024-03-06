@@ -118,7 +118,7 @@ def marker(
 	assert isinstance(pen, Pen), "pen must be Pen object"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
-	assert 1<size<=20, "1 < size <= 20 expected"
+	assert 1<size<=100, "1 < size <= 100 expected"
 
 	_p1 = [i for i in p if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
