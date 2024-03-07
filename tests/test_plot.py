@@ -142,7 +142,7 @@ def scatter():
 	y=y,
 	trendline=plt.Trendline
 		(
-		style =plt.Trendline.STYLE.POLY,
+		style ="poly",
 		degree=3,
 		intercept=-10,
 		line=plt.Pen(color="255 0 0", width=2),
@@ -247,10 +247,10 @@ def layout_test():
 	plt.hist(z, density=True)
 	plt.scatter(x=z, y=f)
 
-	gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.COLOR_GREEN, 2, plt.PEN_DOTDASH))
-	gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.COLOR_GREEN))
+	gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.C_GREEN, 2, plt.PEN_DOTDASH))
+	gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.C_GREEN))
 
-	gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.COLOR_BROWN))
+	gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.C_BROWN))
 
 	gdi.text(p = (-1, 0.3), text="hello world", angle=180)
 
@@ -294,19 +294,19 @@ def heart2():
 	plt.canvas(x=(-20, 20), y=(-20, 20))
 
 	gdi.curve(x, y, pen = gdi.Pen(plt.COLOR_RED))
-	gdi.text((-5,-5), "Some text", 45, font= gdi.Font(size=15, color=plt.COLOR_GREEN))
+	gdi.text((-5,-5), "Some text", 45, font= gdi.Font(size=15, color=plt.C_GREEN))
 	#gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
 
 
 x = [0, 3, 6]
 y = [0, 4, 0]
-plt.canvas(x=(-1, 1), y=(-1, 1))
+plt.canvas(xmin=-1, xmax=1, ymin=-1, ymax=1)
 #gdi.polygon(x, y)
 
 #gdi.arrow((1,1), (3,3), angle=45, length=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
-gdi.line((0,0), (1,-1), label="hi there", labeldist=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
+gdi.line((0,0), [1,-1], label="hi there", labeldist=0.1, pen = gdi.Pen(plt.C_BLUE))
 
-gdi.marker((0.5, 0.5), size=100, type="c")
+gdi.marker([0.5, 0.5], size=100, type="c")
 plt.show()
 
 

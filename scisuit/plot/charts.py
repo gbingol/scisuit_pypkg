@@ -1,4 +1,5 @@
 import ctypes as _ct
+import numbers
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
@@ -16,9 +17,9 @@ class Marker:
 	A class to define marker properties
 
 	## Input:
-	style: "c", "s", "t", "x"  \n	
-	size: 5 #>0 expected \n
-	fill: if specified, RGB "255 255 0" \n
+	`style:` "c", "s", "t", "x"  \n	
+	`size:` 5 #>0 expected \n
+	`fill:` if specified, RGB "255 255 0" \n
 	"""
 	def __init__(
 		self,
@@ -51,10 +52,10 @@ class Trendline:
 	A class to define Trendline properties
 
 	## Input:
-	style: "linear", "poly", "exp", "log","pow" (Use STYLE class) \n
-	degree: 2, >=2 expected when type is polynomial \n
-	intercept: number expected \n
-	line: line properties
+	`style:` "linear", "poly", "exp", "log","pow" \n
+	`degree:` 2, >=2 expected when type is polynomial \n
+	`intercept:` number expected \n
+	`line:` line properties
 	"""
 	def __init__(
 		self, 
@@ -586,19 +587,24 @@ def bubble(
 
 
 
-def canvas(x:_Iterable, y:_Iterable):
+def canvas(
+		xmin:numbers.Real, 
+		xmax:numbers.Real,
+		ymin:numbers.Real, 
+		ymax:numbers.Real):
 	"""
 	Shows a canvas (an empty chart with axes)
 
 	## Input:
-	x, y:	x- and y-data for horizontal and vertical axis bounds \n
+	`xmin, xmax:` horizontal axis bounds \n
+	`ymin, ymax:` vertical axis bounds
 	"""
-	assert isinstance(x, _Iterable), "x must be iterable object"
-	assert isinstance(y, _Iterable), "y must be iterable object"
-	assert len(x) == len(y), "x and y must have same lengths"
+	assert isinstance(xmin, numbers.Real), "xmin must be a real number"
+	assert isinstance(xmax, numbers.Real), "xmax must be a real number"
+	assert isinstance(ymin, numbers.Real), "ymin must be a real number"
+	assert isinstance(ymax, numbers.Real), "ymax must be a real number"
 
-
-	return _pydll.c_plot_canvas((), {"x":x, "y":y})
+	return _pydll.c_plot_canvas((), {"x":[xmin, xmax], "y":[ymin, ymax]})
 
 
 
