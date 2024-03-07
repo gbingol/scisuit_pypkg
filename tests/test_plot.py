@@ -305,32 +305,52 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
+def psychrometry_heating():
+	p1 = (10, 0.002) #Tdb, W
+	p2 = (30, 0.002) #simple heating
+	p3 = (50, 0.04) #heating + humidification
 
-p1 = (10, 0.002) #Tdb, W
-p2 = (30, 0.002) #simple heating
-p3 = (50, 0.04) #heating + humidification
+	plt.psychrometry()
 
-plt.psychrometry()
+	color = plt.C_GREEN
+	pen = gdi.Pen(color=color)
+	brush = gdi.Brush(color=color)
 
-color = plt.C_GREEN
-pen = gdi.Pen(color=color)
-brush = gdi.Brush(color=color)
-
-for p in [p1, p2, p3]:
-	gdi.marker(p, size=9, pen=pen, brush=brush)
+	for p in [p1, p2, p3]:
+		gdi.marker(p, size=9, pen=pen, brush=brush)
 
 
-gdi.arrow(p1=p1, p2=p2, length=0.05,
-		  pen=gdi.Pen(
-			  color=plt.C_BLUE, 
-			  style=plt.PEN_SHORTDASH, 
-			  width=4))
+	gdi.arrow(p1=p1, p2=p2, length=0.05,
+			pen=gdi.Pen(
+				color=plt.C_BLUE, 
+				style=plt.PEN_SHORTDASH, 
+				width=4))
 
-gdi.arrow(p1=p2, p2=p3, length=0.05,
-		  pen=gdi.Pen(
-			  color=plt.C_RED_DARK, 
-			  style=plt.PEN_SHORTDASH, 
-			  width=4))
+	gdi.arrow(p1=p2, p2=p3, length=0.05,
+			pen=gdi.Pen(
+				color=plt.C_RED_DARK, 
+				style=plt.PEN_SHORTDASH, 
+				width=4))
+
+def linregress_deviations():
+	x = [32, 42, 110, 115, 118, 145, 150]
+	y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
+
+	#plot a simple scatter chart
+	plt.scatter(x=x, y=y)
+
+	poly = np.polyfit(x, y, 1)
+
+	for i in range(len(x)):
+		#experimental data
+		p1 = (x[i], y[i])
+
+		#regression data
+		p2 = (x[i], np.polyval(poly, x[i]))
+
+		gdi.line(p1, p2, 
+			pen=gdi.Pen(style=plt.PEN_SHORTDASH, width=2))
+
 plt.show()
 
 
