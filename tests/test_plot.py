@@ -220,7 +220,7 @@ def scatter_errorbar():
 		plt.plot(
 			x=[x1, x2], 
 			y=[y1, y2], 
-			color = plt.Color.BLACK, 
+			color = plt.C_BLACK, 
 			style = plt.PEN_LONGDASH,
 			width=2)
 
@@ -291,24 +291,46 @@ def heart2():
 	x = 16*np.sin(t)**3
 	y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
 
-	plt.canvas(x=(-20, 20), y=(-20, 20))
+	plt.canvas(xmin=-20, xmax=20, ymin=-20, ymax=20)
 
-	gdi.curve(x, y, pen = gdi.Pen(plt.COLOR_RED))
-	gdi.text((-5,-5), "Some text", 45, font= gdi.Font(size=15, color=plt.C_GREEN))
-	#gdi.curve(x, y2, pen=gdi.Pen(plt.COLOR_GREEN, width=2))
+	gdi.curve(x, y, pen = gdi.Pen(plt.C_RED))
+	gdi.text((-4.5,-4), "text", 45, 
+			font= gdi.Font(size=25, color=plt.C_GREEN))
 
 
-x = [0, 3, 6]
-y = [0, 4, 0]
-plt.canvas(xmin=-1, xmax=1, ymin=-1, ymax=1)
-#gdi.polygon(x, y)
 
-#gdi.arrow((1,1), (3,3), angle=45, length=0.1, pen = gdi.Pen(plt.COLOR_BLUE))
-gdi.line((0,0), [1,-1], label="hi there", labeldist=0.1, pen = gdi.Pen(plt.C_BLUE))
 
-gdi.marker([0.5, 0.5], size=100, type="c")
+
+import scisuit.plot as plt
+import scisuit.plot.gdi as gdi
+import numpy as np
+
+
+p1 = (10, 0.002) #Tdb, W
+p2 = (30, 0.002) #simple heating
+p3 = (50, 0.04) #heating + humidification
+
+plt.psychrometry()
+
+color = plt.C_GREEN
+pen = gdi.Pen(color=color)
+brush = gdi.Brush(color=color)
+
+for p in [p1, p2, p3]:
+	gdi.marker(p, size=7, pen=pen, brush=brush)
+
+
+gdi.arrow(p1=p1, p2=p2, length=0.05,
+		  pen=gdi.Pen(
+			  color=plt.C_BLUE, 
+			  style=plt.PEN_SHORTDASH, 
+			  width=3))
+
+gdi.arrow(p1=p2, p2=p3, length=0.05,
+		  pen=gdi.Pen(
+			  color=plt.C_RED_DARK, 
+			  style=plt.PEN_SHORTDASH, 
+			  width=3))
 plt.show()
-
-
 
 
