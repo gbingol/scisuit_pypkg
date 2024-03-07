@@ -37,7 +37,7 @@ class Pen:
 @_dc.dataclass
 class Brush:
 	color:str = None
-	style:int = 100 #solid brush
+	style:int = _BRUSH_SOLID
 
 	def __post_init__(self):
 		if self.color != None:
