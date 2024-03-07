@@ -69,7 +69,7 @@ class Font:
 
 
 def text(
-		p:tuple, 
+		p:tuple|list, 
 		label:str,
 		angle:float = 0.0,
 		font:Font = Font())->None:
@@ -79,7 +79,7 @@ def text(
 	angle: 	rotation angle (>0 is counterclockwise; the full angle is 360 degrees)
 	font: 	Font object to specify color, point size, facename, italic, bold 
 	"""
-	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(label, str), "label must be string"
 	assert isinstance(angle, numbers.Real), "angle must be real number"
 	assert isinstance(font, Font), "font must be Font object"
@@ -99,7 +99,7 @@ def text(
 
 
 def marker(
-		p:tuple, 
+		p:tuple|list, 
 		type:str = "c",
 		size:int = 5,
 		pen:Pen = Pen("255 0 0", 2),
@@ -112,7 +112,7 @@ def marker(
 	`brush:` Brush object to specify color, style of internal
 
 	"""
-	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(type, str), "type must be string"
 	assert isinstance(size, int), "size must be int"
 	assert isinstance(pen, Pen), "pen must be Pen object"
@@ -134,9 +134,9 @@ def marker(
 
 
 def arc(
-		center:tuple, 
-		p1:tuple, 
-		p2:tuple, 
+		center:tuple|list, 
+		p1:tuple|list, 
+		p2:tuple|list, 
 		pen:Pen = Pen("0 0 0", 2),
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
@@ -150,9 +150,9 @@ def arc(
 	To be able to plot a circular arc, the plot area must be a square.
 	"""
 
-	assert isinstance(center, tuple), "center must be tuple"
-	assert isinstance(p1, tuple), "p1 must be tuple"
-	assert isinstance(p2, tuple), "p2 must be tuple"
+	assert isinstance(center, tuple) or isinstance(center, list), "center must be tuple|list"
+	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
+	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
 	assert isinstance(pen, Pen), "pen must be Pen object"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
@@ -178,8 +178,8 @@ def arc(
 
 
 def arrow(
-		p1:tuple, 
-		p2:tuple, 
+		p1:tuple|list, 
+		p2:tuple|list, 
 		angle:float = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
 		pen:Pen = Pen("0 0 0", 2))->None:
@@ -189,8 +189,8 @@ def arrow(
 	`length:` ratio of the length of the head-line to the main-line
 	`pen:` Pen object to specify width, color, style
 	"""
-	assert isinstance(p1, tuple), "p1 must be tuple"
-	assert isinstance(p2, tuple), "p2 must be tuple"
+	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
+	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
 	assert isinstance(angle, numbers.Real), "angle must be float"
 	assert isinstance(length, float), "length must be float"
 	assert isinstance(pen, Pen), "pen must be Pen object"
@@ -249,7 +249,7 @@ def curve(
 
 
 def ellipse(
-		p:tuple, 
+		p:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		pen:Pen = Pen("0 0 0", 1), 
@@ -261,7 +261,7 @@ def ellipse(
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
-	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 	assert isinstance(pen, Pen), "pen must be Pen object"
@@ -284,8 +284,8 @@ def ellipse(
 
 
 def line(
-		p1:tuple, 
-		p2:tuple, 
+		p1:tuple|list, 
+		p2:tuple|list, 
 		label:str = "",
 		labeldist:float = 0.40,
 		labelfont:Font = Font(),
@@ -297,8 +297,8 @@ def line(
 	`labeldist:` (0, 1) pos = start + labeldist*length
 	`pen:` Pen object to specify width, color, style
 	"""
-	assert isinstance(p1, tuple), "p1 must be tuple"
-	assert isinstance(p2, tuple), "p2 must be tuple"
+	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
+	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
 	assert isinstance(pen, Pen), "pen must be Pen object"
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
@@ -381,7 +381,7 @@ def polygon(
 
 
 def rect(
-		p:tuple, 
+		p:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		pen:Pen = Pen("0 0 0", 1), 
@@ -393,7 +393,7 @@ def rect(
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
-	assert isinstance(p, tuple), "p must be tuple"
+	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 	assert isinstance(pen, Pen), "pen must be Pen object"
