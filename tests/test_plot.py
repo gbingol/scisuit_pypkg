@@ -317,20 +317,20 @@ pen = gdi.Pen(color=color)
 brush = gdi.Brush(color=color)
 
 for p in [p1, p2, p3]:
-	gdi.marker(p, size=7, pen=pen, brush=brush)
+	gdi.marker(p, size=9, pen=pen, brush=brush)
 
 
 gdi.arrow(p1=p1, p2=p2, length=0.05,
 		  pen=gdi.Pen(
 			  color=plt.C_BLUE, 
 			  style=plt.PEN_SHORTDASH, 
-			  width=3))
+			  width=4))
 
 gdi.arrow(p1=p2, p2=p3, length=0.05,
 		  pen=gdi.Pen(
 			  color=plt.C_RED_DARK, 
 			  style=plt.PEN_SHORTDASH, 
-			  width=3))
+			  width=4))
 plt.show()
 
 
