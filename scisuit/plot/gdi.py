@@ -180,7 +180,7 @@ def arc(
 def arrow(
 		p1:tuple|list, 
 		p2:tuple|list, 
-		angle:float = 45, #45 degrees
+		angle:numbers.Real = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
 		pen:Pen = Pen("0 0 0", 2))->None:
 	"""
