@@ -252,7 +252,7 @@ def layout_test():
 
 	gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.C_BROWN))
 
-	gdi.text(p = (-1, 0.3), text="hello world", angle=180)
+	gdi.text(p = (-1, 0.3), label="hello world", angle=180)
 
 
 	#new chart
@@ -351,6 +351,11 @@ def linregress_deviations():
 		gdi.line(p1, p2, 
 			pen=gdi.Pen(style=plt.PEN_SHORTDASH, width=2))
 
+linregress_deviations()
+plt.figure()
+heart2()
+plt.figure()
+layout_test()
 plt.show()
 
 
