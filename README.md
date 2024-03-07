@@ -25,7 +25,8 @@ Windows and Python 3.10, 3.11 and 3.12.
 ## Plot Library
 
 Completely interactive charts (Bar, Box-Whisker, Bubble, Histogram, Line, Pie, Psychrometry, 
-QQnorm, QQplot, Quiver, Scatter).
+QQnorm, QQplot, Quiver, Scatter). Using the `plot.gdi` library existing charts can be extended 
+or new visualizations can be created.
 
 ![Multiple charts](chart_multiple.png)
 
