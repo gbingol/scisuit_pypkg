@@ -1,29 +1,10 @@
 from .charts import layout, subplot, figure, legend, show, title, xlabel, ylabel
-from .gdi import Pen, Brush
 from .charts import canvas, bar, barh, boxplot, bubble, dirfield, hist, line, \
 			pie, plot, psychrometry, qqnorm, qqplot, quiver, scatter, \
 			Marker, Trendline
 
 
 
-
-"""Pen styles"""
-PEN_SOLID = 100
-PEN_DOT = 101
-PEN_LONGDASH = 102
-PEN_SHORTDASH = 103
-PEN_DOTDASH = 104
-PEN_TRANSPARENT = 106
-
-"""Brush styles"""
-BRUSH_SOLID = 100
-BRUSH_TRANSPARENT = 106
-BRUSH_BDIAGHATCH = 111
-BRUSH_CROSSDIAGHATCH = 112
-BRUSH_FDIAGHATCH = 113
-BRUSH_CROSSHATCH = 114
-BRUSH_HORIZHATCH =115
-BRUSH_VERTHATCH = 116
 
 """ Colors with corresponding RGB values"""
 C_AQUA = "0 255 255"

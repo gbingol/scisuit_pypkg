@@ -62,7 +62,7 @@ class Trendline:
 		style:str= "linear",
 		degree:int=2, 
 		intercept:float=None, 
-		line:_gdi.Pen = _gdi.Pen(color=None, width=1, style="---"), #PEN_LONGDASH
+		line:_gdi.Pen = _gdi.Pen({"color":None, "width":1, "style":"---"}), #PEN_LONGDASH
 		label:str = None,
 		show_stats:bool = False,
 		show_equation:bool=False

@@ -332,24 +332,7 @@ def psychrometry_heating():
 				style=plt.PEN_SHORTDASH, 
 				width=4))
 
-def linregress_deviations():
-	x = [32, 42, 110, 115, 118, 145, 150]
-	y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
 
-	#plot a simple scatter chart
-	plt.scatter(x=x, y=y)
-
-	poly = np.polyfit(x, y, 1)
-
-	for i in range(len(x)):
-		#experimental data
-		p1 = (x[i], y[i])
-
-		#regression data
-		p2 = (x[i], np.polyval(poly, x[i]))
-
-		gdi.line(p1, p2, 
-			pen=gdi.Pen(style=plt.PEN_SHORTDASH, width=2))
 
 
 
@@ -392,8 +375,9 @@ for i in range(len(x)):
 
 	label = str(int(y[i] -rv))
 
-	gdi.line(p1, p2, linestyle="dashed", lw=2, label=label )
-	
+	gdi.line(p1, p2, ls="-", lw=4, label=label )
+
+gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor = "255 0 0")
 plt.show()
 
 
