@@ -14,7 +14,6 @@ def text(
 		xy:tuple|list, 
 		label:str,
 		rotation:float = 0.0,
-		color:str = "0 0 0",
 		**kwargs)->None:
 	"""
 	xy: 	(x, y), top-left,
@@ -25,18 +24,19 @@ def text(
 	assert isinstance(xy, tuple) or isinstance(xy, list), "xy must be tuple|list"
 	assert isinstance(label, str), "label must be string"
 	assert isinstance(rotation, numbers.Real), "rotation must be real number"
-	assert isinstance(color, str), "color must be str"
-
 
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
+	
+	_color = kwargs.get("labelcolor") or "0 0 0"
+	assert isinstance(_color, str), "color must be str"
 
 	_pydll.c_plot_gdi_text(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(label.encode()),
 			_ct.c_double(rotation),
-			_ct.c_char_p(color.encode()),
+			_ct.c_char_p(_color.encode()),
 			vars(Font(kwargs)))
 
 
@@ -215,14 +215,16 @@ def line(
 		p1:tuple|list, 
 		p2:tuple|list, 
 		label:str = "",
-		labeldist:float = 0.40,
-		labelcolor:str = "0 0 0",
 		**kwargs)->None:
 	"""
 	`p1:` (x1, y1)
 	`p2:` (x2, y2)
 	`label:` a text to be shown along with line
-	`labeldist:` (0, 1) pos = start + labeldist*length
+
+	## Note:
+	If label is specified:
+	`labeldist:float:` (0, 1) pos = start + labeldist*length
+	`labelcolor:str` label color
 	"""
 
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
@@ -247,16 +249,18 @@ def line(
 	_txt = _txt.lstrip()
 
 	if _txt != "":
-		assert isinstance(labeldist, float), "labeldist must be float"
-		assert isinstance(labelcolor, str), "labelcolor must be str"
+		_labelcolor = kwargs.get("labelcolor") or "0 0 0"
+		_labeldist = kwargs.get("labeldist") or 0.45
+		assert isinstance(_labeldist, float), "labeldist must be float"
+		assert isinstance(_labelcolor, str), "labelcolor must be str"
 
 		dy = p2[1] - p1[1]
 		dx = p2[0] - p1[0]
 		Slope = math.atan2(dy, dx)
 
 		TL = (
-				p1[0] + labeldist * math.cos(Slope) ,
-				p1[1] + labeldist * math.sin(Slope))
+				p1[0] + _labeldist * math.cos(Slope) ,
+				p1[1] + _labeldist * math.sin(Slope))
 
 		
 		#As of this point slope is in degrees (0, 180) or (0, -180)
@@ -268,8 +272,7 @@ def line(
 		if Slope>90:
 			Slope = 90 - Slope
 	
-		text(TL, label, Slope,labelcolor, **kwargs)
-
+		text(TL, label, Slope, **kwargs)
 
 
 
