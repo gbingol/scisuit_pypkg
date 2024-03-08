@@ -3,7 +3,7 @@ import numbers
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
-import scisuit.plot.gdi as _gdi
+from .gdiobj import Pen, Brush
 
 from ..app import App as _App
 
@@ -47,57 +47,6 @@ class Marker:
 
 
 
-class Trendline:
-	"""
-	A class to define Trendline properties
-
-	## Input:
-	`style:` "linear", "poly", "exp", "log","pow" \n
-	`degree:` 2, >=2 expected when type is polynomial \n
-	`intercept:` number expected \n
-	`line:` line properties
-	"""
-	def __init__(
-		self, 
-		style:str= "linear",
-		degree:int=2, 
-		intercept:float=None, 
-		line:_gdi.Pen = _gdi.Pen({"color":None, "width":1, "style":"---"}), #PEN_LONGDASH
-		label:str = None,
-		show_stats:bool = False,
-		show_equation:bool=False
-		) -> None:
-
-		assert isinstance(style, str), "'style' must be string"
-		assert isinstance(degree, int), "'degree' must be int"
-		assert isinstance(intercept, float), "'intercept' must be float"
-		assert isinstance(show_stats, bool), "'show_stats' must be bool"
-		assert isinstance(show_equation, bool), "'show_equation' must be bool"
-
-		if label != None:
-			assert isinstance(label, str), "'label' must be string"
-
-		self._style = style
-		self._degree = degree
-		self._intercept = intercept
-		self._label = style if label == None else label
-		self._line = vars(line) if line != None else None
-		self._show_stats = show_stats
-		self._show_equation = show_equation
-
-
-	def __iter__(self):
-		return iter([
-			("style",self._style),
-			("degree", self._degree),
-			("intercept", self._intercept),
-			("label", self._label),
-			("line", dict(self._line) if self._line != None else None),
-			("show_stats", self._show_stats),
-			("show_equation", self._show_equation)
-		])	
-
-
 
 
 """
@@ -111,8 +60,7 @@ def bar(
 	height:_Iterable, 
 	labels:_Iterable, 
 	stacked = False, 
-	fill:_gdi.Brush=None, 
-	line:_gdi.Pen=None):
+	**kwargs):
 	"""
 	Plots bar chart
 
@@ -133,8 +81,8 @@ def bar(
 			"height":height, 
 			"labels":labels, 
 			"style": "c" if not stacked else "s", 
-			"fill":vars(fill) if fill != None else None, 
-			"line":vars(line) if line != None else None})
+			"fill":vars(Brush(kwargs)), 
+			"line":vars(Pen(kwargs))})
 
 
 #-----------------------------------------------------------------------------------
@@ -144,8 +92,7 @@ def barh(
 	width:_Iterable, 
 	labels:_Iterable, 
 	stacked = False,
-	fill:_gdi.Brush = None, 
-	line:_gdi.Pen = None):
+	**kwargs):
 	"""
 	Plots horizontal bar chart
 
@@ -166,8 +113,8 @@ def barh(
 		"width":width, 
 		"labels":labels, 
 		"style":"c" if not stacked else "s",  
-		"fill":vars(fill) if fill != None else None, 
-		"line":vars(line) if line != None else None})
+		"fill":vars(Brush(kwargs)), 
+		"line":vars(Pen(kwargs))})
 
 
 
@@ -178,8 +125,7 @@ def barh(
 def boxplot(
 	data:_Iterable, 
 	label:str = None, 
-	fill:_gdi.Brush = None, 
-	line:_gdi.Pen = None):
+	**kwargs):
 	"""
 	Plots box-whisker chart.
 
@@ -195,8 +141,8 @@ def boxplot(
 	return _pydll.c_plot_boxplot((), {
 		"data":data, 
 		"name":label, 
-		"fill":vars(fill) if fill != None else None, 
-		"line":vars(line) if line != None else None})
+		"fill":vars(Brush(kwargs)), 
+		"line":vars(Pen(kwargs))})
 
 
 
@@ -209,8 +155,7 @@ def hist(
 		density = False, #frequency 
 		cumulative = False, 
 		breaks:int|_Iterable = None, 
-		fill:_gdi.Brush=None, 
-		line:_gdi.Pen=None):
+		**kwargs):
 	"""
 	Plots histogram
 
@@ -240,8 +185,8 @@ def hist(
 			"mode":"f" if not density else "d", 
 			"cumulative":cumulative , 
 			"breaks":breaks, 
-			"fill":vars(fill) if fill != None else None, 
-			"line":vars(line) if line != None else None})
+			"fill":vars(Brush(kwargs)), 
+			"line":vars(Pen(kwargs))})
 
 
 
@@ -255,7 +200,7 @@ def line(
 	stacked = False,
 	label:str = None,  
 	marker:Marker=None, 
-	line:_gdi.Pen=None):
+	**kwargs):
 	"""
 	Plots line chart
 
@@ -280,7 +225,7 @@ def line(
 			"label":label, 
 			"style":"c" if not stacked else "s",  
 			"marker":dict(marker) if marker != None else None, 
-			"line":vars(line) if line != None else None})
+			"line":vars(Pen(kwargs))})
 
 
 
@@ -365,8 +310,7 @@ def qqnorm(
 		data:_Iterable, 
 		label:str=None, 
 		show:bool=True, 
-		line:_gdi.Pen=None, 
-		marker:Marker=None):
+		**kwargs):
 		"""
 		Normal Quantile-quantile chart \n
 		x-axis="Theoretical Quantiles" \n  
@@ -386,8 +330,8 @@ def qqnorm(
 			"data":data, 
 			"label": label, 
 			"show":show, 
-			"marker":dict(marker) if marker != None else None, 
-			"line":vars(line) if line != None else None})
+			"marker":vars(Marker(kwargs)), 
+			"line":vars(Pen(kwargs))})
 
 
 
@@ -396,7 +340,7 @@ def qqnorm(
 def qqplot(
 		x:_Iterable,
 		y:_Iterable,
-		marker:Marker=None):
+		**kwargs):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 
@@ -409,7 +353,7 @@ def qqplot(
 	return _pydll.c_plot_qqplot((),{
 			"x":x, 
 			"y":y,
-			"marker":dict(marker) if marker != None else None})
+			"marker":vars(Marker(kwargs))})
 
 
 
@@ -485,9 +429,7 @@ def scatter(
 		y:_Iterable,  
 		label:str = None, 
 		smooth:bool = False, 
-		marker:Marker = None, 
-		line:_gdi.Pen = None, 
-		trendline:Trendline = None):
+		**kwargs):
 	"""
 	Plot scatter charts
 
@@ -510,9 +452,8 @@ def scatter(
 		"y":y , 
 		"name":label, 
 		"smooth":smooth, 
-		"marker":dict(marker) if marker!=None else None, 
-		"line":vars(line) if line!=None else None, 
-		"trendline":dict(trendline) if trendline!=None else None})
+		"marker":vars(Marker(kwargs)), 
+		"line":vars(Pen(kwargs))})
 
 
 
