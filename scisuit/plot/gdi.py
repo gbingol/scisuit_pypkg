@@ -5,89 +5,65 @@ import math
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
-from .gdiobj import Pen, Brush
+from .gdiobj import Pen, Brush, Font
 
-
-
-
-
-@_dc.dataclass
-class Font:
-	facename:str = "Arial"
-	color:str = "0 0 0" #black
-	size:int = 11 # 11 points
-	italic:bool = False
-	bold: bool = False
-
-	def __post_init__(self):
-		if self.color != None:
-			assert isinstance(self.color, str), "'color' must be string"
-
-		assert isinstance(self.size, int), "'size' must be integer"
-		assert self.size>0, "size>0 expected"
-
-		assert isinstance(self.italic, bool), "'italic' must be bool"
-		assert isinstance(self.italic, bool), "'italic' must be bool"
 
 
 
 def text(
-		p:tuple|list, 
+		xy:tuple|list, 
 		label:str,
-		angle:float = 0.0,
-		font:Font = Font())->None:
+		rotation:float = 0.0,
+		color:str = "0 0 0",
+		**kwargs)->None:
 	"""
-	p: 		(x, y), top-left,
+	xy: 	(x, y), top-left,
 	label: 	text to be drawn,
-	angle: 	rotation angle (>0 is counterclockwise; the full angle is 360 degrees)
-	font: 	Font object to specify color, point size, facename, italic, bold 
+	rotation: rotation angle (>0 is counterclockwise; the full angle is 360 degrees)
+	color: label color 
 	"""
-	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
+	assert isinstance(xy, tuple) or isinstance(xy, list), "xy must be tuple|list"
 	assert isinstance(label, str), "label must be string"
-	assert isinstance(angle, numbers.Real), "angle must be real number"
-	assert isinstance(font, Font), "font must be Font object"
+	assert isinstance(rotation, numbers.Real), "rotation must be real number"
+	assert isinstance(color, str), "color must be str"
 
 
-	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
 	_pydll.c_plot_gdi_text(
-			_ct.c_double(p[0]),
-			_ct.c_double(p[1]),
+			_ct.c_double(xy[0]),
+			_ct.c_double(xy[1]),
 			_ct.c_char_p(label.encode()),
-			_ct.c_double(angle),
-			_ct.c_char_p(font.color.encode()),
-			vars(font))
+			_ct.c_double(rotation),
+			_ct.c_char_p(color.encode()),
+			vars(Font(kwargs)))
 
 
 
 def marker(
-		p:tuple|list, 
+		xy:tuple|list, 
 		type:str = "c",
 		size:int = 5,
 		**kwargs)->None:
 	"""
-	`p:`	(x, y), centroid,
+	`xy:`	(x, y), centroid,
 	`type:`	type of the marker, "c", "t", "r", "x",
 	`size:`	size of the marker in pixels
-	`pen:` 	Pen object to specify width, color, style
-	`brush:` Brush object to specify color, style of internal
 	"""
 
-	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
+	assert isinstance(xy, tuple) or isinstance(xy, list), "xy must be tuple|list"
 	assert isinstance(type, str), "type must be string"
 	assert isinstance(size, int), "size must be int"
 
 	assert 1<size<=100, "1 < size <= 100 expected"
 
-	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
-
-
 	_pydll.c_plot_gdi_marker(
-			_ct.c_double(p[0]),
-			_ct.c_double(p[1]),
+			_ct.c_double(xy[0]),
+			_ct.c_double(xy[1]),
 			_ct.c_char_p(type.encode()),
 			_ct.c_uint8(size),
 			vars(Pen(kwargs)),
@@ -145,7 +121,6 @@ def arrow(
 	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line
 	`angle:` angle between the two head-lines
 	`length:` ratio of the length of the head-line to the main-line
-	`pen:` Pen object to specify width, color, style
 	"""
 
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
@@ -183,7 +158,6 @@ def curve(
 
 	`x:` x values
 	`y:` y values
-	`pen:` Pen object to specify width, color, style
 	"""
 
 	assert isinstance(x, _Iterable), "x must be Iterable"
@@ -206,19 +180,17 @@ def curve(
 
 
 def ellipse(
-		p:tuple|list, 
+		xy:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		**kwargs)->None:
 	"""
-	p:	 	(x, y), center,
+	xy:	 	(x, y), center,
 	width: 	half width (>0),
 	height: half height (>0),
-	pen: 	Pen object to specify width, color, style of boundaries,
-	brush: 	Brush object to specify color, style of internal 
 	"""
 
-	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
+	assert isinstance(xy, tuple) or isinstance(xy, list), "p must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 	
@@ -226,12 +198,12 @@ def ellipse(
 	assert width>0, "width>0 expected"
 	assert height>0, "height>0 expected"
 
-	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
 	_pydll.c_plot_gdi_ellipse(
-			_ct.c_double(p[0]),
-			_ct.c_double(p[1]),
+			_ct.c_double(xy[0]),
+			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
 			vars(Pen(kwargs)),
@@ -244,14 +216,13 @@ def line(
 		p2:tuple|list, 
 		label:str = "",
 		labeldist:float = 0.40,
-		labelfont:Font = Font(),
+		labelcolor:str = "0 0 0",
 		**kwargs)->None:
 	"""
 	`p1:` (x1, y1)
 	`p2:` (x2, y2)
 	`label:` a text to be shown along with line
 	`labeldist:` (0, 1) pos = start + labeldist*length
-	`pen:` Pen object to specify width, color, style
 	"""
 
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
@@ -277,7 +248,7 @@ def line(
 
 	if _txt != "":
 		assert isinstance(labeldist, float), "labeldist must be float"
-		assert isinstance(labelfont, Font), "labelfont must be Font object"
+		assert isinstance(labelcolor, str), "labelcolor must be str"
 
 		dy = p2[1] - p1[1]
 		dx = p2[0] - p1[0]
@@ -297,7 +268,8 @@ def line(
 		if Slope>90:
 			Slope = 90 - Slope
 	
-		text(TL, label, Slope, labelfont)
+		text(TL, label, Slope,labelcolor, **kwargs)
+
 
 
 
@@ -311,8 +283,6 @@ def polygon(
 
 	`x:` x values
 	`y:` y values
-	`pen:` Pen object to specify width, color, style
-	`brush:` Brush object to specify color, style of internal
 	"""
 
 	assert isinstance(x, _Iterable), "x must be Iterable"
@@ -339,32 +309,31 @@ def polygon(
 
 
 def rect(
-		p:tuple|list, 
+		xy:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
 		**kwargs)->None:
 	"""
-	p: 		(x, y), top-left corner of the rectangle,
+	xy: 		(x, y), top-left corner of the rectangle,
 	width: 	width of rectangle (>0),
 	height: height of rectangle (>0),
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
-	"""
-	
+	"""	
 
-	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
+	assert isinstance(xy, tuple) or isinstance(xy, list), "xy must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
 
 	assert width>0, "width>0 expected"
 	assert height>0, "height>0 expected"
 
-	_p1 = [i for i in p if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
 	_pydll.c_plot_gdi_rect(
-			_ct.c_double(p[0]),
-			_ct.c_double(p[1]),
+			_ct.c_double(xy[0]),
+			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
 			vars(Pen(kwargs)),

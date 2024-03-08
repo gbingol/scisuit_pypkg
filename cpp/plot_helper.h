@@ -175,16 +175,26 @@ static void PrepareFont(PyObject* Dict, wxFont& font)
 		else if (ObjValue != Py_None && key == "size")
 			font.SetPointSize(PyLong_AsLong(ObjValue));
 
-		else if (ObjValue != Py_None && key == "italic")
+		else if (ObjValue != Py_None && key == "style")
 		{
-			if(Py_IsTrue(ObjValue))
+			std::string style = PyUnicode_AsUTF8(ObjValue);
+			if(style == "italic")
 				font.MakeItalic();
+			if(style == "oblique")
+				font.SetStyle(wxFontStyle::wxFONTSTYLE_SLANT);
 		}
 
-		else if (ObjValue != Py_None && key == "bold")
+		else if (ObjValue != Py_None && key == "weight")
 		{
-			if(Py_IsTrue(ObjValue))
+			std::string weight = PyUnicode_AsUTF8(ObjValue);
+			if(weight == "bold")
 				font.MakeBold();
+			else if(weight == "light")
+				font.SetWeight(wxFontWeight::wxFONTWEIGHT_LIGHT);
+			else if(weight == "heavy")
+				font.SetWeight(wxFontWeight::wxFONTWEIGHT_HEAVY);
+			else if(weight == "ultrabold")
+				font.SetWeight(wxFontWeight::wxFONTWEIGHT_EXTRAHEAVY);
 		}
 		
 	}

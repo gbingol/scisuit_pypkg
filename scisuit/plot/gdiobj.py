@@ -96,3 +96,46 @@ class Brush:
 		return iter([
 			("style",self.style),
 			("color", self.color)])
+
+
+class Font:
+	def __init__(self, *args):
+		assert isinstance(args[0], dict), "first argument must be dict"
+		params:dict = args[0]
+		
+		self.size = params.get("size") or params.get("fontsize")
+		if self.size != None:
+			assert isinstance(self.size, int), "size or fontsize must be int"
+			assert self.size>0, "size>0 expected"
+		else:
+			self.size = 11
+		
+		self.facename = params.get("fontname")
+		if self.facename != None:
+			assert isinstance(self.facename, str), "fontname must be str"
+		else:
+			self.facename = "Arial"
+
+		self.weight = params.get("weight") or params.get("fontweight")
+		if self.weight == None:
+			self.weight = "normal"
+		else:
+			_weights = ["normal", "light", "bold", "heavy", "ultrabold"]
+			if not self.weight in _weights:
+				raise ValueError("weights: " + ",".join(_weights))
+		
+		self.style = params.get("style") or params.get("fontstyle")
+		if self.style == None:
+			self.style = "normal"
+		else:
+			_styles = ["normal", "italic", "oblique"]
+			if not self.style in _styles:
+				raise ValueError("weights: " + ",".join(_styles))
+	
+	def __iter__(self):
+		return iter([
+			("style",self.style),
+			("facename", self.facename),
+			("weight", self.weight)
+			("size", self.size)
+		])
