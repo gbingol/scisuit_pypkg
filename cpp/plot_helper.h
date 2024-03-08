@@ -116,7 +116,20 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 			pen.SetWidth(PyLong_AsLong(ObjValue));
 
 		else if (ObjValue != Py_None && key == "style")
-			pen.SetStyle((wxPenStyle) PyLong_AsLong(ObjValue));
+		{
+			std::vector<std::pair<std::string, int>> v{
+				{"-", 100}, {":", 101}, {"---", 102}, {"--", 103}, {"-.", 104}, {"", 106}};
+
+			std::string style = PyUnicode_AsUTF8(ObjValue);
+			for(const auto& s: v)
+			{
+				if(s.first == style)
+				{
+					pen.SetStyle((wxPenStyle)s.second);
+					break;
+				}
+			}
+		}
 	}	
 }
 

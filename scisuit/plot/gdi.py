@@ -5,6 +5,7 @@ import math
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
+from .gdiobj import Pen
 
 """
 Not meant to be used outside gdi module.
@@ -17,21 +18,7 @@ _BRUSH_SOLID = 100
 
 
 
-@_dc.dataclass
-class Pen:
-	color:str = None
-	width:int = 1
-	style:int= _PEN_SOLID
 
-	def __post_init__(self):
-		if self.color != None:
-			assert isinstance(self.color, str), "'color' must be string"
-
-		assert isinstance(self.style, int), "'style' must be integer"
-		assert self.style>0, "style>0 expected"
-
-		assert isinstance(self.width, int), "'width' must be integer"
-		assert self.width>0, "width>0 expected"
 
 
 @_dc.dataclass
@@ -102,7 +89,10 @@ def marker(
 		p:tuple|list, 
 		type:str = "c",
 		size:int = 5,
-		pen:Pen = Pen("255 0 0", 2),
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None,
+		edgecolor = "255 0 0",
 		brush:Brush = Brush("255 0 0", _BRUSH_SOLID))->None:
 	"""
 	`p:`	(x, y), centroid,
@@ -110,12 +100,16 @@ def marker(
 	`size:`	size of the marker in pixels
 	`pen:` 	Pen object to specify width, color, style
 	`brush:` Brush object to specify color, style of internal
-
 	"""
+
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(type, str), "type must be string"
 	assert isinstance(size, int), "size must be int"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
 	assert 1<size<=100, "1 < size <= 100 expected"
@@ -123,12 +117,14 @@ def marker(
 	_p1 = [i for i in p if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
+
+
 	_pydll.c_plot_gdi_marker(
 			_ct.c_double(p[0]),
 			_ct.c_double(p[1]),
 			_ct.c_char_p(type.encode()),
 			_ct.c_uint8(size),
-			vars(pen),
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)),
 			vars(brush))
 
 
@@ -137,7 +133,10 @@ def arc(
 		center:tuple|list, 
 		p1:tuple|list, 
 		p2:tuple|list, 
-		pen:Pen = Pen("0 0 0", 2),
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None,
+		edgecolor = "0 0 0",
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
 	`center:` (x, y) -> center point of arc
@@ -150,10 +149,14 @@ def arc(
 	To be able to plot a circular arc, the plot area must be a square.
 	"""
 
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(center, tuple) or isinstance(center, list), "center must be tuple|list"
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
 	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
 	_c = [i for i in center if isinstance(i, numbers.Real)]
@@ -172,7 +175,7 @@ def arc(
 			_ct.c_double(p2[1]),
 			_ct.c_double(center[0]),
 			_ct.c_double(center[1]),
-			vars(pen),
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)),
 			vars(brush))
 
 
@@ -182,18 +185,25 @@ def arrow(
 		p2:tuple|list, 
 		angle:numbers.Real = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
-		pen:Pen = Pen("0 0 0", 2))->None:
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None,
+		edgecolor = "255 0 0")->None:
 	"""
 	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line
 	`angle:` angle between the two head-lines
 	`length:` ratio of the length of the head-line to the main-line
 	`pen:` Pen object to specify width, color, style
 	"""
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
 	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
 	assert isinstance(angle, numbers.Real), "angle must be float"
 	assert isinstance(length, float), "length must be float"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
@@ -211,14 +221,17 @@ def arrow(
 			_ct.c_double(p2[1]),
 			_ct.c_double(angle),
 			_ct.c_double(length),
-			vars(pen))
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)))
 
 
 
 def curve(
 		x: _Iterable, 
 		y:_Iterable, 
-		pen:Pen = Pen("0 0 0", 2))->None:
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None,
+		edgecolor = "0 0 0")->None:
 	"""
 	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The curve is only guaranteed to pass from (x1, y1) and (xn, yn).
@@ -227,10 +240,13 @@ def curve(
 	`y:` y values
 	`pen:` Pen object to specify width, color, style
 	"""
+	_lwidth = lw if lw != None else linewidth
 
 	assert isinstance(x, _Iterable), "x must be Iterable"
 	assert isinstance(y, _Iterable), "y must be Iterable"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 
 	#pre-check
 	assert len(x) == len(y), "x and y must have same lengths"
@@ -244,7 +260,7 @@ def curve(
 	#processed-check
 	assert len(_x) == len(_y), "x and y must have same lengths"
 
-	_pydll.c_plot_gdi_curve(x, y, vars(pen))
+	_pydll.c_plot_gdi_curve(x, y, vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)))
 
 
 
@@ -252,7 +268,10 @@ def ellipse(
 		p:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
-		pen:Pen = Pen("0 0 0", 1), 
+		linestyle = "-", 
+		linewidth = 1,
+		lw:int = None,
+		edgecolor = "0 0 0",
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
 	p:	 	(x, y), center,
@@ -261,10 +280,14 @@ def ellipse(
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
 	assert width>0, "width>0 expected"
@@ -278,7 +301,7 @@ def ellipse(
 			_ct.c_double(p[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
-			vars(pen),
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)),
 			vars(brush))	
 
 
@@ -289,7 +312,10 @@ def line(
 		label:str = "",
 		labeldist:float = 0.40,
 		labelfont:Font = Font(),
-		pen:Pen = Pen("0 0 0", 2))->None:
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None, 
+		edgecolor = "0 0 0")->None:
 	"""
 	`p1:` (x1, y1)
 	`p2:` (x2, y2)
@@ -297,9 +323,13 @@ def line(
 	`labeldist:` (0, 1) pos = start + labeldist*length
 	`pen:` Pen object to specify width, color, style
 	"""
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(p1, tuple) or isinstance(p1, list), "p1 must be tuple|list"
 	assert isinstance(p2, tuple) or isinstance(p2, list), "p2 must be tuple|list"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
@@ -312,7 +342,7 @@ def line(
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
 			_ct.c_double(p2[1]),
-			vars(pen))
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)))
 	
 	_txt = label.rstrip()
 	_txt = _txt.lstrip()
@@ -346,7 +376,10 @@ def line(
 def polygon(
 		x: _Iterable, 
 		y:_Iterable, 
-		pen:Pen = Pen("0 0 0", 2),
+		linestyle = "-", 
+		linewidth = 2,
+		lw:int = None,
+		edgecolor = "0 0 0",
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
 	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
@@ -357,10 +390,13 @@ def polygon(
 	`pen:` Pen object to specify width, color, style
 	`brush:` Brush object to specify color, style of internal
 	"""
+	_lwidth = lw if lw != None else linewidth
 
 	assert isinstance(x, _Iterable), "x must be Iterable"
 	assert isinstance(y, _Iterable), "y must be Iterable"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
 	#pre-check
@@ -375,7 +411,10 @@ def polygon(
 	#processed-check
 	assert len(_x) == len(_y), "x and y must have same lengths"
 
-	_pydll.c_plot_gdi_polygon(x, y, vars(pen), vars(brush))
+	_pydll.c_plot_gdi_polygon(
+			x, y, 
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)), 
+			vars(brush))
 
 
 
@@ -384,7 +423,10 @@ def rect(
 		p:tuple|list, 
 		width:numbers.Real, 
 		height:numbers.Real, 
-		pen:Pen = Pen("0 0 0", 1), 
+		linestyle = "-", 
+		linewidth = 1,
+		lw = None,
+		edgecolor = "0 0 0", 
 		brush:Brush = Brush("255 255 255", _BRUSH_TRANSPARENT))->None:
 	"""
 	p: 		(x, y), top-left corner of the rectangle,
@@ -393,10 +435,14 @@ def rect(
 	pen: 	Pen object to specify width, color, style of boundaries,
 	brush: 	Brush object to specify color, style of internal 
 	"""
+	_lwidth = lw if lw != None else linewidth
+
 	assert isinstance(p, tuple) or isinstance(p, list), "p must be tuple|list"
 	assert isinstance(width, numbers.Real), "width must be real number"
 	assert isinstance(height, numbers.Real), "height must be real number"
-	assert isinstance(pen, Pen), "pen must be Pen object"
+	assert isinstance(linestyle, str), "linestyle must be string"
+	assert isinstance(_lwidth, int), "linewidth or lw must be int"
+	assert isinstance(edgecolor, str), "edgecolor must be string"
 	assert isinstance(brush, Brush), "brush must be Brush object"
 
 	assert width>0, "width>0 expected"
@@ -410,5 +456,5 @@ def rect(
 			_ct.c_double(p[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
-			vars(pen),
+			vars(Pen(color=edgecolor, width=_lwidth, style=linestyle)),
 			vars(brush))

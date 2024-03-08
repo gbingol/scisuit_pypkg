@@ -351,11 +351,50 @@ def linregress_deviations():
 		gdi.line(p1, p2, 
 			pen=gdi.Pen(style=plt.PEN_SHORTDASH, width=2))
 
-linregress_deviations()
-plt.figure()
-heart2()
-plt.figure()
-layout_test()
+
+
+def matplotlibcircle():
+	import matplotlib.pyplot as plt
+	import matplotlib.patches as pt
+	import numpy as np
+
+	ypoints = np.array([3, 8, 1, 10])
+
+	fig, ax = plt.subplots()
+	ax.plot(ypoints)
+	circle = pt.Circle((1.0,6.0), radius=1, 
+					edgecolor="red", 
+					linestyle=":",
+					linewidth = 4,
+					hatch = "|",
+					facecolor="green"
+					)
+	ax.add_patch(circle)
+	plt.show()
+
+x = [32, 42, 110, 115, 118, 145, 150]
+y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
+
+
+
+#plot a simple scatter chart
+plt.scatter(x=x, y=y)
+
+poly = np.polyfit(x, y, 1)
+
+for i in range(len(x)):
+	rv = np.polyval(poly, x[i])
+	#experimental data
+	p1 = (x[i], y[i])
+
+	#regression data
+	p2 = (x[i], rv)
+
+	label = str(int(y[i] -rv))
+
+	gdi.line(p1, p2, linestyle="dashed", lw=2, label=label )
+	
 plt.show()
+
 
 
