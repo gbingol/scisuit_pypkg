@@ -31,13 +31,14 @@ def text(
 	_color = kwargs.get("labelcolor") or "0 0 0"
 	assert isinstance(_color, str), "color must be str"
 
+
 	_pydll.c_plot_gdi_text(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(label.encode()),
 			_ct.c_double(rotation),
 			_ct.c_char_p(_color.encode()),
-			vars(Font(kwargs)))
+			dict(Font(kwargs)))
 
 
 
@@ -66,8 +67,8 @@ def marker(
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(type.encode()),
 			_ct.c_uint8(size),
-			vars(Pen(kwargs)),
-			vars(Brush(kwargs)))
+			dict(Pen(kwargs)),
+			dict(Brush(kwargs)))
 
 
 
@@ -106,8 +107,8 @@ def arc(
 			_ct.c_double(p2[1]),
 			_ct.c_double(center[0]),
 			_ct.c_double(center[1]),
-			vars(Pen(kwargs)),
-			vars(Brush(kwargs)))
+			dict(Pen(kwargs)),
+			dict(Brush(kwargs)))
 
 
 
@@ -144,7 +145,7 @@ def arrow(
 			_ct.c_double(p2[1]),
 			_ct.c_double(angle),
 			_ct.c_double(length),
-			vars(Pen(kwargs)))
+			dict(Pen(kwargs)))
 
 
 
@@ -175,7 +176,7 @@ def curve(
 	#processed-check
 	assert len(_x) == len(_y), "x and y must have same lengths"
 
-	_pydll.c_plot_gdi_curve(x, y, vars(Pen(kwargs)))
+	_pydll.c_plot_gdi_curve(x, y, dict(Pen(kwargs)))
 
 
 
@@ -206,8 +207,8 @@ def ellipse(
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
-			vars(Pen(kwargs)),
-			vars(Brush(kwargs)))	
+			dict(Pen(kwargs)),
+			dict(Brush(kwargs)))	
 
 
 
@@ -243,7 +244,7 @@ def line(
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
 			_ct.c_double(p2[1]),
-			vars(Pen(kwargs)))
+			dict(Pen(kwargs)))
 	
 	_txt = label.rstrip()
 	_txt = _txt.lstrip()
@@ -305,8 +306,8 @@ def polygon(
 
 	_pydll.c_plot_gdi_polygon(
 			x, y, 
-			vars(Pen(kwargs)), 
-			vars(Brush(kwargs)))
+			dict(Pen(kwargs)), 
+			dict(Brush(kwargs)))
 
 
 
@@ -339,5 +340,5 @@ def rect(
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
-			vars(Pen(kwargs)),
-			vars(Brush(kwargs)))
+			dict(Pen(kwargs)),
+			dict(Brush(kwargs)))

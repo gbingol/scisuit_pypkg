@@ -1,7 +1,8 @@
 from .charts import layout, subplot, figure, legend, show, title, xlabel, ylabel
 from .charts import canvas, bar, barh, boxplot, bubble, dirfield, hist, line, \
-			pie, plot, psychrometry, qqnorm, qqplot, quiver, scatter, \
-			Marker, Trendline
+			pie, psychrometry, qqnorm, qqplot, quiver, scatter 
+
+from .chartelems import Marker
 
 
 

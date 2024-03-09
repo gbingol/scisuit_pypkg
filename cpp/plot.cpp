@@ -1022,11 +1022,11 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 	PyObject* XObj = nullptr, * YObj = nullptr;
 	PyObject* NameObj = nullptr;
 	PyObject* SmoothObj = nullptr, *MarkerObj = nullptr;
-	PyObject* LineObj = nullptr, *TrendObj = nullptr;
+	PyObject* LineObj = nullptr;
 
-	const char* kwlist[] = { "x","y", "name", "smooth", "marker", "line", "trendline", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOOOO", const_cast<char**>(kwlist),
-		&XObj, &YObj, &NameObj, &SmoothObj,&MarkerObj, &LineObj, &TrendObj))
+	const char* kwlist[] = { "x","y", "name", "smooth", "marker", "line", NULL };
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOOO", const_cast<char**>(kwlist),
+		&XObj, &YObj, &NameObj, &SmoothObj,&MarkerObj, &LineObj))
 	{
 		return nullptr;
 	}
@@ -1106,10 +1106,6 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 			series->EnableSmoothing(IsSmooth);
 		}
 			
-
-		if (TrendObj && TrendObj != Py_None)
-			PrepareTrendline(TrendObj, Chart->GetNextColor(), series.get());
-			 
 		if (NameObj && PyUnicode_Check(NameObj))
 		{
 			auto SeriesName = PyUnicode_AsUTF8(NameObj);

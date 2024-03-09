@@ -361,7 +361,7 @@ y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
 
 
 #plot a simple scatter chart
-plt.scatter(x=x, y=y)
+plt.scatter(x=x, y=y, lw=1, edgecolor="0 255 0", marker=plt.Marker(size=10, facecolor="0 0 0"))
 
 poly = np.polyfit(x, y, 1)
 
@@ -378,7 +378,8 @@ for i in range(len(x)):
 	gdi.line(p1, p2, ls="-", lw=4, label=label )
 
 gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor = "255 0 0")
-plt.show()
 
+
+plt.show()
 
 

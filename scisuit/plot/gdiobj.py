@@ -1,7 +1,3 @@
-import dataclasses as _dc
-
-
-
 
 class Pen:
 	def __init__(self, *args):
@@ -116,7 +112,7 @@ class Font:
 		else:
 			self.facename = "Arial"
 
-		self.weight = params.get("weight") or params.get("fontweight")
+		self.weight:str = params.get("weight") or params.get("fontweight")
 		if self.weight == None:
 			self.weight = "normal"
 		else:
@@ -131,11 +127,12 @@ class Font:
 			_styles = ["normal", "italic", "oblique"]
 			if not self.style in _styles:
 				raise ValueError("weights: " + ",".join(_styles))
+		
 	
 	def __iter__(self):
 		return iter([
 			("style",self.style),
 			("facename", self.facename),
-			("weight", self.weight)
+			("weight", self.weight),
 			("size", self.size)
 		])

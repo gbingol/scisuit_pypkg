@@ -4,6 +4,7 @@ from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
 from .gdiobj import Pen, Brush
+from .chartelems import Marker
 
 from ..app import App as _App
 
@@ -11,48 +12,6 @@ from ..app import App as _App
 _app = _App()
 
 
-
-class Marker:
-	"""
-	A class to define marker properties
-
-	## Input:
-	`style:` "c", "s", "t", "x"  \n	
-	`size:` 5 #>0 expected \n
-	`fill:` if specified, RGB "255 255 0" \n
-	"""
-	def __init__(
-		self,
-		style:str = "c",
-		size:int = 5 ,
-		fill:_gdi.Brush = None,
-		line:_gdi.Pen = None) -> None:
-
-		assert isinstance(style, str),"'style' must be string"
-		assert isinstance(size, int), "'size' must be integer"
-		assert size>0, "size>0 expected"
-
-		self._style = style
-		self._size = size
-		self._fill = vars(fill) if fill != None else None
-		self._line = vars(line) if line != None else None
-	
-	def __iter__(self):
-		return iter([
-			("style",self._style),
-			("size", self._size),
-			("fill", dict(self._fill) if self._fill != None else None),
-			("line", dict(self._line) if self._line != None else None)
-		])
-
-
-
-
-
-"""
----------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-"""
 
 
 
@@ -81,8 +40,8 @@ def bar(
 			"height":height, 
 			"labels":labels, 
 			"style": "c" if not stacked else "s", 
-			"fill":vars(Brush(kwargs)), 
-			"line":vars(Pen(kwargs))})
+			"fill":dict(Brush(kwargs)), 
+			"line":dict(Pen(kwargs))})
 
 
 #-----------------------------------------------------------------------------------
@@ -113,8 +72,8 @@ def barh(
 		"width":width, 
 		"labels":labels, 
 		"style":"c" if not stacked else "s",  
-		"fill":vars(Brush(kwargs)), 
-		"line":vars(Pen(kwargs))})
+		"fill":dict(Brush(kwargs)), 
+		"line":dict(Pen(kwargs))})
 
 
 
@@ -141,8 +100,8 @@ def boxplot(
 	return _pydll.c_plot_boxplot((), {
 		"data":data, 
 		"name":label, 
-		"fill":vars(Brush(kwargs)), 
-		"line":vars(Pen(kwargs))})
+		"fill":dict(Brush(kwargs)), 
+		"line":dict(Pen(kwargs))})
 
 
 
@@ -185,8 +144,8 @@ def hist(
 			"mode":"f" if not density else "d", 
 			"cumulative":cumulative , 
 			"breaks":breaks, 
-			"fill":vars(Brush(kwargs)), 
-			"line":vars(Pen(kwargs))})
+			"fill":dict(Brush(kwargs)), 
+			"line":dict(Pen(kwargs))})
 
 
 
@@ -225,7 +184,7 @@ def line(
 			"label":label, 
 			"style":"c" if not stacked else "s",  
 			"marker":dict(marker) if marker != None else None, 
-			"line":vars(Pen(kwargs))})
+			"line":dict(Pen(kwargs))})
 
 
 
@@ -330,8 +289,8 @@ def qqnorm(
 			"data":data, 
 			"label": label, 
 			"show":show, 
-			"marker":vars(Marker(kwargs)), 
-			"line":vars(Pen(kwargs))})
+			"marker":dict(Marker(kwargs)), 
+			"line":dict(Pen(kwargs))})
 
 
 
@@ -353,7 +312,7 @@ def qqplot(
 	return _pydll.c_plot_qqplot((),{
 			"x":x, 
 			"y":y,
-			"marker":vars(Marker(kwargs))})
+			"marker":dict(Marker(kwargs))})
 
 
 
@@ -429,6 +388,7 @@ def scatter(
 		y:_Iterable,  
 		label:str = None, 
 		smooth:bool = False, 
+		marker:Marker = Marker(),
 		**kwargs):
 	"""
 	Plot scatter charts
@@ -447,45 +407,16 @@ def scatter(
 	if label != None:
 		assert isinstance(label, str), "'label' must be string"
 
-	return _pydll.c_plot_scatter((), {
+
+	return _pydll.c_plot_scatter((), 
+	{
 		"x":x, 
 		"y":y , 
 		"name":label, 
 		"smooth":smooth, 
-		"marker":vars(Marker(kwargs)), 
-		"line":vars(Pen(kwargs))})
-
-
-
-
-#convenience function
-def plot(
-		x:_Iterable, 
-		y:_Iterable, 
-		label:str=None, 
-		color:str = None, 
-		width:int = 1,
-		style:int = 100, #solid pen
-		smooth:bool=False):
-	"""
-	A convenience function to plot scatter chart without markers (with lines only)
-
-	## Input:
-	x, y:	x- and y-data \n
-	label: Name of the series \n
-	smooth: Smooth lines \n
-	color: line color, check Color class \n
-	style: line style, use PEN_XXX \n
-	width: line width
-	"""
-	return scatter(
-		x=x, 
-		y=y, 
-		label=label, 
-		smooth=smooth, 
-		marker=None, 
-		line=_gdi.Pen(color=color, width=width, style=style))
-
+		"marker": dict(marker) if marker != None else None, 
+		"line":dict(Pen(kwargs)) if (kwargs.get("lw") != None or kwargs.get("linewidth") != None) else None
+	})
 
 
 
