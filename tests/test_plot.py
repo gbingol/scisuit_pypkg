@@ -277,27 +277,6 @@ def layout_test():
 
 
 
-#gdi.arc(center = (4,3), p1=(6, 3), p2=(2,3),  
-#		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
-#		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
-
-def heart1():
-	t= np.linspace(-10, 10, 1000)
-	#x=np.sin(t)*np.cos(t)*np.log(np.abs(t))
-	#y=np.abs(t)**0.3*np.sqrt(np.cos(t))
-
-def heart2():
-	t= np.linspace(-10, 10, 1000)
-	x = 16*np.sin(t)**3
-	y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
-
-	plt.canvas(xmin=-20, xmax=20, ymin=-20, ymax=20)
-
-	gdi.curve(x, y, pen = gdi.Pen(plt.C_RED))
-	gdi.text((-4.5,-4), "text", 45, 
-			font= gdi.Font(size=25, color=plt.C_GREEN))
-
-
 
 
 
@@ -305,79 +284,12 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-def psychrometry_heating():
-	p1 = (10, 0.002) #Tdb, W
-	p2 = (30, 0.002) #simple heating
-	p3 = (50, 0.04) #heating + humidification
+categ=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
 
-	plt.psychrometry()
-
-	color = plt.C_GREEN
-	pen = gdi.Pen(color=color)
-	brush = gdi.Brush(color=color)
-
-	for p in [p1, p2, p3]:
-		gdi.marker(p, size=9, pen=pen, brush=brush)
-
-
-	gdi.arrow(p1=p1, p2=p2, length=0.05,
-			pen=gdi.Pen(
-				color=plt.C_BLUE, 
-				style=plt.PEN_SHORTDASH, 
-				width=4))
-
-	gdi.arrow(p1=p2, p2=p3, length=0.05,
-			pen=gdi.Pen(
-				color=plt.C_RED_DARK, 
-				style=plt.PEN_SHORTDASH, 
-				width=4))
-
-
-
-
-
-def matplotlibcircle():
-	import matplotlib.pyplot as plt
-	import matplotlib.patches as pt
-	import numpy as np
-
-	ypoints = np.array([3, 8, 1, 10])
-
-	fig, ax = plt.subplots()
-	ax.plot(ypoints)
-	circle = pt.Circle((1.0,6.0), radius=1, 
-					edgecolor="red", 
-					linestyle=":",
-					linewidth = 4,
-					hatch = "|",
-					facecolor="green"
-					)
-	ax.add_patch(circle)
-	plt.show()
-
-x = [32, 42, 110, 115, 118, 145, 150]
-y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
-
-
-
-#plot a simple scatter chart
-plt.scatter(x=x, y=y, lw=1, edgecolor="0 255 0", marker=plt.Marker(size=10, facecolor="0 0 0"))
-
-poly = np.polyfit(x, y, 1)
-
-for i in range(len(x)):
-	rv = np.polyval(poly, x[i])
-	#experimental data
-	p1 = (x[i], y[i])
-
-	#regression data
-	p2 = (x[i], rv)
-
-	label = str(int(y[i] -rv))
-
-	gdi.line(p1, p2, ls="-", lw=4, label=label )
-
-gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor = "255 0 0")
+plt.bar(labels=categ, height=A)
+plt.bar(height=B, labels=categ, lw=4, facecolor="0 255 0")
 
 
 plt.show()
