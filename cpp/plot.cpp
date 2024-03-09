@@ -1189,7 +1189,7 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 
 		if (ColorObj && ColorObj != Py_None)
 		{
-			auto Color = StringToColor(ColorObj);
+			auto Color = MakeColor(ColorObj);
 			auto Brush = series->GetBrush();
 
 			//modify existing brush

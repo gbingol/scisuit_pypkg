@@ -98,7 +98,7 @@ for i in range(len(x)):
 
 	gdi.line(p1, p2, ls="-", lw=4, label=label )
 
-gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor = "255 0 0")
+gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor=(255, 0, 0))
 
 plt.show()
 

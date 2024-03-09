@@ -25,27 +25,6 @@ static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 
 
 
-static wxColour StringToColor(PyObject* Obj)
-{
-	std::string ColorStr = PyUnicode_AsUTF8(Obj);
-	std::stringstream ss(ColorStr);
-
-	std::vector<int> rgb;
-	int c;
-	while (ss >> c)
-	{
-		if (c > 255 || c < 0)
-			throw std::runtime_error("RGB must be in [0, 255].");
-
-		rgb.push_back(c);
-	}
-
-	if (rgb.size() != 3)
-		throw std::runtime_error("Ill-formed color.");
-
-	return wxColor(rgb[0], rgb[1], rgb[2]);
-}
-
 static wxColour StringToColor(const char* Obj)
 {
 	std::string ColorStr = Obj;
@@ -68,6 +47,46 @@ static wxColour StringToColor(const char* Obj)
 }
 
 
+static wxColour MakeColor(PyObject* Obj)
+{
+	if(PyUnicode_Check(Obj))
+	{
+		auto ColorStr = PyUnicode_AsUTF8(Obj);
+		return StringToColor(ColorStr);
+	}
+
+	else if(PyTuple_Check(Obj) || PyList_Check(Obj))
+	{
+		std::vector<int> rgb;
+
+		auto len = PyObject_Size(Obj);
+		for (decltype(len) i = 0; i < len; ++i)
+		{
+			auto item = PyObject_GetItem(Obj, Py_BuildValue("i", i));
+			if(!PyLong_Check(item))
+			{
+				PyErr_SetString(PyExc_RuntimeError, "RGB elements must be int");
+				return wxNullColour;
+			}
+
+			int value = PyLong_AsLong(item);
+			if(value < 0 || value > 255)
+			{
+				PyErr_SetString(PyExc_ValueError, "RGB values must be in [0, 255]");
+				return wxNullColour;
+			}
+			rgb.push_back(value);
+		}
+
+		return wxColor(rgb[0], rgb[1], rgb[2]);
+	}
+
+	return wxNullColour;
+}
+
+
+
+
 
 
 static std::vector<wxColor> CheckColors(PyObject* Obj)
@@ -80,7 +99,7 @@ static std::vector<wxColor> CheckColors(PyObject* Obj)
 	PyObject* item{ nullptr };
 	while ((item = PyIter_Next(iterator)) != nullptr)
 	{
-		auto Color = StringToColor(item);
+		auto Color = MakeColor(item);
 		retColors.push_back(Color);
 
 		Py_DECREF(item);
@@ -110,7 +129,7 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-			pen.SetColour(StringToColor(ObjValue));
+			pen.SetColour(MakeColor(ObjValue));
 
 		else if (ObjValue != Py_None && key == "width")
 			pen.SetWidth(PyLong_AsLong(ObjValue));
@@ -149,7 +168,7 @@ static void PrepareBrush(PyObject* Dict, wxBrush& brush)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-			brush.SetColour(StringToColor(ObjValue));
+			brush.SetColour(MakeColor(ObjValue));
 
 		else if (ObjValue != Py_None && key == "style")
 			brush.SetStyle((wxBrushStyle)PyLong_AsLong(ObjValue));

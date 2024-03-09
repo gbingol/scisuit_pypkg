@@ -1,4 +1,3 @@
-
 class Pen:
 	def __init__(self, *args):
 
@@ -8,12 +7,9 @@ class Pen:
 
 		self.color = params.get("edgecolor")
 		if self.color != None:
-			assert isinstance(self.color, str), "'color' must be string"
+			assert isinstance(self.color, str|tuple|list), "'edgecolor' must be str|tuple|list"
 
-		self.style = params.get("linestyle")
-		if self.style == None:
-			self.style = params.get("ls")
-		
+		self.style = params.get("linestyle") or params.get("ls")
 		if self.style == None:
 			self.style = "-"
 		else:
@@ -34,10 +30,7 @@ class Pen:
 				self.style = _style1[index2]
 
 
-		self.width = params.get("linewidth")
-		if self.width == None:
-			self.width = params.get("lw")
-		
+		self.width = params.get("linewidth") or params.get("lw")
 		if self.width == None:
 			self.width = 1
 		else:
@@ -70,7 +63,7 @@ class Brush:
 
 		self.color = params.get("facecolor")
 		if self.color != None:
-			assert isinstance(self.color, str), "'facecolor' must be string"
+			assert isinstance(self.color, str|tuple|list), "'facecolor' must be str|tuple|list"
 
 		self.style = params.get("hatch")
 		if self.style != None:

@@ -393,10 +393,16 @@ def scatter(
 	"""
 	Plot scatter charts
 
-	## Input:
-	x, y:	x- and y-data \n
-	label: Label of the series \n
+	x, y:	x- and y-data 
+	label: Label of the series 
 	smooth: Uses smoothing algorith to smooth lines (instead of broken)
+	marker: Marker class to specify marker properties
+
+	## Note:
+	- To plot lines set `lw` to an int > 0.
+	- If marker is None and lw is not set, by default markers will be shown.
+	- Customize line with (lw, ls and edgecolor properties)
+	- Customize marker with (line properties +  facecolor, hatch)
 	"""
 	assert isinstance(x, _Iterable), "x must be iterable object"
 	assert isinstance(y, _Iterable), "y must be iterable object"
@@ -425,7 +431,7 @@ def bubble(
 		x:_Iterable,
 		y:_Iterable,  
 		size:_Iterable,
-		color:str = None,
+		color:str|tuple|list = None,
 		mode:str = "A",
 		scale:int=100,
 		label:str=None):
@@ -434,7 +440,7 @@ def bubble(
 
 	## Input:
 	x, y, size:	x- and y- and size data \n
-	color: color (str) \n
+	color: color  \n
 	mode: "A" area "W" diameter \n
 	scale: size scale (0, 200] \n
 	label: Name of the series	
@@ -448,7 +454,7 @@ def bubble(
 
 	assert isinstance(mode, str), "'mode' must be string"
 	assert isinstance(label, str), "'label' must be string"
-	assert isinstance(color, str), "'color' must be string"
+	assert isinstance(color, str|tuple|list), "'color' must be str|tuple|list"
 
 	assert isinstance(scale, int), "'scale' must be int"
 	assert 0<scale<200, "'scale' must be in range (0, 200)"

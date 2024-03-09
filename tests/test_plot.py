@@ -247,12 +247,12 @@ def layout_test():
 	plt.hist(z, density=True)
 	plt.scatter(x=z, y=f)
 
-	gdi.line(p1=(-2, 0.1), p2=(0, 0.5), pen=gdi.Pen(plt.C_GREEN, 2, plt.PEN_DOTDASH))
-	gdi.rect(p =(-2, 0.5), width=2, height=0.4, pen=gdi.Pen(plt.C_GREEN))
+	gdi.line((-2, 0.1), (0, 0.5), edgecolor="0 255 0", lw =2, ls = "-.")
+	gdi.rect([-2, 0.5], width=2, height=0.4, edgecolor = "0 255 0", hatch="solid")
 
-	gdi.ellipse(p = (-1, 0.3), width=2, height=0.2, pen=gdi.Pen(plt.C_BROWN))
+	gdi.ellipse(xy=(-1, 0.3), width=2, height=0.2, edgecolor=plt.C_BROWN)
 
-	gdi.text(p = (-1, 0.3), label="hello world", angle=180)
+	gdi.text([-1, 0.3], label="hello world", rotation=180)
 
 
 	#new chart
@@ -284,14 +284,8 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-categ=["Q1", "Q2", "Q3", "Q4"]
-A = [44, 55, 41, 67]
-B = [13, 23, 8, 13]
 
-plt.bar(labels=categ, height=A)
-plt.bar(height=B, labels=categ, lw=4, facecolor="0 255 0")
-
-
+layout_test()
 plt.show()
 
 
