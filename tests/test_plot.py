@@ -247,10 +247,10 @@ def layout_test():
 	plt.hist(z, density=True)
 	plt.scatter(x=z, y=f)
 
-	gdi.line((-2, 0.1), (0, 0.5), edgecolor="0 255 0", lw =2, ls = "-.")
-	gdi.rect([-2, 0.5], width=2, height=0.4, edgecolor = "0 255 0", hatch="solid")
+	gdi.line((-2, 0.1), (0, 0.5), edgecolor="0 255 0", lw=2, ls= "-.")
+	gdi.rect([-2, 0.5], width=2, height=0.4, edgecolor=[0, 255, 0])
 
-	gdi.ellipse(xy=(-1, 0.3), width=2, height=0.2, edgecolor=plt.C_BROWN)
+	gdi.ellipse(xy=(-1, 0.3), width=2, height=0.2, edgecolor="#A02A2A") 
 
 	gdi.text([-1, 0.3], label="hello world", rotation=180)
 

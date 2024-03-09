@@ -27,21 +27,51 @@ static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 
 static wxColour StringToColor(const char* Obj)
 {
-	std::string ColorStr = Obj;
-	std::stringstream ss(ColorStr);
-
+	std::string S = Obj;
 	std::vector<int> rgb;
-	int c;
-	while (ss >> c)
-	{
-		if (c > 255 || c < 0)
-			throw std::runtime_error("RGB must be in [0, 255].");
 
-		rgb.push_back(c);
+	if(S.at(0) != '#')
+	{
+		std::stringstream ss(S);
+		int c;
+		while (ss >> c)
+		{
+			if (c > 255 || c < 0)
+				throw std::runtime_error("RGB must be in [0, 255].");
+
+			rgb.push_back(c);
+		}
 	}
 
-	if (rgb.size() != 3)
-		throw std::runtime_error("Ill-formed color.");
+	else
+	{
+		S.erase(S.begin()); //remove #
+		if(S.size()<6)
+			throw std::runtime_error("Hex string must be at least 6 characters long.");
+
+		int i = 0;
+		while (i < S.size())
+		{
+			if((i+2) > S.size())
+				break;
+			
+			auto str = S.substr(i, 2);
+			char * p;
+			long ColorVal = strtoul(str.c_str(), & p, 16 ); 
+			if(*p!=0)
+				throw std::runtime_error("Malformed hex string");
+			
+			if (ColorVal > 255 || ColorVal < 0)
+					throw std::runtime_error("RGB must be in [0, 255].");
+
+			rgb.push_back(ColorVal);
+
+			i = i + 2;
+		}
+	}
+
+	if (rgb.size() < 3)
+			throw std::runtime_error("Ill-formed color.");
 
 	return wxColor(rgb[0], rgb[1], rgb[2]);
 }
