@@ -118,38 +118,38 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
 
 
-	try
-	{
-		auto DataCol = std::make_shared<core::CRealColData>(Data);
-		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
-		auto DataTbl = std::make_unique<core::CGenericDataTable>();
-		DataTbl->append_col(LblCol);
-		DataTbl->append_col(DataCol);
+	TRYBLOCK();
 
-		CBarVertSeries* Series = nullptr;
-		if (strcmp(Style, "c") == 0)
-			Series = new CBarVertClusterSeries((CBarVertClusterChart*)Chart, std::move(DataTbl));
+	auto DataCol = std::make_shared<core::CRealColData>(Data);
+	auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
+	auto DataTbl = std::make_unique<core::CGenericDataTable>();
+	DataTbl->append_col(LblCol);
+	DataTbl->append_col(DataCol);
 
-		else if (strcmp(Style, "s") == 0)
-			Series = new CBarVertStkSeries((CBarVertStkChart*)Chart, std::move(DataTbl));
+	CBarVertSeries *Series = nullptr;
+	if (strcmp(Style, "c") == 0)
+		Series = new CBarVertClusterSeries((CBarVertClusterChart *)Chart, std::move(DataTbl));
 
-		wxPen Pen = Series->GetPen();
-		if (LineObj != Py_None)
-			PreparePen(LineObj, Pen);
-		Series->SetPen(Pen);
+	else if (strcmp(Style, "s") == 0)
+		Series = new CBarVertStkSeries((CBarVertStkChart *)Chart, std::move(DataTbl));
 
+	wxPen Pen = Series->GetPen();
+	if (LineObj != Py_None)
+		PreparePen(LineObj, Pen);
+	Series->SetPen(Pen);
 
-		wxBrush Brush = Series->GetBrush();
-		if (FillObj != Py_None)
-			PrepareBrush(FillObj, Brush);
-		Series->SetBrush(Brush);
+	wxBrush Brush = Series->GetBrush();
+	if (FillObj != Py_None)
+		PrepareBrush(FillObj, Brush);
+	Series->SetBrush(Brush);
 
-		auto UniqueSeries = std::unique_ptr<CBarVertSeries>(Series);
-		Chart->AddSeries(std::move(UniqueSeries));
+	auto UniqueSeries = std::unique_ptr<CBarVertSeries>(Series);
+	Chart->AddSeries(std::move(UniqueSeries));
 
-		s_SubPlotInfo = SubPlotInfo();
-	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	s_SubPlotInfo = SubPlotInfo();
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -219,41 +219,40 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 		Chart = (CBarHorizClusterChart*)frmPlot->GetActiveChart();
 	else if (strcmp(Style, "s") == 0) 
 		Chart = (CBarHorizStkChart*)frmPlot->GetActiveChart();
+
+
+	TRYBLOCK();
+
+	auto DataCol = std::make_shared<core::CRealColData>(Data);
+	auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
+	auto DataTbl = std::make_unique<core::CGenericDataTable>();
+	DataTbl->append_col(LblCol);
+	DataTbl->append_col(DataCol);
+
+	CBarHorizSeries *Series = nullptr;
+	if (strcmp(Style, "c") == 0)
+		Series = new CBarHorizClusterSeries((CBarHorizClusterChart *)Chart, std::move(DataTbl));
+
+	else if (strcmp(Style, "s") == 0)
+		Series = new CBarHorizStkSeries((CBarHorizStkChart *)Chart, std::move(DataTbl));
+
+	wxPen Pen = Series->GetPen();
+	if (LineObj != Py_None)
+		PreparePen(LineObj, Pen);
+	Series->SetPen(Pen);
+
+	wxBrush Brush = Series->GetBrush();
+	if (FillObj != Py_None)
+		PrepareBrush(FillObj, Brush);
+	Series->SetBrush(Brush);
+
+	auto UniqueSeries = std::unique_ptr<CBarHorizSeries>(Series);
+	Chart->AddSeries(std::move(UniqueSeries));
+
+	s_SubPlotInfo = SubPlotInfo();
 	
-	try
-	{
-		auto DataCol = std::make_shared<core::CRealColData>(Data);
-		auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
-		auto DataTbl = std::make_unique<core::CGenericDataTable>();
-		DataTbl->append_col(LblCol);
-		DataTbl->append_col(DataCol);
 
-		CBarHorizSeries* Series = nullptr;
-		if (strcmp(Style, "c") == 0)
-			Series = new CBarHorizClusterSeries((CBarHorizClusterChart*)Chart, std::move(DataTbl));
-
-		else if (strcmp(Style, "s") == 0)
-			Series = new CBarHorizStkSeries((CBarHorizStkChart*)Chart, std::move(DataTbl));
-
-		wxPen Pen = Series->GetPen();
-		if (LineObj != Py_None)
-			PreparePen(LineObj, Pen);
-		Series->SetPen(Pen);
-
-
-		wxBrush Brush = Series->GetBrush();
-		if (FillObj != Py_None)
-			PrepareBrush(FillObj, Brush);
-		Series->SetBrush(Brush);
-
-
-		auto UniqueSeries = std::unique_ptr<CBarHorizSeries>(Series);
-		Chart->AddSeries(std::move(UniqueSeries));
-
-		s_SubPlotInfo = SubPlotInfo();
-	}
-	CATCHRUNTIMEEXCEPTION_RET();
-
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -279,58 +278,59 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	auto Data = Iterable_As1DVector(DataObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "Data does not contain any numeric element.");
 
-	try
+
+	TRYBLOCK();
+
+	CFrmPlot *frmPlot = nullptr;
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		CFrmPlot* frmPlot = nullptr;
-
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BW_Chrt));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-
-		auto Chart = (CBoxWhiskerChart*)frmPlot->GetActiveChart();
-
-		auto DataTbl = std::make_unique<core::CRealDataTable>();
-		auto NumData = std::make_shared<core::CRealColData>(Data);
-		DataTbl->append_col(NumData);
-
-		auto series = std::make_unique<CBoxWhiskerSeries>(Chart, std::move(DataTbl));
-
-		if (LineObj != Py_None)
-		{
-			wxPen Pen = series->GetPen();
-			PreparePen(LineObj, Pen);
-			series->SetPen(Pen);
-		}
-
-		if (FillObj != Py_None)
-		{
-			wxBrush Brush = series->GetBrush();
-			PrepareBrush(FillObj, Brush);
-			series->SetBrush(Brush);
-		}
-
-		if (NameObj != Py_None)
-			series->SetName(PyUnicode_AsUTF8(NameObj));
-
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(BW_Chrt));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+
+	auto Chart = (CBoxWhiskerChart*)frmPlot->GetActiveChart();
+
+	auto DataTbl = std::make_unique<core::CRealDataTable>();
+	auto NumData = std::make_shared<core::CRealColData>(Data);
+	DataTbl->append_col(NumData);
+
+	auto series = std::make_unique<CBoxWhiskerSeries>(Chart, std::move(DataTbl));
+
+	if (LineObj != Py_None)
+	{
+		wxPen Pen = series->GetPen();
+		PreparePen(LineObj, Pen);
+		series->SetPen(Pen);
+	}
+
+	if (FillObj != Py_None)
+	{
+		wxBrush Brush = series->GetBrush();
+		PrepareBrush(FillObj, Brush);
+		series->SetBrush(Brush);
+	}
+
+	if (NameObj != Py_None)
+		series->SetName(PyUnicode_AsUTF8(NameObj));
+
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -361,80 +361,79 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	auto Data = Iterable_As1DVector(DataObj);
 	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any numeric element.");
 
-	try
-	{
-		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
-		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
+	TRYBLOCK();
 
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(Histogram));
+	CFrmPlot *frmPlot{nullptr};
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
+		{
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
-		
-
-		auto NumData = std::make_shared<core::CRealColData>(Data);
-		auto DataTbl = std::make_unique<core::CRealDataTable>();
-		DataTbl->append_col(NumData);
-
-		auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl));
-
-		wxPen Pen = series->GetPen();
-		if (LineObj != Py_None)
-			PreparePen(LineObj, Pen);
-		series->SetPen(Pen);
-
-
-		wxBrush Brush = series->GetBrush();
-		if (FillObj != Py_None)
-			PrepareBrush(FillObj, Brush);
-		series->SetBrush(Brush);
-
-
-		//From Python side value is either "f" or "d"
-		auto BinMode = CHistogramSeries::Mode::Frequency;
-		if (strcmp(PyUnicode_AsUTF8(ModeObj), "d") == 0) 
-			BinMode = CHistogramSeries::Mode::Density;
-		
-		series->SetMode(BinMode);
-
-		//Guaranteed to have bool value from Python side
-		series->MakeCumulative(PyObject_IsTrue(CumulObj));
-
-
-		if (BreaksObj != Py_None)
-		{
-			if (PyLong_CheckExact(BreaksObj))
-			{
-				int Breaks = (int)PyLong_AsLong(BreaksObj);
-				int NBins = Breaks + 1;
-
-				IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
-			}
-			else{
-				auto Breaks = std::move(Iterable_As1DVector(BreaksObj));
-				IF_PYERRRUNTIME_RET(series->SetBreakPoints(Breaks) == false, "Invalid break points.");
-			}
-		}
-
-
-		series->PrepareForDrawing();
-		Chart->AddSeries(std::move(series), false);
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(Histogram));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
+	
+
+	auto NumData = std::make_shared<core::CRealColData>(Data);
+	auto DataTbl = std::make_unique<core::CRealDataTable>();
+	DataTbl->append_col(NumData);
+
+	auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl));
+
+	wxPen Pen = series->GetPen();
+	if (LineObj != Py_None)
+		PreparePen(LineObj, Pen);
+	series->SetPen(Pen);
+
+
+	wxBrush Brush = series->GetBrush();
+	if (FillObj != Py_None)
+		PrepareBrush(FillObj, Brush);
+	series->SetBrush(Brush);
+
+
+	//From Python side value is either "f" or "d"
+	auto BinMode = CHistogramSeries::Mode::Frequency;
+	if (strcmp(PyUnicode_AsUTF8(ModeObj), "d") == 0) 
+		BinMode = CHistogramSeries::Mode::Density;
+	
+	series->SetMode(BinMode);
+
+	//Guaranteed to have bool value from Python side
+	series->MakeCumulative(PyObject_IsTrue(CumulObj));
+
+
+	if (BreaksObj != Py_None)
+	{
+		if (PyLong_CheckExact(BreaksObj))
+		{
+			int Breaks = (int)PyLong_AsLong(BreaksObj);
+			int NBins = Breaks + 1;
+
+			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
+		}
+		else{
+			auto Breaks = std::move(Iterable_As1DVector(BreaksObj));
+			IF_PYERRRUNTIME_RET(series->SetBreakPoints(Breaks) == false, "Invalid break points.");
+		}
+	}
+
+	series->PrepareForDrawing();
+	Chart->AddSeries(std::move(series), false);
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -503,65 +502,67 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 		Chart = (CLineClusterChart*)frmPlot->GetActiveChart();
 	else if (strcmp(Style, "s") == 0) 
 		Chart = (CStackedLineChart*)frmPlot->GetActiveChart();
-		
-	try
+
+
+	TRYBLOCK();
+
+	auto DataCol = std::make_shared<core::CRealColData>(Data);
+
+	std::shared_ptr<core::CStrColData> LabelCol;
+	if (LabelData.size() == 0)
+		LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
+
+	else if (LabelData.size() == Data.size())
+		LabelCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
+
+	else if (LabelData.size() < Data.size())
 	{
-		auto DataCol = std::make_shared<core::CRealColData>(Data);
-		
-		std::shared_ptr<core::CStrColData> LabelCol;
-		if (LabelData.size() == 0)
-			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
-
-		else if (LabelData.size() == Data.size())
-			LabelCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
-
-		else if (LabelData.size() < Data.size())
+		LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
+		for (size_t i = 0; const auto &Lbl : LabelData)
 		{
-			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
-			for (size_t i = 0; const auto & Lbl:LabelData)
-			{
-				if (auto s = dynamic_cast<core::CString*>(Lbl.get()))
-					LabelCol->set(i++, s->data());
-			}
+			if (auto s = dynamic_cast<core::CString *>(Lbl.get()))
+				LabelCol->set(i++, s->data());
 		}
-		else //too many labels
-		{
-			LabelCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
-			size_t diff = LabelData.size() - Data.size();
-			LabelCol->pop_back(diff);
-		}
-
-		auto DataTbl = std::make_unique<core::CGenericDataTable>();
-		DataTbl->append_col(LabelCol);
-		DataTbl->append_col(DataCol);
-
-		
-		CLineSeriesBase* Series = nullptr;
-		if (strcmp(Style, "c") == 0)
-			Series = new CLineClusterSeries((CLineClusterChart*)Chart, std::move(DataTbl), MARKERSIZE);
-
-		else if (strcmp(Style, "s") == 0)
-			Series = new CStackedLineSeries((CStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
-
-
-		if (LabelObj != Py_None)
-		{
-			auto Label = PyUnicode_AsUTF8(LabelObj);
-			Series->SetName(Label);
-		}
-
-		wxPen LinePen = Series->GetLinePen();
-		PreparePen(LineObj, LinePen);
-		Series->SetLinePen(LinePen);
-
-		PrepareMarker(MarkerObj, Series);
-
-		auto UniqueSeries = std::unique_ptr<CLineSeriesBase>(Series);
-		Chart->AddSeries(std::move(UniqueSeries));
-
-		s_SubPlotInfo = SubPlotInfo();
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else //too many labels
+	{
+		LabelCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
+		size_t diff = LabelData.size() - Data.size();
+		LabelCol->pop_back(diff);
+	}
+
+
+	auto DataTbl = std::make_unique<core::CGenericDataTable>();
+	DataTbl->append_col(LabelCol);
+	DataTbl->append_col(DataCol);
+	
+	CLineSeriesBase* Series = nullptr;
+	if (strcmp(Style, "c") == 0)
+		Series = new CLineClusterSeries((CLineClusterChart*)Chart, std::move(DataTbl), MARKERSIZE);
+
+	else if (strcmp(Style, "s") == 0)
+		Series = new CStackedLineSeries((CStackedLineChart*)Chart, std::move(DataTbl), MARKERSIZE);
+
+
+	if (LabelObj != Py_None)
+	{
+		auto Label = PyUnicode_AsUTF8(LabelObj);
+		Series->SetName(Label);
+	}
+
+	wxPen LinePen = Series->GetLinePen();
+	PreparePen(LineObj, LinePen);
+	Series->SetLinePen(LinePen);
+
+	PrepareMarker(MarkerObj, Series);
+
+	auto UniqueSeries = std::unique_ptr<CLineSeriesBase>(Series);
+	Chart->AddSeries(std::move(UniqueSeries));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 	
 	Py_RETURN_NONE;
 }
@@ -598,119 +599,119 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 		
 	auto Data = Iterable_As1DVector(DataObj);
 
-	try
+	TRYBLOCK();
+
+	if (LabelsObj != Py_None)
+		Labels = Iterable_AsArray(LabelsObj);
+
+	if (ColorsObj != Py_None)
 	{
-		if (LabelsObj != Py_None)
-			Labels = Iterable_AsArray(LabelsObj);
+		Colors = CheckColors(ColorsObj);
+		IF_PYERRVALUE_RET(Colors.size() == 0, "colors list does not contain any valid color");
+	}
 
-		if (ColorsObj != Py_None)
+	if (StartAngleObj != Py_None)
+		StartAngle = PyLong_AsLong(StartAngleObj);
+
+	if (ExplodeObj != Py_None)
+	{
+		if (PyLong_CheckExact(ExplodeObj))
+			ExplodeSeries = PyLong_AsLong(ExplodeObj);
+		else
 		{
-			Colors = CheckColors(ColorsObj);
-			IF_PYERRVALUE_RET(Colors.size() == 0, "colors list does not contain any valid color");
-		}
+			PyObject* iterator = PyObject_GetIter(ExplodeObj);
 
-		if (StartAngleObj != Py_None)
-			StartAngle = PyLong_AsLong(StartAngleObj);
-
-		if (ExplodeObj != Py_None)
-		{
-			if (PyLong_CheckExact(ExplodeObj))
-				ExplodeSeries = PyLong_AsLong(ExplodeObj);
-			else
+			PyObject* item{ nullptr };
+			while ((item = PyIter_Next(iterator)) != nullptr)
 			{
-				PyObject* iterator = PyObject_GetIter(ExplodeObj);
-
-				PyObject* item{ nullptr };
-				while ((item = PyIter_Next(iterator)) != nullptr)
-				{
-					Explode.push_back(PyLong_AsLong(item));
-					Py_DECREF(item);
-				}
-
-				Py_DECREF(iterator);
+				Explode.push_back(PyLong_AsLong(item));
+				Py_DECREF(item);
 			}
+
+			Py_DECREF(iterator);
 		}
+	}
 
 
-		CFrmPlot* frmPlot{ nullptr };
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
+	CFrmPlot* frmPlot{ nullptr };
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto PieChrt = std::make_unique<CPieChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(PieChrt));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CPieChart*)frmPlot->GetActiveChart();
-			
-		auto DataCol = std::make_shared<core::CRealColData>(Data);
-
-		std::shared_ptr<core::CStrColData> LabelCol;
-		if (Labels.size() == 0)
-			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
-
-		else if (Labels.size() == Data.size())
-			LabelCol = std::make_shared<core::CStrColData>(Labels.getstrings());
-
-		else if (Labels.size() < Data.size())
-		{
-			LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
-			for (size_t i = 0; const auto & Lbl:Labels)
-			{
-				if (auto s = dynamic_cast<core::CString*>(Lbl.get()))
-					LabelCol->set(i++, s->data());
-			}
-		}
-		else //too many labels
-		{
-			LabelCol = std::make_shared<core::CStrColData>(Labels.getstrings());
-			size_t diff = Labels.size() - Data.size();
-			LabelCol->pop_back(diff);
-		}
-
-
-		auto DataTbl = std::make_unique<core::CGenericDataTable>();
-		DataTbl->append_col(LabelCol);
-		DataTbl->append_col(DataCol);
-
-		auto PieSeries = std::make_unique<CPieSeries>(Chart, std::move(DataTbl));
-
-		if (Colors.size() > 0)
-			PieSeries->SetSliceColors(Colors);
-
-		if (ExplodeSeries > 0)
-			PieSeries->ExplodeSeries(ExplodeSeries);
-		else if (Explode.size() > 0)
-		{
-			for (size_t i = 0; i < Explode.size(); ++i)
-			{
-				IF_PYERRRUNTIME_RET(PieSeries->ExplodeNthDataPoint(i, Explode[i]) == false, "Cannot explode data point.");
-			}
-		}
-
-		//if defined by user
-		if (StartAngle > 0)
-		{
-			const float PI = 3.141592654f;
-			float InRadians = (float)StartAngle / 360.0f * (2.0f * PI);
-
-			PieSeries->SetAngleFirstSlice(InRadians);
-		}
-
-		Chart->AddSeries(std::move(PieSeries));
-
-		s_CurPlotWnd = frmPlot;
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto PieChrt = std::make_unique<CPieChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(PieChrt));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CPieChart*)frmPlot->GetActiveChart();
+		
+	auto DataCol = std::make_shared<core::CRealColData>(Data);
+
+	std::shared_ptr<core::CStrColData> LabelCol;
+	if (Labels.size() == 0)
+		LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
+
+	else if (Labels.size() == Data.size())
+		LabelCol = std::make_shared<core::CStrColData>(Labels.getstrings());
+
+	else if (Labels.size() < Data.size())
+	{
+		LabelCol = std::make_shared<core::CStrColData>(1, Data.size());
+		for (size_t i = 0; const auto & Lbl:Labels)
+		{
+			if (auto s = dynamic_cast<core::CString*>(Lbl.get()))
+				LabelCol->set(i++, s->data());
+		}
+	}
+	else //too many labels
+	{
+		LabelCol = std::make_shared<core::CStrColData>(Labels.getstrings());
+		size_t diff = Labels.size() - Data.size();
+		LabelCol->pop_back(diff);
+	}
+
+
+	auto DataTbl = std::make_unique<core::CGenericDataTable>();
+	DataTbl->append_col(LabelCol);
+	DataTbl->append_col(DataCol);
+
+	auto PieSeries = std::make_unique<CPieSeries>(Chart, std::move(DataTbl));
+
+	if (Colors.size() > 0)
+		PieSeries->SetSliceColors(Colors);
+
+	if (ExplodeSeries > 0)
+		PieSeries->ExplodeSeries(ExplodeSeries);
+	else if (Explode.size() > 0)
+	{
+		for (size_t i = 0; i < Explode.size(); ++i)
+		{
+			IF_PYERRRUNTIME_RET(PieSeries->ExplodeNthDataPoint(i, Explode[i]) == false, "Cannot explode data point.");
+		}
+	}
+
+	//if defined by user
+	if (StartAngle > 0)
+	{
+		const float PI = 3.141592654f;
+		float InRadians = (float)StartAngle / 360.0f * (2.0f * PI);
+
+		PieSeries->SetAngleFirstSlice(InRadians);
+	}
+
+	Chart->AddSeries(std::move(PieSeries));
+
+	s_CurPlotWnd = frmPlot;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -735,30 +736,30 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 		return nullptr;
 	}
 
-	try
+	TRYBLOCK();
+
+	if (TdbObj && TdbObj != Py_None)
 	{
-		if (TdbObj && TdbObj != Py_None)
-		{
-			auto Tdb_ = Iterable_As1DVector(TdbObj);
-			IF_PYERRVALUE_RET(Tdb_.size() != 2, "Tdb must contain exactly 2 real numbers.");
-				
-			auto MinMax = std::ranges::minmax(Tdb_);
-			Tdb = { MinMax.min, MinMax.max };
-		}
+		auto Tdb_ = Iterable_As1DVector(TdbObj);
+		IF_PYERRVALUE_RET(Tdb_.size() != 2, "Tdb must contain exactly 2 real numbers.");
 
-		if (RHObj && RHObj != Py_None)
-		{
-			RH = Iterable_As1DVector(RHObj);
-			IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values.");
-		}
-
-		auto frmPlot = new CFrmPlot(nullptr);
-		auto PsyChart = std::make_unique<charts::CPsychrometricChart>(frmPlot, Tdb, RH, P);
-		frmPlot->AddChart(std::move(PsyChart));
-
-		s_CurPlotWnd = frmPlot;
+		auto MinMax = std::ranges::minmax(Tdb_);
+		Tdb = {MinMax.min, MinMax.max};
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	if (RHObj && RHObj != Py_None)
+	{
+		RH = Iterable_As1DVector(RHObj);
+		IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values.");
+	}
+
+	auto frmPlot = new CFrmPlot(nullptr);
+	auto PsyChart = std::make_unique<charts::CPsychrometricChart>(frmPlot, Tdb, RH, P);
+	frmPlot->AddChart(std::move(PsyChart));
+
+	s_CurPlotWnd = frmPlot;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -787,62 +788,61 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any valid element.");
 	IF_PYERRVALUE_RET(Data.size() < 2, "data must contain at least 2 numeric values.");
 
-	try
+	TRYBLOCK();
+
+	if (ShowObj != Py_None)
+		LineShown = PyObject_IsTrue(ShowObj);
+
+	CFrmPlot *frmPlot = nullptr;
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		if (ShowObj != Py_None)
-			LineShown = PyObject_IsTrue(ShowObj);
-
-			
-		CFrmPlot* frmPlot = nullptr;
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(QQChart));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
-		
-		auto ColX = std::make_shared<core::CRealColData>(Data);
-		auto DataTable = std::make_unique<core::CRealDataTable>();
-		DataTable->append_col(ColX);
-
-		auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
-
-		if (MarkerObj != Py_None)
-			PrepareMarker(MarkerObj, series.get());
-
-		series->ShowTheoreticalLine(LineShown);
-
-		if (LineShown)
-		{
-			wxPen LinePen = series->GetLinePen();
-			PreparePen(LineObj, LinePen);
-			series->SetLinePen(LinePen);
-		}
-
-		if (LabelObj && PyUnicode_Check(LabelObj))
-		{
-			auto Lbl = PyUnicode_AsUTF8(LabelObj);
-			series->SetName(Lbl);
-		}
-
-		series->PrepareForDrawing();
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(QQChart));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
+	
+	auto ColX = std::make_shared<core::CRealColData>(Data);
+	auto DataTable = std::make_unique<core::CRealDataTable>();
+	DataTable->append_col(ColX);
+
+	auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
+
+	if (MarkerObj != Py_None)
+		PrepareMarker(MarkerObj, series.get());
+
+	series->ShowTheoreticalLine(LineShown);
+
+	if (LineShown)
+	{
+		wxPen LinePen = series->GetLinePen();
+		PreparePen(LineObj, LinePen);
+		series->SetLinePen(LinePen);
+	}
+
+	if (LabelObj && PyUnicode_Check(LabelObj))
+	{
+		auto Lbl = PyUnicode_AsUTF8(LabelObj);
+		series->SetName(Lbl);
+	}
+
+	series->PrepareForDrawing();
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -871,47 +871,47 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 	IF_PYERRVALUE_RET(DataY.size() == 0, "y does not have any valid element.");
 	IF_PYERRVALUE_RET(DataY.size() < 2, "y must contain at least 2 numeric values.");
 
-	try
-	{
-		CFrmPlot* frmPlot = nullptr;
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
-		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
+	TRYBLOCK();
 
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(QQChart));
+	CFrmPlot *frmPlot = nullptr;
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+	{
+		if (!s_CurPlotWnd)
+		{
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
-
-		IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid.");
-		IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid.");
-
-		auto DataTable = std::make_unique<core::CRealDataTable>();
-		auto ColX = std::make_shared<core::CRealColData>(DataX);
-		auto ColY = std::make_shared<core::CRealColData>(DataY);
-		DataTable->append_col(ColX);
-		DataTable->append_col(ColY);
-		auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
-
-		if (MarkerObj != Py_None)
-			PrepareMarker(MarkerObj, series.get());
-
-		series->PrepareForDrawing();
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto QQChart = std::make_unique<CScatterChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(QQChart));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
+
+	IF_PYERRVALUE_RET(DataX.size() == 0, "X data is not valid.");
+	IF_PYERRVALUE_RET(DataY.size() == 0, "Y data is not valid.");
+
+	auto DataTable = std::make_unique<core::CRealDataTable>();
+	auto ColX = std::make_shared<core::CRealColData>(DataX);
+	auto ColY = std::make_shared<core::CRealColData>(DataY);
+	DataTable->append_col(ColX);
+	DataTable->append_col(ColY);
+	auto series = std::make_unique<CQQSeries>(Chart, std::move(DataTable));
+
+	if (MarkerObj != Py_None)
+		PrepareMarker(MarkerObj, series.get());
+
+	series->PrepareForDrawing();
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -961,52 +961,52 @@ PyObject* c_plot_quiver(PyObject* args, PyObject* kwargs)
 	IF_PYERRVALUE_RET(DataX.size() != DataY.size(), "x and y must have same number of elements");
 	IF_PYERRVALUE_RET(DataX.size() != DataU.size(), "x and u must have same number of elements");
 
-	try
+	TRYBLOCK();
+
+	CFrmPlot *frmPlot = nullptr;
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		CFrmPlot* frmPlot = nullptr;
-
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto Quiver = std::make_unique<CQuiverChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(Quiver));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CQuiverChart*)frmPlot->GetActiveChart();
-
-		if (ScaleObj != Py_None)
-			IsScaled = PyObject_IsTrue(ScaleObj);
-
-		Chart->SetScaled(IsScaled);
-
-		auto DataTable = std::make_unique<core::CRealDataTable>();
-		auto ColX = std::make_shared<core::CRealColData>(DataX);
-		auto ColY = std::make_shared<core::CRealColData>(DataY);
-		auto ColU = std::make_shared<core::CRealColData>(DataU);
-		auto ColV = std::make_shared<core::CRealColData>(DataV);
-		DataTable->append_col(ColX);
-		DataTable->append_col(ColY);
-		DataTable->append_col(ColU);
-		DataTable->append_col(ColV);
-		auto series = std::make_unique<CQuiverSeries>(Chart, std::move(DataTable));
-
-		series->PrepareForDrawing();
-		Chart->AddSeries(std::move(series));
-		Chart->BoundsChanged();
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto Quiver = std::make_unique<CQuiverChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(Quiver));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CQuiverChart*)frmPlot->GetActiveChart();
+
+	if (ScaleObj != Py_None)
+		IsScaled = PyObject_IsTrue(ScaleObj);
+
+	Chart->SetScaled(IsScaled);
+
+	auto DataTable = std::make_unique<core::CRealDataTable>();
+	auto ColX = std::make_shared<core::CRealColData>(DataX);
+	auto ColY = std::make_shared<core::CRealColData>(DataY);
+	auto ColU = std::make_shared<core::CRealColData>(DataU);
+	auto ColV = std::make_shared<core::CRealColData>(DataV);
+	DataTable->append_col(ColX);
+	DataTable->append_col(ColY);
+	DataTable->append_col(ColU);
+	DataTable->append_col(ColV);
+	auto series = std::make_unique<CQuiverSeries>(Chart, std::move(DataTable));
+
+	series->PrepareForDrawing();
+	Chart->AddSeries(std::move(series));
+	Chart->BoundsChanged();
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1039,84 +1039,84 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 	IF_PYERRRUNTIME_RET(xdata.size() != ydata.size(), "'x' and 'y' must have same number of numeric data.");
 
-	try
+	TRYBLOCK();
+
+	CFrmPlot *frmPlot = nullptr;
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		CFrmPlot* frmPlot = nullptr;
-
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto Scatter = std::make_unique<CScatterChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(Scatter));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
-					
-		auto YData = std::make_shared<core::CRealColData>(ydata);
-		auto XData = std::make_shared<core::CRealColData>(xdata);
-
-		auto DTbl = std::make_unique<core::CRealDataTable>();
-		DTbl->append_col(XData);
-		DTbl->append_col(YData);
-
-		auto series = std::make_unique<CScatterSeries>(Chart, std::move(DTbl));
-
-		bool IsSmooth = false;
-		if (SmoothObj && SmoothObj != Py_None)
-			IsSmooth = PyObject_IsTrue(SmoothObj);
-
-		bool MarkerDef = MarkerObj && MarkerObj != Py_None;
-		bool LineDef = LineObj && LineObj != Py_None;
-
-		//Has the user defined marker or line properties
-		bool MarkerLine = MarkerDef || LineDef;
-
-		//if no marker or line defined, then show marker with default properties
-		if (MarkerLine == false)
-			MarkerDef = true;
-
-		if (MarkerDef)
-		{
-			//give a default marker size (otherwise it is 0)	
-			series->SetMarkerSize(MARKERSIZE);
-
-			//user can modify however they want
-			PrepareMarker(MarkerObj, series.get());
-		}
-
-		if (LineDef)
-		{
-			wxPen LinePen = series->GetLinePen();
-			PreparePen(LineObj, LinePen);
-			series->SetLinePen(LinePen);
-
-			if (MarkerDef == false)
-				series->SetMarkerSize(0);
-
-			series->EnableSmoothing(IsSmooth);
-		}
-			
-		if (NameObj && PyUnicode_Check(NameObj))
-		{
-			auto SeriesName = PyUnicode_AsUTF8(NameObj);
-			series->SetName(SeriesName);
-		}
-
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto Scatter = std::make_unique<CScatterChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(Scatter));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
+				
+	auto YData = std::make_shared<core::CRealColData>(ydata);
+	auto XData = std::make_shared<core::CRealColData>(xdata);
+
+	auto DTbl = std::make_unique<core::CRealDataTable>();
+	DTbl->append_col(XData);
+	DTbl->append_col(YData);
+
+	auto series = std::make_unique<CScatterSeries>(Chart, std::move(DTbl));
+
+	bool IsSmooth = false;
+	if (SmoothObj && SmoothObj != Py_None)
+		IsSmooth = PyObject_IsTrue(SmoothObj);
+
+	bool MarkerDef = MarkerObj && MarkerObj != Py_None;
+	bool LineDef = LineObj && LineObj != Py_None;
+
+	//Has the user defined marker or line properties
+	bool MarkerLine = MarkerDef || LineDef;
+
+	//if no marker or line defined, then show marker with default properties
+	if (MarkerLine == false)
+		MarkerDef = true;
+
+	if (MarkerDef)
+	{
+		//give a default marker size (otherwise it is 0)	
+		series->SetMarkerSize(MARKERSIZE);
+
+		//user can modify however they want
+		PrepareMarker(MarkerObj, series.get());
+	}
+
+	if (LineDef)
+	{
+		wxPen LinePen = series->GetLinePen();
+		PreparePen(LineObj, LinePen);
+		series->SetLinePen(LinePen);
+
+		if (MarkerDef == false)
+			series->SetMarkerSize(0);
+
+		series->EnableSmoothing(IsSmooth);
+	}
+			
+	if (NameObj && PyUnicode_Check(NameObj))
+	{
+		auto SeriesName = PyUnicode_AsUTF8(NameObj);
+		series->SetName(SeriesName);
+	}
+
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1153,70 +1153,70 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 	IF_PYERRRUNTIME_RET(xdata.size() != ydata.size(), "'x' and 'y' must have same number of numeric data.");
 	IF_PYERRRUNTIME_RET(ydata.size() != sizedata.size(), "'y' and 'size' must have same number of numeric data.");
 
-	try
+	TRYBLOCK();
+
+	CFrmPlot *frmPlot = nullptr;
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		CFrmPlot* frmPlot = nullptr;
-
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto BubbleChrt = std::make_unique<CBubbleChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BubbleChrt));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CBubbleChart*)frmPlot->GetActiveChart();
-		
-		auto XData = std::make_shared<core::CRealColData>(xdata);
-		auto YData = std::make_shared<core::CRealColData>(ydata);
-		auto SizeData = std::make_shared<core::CRealColData>(sizedata);
-
-		auto DTable = std::make_unique<core::CRealDataTable>();
-		DTable->append_col(XData);
-		DTable->append_col(YData);
-		DTable->append_col(SizeData);
-
-		auto series = std::make_unique<CBubbleSeries>(Chart, std::move(DTable));
-
-		if (ColorObj && ColorObj != Py_None)
-		{
-			auto Color = MakeColor(ColorObj);
-			auto Brush = series->GetBrush();
-
-			//modify existing brush
-			Brush.SetColour(Color);
-			series->SetBrush(Brush);
-		}
-
-		if (ModeObj && ModeObj != Py_None)
-		{
-			#define enm charts::CBubbleSeries::SIZEMODE
-			auto s = PyUnicode_AsUTF8(ModeObj);
-			auto mode = strcmp(s, "w") == 0 ? enm::WIDTH: enm::AREA;
-				
-			series->SetSizeMode(mode);
-		}
-
-		if (ScaleObj && ScaleObj != Py_None)
-			series->SetScalingFactor(PyLong_AsLong(ScaleObj));
-
-		if (LabelObj && PyUnicode_Check(LabelObj))
-			series->SetName(PyUnicode_AsUTF8(LabelObj));
-
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto BubbleChrt = std::make_unique<CBubbleChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(BubbleChrt));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CBubbleChart*)frmPlot->GetActiveChart();
+	
+	auto XData = std::make_shared<core::CRealColData>(xdata);
+	auto YData = std::make_shared<core::CRealColData>(ydata);
+	auto SizeData = std::make_shared<core::CRealColData>(sizedata);
+
+	auto DTable = std::make_unique<core::CRealDataTable>();
+	DTable->append_col(XData);
+	DTable->append_col(YData);
+	DTable->append_col(SizeData);
+
+	auto series = std::make_unique<CBubbleSeries>(Chart, std::move(DTable));
+
+	if (ColorObj && ColorObj != Py_None)
+	{
+		auto Color = MakeColor(ColorObj);
+		auto Brush = series->GetBrush();
+
+		//modify existing brush
+		Brush.SetColour(Color);
+		series->SetBrush(Brush);
+	}
+
+	if (ModeObj && ModeObj != Py_None)
+	{
+		#define enm charts::CBubbleSeries::SIZEMODE
+		auto s = PyUnicode_AsUTF8(ModeObj);
+		auto mode = strcmp(s, "w") == 0 ? enm::WIDTH: enm::AREA;
+			
+		series->SetSizeMode(mode);
+	}
+
+	if (ScaleObj && ScaleObj != Py_None)
+		series->SetScalingFactor(PyLong_AsLong(ScaleObj));
+
+	if (LabelObj && PyUnicode_Check(LabelObj))
+		series->SetName(PyUnicode_AsUTF8(LabelObj));
+
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1245,44 +1245,44 @@ PyObject* c_plot_canvas(PyObject* args, PyObject* kwargs)
 	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
 	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
 
+	TRYBLOCK();
 
-	try
+	CFrmPlot *frmPlot = nullptr;
+
+	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
-		CFrmPlot* frmPlot = nullptr;
-
-		if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
+		if (!s_CurPlotWnd)
 		{
-			if (!s_CurPlotWnd)
-			{
-				frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-				s_CurPlotWnd = frmPlot;
-			}
-			else
-				frmPlot = s_CurPlotWnd;
-
-			auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-			auto Canvas = std::make_unique<CCanvasChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(Canvas));
+			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = frmPlot;
 		}
 		else
 			frmPlot = s_CurPlotWnd;
 
-		auto Chart = (CCanvasChart*)frmPlot->GetActiveChart();
-					
-		auto YData = std::make_shared<core::CRealColData>(ydata);
-		auto XData = std::make_shared<core::CRealColData>(xdata);
-
-		auto DTbl = std::make_unique<core::CRealDataTable>();
-		DTbl->append_col(XData);
-		DTbl->append_col(YData);
-
-		auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
-
-		Chart->AddSeries(std::move(series));
-
-		s_SubPlotInfo = SubPlotInfo();
+		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
+		auto Canvas = std::make_unique<CCanvasChart>(frmPlot, Rect);
+		frmPlot->AddChart(std::move(Canvas));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	else
+		frmPlot = s_CurPlotWnd;
+
+	auto Chart = (CCanvasChart*)frmPlot->GetActiveChart();
+				
+	auto YData = std::make_shared<core::CRealColData>(ydata);
+	auto XData = std::make_shared<core::CRealColData>(xdata);
+
+	auto DTbl = std::make_unique<core::CRealDataTable>();
+	DTbl->append_col(XData);
+	DTbl->append_col(YData);
+
+	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
+
+	Chart->AddSeries(std::move(series));
+
+	s_SubPlotInfo = SubPlotInfo();
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1399,24 +1399,27 @@ void c_plot_gdi_ellipse(
 	if (s_CurPlotWnd == nullptr)
 		return;
 
-	//default pen (black, width=1 pixels, solid)
+	TRYBLOCK();
+	// default pen (black, width=1 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 1);
 	PreparePen(PenObj, pen);
 
-	//default brush (white and transparent)
+	// default brush (white and transparent)
 	wxBrush brush = wxBrush(wxColour(255, 255, 255), wxBRUSHSTYLE_TRANSPARENT);
 	PrepareBrush(BrushObj, brush);
 
-	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
+	auto Chart = s_CurPlotWnd->GetActiveChart();
+	auto NumChart = dynamic_cast<CNumericChart *>(Chart);
 
-	if(NumChart == nullptr) 
+	if (NumChart == nullptr)
 	{
 		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
 		return;
-	};
+	}
 
 	NumChart->DrawEllipse(x, y, width, height, pen, brush);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1433,6 +1436,8 @@ void c_plot_gdi_text(
 	if (s_CurPlotWnd == nullptr)
 		return;
 
+	TRYBLOCK();
+
 	wxFont font(wxFontInfo(11).FaceName("Arial"));
 	PrepareFont(FontObj, font);
 
@@ -1448,6 +1453,8 @@ void c_plot_gdi_text(
 	};
 
 	NumChart->DrawText(x, y, text, angle, font, textColor);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1463,6 +1470,8 @@ void c_plot_gdi_arc(
 {
 	if (s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	//default pen (black, width=2 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
@@ -1482,6 +1491,8 @@ void c_plot_gdi_arc(
 	};
 
 	NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1492,6 +1503,8 @@ void c_plot_gdi_curve(
 {
 	if (s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	//default pen (black, width=2 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
@@ -1510,6 +1523,8 @@ void c_plot_gdi_curve(
 	};
 
 	NumChart->DrawCurve(X, Y, pen);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1521,6 +1536,8 @@ void c_plot_gdi_polygon(
 {
 	if (s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	//default pen (black, width=2 pixels, solid)
 	auto pen = wxPen(wxColour(0, 0, 0), 2);
@@ -1543,6 +1560,8 @@ void c_plot_gdi_polygon(
 	};
 
 	NumChart->DrawPolygon(X, Y, pen, brush);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1556,6 +1575,8 @@ void c_plot_gdi_marker(
 {
 	if (s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	//default pen (black, width=2 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
@@ -1575,6 +1596,8 @@ void c_plot_gdi_marker(
 	};
 
 	NumChart->DrawMarker(x, y, Type, Size, pen, brush);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 /*
@@ -1620,6 +1643,8 @@ void c_plot_figure()
 	
 void c_plot_show()
 {
+	TRYBLOCK();
+
 	if (!s_CurPlotWnd)
 		return;
 
@@ -1633,6 +1658,8 @@ void c_plot_show()
 
 	//reset static variables
 	s_NROWS = s_NCOLS = 1;
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1640,6 +1667,8 @@ void c_plot_title(PyObject* LabelObj )
 {
 	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 
@@ -1652,6 +1681,8 @@ void c_plot_title(PyObject* LabelObj )
 
 	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1659,6 +1690,9 @@ void c_plot_xlabel(PyObject* LabelObj)
 {
 	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
+
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 
@@ -1671,6 +1705,9 @@ void c_plot_xlabel(PyObject* LabelObj)
 
 	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
+
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1678,6 +1715,8 @@ void c_plot_ylabel(PyObject* LabelObj)
 {
 	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
 		return;
+
+	TRYBLOCK();
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 	auto TextBox = Chart->GetVertAxisTitle();
@@ -1689,6 +1728,9 @@ void c_plot_ylabel(PyObject* LabelObj)
 
 	if(auto Label = PyUnicode_AsUTF8(LabelObj))
 		TextBox->SetText(Label);
+
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
@@ -1697,7 +1739,13 @@ void c_plot_legend()
 	if(s_CurPlotWnd == nullptr)
 		return;
 
-	s_CurPlotWnd->GetActiveChart()->CreateElement(CChartBase::Elems::LEGEND);
+	TRYBLOCK();
+
+	if(auto s= s_CurPlotWnd->GetActiveChart())
+		s->CreateElement(CChartBase::Elems::LEGEND);
+	
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 

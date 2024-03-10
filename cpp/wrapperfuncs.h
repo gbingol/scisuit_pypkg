@@ -213,11 +213,21 @@ std::function<std::complex<double>(std::complex<double>)>
 #endif
 
 
+#ifndef NOTHING
+#define NOTHING
+#endif
 
-#ifndef CATCHRUNTIMEEXCEPTION_RET
-#define CATCHRUNTIMEEXCEPTION_RET()								\
-	catch (std::exception& e){								\
+#ifndef TRYBLOCK
+#define TRYBLOCK()								\
+	try \
+	{
+#endif
+
+
+#ifndef CATCHRUNTIMEEXCEPTION
+#define CATCHRUNTIMEEXCEPTION(retVal)								\
+	}catch (std::exception& e){								\
 		PyErr_SetString(PyExc_RuntimeError, e.what());		\
-		return nullptr;										\
+		return retVal; \
 	}
 #endif

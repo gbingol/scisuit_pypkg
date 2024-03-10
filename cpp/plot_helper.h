@@ -45,16 +45,15 @@ static wxColour StringToColor(const char* Obj)
 
 	else
 	{
-		S.erase(S.begin()); //remove #
-		if(S.size()<6)
-			throw std::runtime_error("Hex string must be at least 6 characters long.");
+		// # + 6 characters
+		if(S.size()<7)
+			throw std::runtime_error("Hex str must be at least 6 characters.");
 
+		S.erase(S.begin()); //remove #
+		
 		int i = 0;
 		while (i < S.size())
 		{
-			if((i+2) > S.size())
-				break;
-			
 			auto str = S.substr(i, 2);
 			char * p;
 			long ColorVal = strtoul(str.c_str(), & p, 16 ); 

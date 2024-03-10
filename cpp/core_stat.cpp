@@ -18,18 +18,18 @@ using namespace core::math;
 
 PyObject* c_stat_dbeta(PyObject* X, double shape1, double shape2)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(X))
-		{
-			double dval = dist::dbeta(ExtractRealNumber(X).value(), shape1, shape2);
-			return Py_BuildValue("d", dval);
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(X);
-		return List_FromCVector(dist::dbeta(Vec, shape1, shape2));
+	if (IsExactTypeRealNumber(X))
+	{
+		double dval = dist::dbeta(ExtractRealNumber(X).value(), shape1, shape2);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(X);
+	return List_FromCVector(dist::dbeta(Vec, shape1, shape2));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -37,18 +37,18 @@ PyObject* c_stat_dbeta(PyObject* X, double shape1, double shape2)
 
 PyObject* c_stat_pbeta(PyObject* qvalObj, double shape1, double shape2)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double dval = dist::pbeta(ExtractRealNumber(qvalObj).value(), shape1, shape2);
-			return Py_BuildValue("d", dval);
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pbeta(Vec, shape1, shape2));
+	if (IsExactTypeRealNumber(qvalObj))
+	{
+		double dval = dist::pbeta(ExtractRealNumber(qvalObj).value(), shape1, shape2);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pbeta(Vec, shape1, shape2));
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -56,18 +56,18 @@ PyObject* c_stat_pbeta(PyObject* qvalObj, double shape1, double shape2)
 
 PyObject* c_stat_qbeta(PyObject* pvalObj, double shape1, double shape2)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double dval = dist::qbeta(ExtractRealNumber(pvalObj).value(), shape1, shape2);
-			return Py_BuildValue("d", dval);
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qbeta(Vec, shape1, shape2));
+	if (IsExactTypeRealNumber(pvalObj))
+	{
+		double dval = dist::qbeta(ExtractRealNumber(pvalObj).value(), shape1, shape2);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qbeta(Vec, shape1, shape2));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -77,18 +77,18 @@ PyObject* c_stat_qbeta(PyObject* pvalObj, double shape1, double shape2)
 /*  -----------        binomial distribution -------------------*/
 PyObject* c_stat_dbinom(PyObject* X, int size_, double prob)
 {
-	try
+	TRYBLOCK();
+
+	if (IsExactTypeRealNumber(X))
 	{
-		if (IsExactTypeRealNumber(X))
-		{
-			double dval = dist::dbinom(ExtractRealNumber(X).value(), size_, prob);
-			return Py_BuildValue("d", dval);
-		}
-		
-		auto Vec = Iterable_As1DVector(X);
-		return List_FromCVector(dist::dbinom(Vec, size_, prob));
+		double dval = dist::dbinom(ExtractRealNumber(X).value(), size_, prob);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+		
+	auto Vec = Iterable_As1DVector(X);
+	return List_FromCVector(dist::dbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -96,18 +96,18 @@ PyObject* c_stat_dbinom(PyObject* X, int size_, double prob)
 
 PyObject* c_stat_pbinom(PyObject* qvalObj, int size_, double prob)
 {
-	try
+	TRYBLOCK();
+
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pbinom(qval, size_, prob));
-		}
-		
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pbinom(Vec, size_, prob));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pbinom(qval, size_, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+		
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -115,18 +115,18 @@ PyObject* c_stat_pbinom(PyObject* qvalObj, int size_, double prob)
 
 PyObject* c_stat_qbinom(PyObject* pvalObj, int size_, double prob)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qbinom(pval, size_, prob));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qbinom(Vec, size_, prob));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qbinom(pval, size_, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+		
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -136,18 +136,18 @@ PyObject* c_stat_qbinom(PyObject* pvalObj, int size_, double prob)
 /*  -----------     negative binomial distribution -------------------*/
 PyObject* c_stat_dnbinom(PyObject* X, int size_, double prob)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(X))
-		{
-			double dval = dist::dnbinom(ExtractRealNumber(X).value(), size_, prob);
-			return Py_BuildValue("d", dval);
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(X);
-		return List_FromCVector(dist::dnbinom(Vec, size_, prob));
+	if (IsExactTypeRealNumber(X))
+	{
+		double dval = dist::dnbinom(ExtractRealNumber(X).value(), size_, prob);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(X);
+	return List_FromCVector(dist::dnbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -155,18 +155,18 @@ PyObject* c_stat_dnbinom(PyObject* X, int size_, double prob)
 
 PyObject* c_stat_pnbinom(PyObject* qvalObj, int size_, double prob)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pnbinom(qval, size_, prob));
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pnbinom(Vec, size_, prob));
+	if (IsExactTypeRealNumber(qvalObj))
+	{
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pnbinom(qval, size_, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pnbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -174,18 +174,18 @@ PyObject* c_stat_pnbinom(PyObject* qvalObj, int size_, double prob)
 
 PyObject* c_stat_qnbinom(PyObject* pvalObj, int size_, double prob)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qnbinom(pval, size_, prob));
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qnbinom(Vec, size_, prob));
+	if (IsExactTypeRealNumber(pvalObj))
+	{
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qnbinom(pval, size_, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qnbinom(Vec, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -199,13 +199,13 @@ PyObject* c_stat_qnbinom(PyObject* pvalObj, int size_, double prob)
 
 PyObject* c_stat_dmultinom(PyObject* X, int size_, PyObject* probs)
 {
-	try
-	{
-		auto x = Iterable_As1DVector<int>(X);
-		auto prob = Iterable_As1DVector(probs);
-		return Py_BuildValue("d", dist::dmultinom(x, size_, prob));
-	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	TRYBLOCK();
+
+	auto x = Iterable_As1DVector<int>(X);
+	auto prob = Iterable_As1DVector(probs);
+	return Py_BuildValue("d", dist::dmultinom(x, size_, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -217,18 +217,18 @@ PyObject* c_stat_dmultinom(PyObject* X, int size_, PyObject* probs)
 /*  -----------        chisq distribution -------------------*/
 PyObject* c_stat_dchisq(PyObject* xvalObj, int df)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dchisq(xval, df));
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dchisq(Vec, df));
+	if (IsExactTypeRealNumber(xvalObj))
+	{
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dchisq(xval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dchisq(Vec, df));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -236,18 +236,17 @@ PyObject* c_stat_dchisq(PyObject* xvalObj, int df)
 
 PyObject* c_stat_pchisq(PyObject* qvalObj, int df)
 {
-	try
+	TRYBLOCK();
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pchisq(qval, df));
-		}
-		
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pchisq(Vec, df));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pchisq(qval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pchisq(Vec, df));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -255,19 +254,18 @@ PyObject* c_stat_pchisq(PyObject* qvalObj, int df)
 
 PyObject* c_stat_qchisq(PyObject* pvalObj, int df)
 {
-	try
+	TRYBLOCK();
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qchisq(pval, df));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qchisq(Vec, df));
-		
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qchisq(pval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+		
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qchisq(Vec, df));
+		
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -277,18 +275,18 @@ PyObject* c_stat_qchisq(PyObject* pvalObj, int df)
 
 PyObject* c_stat_dexp(PyObject* xvalObj, double rate)
 {
-	try
-	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dexp(xval, rate));
-		}
+	TRYBLOCK();
 
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dexp(Vec, rate));
+	if (IsExactTypeRealNumber(xvalObj))
+	{
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dexp(xval, rate));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dexp(Vec, rate));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -296,18 +294,18 @@ PyObject* c_stat_dexp(PyObject* xvalObj, double rate)
 
 PyObject* c_stat_pexp(PyObject* qvalObj, double rate)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pexp(qval, rate));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pexp(Vec, rate));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pexp(qval, rate));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pexp(Vec, rate));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -315,19 +313,19 @@ PyObject* c_stat_pexp(PyObject* qvalObj, double rate)
 
 PyObject* c_stat_qexp(PyObject* pvalObj, double rate)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qexp(pval, rate));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qexp(Vec, rate));
-
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qexp(pval, rate));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qexp(Vec, rate));
+
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -338,18 +336,18 @@ PyObject* c_stat_qexp(PyObject* pvalObj, double rate)
 /*  -----------        F distribution -------------------*/
 PyObject* c_stat_df(PyObject* xvalObj, int df1, int df2)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::df(xval, df1, df2));
-		}
-		
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::df(Vec, df1, df2));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::df(xval, df1, df2));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::df(Vec, df1, df2));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -357,18 +355,18 @@ PyObject* c_stat_df(PyObject* xvalObj, int df1, int df2)
 
 PyObject* c_stat_pf(PyObject* qvalObj, int df1, int df2)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pf(qval, df1, df2));
-		}
-		
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pf(Vec, df1, df2));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pf(qval, df1, df2));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pf(Vec, df1, df2));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -376,18 +374,18 @@ PyObject* c_stat_pf(PyObject* qvalObj, int df1, int df2)
 
 PyObject* c_stat_qf(PyObject* pvalObj, int df1, int df2)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qf(pval, df1, df2));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qf(Vec, df1, df2));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qf(pval, df1, df2));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qf(Vec, df1, df2));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -398,18 +396,19 @@ PyObject* c_stat_qf(PyObject* pvalObj, int df1, int df2)
 
 PyObject* c_stat_dgamma(PyObject* xvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double dval = dist::dgamma(ExtractRealNumber(xvalObj).value(), shape, scale);
-			return Py_BuildValue("d", dval);
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dgamma(Vec, shape, scale));
+		double dval = dist::dgamma(ExtractRealNumber(xvalObj).value(), shape, scale);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dgamma(Vec, shape, scale));
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -417,18 +416,18 @@ PyObject* c_stat_dgamma(PyObject* xvalObj, double shape, double scale)
 
 PyObject* c_stat_pgamma(PyObject* qvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pgamma(qval, shape, scale));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pgamma(Vec, shape, scale));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pgamma(qval, shape, scale));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pgamma(Vec, shape, scale));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -436,18 +435,19 @@ PyObject* c_stat_pgamma(PyObject* qvalObj, double shape, double scale)
 
 PyObject* c_stat_qgamma(PyObject* pvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qgamma(pval, shape, scale));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qgamma(Vec, shape, scale));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qgamma(pval, shape, scale));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qgamma(Vec, shape, scale));
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -457,18 +457,18 @@ PyObject* c_stat_qgamma(PyObject* pvalObj, double shape, double scale)
 /*  -----------        geometric distribution -------------------*/
 PyObject* c_stat_dgeom(PyObject* X, double prob)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(X))
 	{
-		if (IsExactTypeRealNumber(X))
-		{
-			double dval = dist::dgeom(ExtractRealNumber(X).value(), prob);
-			return Py_BuildValue("d", dval);
-		}
-
-		auto Vec = Iterable_As1DVector(X);
-		return List_FromCVector(dist::dgeom(Vec, prob));
+		double dval = dist::dgeom(ExtractRealNumber(X).value(), prob);
+		return Py_BuildValue("d", dval);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(X);
+	return List_FromCVector(dist::dgeom(Vec, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -476,18 +476,18 @@ PyObject* c_stat_dgeom(PyObject* X, double prob)
 
 PyObject* c_stat_pgeom(PyObject* qvalObj, double prob)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pgeom(qval, prob));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pgeom(Vec, prob));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pgeom(qval, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pgeom(Vec, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -495,18 +495,18 @@ PyObject* c_stat_pgeom(PyObject* qvalObj, double prob)
 
 PyObject* c_stat_qgeom(PyObject* pvalObj, double prob)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qgeom(pval, prob));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qgeom(Vec, prob));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qgeom(pval, prob));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qgeom(Vec, prob));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -518,18 +518,18 @@ PyObject* c_stat_qgeom(PyObject* pvalObj, double prob)
 
 PyObject* c_stat_dhyper(PyObject* X, int m, int n, int k)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(X))
 	{
-		if (IsExactTypeRealNumber(X))
-		{
-			double xval = ExtractRealNumber(X).value();
-			return Py_BuildValue("d", dist::dhyper(xval, m, n, k));
-		}
-
-		auto Vec = Iterable_As1DVector(X);
-		return List_FromCVector(dist::dhyper(Vec, m, n, k));
+		double xval = ExtractRealNumber(X).value();
+		return Py_BuildValue("d", dist::dhyper(xval, m, n, k));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(X);
+	return List_FromCVector(dist::dhyper(Vec, m, n, k));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -537,18 +537,19 @@ PyObject* c_stat_dhyper(PyObject* X, int m, int n, int k)
 
 PyObject* c_stat_phyper(PyObject* qvalObj, int m, int n, int k)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::phyper(qval, m, n, k));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::phyper(Vec, m, n, k));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::phyper(qval, m, n, k));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::phyper(Vec, m, n, k));
+	
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -556,18 +557,18 @@ PyObject* c_stat_phyper(PyObject* qvalObj, int m, int n, int k)
 
 PyObject* c_stat_qhyper(PyObject* pvalObj, int m, int n, int k)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qhyper(pval, m, n, k));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qhyper(Vec, m, n, k));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qhyper(pval, m, n, k));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qhyper(Vec, m, n, k));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -578,18 +579,18 @@ PyObject* c_stat_qhyper(PyObject* pvalObj, int m, int n, int k)
 
 PyObject* c_stat_dnorm(PyObject* xvalObj, double mean, double sd)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dnorm(xval, mean, sd));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dnorm(Vec, mean, sd));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dnorm(xval, mean, sd));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dnorm(Vec, mean, sd));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -597,18 +598,18 @@ PyObject* c_stat_dnorm(PyObject* xvalObj, double mean, double sd)
 
 PyObject* c_stat_pnorm(PyObject* qvalObj, double mean, double sd)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pnorm(qval, mean, sd));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pnorm(Vec, mean, sd));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pnorm(qval, mean, sd));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pnorm(Vec, mean, sd));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -616,18 +617,18 @@ PyObject* c_stat_pnorm(PyObject* qvalObj, double mean, double sd)
 
 PyObject* c_stat_qnorm(PyObject* pvalObj, double mean, double sd)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qnorm(pval, mean, sd));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qnorm(Vec, mean, sd));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qnorm(pval, mean, sd));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qnorm(Vec, mean, sd));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -639,18 +640,18 @@ PyObject* c_stat_qnorm(PyObject* pvalObj, double mean, double sd)
 
 PyObject* c_stat_dlnorm(PyObject* xvalObj, double meanlog, double sdlog)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dlnorm(xval, meanlog, sdlog));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dlnorm(Vec, meanlog, sdlog));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dlnorm(xval, meanlog, sdlog));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dlnorm(Vec, meanlog, sdlog));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -658,18 +659,18 @@ PyObject* c_stat_dlnorm(PyObject* xvalObj, double meanlog, double sdlog)
 
 PyObject* c_stat_plnorm(PyObject* qvalObj, double meanlog, double sdlog)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::plnorm(qval, meanlog, sdlog));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::plnorm(Vec, meanlog, sdlog));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::plnorm(qval, meanlog, sdlog));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::plnorm(Vec, meanlog, sdlog));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -677,18 +678,18 @@ PyObject* c_stat_plnorm(PyObject* qvalObj, double meanlog, double sdlog)
 
 PyObject* c_stat_qlnorm(PyObject* pvalObj, double meanlog, double sdlog)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qlnorm(pval, meanlog, sdlog));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qlnorm(Vec, meanlog, sdlog));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qlnorm(pval, meanlog, sdlog));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qlnorm(Vec, meanlog, sdlog));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -700,18 +701,18 @@ PyObject* c_stat_qlnorm(PyObject* pvalObj, double meanlog, double sdlog)
 
 PyObject* c_stat_dpareto(PyObject* xvalObj, double location, double shape)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dpareto(xval, location, shape));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dpareto(Vec, location, shape));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dpareto(xval, location, shape));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dpareto(Vec, location, shape));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -719,18 +720,18 @@ PyObject* c_stat_dpareto(PyObject* xvalObj, double location, double shape)
 
 PyObject* c_stat_ppareto(PyObject* qvalObj, double location, double shape)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::ppareto(qval, location, shape));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::ppareto(Vec, location, shape));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::ppareto(qval, location, shape));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::ppareto(Vec, location, shape));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -738,18 +739,18 @@ PyObject* c_stat_ppareto(PyObject* qvalObj, double location, double shape)
 
 PyObject* c_stat_qpareto(PyObject* pvalObj, double location, double shape)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qpareto(pval, location, shape));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qpareto(Vec, location, shape));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qpareto(pval, location, shape));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qpareto(Vec, location, shape));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -760,18 +761,18 @@ PyObject* c_stat_qpareto(PyObject* pvalObj, double location, double shape)
 /*  -----------        Poisson distribution -------------------*/
 PyObject* c_stat_dpois(PyObject* xvalObj, double mu)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dpois(xval, mu));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dpois(Vec, mu));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dpois(xval, mu));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dpois(Vec, mu));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -779,18 +780,18 @@ PyObject* c_stat_dpois(PyObject* xvalObj, double mu)
 
 PyObject* c_stat_ppois(PyObject* qvalObj, double mu)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::ppois(qval, mu));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::ppois(Vec, mu));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::ppois(qval, mu));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::ppois(Vec, mu));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -798,18 +799,18 @@ PyObject* c_stat_ppois(PyObject* qvalObj, double mu)
 
 PyObject* c_stat_qpois(PyObject* pvalObj, double mu)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qpois(pval, mu));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qpois(Vec, mu));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qpois(pval, mu));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qpois(Vec, mu));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -821,18 +822,18 @@ PyObject* c_stat_qpois(PyObject* pvalObj, double mu)
 
 PyObject* c_stat_dt(PyObject* xvalObj, int df)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dt(xval, df));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dt(Vec, df));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dt(xval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dt(Vec, df));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -840,18 +841,18 @@ PyObject* c_stat_dt(PyObject* xvalObj, int df)
 
 PyObject* c_stat_pt(PyObject* qvalObj, int df)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pt(qval, df));
-		}
-		
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pt(Vec, df));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pt(qval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pt(Vec, df));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -859,18 +860,18 @@ PyObject* c_stat_pt(PyObject* qvalObj, int df)
 
 PyObject* c_stat_qt(PyObject* pvalObj, int df)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qt(pval, df));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qt(Vec, df));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qt(pval, df));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qt(Vec, df));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -881,18 +882,18 @@ PyObject* c_stat_qt(PyObject* pvalObj, int df)
 
 PyObject* c_stat_dunif(PyObject* xvalObj, double min, double max)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dunif(xval, min, max));
-		}
-		
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dunif(Vec, min, max));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dunif(xval, min, max));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dunif(Vec, min, max));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -900,18 +901,18 @@ PyObject* c_stat_dunif(PyObject* xvalObj, double min, double max)
 
 PyObject* c_stat_punif(PyObject* qvalObj, double min, double max)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::punif(qval, min, max));
-		}
-		
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::punif(Vec, min, max));	
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::punif(qval, min, max));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::punif(Vec, min, max));	
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -919,18 +920,18 @@ PyObject* c_stat_punif(PyObject* qvalObj, double min, double max)
 
 PyObject* c_stat_qunif(PyObject* pvalObj, double min, double max)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qunif(pval, min, max));
-		}
-		
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qunif(Vec, min, max));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qunif(pval, min, max));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qunif(Vec, min, max));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -941,18 +942,18 @@ PyObject* c_stat_qunif(PyObject* pvalObj, double min, double max)
 
 PyObject* c_stat_dweibull(PyObject* xvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			double xval = ExtractRealNumber(xvalObj).value();
-			return Py_BuildValue("d", dist::dweibull(xval, shape, scale));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-		return List_FromCVector(dist::dweibull(Vec, shape, scale));
+		double xval = ExtractRealNumber(xvalObj).value();
+		return Py_BuildValue("d", dist::dweibull(xval, shape, scale));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+	return List_FromCVector(dist::dweibull(Vec, shape, scale));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -961,18 +962,18 @@ PyObject* c_stat_dweibull(PyObject* xvalObj, double shape, double scale)
 
 PyObject* c_stat_pweibull(PyObject* qvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::pweibull(qval, shape, scale));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-		return List_FromCVector(dist::pweibull(Vec, shape, scale));
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::pweibull(qval, shape, scale));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::pweibull(Vec, shape, scale));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -981,18 +982,18 @@ PyObject* c_stat_pweibull(PyObject* qvalObj, double shape, double scale)
 
 PyObject* c_stat_qweibull(PyObject* pvalObj, double shape, double scale)
 {
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			return Py_BuildValue("d", dist::qweibull(pval, shape, scale));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-		return List_FromCVector(dist::qweibull(Vec, shape, scale));
+		double pval = ExtractRealNumber(pvalObj).value();
+		return Py_BuildValue("d", dist::qweibull(pval, shape, scale));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+	return List_FromCVector(dist::qweibull(Vec, shape, scale));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1006,23 +1007,23 @@ PyObject* c_stat_dsignrank(PyObject* xvalObj, int n)
 {
 	CHECKPOSITIVE_RET(n, "n must be >0");
 
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(xvalObj))
 	{
-		if (IsExactTypeRealNumber(xvalObj))
-		{
-			int xval = static_cast<int>(std::round(ExtractRealNumber(xvalObj).value()));
-			return Py_BuildValue("d", dist::dsignrank(xval, n));
-		}
-
-		auto Vec = Iterable_As1DVector(xvalObj);
-
-		core::CVector retVec;
-		for (const auto& xv : Vec)
-			retVec.push_back(dist::dsignrank(static_cast<int>(xv), n));
-
-		return List_FromCVector(retVec);
+		int xval = static_cast<int>(std::round(ExtractRealNumber(xvalObj).value()));
+		return Py_BuildValue("d", dist::dsignrank(xval, n));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(xvalObj);
+
+	core::CVector retVec;
+	for (const auto& xv : Vec)
+		retVec.push_back(dist::dsignrank(static_cast<int>(xv), n));
+
+	return List_FromCVector(retVec);
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1032,23 +1033,23 @@ PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 {
 	CHECKPOSITIVE_RET(n, "n must be >0");
 
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
 	{
-		if (IsExactTypeRealNumber(qvalObj))
-		{
-			double qval = ExtractRealNumber(qvalObj).value();
-			return Py_BuildValue("d", dist::psignrank(qval, n));
-		}
-
-		auto Vec = Iterable_As1DVector(qvalObj);
-
-		core::CVector retVec;
-		for (const auto& qv : Vec)
-			retVec.push_back(dist::psignrank(qv, n));
-
-		return List_FromCVector(retVec);
+		double qval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::psignrank(qval, n));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(qvalObj);
+
+	core::CVector retVec;
+	for (const auto& qv : Vec)
+		retVec.push_back(dist::psignrank(qv, n));
+
+	return List_FromCVector(retVec);
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1058,28 +1059,28 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 {
 	CHECKPOSITIVE_RET(n, "n must be >0");
 
-	try
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(pvalObj))
 	{
-		if (IsExactTypeRealNumber(pvalObj))
-		{
-			double pval = ExtractRealNumber(pvalObj).value();
-			CHECKRANGE_RET(pval, 0.0, 1.0, "p value must be in the range of (0,1).");
+		double pval = ExtractRealNumber(pvalObj).value();
+		CHECKRANGE_RET(pval, 0.0, 1.0, "p value must be in the range of (0,1).");
 
-			return Py_BuildValue("d", dist::qsignrank(pval, n));
-		}
-
-		auto Vec = Iterable_As1DVector(pvalObj);
-
-		core::CVector retVec;
-		for (const auto& pv : Vec)
-		{
-			CHECKRANGE_RET(pv, 0.0, 1.0, "p value must be in the range of (0,1).");
-			retVec.push_back(dist::qsignrank(pv, n));
-		}
-
-		return List_FromCVector(retVec);
+		return Py_BuildValue("d", dist::qsignrank(pval, n));
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	auto Vec = Iterable_As1DVector(pvalObj);
+
+	core::CVector retVec;
+	for (const auto& pv : Vec)
+	{
+		CHECKRANGE_RET(pv, 0.0, 1.0, "p value must be in the range of (0,1).");
+		retVec.push_back(dist::qsignrank(pv, n));
+	}
+
+	return List_FromCVector(retVec);
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1101,20 +1102,20 @@ PyObject* c_stat_moveavg(PyObject* X, PyObject* Y, int Period)
 	auto xvec = Iterable_As1DVector(X); 
 	auto yvec = Iterable_As1DVector(Y);
 
-	try
-	{
-		auto MoveAver = fitting::moveavg(xvec, yvec, Period);
+	TRYBLOCK();
+	
+	auto MoveAver = fitting::moveavg(xvec, yvec, Period);
 
-		auto ListX = List_FromCVector(MoveAver.m_X);
-		auto ListY = List_FromCVector(MoveAver.m_Y);
+	auto ListX = List_FromCVector(MoveAver.m_X);
+	auto ListY = List_FromCVector(MoveAver.m_Y);
 
-		auto Tuple = PyTuple_New(2);
-		PyTuple_SetItem(Tuple, 0, ListX);
-		PyTuple_SetItem(Tuple, 1, ListY);
+	auto Tuple = PyTuple_New(2);
+	PyTuple_SetItem(Tuple, 0, ListX);
+	PyTuple_SetItem(Tuple, 1, ListY);
 
-		return Tuple;
-	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	return Tuple;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1129,24 +1130,24 @@ PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 	auto xvec = Iterable_As1DVector(X);
 	auto yvec = Iterable_As1DVector(Y);
 
-	try
+	TRYBLOCK();
+	
+	auto Rolling = fitting::rolling(xvec, yvec, Period);
+
+	auto DataList = PyList_New(Rolling.m_Data.size());
+	for (size_t i = 0; const auto & V : Rolling.m_Data)
 	{
-		auto Rolling = fitting::rolling(xvec, yvec, Period);
-
-		auto DataList = PyList_New(Rolling.m_Data.size());
-		for (size_t i = 0; const auto & V : Rolling.m_Data)
-		{
-			auto Item = List_FromCVector(V);
-			PyList_SetItem(DataList, i++, Item);
-		}
-
-		PyObject* Tuple = PyTuple_New(2);
-		PyTuple_SetItem(Tuple, 0, List_FromCVector(Rolling.m_X));
-		PyTuple_SetItem(Tuple, 1, DataList);
-
-		return Tuple;
+		auto Item = List_FromCVector(V);
+		PyList_SetItem(DataList, i++, Item);
 	}
-	CATCHRUNTIMEEXCEPTION_RET();
+
+	PyObject* Tuple = PyTuple_New(2);
+	PyTuple_SetItem(Tuple, 0, List_FromCVector(Rolling.m_X));
+	PyTuple_SetItem(Tuple, 1, DataList);
+
+	return Tuple;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
 }
@@ -1156,17 +1157,17 @@ PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 PyObject* c_stat_test_norm_ad(PyObject* Obj)
 {
 	auto Data = Iterable_As1DVector(Obj);
-	try
-	{
-		auto Result = tests::AndersonDarling(Data);
+	TRYBLOCK();
+	
+	auto Result = tests::AndersonDarling(Data);
 
-		auto TupleObj = PyTuple_New(2);
-		PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", Result.first));
-		PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", Result.second));
+	auto TupleObj = PyTuple_New(2);
+	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", Result.first));
+	PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", Result.second));
 
-		return TupleObj;
-	}
-	CATCHRUNTIMEEXCEPTION_RET();
+	return TupleObj;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	return nullptr;
 }
