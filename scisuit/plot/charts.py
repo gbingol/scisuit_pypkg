@@ -268,7 +268,8 @@ def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 def qqnorm(
 		data:_Iterable, 
 		label:str=None, 
-		show:bool=True, 
+		show=True, 
+		marker:str|Marker=None,
 		**kwargs):
 		"""
 		Normal Quantile-quantile chart \n
@@ -285,11 +286,17 @@ def qqnorm(
 		
 		assert isinstance(show, bool), "'show' must be bool"
 
+		_mark = marker or Marker()
+		assert isinstance(_mark, str|Marker), "marker must be str|Marker"
+		if isinstance(_mark, str):
+			_mark = Marker(style=marker, size=kwargs.get("markersize") or 5)
+
+
 		return _pydll.c_plot_qqnorm((),{
 			"data":data, 
 			"label": label, 
 			"show":show, 
-			"marker":dict(Marker(kwargs)), 
+			"marker":dict(_mark), 
 			"line":dict(Pen(kwargs))})
 
 
@@ -309,10 +316,14 @@ def qqplot(
 	assert isinstance(x, _Iterable), "'x' must be iterable"
 	assert isinstance(y, _Iterable), "'y' must be iterable"
 
+	_style = kwargs.get("marker") or "c"
+	_size = kwargs.get("markersize") or 5
+	marker = Marker(style=_style, size=_size, **kwargs)
+
 	return _pydll.c_plot_qqplot((),{
 			"x":x, 
 			"y":y,
-			"marker":dict(Marker(kwargs))})
+			"marker":dict(marker)})
 
 
 
@@ -388,7 +399,7 @@ def scatter(
 		y:_Iterable,  
 		label:str = None, 
 		smooth:bool = False, 
-		marker:Marker = Marker(),
+		marker:str|Marker = None,
 		**kwargs):
 	"""
 	Plot scatter charts
@@ -412,7 +423,13 @@ def scatter(
 
 	if label != None:
 		assert isinstance(label, str), "'label' must be string"
-
+	
+	_mark = marker
+	assert isinstance(_mark, str|Marker|None), "marker must be str|Marker"
+	if isinstance(_mark, str):
+		_mark = None if \
+						(_mark.isspace() or len(_mark)==0) else \
+						Marker(style=marker, size=kwargs.get("markersize") or 5)
 
 	return _pydll.c_plot_scatter((), 
 	{
@@ -420,7 +437,7 @@ def scatter(
 		"y":y , 
 		"name":label, 
 		"smooth":smooth, 
-		"marker": dict(marker) if marker != None else None, 
+		"marker": dict(_mark) if _mark!=None else None, 
 		"line":dict(Pen(kwargs)) if (kwargs.get("lw") != None or kwargs.get("linewidth") != None) else None
 	})
 

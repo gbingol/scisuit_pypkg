@@ -6,7 +6,7 @@ import math
 sys.path.insert(0, os.getcwd()) 
 
 
-import scisuit.stats as stat
+
 import scisuit.plot as plt
 
 
@@ -15,8 +15,8 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.bar(labels=categ, height=A)
-	plt.bar(height=B, labels=categ)
+	plt.bar(labels=categ, height=A, fc=(0,255,0), hatch="\\")
+	plt.bar(height=B, labels=categ, lw=2)
 
 
 def barh():
@@ -32,9 +32,7 @@ def histogram():
 	import scisuit.stats as stat
 
 	x=stat.rnorm(500)
-	plt.hist(x,  
-			fill=plt.Brush(color=plt.COLOR_RED), 
-			line=plt.Pen(color="0 255 0", width=2))
+	plt.hist(x, fc="255 0 0", lw=2, ec=[0,255,0])
 
 
 
@@ -44,7 +42,7 @@ def linechart():
 	B = [13, 23, 8, 13]
 
 	#Clustered line chart with two series
-	plt.line(labels=categories, y=A)
+	plt.line(labels=categories, y=A, marker=plt.Marker(fc=(0,255,0)))
 	plt.line(labels=categories, y=B)
 
 
@@ -77,22 +75,28 @@ def pie():
 
 
 def qqnorm():
+	import scisuit.stats as stat
 	x=stat.rnorm(100)
 
-	#Normal Q-Q chart
-	plt.qqnorm(x)
+	#full control on marker
+	plt.layout(1,2)
 
-	#Marker specified
-	marker = {'fill': plt.Color.WHITE, 'linecolor': plt.Color.BLUE, 'type': plt.MARKER_SQUARE, 'linewidth': 2, 'size': 5}
-	plt.qqnorm(x, marker=marker)
+	plt.subplot(0,0)
+	plt.qqnorm(x, lw=5, ec=(0, 255,0), 
+			marker=plt.Marker(style="s", fc=(255,0,0), lw=2))
+
+
+	#marker with default Pen and Brush properties
+	plt.subplot(0, 1)
+	plt.qqnorm(x, lw=3, marker="s")
 
 
 
 def qqplot():
-	treatment = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
-	control = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
+	t = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
+	c = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-	plt.qqplot(x=control, y=treatment, marker = plt.Marker(style = plt.MARKER_CIRCLE))
+	plt.qqplot(x=c, y=t, marker="c", markersize=10, fc="#FF0000")
 
 
 
@@ -107,6 +111,8 @@ def quiver():
 
 	#without scaling
 	plt.quiver(X,Y, U, V)
+
+	plt.figure()
 
 	#with scaling
 	plt.quiver(X,Y, U, V, scale = True)
@@ -134,105 +140,26 @@ def boxplot():
 
 
 def scatter():
-	x = [1, 2, 3, 4]
-	y = [1, 3, 7, 14]
+	x = np.arange(0, 6, 0.5)
+	y = x**2
 
-	plt.scatter(
-	x=x, 
-	y=y,
-	trendline=plt.Trendline
-		(
-		style ="poly",
-		degree=3,
-		intercept=-10,
-		line=plt.Pen(color="255 0 0", width=2),
-		show_equation=True,
-		show_stats=True
-		)
-	)
+	plt.layout(2,1)
 
+	#show line and marker with default pen and brush
+	plt.subplot(0,0)
+	plt.scatter(x=x, y=y, lw=3, ls=":", marker="s", markersize=10)
 
-def scisuit_hist_scatter():
-
-	import math
-	from scisuit.stats import rbinom
-
-	n=60
-	p=0.4
-
-	#Generate random numbers from a binomial distribution
-	x = np.array(rbinom(n=1000, size=n, prob=p), dtype=np.float32)
-
-	#z-ratio
-	z = (x - n*p)/math.sqrt(n*p*(1-p))
-
-	#DeMoivre's equation
-	f = 1.0/math.sqrt(2*math.pi)*np.exp(-z**2/2.0)
-
-	#Density scaled histogram
-	plt.hist(z, density=True)
-
-	#Overlay scatter plot
-	plt.scatter(x=z, y=f)
-
-
-def scatter_quiver():
-	t=np.arange(0.0, 2.0, 0.2)
-	y=np.arange(-5.0, 0.0, 0.2)
-
-	t, y = np.meshgrid(t,y) 
-
-	f1= 4-t+2*y
-
-	x1 = [1, 2, 3]
-	y1 = [-1, -4, -6]
-
-	plt.dirfield(t,y,f1) 
-	plt.scatter(x=x1, y=y1)
+	#customize marker properties
+	plt.subplot(1,0)
+	plt.scatter(x=x, y=y, marker=plt.Marker(fc="#00FF00"))
 
 
 
-def scatter_errorbar():
-
-	import math
-	import numpy as np
-	import scisuit.plot as plt
-
-
-	measurement = [0, 20, 100] #temperatures
-
-	#Energy absorbed at different temperatures
-	data = np.array([
-		[52, 58, 82, 35, 84], #0C
-		[48, 66, 74, 86, 78], #20
-		[73.5, 82, 72, 80, 79] #100C
-	])
-
-	mean  = np.mean(data, axis=1)
-	std = np.std(data, axis=1, ddof=1)
-	se = std/ math.sqrt(data.shape[1])
-
-	plt.scatter(x = measurement, y = mean)
-	for i in range(len(measurement)):
-		x1 = measurement[i]
-		x2 = x1
-		y1, y2 = mean[i] + se[i], mean[i] - se[i]
-		plt.plot(
-			x=[x1, x2], 
-			y=[y1, y2], 
-			color = plt.C_BLACK, 
-			style = plt.PEN_LONGDASH,
-			width=2)
-
-
-
-from math import sqrt, pi
-from scisuit.stats import rbinom
-import scisuit.plot as plt
-import scisuit.plot.gdi as gdi
 
 
 def layout_test():
+	from math import sqrt, pi
+	from scisuit.stats import rbinom
 	n=60 ; p=0.4
 
 	#Generate random numbers from a binomial dist
@@ -277,15 +204,11 @@ def layout_test():
 
 
 
-
-
-
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
 
 layout_test()
+
 plt.show()
-
-
