@@ -5,7 +5,7 @@ class Pen:
 
 		params:dict = args[0]
 
-		self.color = params.get("edgecolor")
+		self.color = params.get("edgecolor") or params.get("ec")
 		if self.color != None:
 			assert isinstance(self.color, str|tuple|list), "'edgecolor' must be str|tuple|list"
 
@@ -61,7 +61,7 @@ class Brush:
 		assert isinstance(args[0], dict), "first argument must be dict"
 		params:dict = args[0]
 
-		self.color = params.get("facecolor")
+		self.color = params.get("facecolor") or params.get("fc")
 		if self.color != None:
 			assert isinstance(self.color, str|tuple|list), "'facecolor' must be str|tuple|list"
 
