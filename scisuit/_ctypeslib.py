@@ -4,25 +4,15 @@ import sys
 
 
 
-def _parent_path(path:str)->_Path:
-	pt = _Path(path)
-
-	if(pt.is_absolute() == False):
-		pt = pt.absolute()
-
-	return pt.parents[0]
-
-
-
-
 """
 Tested with: 3.10.6, 3.11.6, 3.12.0
 """
 _DLLname = "scisuit_pybind" + str(sys.version_info.major) + str(sys.version_info.minor)
 
 
-_path = _parent_path(__file__) / _DLLname
-pydll = _ct.PyDLL(str(_path))
+#__file__ is guaranteed to be an absolute path in Python 3.9+
+__pt = _Path(__file__)
+pydll = _ct.PyDLL(str(__pt.parents[0] / _DLLname))
 
 
 
