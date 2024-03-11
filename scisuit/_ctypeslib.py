@@ -1,7 +1,19 @@
 import ctypes as _ct
+from pathlib import Path as _Path
 import sys
 
-from .util import parent_path as _parent_path
+
+
+def _parent_path(path:str)->_Path:
+	pt = _Path(path)
+
+	if(pt.is_absolute() == False):
+		pt = pt.absolute()
+
+	return pt.parents[0]
+
+
+
 
 """
 Tested with: 3.10.6, 3.11.6, 3.12.0
