@@ -3,10 +3,21 @@ import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
 from numpy.polynomial import polynomial as _Polynomial
+import numpy as _np
 from typing import Iterable
 
 
+
 __all__ = ['linearinterp', 'lagrange', 'spline', 'expfit', 'logfit', 'logistfit', 'polyfit', 'powfit', 'SplineResult']
+
+def _MinMax(X:_np.ndarray)->tuple[float]:
+	_min = X[0]
+	_max = X[0]
+	for i in range(1, len(X)):
+		_min = X[i] if X[i]<_min else _min
+		_max = X[i] if X[i]>_max else _max
+	
+	return _min, _max
 
 
 
@@ -137,3 +148,38 @@ def powfit(x:Iterable, y:Iterable)->list[float]:
 	Returns [a, n]
 	"""
 	return _pydll.c_fit_powfit(x,y)
+
+
+
+
+def approx(x:_np.ndarray, y:_np.ndarray = None, n=50)->_np.ndarray:
+	assert n>1, "n>1 expected"
+
+	v = _np.zeros(n)
+	if y == None:
+		Min, Max = _MinMax(x)
+		strideLen = (Max-Min)/(n-1)
+		v[0], v[n-1] = Min, Max
+		for i in range(1, len(v)-1):
+			v[i] = Min + i * strideLen
+		
+		return v
+	
+	assert len(x)==len(y), "x and y must have same lengths"
+	assert n<len(x), "n must be smaller than x's length"
+
+	SP = approx(x, None, n)
+
+	for i in range(n):
+		x1, x2 = x[i], x[i + 1]
+		y1, y2 = y[i], y[i + 1]
+
+		for j in range(i, n):
+			if (x[j] < SP[i] <= x[j + 1]):
+				x1, x2 = x[j], x[j + 1]
+				y1, y2 = y[j], y[j + 1]
+				break
+		
+		v[i] = linearinterp(x1, y1, x2, y2, SP[i])
+	
+	return v
