@@ -60,11 +60,6 @@ EXTERN PyObject * c_plot_qqplot(
 	PyObject * kwargs);
 
 
-EXTERN PyObject * c_plot_quiver(
-	PyObject * args, 
-	PyObject * kwargs);
-
-
 EXTERN PyObject * c_plot_scatter(
 	PyObject * args, 
 	PyObject* kwargs);
