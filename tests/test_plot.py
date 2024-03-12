@@ -209,6 +209,16 @@ import scisuit.plot.gdi as gdi
 import numpy as np
 
 
-layout_test()
+x=np.arange(-3.0, 3.0, 0.5)
+y=np.arange(-1.0, 5.0, 0.5)
+X, Y = np.meshgrid(x,y)
+
+#V= (u, v) = (0.5+0.8x)i + (1.5-0.8y)j
+U= 0.5 + 0.8*X
+V=1.5 - 0.8*Y
+
+
+plt.quiver(X,Y,U, V, scale=0.3, ec=(0,0,255), length=0.2)
+
 
 plt.show()
