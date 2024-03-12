@@ -8,7 +8,17 @@ from typing import Iterable
 
 
 
-__all__ = ['linearinterp', 'lagrange', 'spline', 'expfit', 'logfit', 'logistfit', 'polyfit', 'powfit', 'SplineResult']
+__all__ = [
+	'approx',
+	'linearinterp', 
+	'lagrange', 
+	'spline', 
+	'expfit', 
+	'logfit', 
+	'logistfit', 
+	'polyfit', 
+	'powfit', 
+	'SplineResult']
 
 def _MinMax(X:_np.ndarray)->tuple[float]:
 	_min = X[0]
@@ -152,7 +162,19 @@ def powfit(x:Iterable, y:Iterable)->list[float]:
 
 
 
-def approx(x:_np.ndarray, y:_np.ndarray = None, n=50)->_np.ndarray:
+def approx(
+		x:_np.ndarray, 
+		y:_np.ndarray, 
+		n=50)->tuple[_np.ndarray, _np.ndarray]:
+	"""
+	Returns points which linearly interpolate (
+	interpolation takes place at n equally spaced points 
+	spanning the interval [min(x), max(x)]).
+
+		
+	`x, y:` Numeric vectors giving the coordinates of the points to be interpolated. 
+	`n:` Number of equally spaced data points [min(x), min(y)]
+	"""
 	assert n>1, "n>1 expected"
 
 	v = _np.zeros(n)
@@ -166,20 +188,18 @@ def approx(x:_np.ndarray, y:_np.ndarray = None, n=50)->_np.ndarray:
 		return v
 	
 	assert len(x)==len(y), "x and y must have same lengths"
-	assert n<len(x), "n must be smaller than x's length"
 
-	SP = approx(x, None, n)
+	"""
+	Generate n data points in the interval min(x) and max(x)
+	Note that data points are sorted by nature.
+	"""
+	XX = approx(x, None, n)
 
-	for i in range(n):
-		x1, x2 = x[i], x[i + 1]
-		y1, y2 = y[i], y[i + 1]
+	for i in range(len(x)-1):
+		for j in range(n):
+			if (x[i] <= XX[j] <= x[i + 1]):
+				x1, x2 = x[i], x[i + 1]
+				y1, y2 = y[i], y[i + 1]
+				v[j] = linearinterp(x1, y1, x2, y2, XX[j])
 
-		for j in range(i, n):
-			if (x[j] < SP[i] <= x[j + 1]):
-				x1, x2 = x[j], x[j + 1]
-				y1, y2 = y[j], y[j + 1]
-				break
-		
-		v[i] = linearinterp(x1, y1, x2, y2, SP[i])
-	
-	return v
+	return XX, v

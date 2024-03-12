@@ -16,5 +16,5 @@ t = fit.spline(x,y)
 time= [0, 2, 5, 8, 10]
 T=[20, 25, 30, 28, 22]
 
-print(fit.approx(time, T, 4))
+print(fit.approx(time, T, 10))
 
