@@ -218,7 +218,10 @@ U= 0.5 + 0.8*X
 V=1.5 - 0.8*Y
 
 
-plt.quiver(X,Y,U, V, scale=0.3, ec=(0,0,255), length=0.2)
+#plt.quiver(X,Y,U, V, scale=0.3, ec=(0,0,255), length=0.2)
+
+c = plt.scatter(x=[1,2,3], y=[1,4,9])
+print(c)
 
 
 plt.show()

@@ -148,6 +148,7 @@ PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
 
 	s_SubPlotInfo = SubPlotInfo();
 	
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -251,6 +252,7 @@ PyObject* c_plot_barh(PyObject* args, PyObject* kwargs)
 
 	s_SubPlotInfo = SubPlotInfo();
 	
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -329,6 +331,8 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series));
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -432,6 +436,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series), false);
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -561,6 +567,7 @@ PyObject* c_plot_line(PyObject* args, PyObject* kwargs)
 
 	s_SubPlotInfo = SubPlotInfo();
 	
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 	
@@ -711,6 +718,8 @@ PyObject* c_plot_pie(PyObject* args, PyObject* kwargs)
 
 	s_CurPlotWnd = frmPlot;
 
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
+
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
 	Py_RETURN_NONE;
@@ -758,6 +767,8 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 	frmPlot->AddChart(std::move(PsyChart));
 
 	s_CurPlotWnd = frmPlot;
+
+	return PyCapsule_New((void*)PsyChart.get(), nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -841,6 +852,8 @@ PyObject* c_plot_qqnorm(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series));
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -910,6 +923,8 @@ PyObject* c_plot_qqplot(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series));
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1019,6 +1034,8 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series));
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1119,6 +1136,8 @@ PyObject* c_plot_bubble(PyObject* args, PyObject* kwargs)
 	Chart->AddSeries(std::move(series));
 
 	s_SubPlotInfo = SubPlotInfo();
+
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1185,6 +1204,7 @@ PyObject* c_plot_canvas(PyObject* args, PyObject* kwargs)
 
 	s_SubPlotInfo = SubPlotInfo();
 	
+	return PyCapsule_New((void*)Chart, nullptr, nullptr);
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
