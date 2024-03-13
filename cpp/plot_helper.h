@@ -158,7 +158,28 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-			pen.SetColour(MakeColor(ObjValue));
+		{
+			//We dont want to change the lightness but only change RGB components
+			auto UserColor = MakeColor(ObjValue);
+			auto penColor =  pen.GetColour() != wxNullColour ? pen.GetColour() : wxColour(0, 0, 255);
+			penColor.SetRGB(UserColor.GetRGB());
+
+			pen.SetColour(penColor);
+		}
+
+		else if (ObjValue != Py_None && key == "alpha")
+		{
+			//User supplies value in accordance with matplotlib 
+			auto Alpha = PyFloat_AsDouble(ObjValue);
+
+			/*
+				wxWidgets: 0 completely black, 200 completely , 100 returns the same colour
+				Matplotlib: <1 more transparent, >1 more dark
+			*/
+			int Lightness = 200 - Alpha * 100;
+			auto Color = pen.GetColour() != wxNullColour ? pen.GetColour() : wxColour(0, 0, 255);
+			pen.SetColour(Color.ChangeLightness(Lightness));
+		}
 
 		else if (ObjValue != Py_None && key == "width")
 			pen.SetWidth(PyLong_AsLong(ObjValue));
@@ -178,7 +199,7 @@ static void PreparePen(PyObject* Dict, wxPen& pen)
 				}
 			}
 		}
-	}	
+	}//while
 }
 
 
@@ -197,7 +218,28 @@ static void PrepareBrush(PyObject* Dict, wxBrush& brush)
 		std::string key = PyUnicode_AsUTF8(ObjKey);
 
 		if (ObjValue != Py_None && (key == "color" || key == "colour"))
-			brush.SetColour(MakeColor(ObjValue));
+		{
+			//We dont want to change the lightness but only change RGB components
+			auto UserColor = MakeColor(ObjValue);
+			auto brushColor = brush.GetColour() != wxNullColour ? brush.GetColour() : wxColour(255, 255, 255);
+			brushColor.SetRGB(UserColor.GetRGB());
+
+			brush.SetColour(brushColor);
+		}
+
+		else if (ObjValue != Py_None && key == "alpha")
+		{
+			//User supplies value in accordance with matplotlib 
+			auto Alpha = PyFloat_AsDouble(ObjValue);
+
+			/*
+				wxWidgets: 0 completely black, 200 completely , 100 returns the same colour
+				Matplotlib: <1 more transparent, >1 more dark
+			*/
+			int Lightness = 200 - Alpha * 100;
+			auto Color = brush.GetColour() != wxNullColour ? brush.GetColour() : wxColour(255, 255, 255);
+			brush.SetColour(Color.ChangeLightness(Lightness));
+		}
 
 		else if (ObjValue != Py_None && key == "style")
 			brush.SetStyle((wxBrushStyle)PyLong_AsLong(ObjValue));

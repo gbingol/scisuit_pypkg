@@ -8,6 +8,9 @@ class Pen:
 		self.color = params.get("edgecolor") or params.get("ec")
 		if self.color != None:
 			assert isinstance(self.color, str|tuple|list), "'edgecolor' must be str|tuple|list"
+		
+		self.alpha = params.get("alpha") or 1
+		assert isinstance(self.alpha, float|int)
 
 		self.style = params.get("linestyle") or params.get("ls")
 		if self.style == None:
@@ -41,7 +44,8 @@ class Pen:
 		return iter([
 			("style",self.style),
 			("width", self.width),
-			("color", self.color)])	
+			("color", self.color),
+			("alpha", self.alpha)])	
 
 
 
@@ -65,6 +69,9 @@ class Brush:
 		if self.color != None:
 			assert isinstance(self.color, str|tuple|list), "'facecolor' must be str|tuple|list"
 
+		self.alpha = params.get("alpha") or 1
+		assert isinstance(self.alpha, float|int)
+
 		self.style = params.get("hatch")
 		if self.style != None:
 			assert isinstance(self.style, str), "'hatch' must be str"
@@ -84,7 +91,8 @@ class Brush:
 	def __iter__(self):
 		return iter([
 			("style",self.style),
-			("color", self.color)])
+			("color", self.color),
+			("alpha", self.alpha)])
 
 
 class Font:
