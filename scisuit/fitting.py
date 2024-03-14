@@ -178,7 +178,7 @@ def approx(
 	assert n>1, "n>1 expected"
 
 	v = _np.zeros(n)
-	if y == None:
+	if type(y) == type(None):
 		Min, Max = _MinMax(x)
 		strideLen = (Max-Min)/(n-1)
 		v[0], v[n-1] = Min, Max

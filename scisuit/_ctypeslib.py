@@ -286,9 +286,6 @@ pydll.c_plot_pie.restype=_ct.py_object
 pydll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_psychrometry.restype=_ct.py_object
 
-pydll.c_plot_qqplot.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_qqplot.restype=_ct.py_object
-
 pydll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_scatter.restype=_ct.py_object
 

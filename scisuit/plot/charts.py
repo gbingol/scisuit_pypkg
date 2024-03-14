@@ -264,34 +264,6 @@ def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 
 #-----------------------------------------------------------------------------------
 
-
-def qqplot(
-		x:_Iterable,
-		y:_Iterable,
-		**kwargs):
-	"""
-	Plots quantile-quantile chart using two data-sets (x,y)
-
-	## Input
-	x, y: Data
-	"""
-	assert isinstance(x, _Iterable), "'x' must be iterable"
-	assert isinstance(y, _Iterable), "'y' must be iterable"
-
-	_style = kwargs.get("marker") or "c"
-	_size = kwargs.get("markersize") or 5
-	marker = Marker(style=_style, size=_size, **kwargs)
-
-	return _pydll.c_plot_qqplot((),{
-			"x":x, 
-			"y":y,
-			"marker":dict(marker)})
-
-
-
-
-#-----------------------------------------------------------------------------------
-
 def scatter(
 		x:_Iterable,
 		y:_Iterable,  

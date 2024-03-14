@@ -4,6 +4,7 @@ from ..stats import qnorm
 from .charts import scatter
 from .chartelems import Marker
 from ..util import minmax
+from ..fitting import approx
 
 def _ComputeQuantiles(X:_Iterable)->_Iterable:
 	lenX = len(X)
@@ -62,3 +63,44 @@ def qqnorm(
 		scatter(x=(MinQ, MaxQ), y=(MinQ, MaxQ), marker=None, lw=lwidth, **kwargs)
 
 	scatter(x=Quantiles, y=_np.sort(data), label=label, marker=marker)
+
+
+
+
+
+def qqplot(x:_Iterable, y:_Iterable, **kwargs):
+	"""
+	Plots quantile-quantile chart using two data-sets (x,y)
+
+	## Input
+	x, y: Data
+	"""
+	assert isinstance(x, _Iterable), "'x' must be iterable"
+	assert isinstance(y, _Iterable), "'y' must be iterable"
+
+	xx = _np.array(x)
+	xx.sort()
+
+	yy = _np.array(y)
+	yy.sort()
+
+	lenX, lenY = len(xx), len(yy)
+
+	if lenX != lenY:
+		InterpData = yy if lenY>lenX else xx
+		xdata = _np.arange(1, len(InterpData)+1)
+
+		InterpPoints = approx(xdata, InterpData, min(lenX, lenY))
+
+		if lenY>lenX:
+			yy=InterpPoints[1]
+		else:
+			xx=InterpPoints[1]
+	
+	_style = kwargs.get("marker") or "c"
+	_size = kwargs.get("markersize") or 5
+	marker = Marker(style=_style, size=_size, **kwargs)
+
+	scatter(x=xx, y=yy, marker=marker)
+
+
