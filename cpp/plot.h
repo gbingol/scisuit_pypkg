@@ -50,11 +50,6 @@ EXTERN PyObject * c_plot_psychrometry(
 	PyObject * kwargs);
 
 
-EXTERN PyObject * c_plot_qqnorm(
-	PyObject * args,
-	PyObject * kwargs);
-
-
 EXTERN PyObject * c_plot_qqplot(
 	PyObject * args, 
 	PyObject * kwargs);

@@ -203,9 +203,6 @@ import numpy as np
 from scisuit.plot.qqcharts import qqnorm
 
 
-import statsmodels.api as sm
-import matplotlib.pyplot as plt2
-
 import scisuit.stats as stat
 x=stat.rnorm(100)
 
@@ -217,5 +214,3 @@ qqnorm(x)
 plt.show()
 
 
-fig = sm.qqplot(np.array(x), line='45')
-plt2.show()

@@ -265,44 +265,6 @@ def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 #-----------------------------------------------------------------------------------
 
 
-def qqnorm(
-		data:_Iterable, 
-		label:str=None, 
-		show=True, 
-		marker:str|Marker=None,
-		**kwargs):
-		"""
-		Normal Quantile-quantile chart \n
-		x-axis="Theoretical Quantiles" \n  
-		y-axis="Sample Quantiles" \n
-
-		## Input:
-		data: Data \n
-		show: Whether to show theoretical line or not 
-		"""
-		assert isinstance(data, _Iterable), "'data' must be iterable"
-		if label!=None:
-			assert isinstance(label, str), "'label' must be string"
-		
-		assert isinstance(show, bool), "'show' must be bool"
-
-		_mark = marker or Marker()
-		assert isinstance(_mark, str|Marker), "marker must be str|Marker"
-		if isinstance(_mark, str):
-			_mark = Marker(style=marker, size=kwargs.get("markersize") or 5)
-
-
-		return _pydll.c_plot_qqnorm((),{
-			"data":data, 
-			"label": label, 
-			"show":show, 
-			"marker":dict(_mark), 
-			"line":dict(Pen(kwargs))})
-
-
-
-
-
 def qqplot(
 		x:_Iterable,
 		y:_Iterable,
