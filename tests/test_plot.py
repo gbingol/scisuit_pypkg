@@ -200,17 +200,13 @@ def layout_test():
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
-from scisuit.plot.qqcharts import qqplot2
 
 
 t = [24, 33,43,43,43,44,46,49,49,52,53,54,56,57,57,58,59,61,62,67,71]
 c = [10,17,19,20,26,28,33,37,37,41,42,42,42,43,46,48,53,54,55,55,60,62,85]
 
-plt.qqplot(x=c, y=t, marker="c", markersize=10, fc="#FF0000")
+plt.qqplot(x=c, y=t, markersize=7, fc="#FF0000")
 
-plt.figure()
-
-qqplot(x=c, y=t, marker="c", markersize=10, fc="#FF0000")
 
 plt.show()
 
