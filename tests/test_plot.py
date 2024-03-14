@@ -109,14 +109,7 @@ def quiver():
 	U= 0.5 + 0.8*X
 	V=1.5 - 0.8*Y
 
-	#without scaling
-	plt.quiver(X,Y, U, V)
-
-	plt.figure()
-
-	#with scaling
-	plt.quiver(X,Y, U, V, scale = True)
-
+	plt.quiver(X,Y,U, V, scale=0.3, lw=3, ec=(0,255, 0), length=0.2, alpha = 0.25)
 
 
 def dirfield():
@@ -207,19 +200,22 @@ def layout_test():
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
+from scisuit.plot.qqcharts import qqnorm
 
 
-x=np.arange(-3.0, 3.0, 0.5)
-y=np.arange(-1.0, 5.0, 0.5)
-X, Y = np.meshgrid(x,y)
+import statsmodels.api as sm
+import matplotlib.pyplot as plt2
 
-#V= (u, v) = (0.5+0.8x)i + (1.5-0.8y)j
-U= 0.5 + 0.8*X
-V=1.5 - 0.8*Y
+import scisuit.stats as stat
+x=stat.rnorm(100)
 
 
-plt.quiver(X,Y,U, V, scale=0.3, lw=3, ec=(0,255, 0), length=0.2, alpha = 0.25)
+qqnorm(x)
 
- 
+
 
 plt.show()
+
+
+fig = sm.qqplot(np.array(x), line='45')
+plt2.show()

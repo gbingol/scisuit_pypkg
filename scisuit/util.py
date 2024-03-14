@@ -1,4 +1,17 @@
 import math
+from typing import Iterable as _Iterable
+
+
+
+def minmax(X:_Iterable)->tuple[float]:
+	_min = X[0]
+	_max = X[0]
+	for i in range(1, len(X)):
+		_min = X[i] if X[i]<_min else _min
+		_max = X[i] if X[i]>_max else _max
+	
+	return _min, _max
+
 
 
 
