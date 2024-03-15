@@ -27,11 +27,6 @@ EXTERN PyObject* c_plot_histogram(
 	PyObject* kwargs);
 
 
-EXTERN PyObject* c_plot_line(
-	PyObject* args, 
-	PyObject* kwargs);
-
-
 EXTERN PyObject * c_plot_psychrometry(
 	PyObject * args, 
 	PyObject * kwargs);

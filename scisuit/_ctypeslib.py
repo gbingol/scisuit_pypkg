@@ -274,9 +274,6 @@ pydll.c_plot_boxplot.restype=_ct.py_object
 pydll.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_histogram.restype=_ct.py_object
 
-pydll.c_plot_line.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_line.restype=_ct.py_object
-
 pydll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_psychrometry.restype=_ct.py_object
 

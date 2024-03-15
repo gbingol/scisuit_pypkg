@@ -1,6 +1,5 @@
 from .charts import layout, subplot, figure, legend, show, title, xlabel, ylabel
-from .charts import canvas, bar, boxplot, hist, line, \
-			psychrometry, scatter 
+from .charts import canvas, bar, boxplot, hist, psychrometry, scatter 
 
 from .quiverchart import quiver, dirfield
 from .qqcharts import qqnorm, qqplot

@@ -120,46 +120,6 @@ def hist(
 
 #-----------------------------------------------------------------------------------
 
-def line(
-	y:_Iterable, 
-	labels:_Iterable, 
-	stacked = False,
-	label:str = None,  
-	marker:Marker=None, 
-	**kwargs):
-	"""
-	Plots line chart
-
-	## Input:
-	y : An iterable containing numeric data \n
-	labels : Category labels \n
-	stacked: if True stacked chart, otherwise clustered \n
-	label: Label of the individual series 
-	"""
-	assert isinstance(y, _Iterable), "'y' must be iterable"
-	assert len(y)>=2, "At least 2 data points expected"
-
-	assert isinstance(stacked, bool), "'stacked' must be bool" 
-	assert isinstance(labels, _Iterable), "'labels' must be iterable"
-	assert len(labels)>=2, "At least 2 labels expected"
-
-	assert len(y) == len(labels), "len(y) == len(labels) expected"
-	
-	return _pydll.c_plot_line((), {
-			"y":y, 
-			"labels":labels, 
-			"label":label, 
-			"style":"c" if not stacked else "s",  
-			"marker":dict(marker) if marker != None else None, 
-			"line":dict(Pen(kwargs))})
-
-
-
-
-
-
-#-----------------------------------------------------------------------------------
-
 
 def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
 	"""

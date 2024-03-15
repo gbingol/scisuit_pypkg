@@ -19,13 +19,6 @@ def bar():
 	plt.bar(height=B, labels=categ, lw=2)
 
 
-def barh():
-	categ=["Q1", "Q2", "Q3", "Q4"]
-	A = [44, 55, 41, 67]
-	B = [13, 23, 8, 13]
-
-	plt.barh(labels=categ, width=A)
-	plt.barh(width=B, labels=categ)
 
 
 def histogram():
@@ -33,17 +26,6 @@ def histogram():
 
 	x=stat.rnorm(500)
 	plt.hist(x, fc="255 0 0", lw=2, ec=[0,255,0])
-
-
-
-def linechart():
-	categories=["Q1", "Q2", "Q3", "Q4"]
-	A = [44, 55, 41, 67]
-	B = [13, 23, 8, 13]
-
-	#Clustered line chart with two series
-	plt.line(labels=categories, y=A, marker=plt.Marker(fc=(0,255,0)))
-	plt.line(labels=categories, y=B)
 
 
 
@@ -181,15 +163,7 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-categories=["Q1", "Q2", "Q3", "Q4"]
-A = [44, 55, 41, 67]
-B = [13, 23, 8, 13]
 
-#Clustered line chart with two series
-plt.line(labels=categories, y=A, marker=plt.Marker(fc=(0,255,0)))
-plt.line(labels=categories, y=B)
-
-plt.figure()
 
 layout_test()
 
