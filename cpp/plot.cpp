@@ -767,8 +767,6 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 	frmPlot->AddChart(std::move(PsyChart));
 
 	s_CurPlotWnd = frmPlot;
-
-	return PyCapsule_New((void*)PsyChart.get(), nullptr, nullptr);
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
