@@ -190,60 +190,6 @@ def line(
 
 
 
-#-----------------------------------------------------------------------------------
-
-
-def pie(
-	data:_Iterable, 
-	labels:_Iterable = None, 
-	colors:_Iterable = None, 
-	explode:_Iterable|int = None, 
-	startangle:int = None):
-	"""
-	Plots Pie chart
-
-	## Input:
-	data : Data of individual slices \n
-	labels: Label of individual slices \n
-	colors: Color of individual slices \n
-	explode: Explosion level \n
-	startangle:	Start angle of first slice 
-	"""
-	assert isinstance(data, _Iterable), "'data' must be iterable"
-	Nums = [i for i in data if isinstance(i, int) or isinstance(i, float)]
-	assert len(Nums)>=2, "'data' (iterable) must contain at least 2 numeric values"
-
-	if labels != None:
-		assert isinstance(labels, _Iterable), "'labels' must be iterable"
-
-	if colors != None:
-		assert isinstance(colors, _Iterable), "'colors' must be iterable"
-
-	if startangle != None:
-		assert isinstance(startangle, int), "'startangle' must be int"
-		assert 0 <startangle< 360, "startangle must be in (0, 360)"
-
-	_Explode = None
-	if explode != None:
-		assert isinstance(explode, _Iterable) or isinstance(explode, int), "'explode' must be iterable/int"
-		if isinstance(explode, int):
-			assert 0 < explode <=10, "explode must be in (0, 10]"
-			_Explode = explode
-		else:
-			_Explode = [i for i in explode if 0 < i <=10 and isinstance(i, int)]
-			assert len(_Explode)>0, "explode must contain"
-
-
-	return _pydll.c_plot_pie((), {
-				"data":data, 
-	 			"labels":labels, 
-				"colors":colors, 
-     			"explode":_Explode, 
-				"startangle":startangle})
-
-
-
-
 
 #-----------------------------------------------------------------------------------
 
