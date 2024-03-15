@@ -200,19 +200,12 @@ def layout_test():
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
-from scisuit.plot.bubblechart import bubble
 
 L = [80.66, 79.84, 78.6, 72.73, 80.05, 72.49, 68.09, 81.55, 68.6, 78.09]
 F = [1.67, 1.36, 1.84, 2.78, 2, 1.7, 4.77, 2.96, 1.54, 2.05]
 P = [337399, 819023, 55230, 797162, 618015, 731371, 310907, 74856, 1418500, 3070070]
 
 plt.bubble(x=L, y=F, s=P)
-
-
-plt.figure()
-
-bubble(x=L, y=F, s=P)
-
 
 plt.show()
 
