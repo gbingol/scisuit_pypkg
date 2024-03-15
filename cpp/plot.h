@@ -10,10 +10,6 @@
 
 
 
-EXTERN PyObject* c_plot_bubble(
-	PyObject* args, 
-	PyObject* kwargs);
-	
 
 EXTERN PyObject * c_plot_bar(
 	PyObject * args, 
