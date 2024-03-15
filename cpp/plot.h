@@ -16,10 +16,6 @@ EXTERN PyObject * c_plot_bar(
 	PyObject * kwargs);
 
 
-EXTERN PyObject * c_plot_barh(
-	PyObject * args, 
-	PyObject * kwargs);
-
 
 EXTERN PyObject* c_plot_boxplot(
 	PyObject* args, 

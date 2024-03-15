@@ -47,32 +47,6 @@ def linechart():
 
 
 
-def pie():
-	data=[10, 6, 8]
-
-	#labels have been automatically assigned as 1, 2 and 3.
-	plt.pie(data)
-
-"""
-	#Labels explicitly defined
-	plt.pie(data, labels=["A", "B", "C"])
-
-	#Number of labels less than slices
-	plt.pie(data, labels=["A"])
-
-	#Explosion of whole pie
-	plt.pie(data, explode = 1)
-
-	#Explosion of only first slice
-	plt.pie(data, explode = [1] )
-
-	#arbitrary colors for each slice.
-	plt.pie(data, colors = [plt.COLOR_GREEN, plt.COLOR_RED, plt.COLOR_CHOCOLATE] )
-
-	#set the angle of first slice to 45°.
-	plt.pie(data, startangle=45)
-"""
-
 
 def qqnorm():
 	import scisuit.stats as stat
@@ -147,6 +121,12 @@ def scatter():
 	plt.scatter(x=x, y=y, marker=plt.Marker(fc="#00FF00"))
 
 
+def bubble():
+	L = [80.66, 79.84, 78.6, 72.73, 80.05, 72.49, 68.09, 81.55, 68.6, 78.09]
+	F = [1.67, 1.36, 1.84, 2.78, 2, 1.7, 4.77, 2.96, 1.54, 2.05]
+	P = [337399, 819023, 55230, 797162, 618015, 731371, 310907, 74856, 1418500, 3070070]
+
+	plt.bubble(x=L, y=F, s=P)
 
 
 
@@ -201,11 +181,17 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-L = [80.66, 79.84, 78.6, 72.73, 80.05, 72.49, 68.09, 81.55, 68.6, 78.09]
-F = [1.67, 1.36, 1.84, 2.78, 2, 1.7, 4.77, 2.96, 1.54, 2.05]
-P = [337399, 819023, 55230, 797162, 618015, 731371, 310907, 74856, 1418500, 3070070]
+categories=["Q1", "Q2", "Q3", "Q4"]
+A = [44, 55, 41, 67]
+B = [13, 23, 8, 13]
 
-plt.bubble(x=L, y=F, s=P)
+#Clustered line chart with two series
+plt.line(labels=categories, y=A, marker=plt.Marker(fc=(0,255,0)))
+plt.line(labels=categories, y=B)
+
+plt.figure()
+
+layout_test()
 
 plt.show()
 

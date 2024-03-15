@@ -44,39 +44,6 @@ def bar(
 			"line":dict(Pen(kwargs))})
 
 
-#-----------------------------------------------------------------------------------
-
-
-def barh(
-	width:_Iterable, 
-	labels:_Iterable, 
-	stacked = False,
-	**kwargs):
-	"""
-	Plots horizontal bar chart
-
-	## Input
-	width : Numeric data \n
-	labels : Category labels \n
-	stacked: if True stacked chart, otherwise clustered
-	"""
-	
-	assert isinstance(width, _Iterable), "'width' must be iterable"
-	assert isinstance(labels, _Iterable), "'labels' must be iterable"
-
-	assert isinstance(stacked, bool), "'stacked' must be bool" 
-	assert len(labels)>=2, "at least 2 labels expected"
-	assert len(labels) == len(width), "len(labels) == len(width) expected"
-	
-	return _pydll.c_plot_barh((),{
-		"width":width, 
-		"labels":labels, 
-		"style":"c" if not stacked else "s",  
-		"fill":dict(Brush(kwargs)), 
-		"line":dict(Pen(kwargs))})
-
-
-
 
 
 #-----------------------------------------------------------------------------------
