@@ -317,7 +317,7 @@ def scatter(
 def bubble(
 		x:_Iterable,
 		y:_Iterable,  
-		size:_Iterable,
+		s:_Iterable,
 		color:str|tuple|list = None,
 		mode:str = "A",
 		scale:int=100,
@@ -335,19 +335,19 @@ def bubble(
 	assert \
 		isinstance(x, _Iterable) and \
 		isinstance(y, _Iterable) and \
-		isinstance(size, _Iterable), "x, y and size must be iterable objects."
+		isinstance(s, _Iterable), "x, y and s must be iterable objects."
 
-	assert len(x) == len(y) and len(y) == len(size), "x, y and size must have same lengths"
+	assert len(x) == len(y) and len(y) == len(s), "x, y and s must have same lengths"
 
 	assert isinstance(mode, str), "'mode' must be string"
-	assert isinstance(label, str), "'label' must be string"
-	assert isinstance(color, str|tuple|list), "'color' must be str|tuple|list"
+	assert isinstance(label, str|None), "'label' must be string"
+	assert isinstance(color, None|str|tuple|list), "'color' must be str|tuple|list"
 
 	assert isinstance(scale, int), "'scale' must be int"
 	assert 0<scale<200, "'scale' must be in range (0, 200)"
 
 	return _pydll.c_plot_bubble((), {
-		"x":x, "y":y , "size":size, "color":color,"mode":mode.lower(), "scale":scale, "label":label})
+		"x":x, "y":y , "size":s, "color":color,"mode":mode.lower(), "scale":scale, "label":label})
 
 
 
