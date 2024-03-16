@@ -147,16 +147,6 @@ def layout_test():
 	plt.dirfield(t,y,f1) 
 
 
-	#new chart
-	categ=["😁", "Q2", "😍", "Q4"]
-	A = [44, 55, 41, 67]
-	B = [13, 23, 8, 13]
-
-	plt.subplot(1,1)
-	plt.bar(labels=categ, height=A)
-	plt.bar(height=B, labels=categ)
-
-
 
 
 import scisuit.plot as plt
