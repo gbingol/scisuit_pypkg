@@ -7,10 +7,8 @@
 #include <core/dtypes/basetypes.h>
 #include <core/dtypes/datatable.h>
 
-#include <plotter/charts/scatterchart.h>
+#include <plotter/charts/numericcharts.h>
 #include <plotter/charts/barchart.h>
-#include <plotter/charts/boxwhiskerchart.h>
-#include <plotter/charts/histogramchart.h>
 
 #include <plotter/windows/frmplot.h>
 #include <plotter/elems/chartelement.h>

@@ -8,7 +8,7 @@
 #include <wx/wx.h>
 
 #include <plotter/charts/chartbase.h>
-#include <plotter/charts/scatterchart.h>
+#include <plotter/charts/numericcharts.h>
 
 #include <plotter/elems/chartelement.h>
 #include <plotter/elems/trendline.h>
