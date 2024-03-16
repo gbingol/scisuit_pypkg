@@ -15,37 +15,6 @@ _app = _App()
 
 
 
-def bar(
-	height:_Iterable, 
-	labels:_Iterable, 
-	stacked = False, 
-	**kwargs):
-	"""
-	Plots bar chart
-
-	## Input
-	height: Numeric data \n
-	labels: Category labels \n
-	stacked: if True stacked bar chart, otherwise clustered
-	"""
-	
-	assert isinstance(height, _Iterable), "'height' must be iterable"
-	assert isinstance(labels, _Iterable), "'labels' must be iterable"
-
-	assert isinstance(stacked, bool), "'stacked' must be bool" 
-	assert len(labels)>=2, "at least 2 labels expected"
-	assert len(labels) == len(height), "len(labels) == len(height) expected"
-	
-	return _pydll.c_plot_bar((), {
-			"height":height, 
-			"labels":labels, 
-			"style": "c" if not stacked else "s", 
-			"fill":dict(Brush(kwargs)), 
-			"line":dict(Pen(kwargs))})
-
-
-
-
 #-----------------------------------------------------------------------------------
 
 def boxplot(

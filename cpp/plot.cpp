@@ -8,7 +8,6 @@
 #include <core/dtypes/datatable.h>
 
 #include <plotter/charts/numericcharts.h>
-#include <plotter/charts/barchart.h>
 
 #include <plotter/windows/frmplot.h>
 #include <plotter/elems/chartelement.h>
@@ -50,110 +49,6 @@ static constinit SubPlotInfo s_SubPlotInfo = SubPlotInfo();
 
 
 
-PyObject* c_plot_bar(PyObject* args, PyObject* kwargs)
-{	
-	//Default type is clustered
-	const char* Style = "c";
-
-	PyObject* LabelsObj = Py_None, * HeightObj = Py_None, *StyleObj = Py_None;
-	PyObject* FillObj = Py_None, * LineObj = Py_None;
-
-	const char* kwlist[] = { "height", "labels", "style", "fill", "line", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO|OOO", const_cast<char**>(kwlist),
-		&HeightObj, &LabelsObj, &StyleObj, &FillObj, &LineObj))
-	{
-		return nullptr;
-	}
-
-	if (StyleObj != Py_None)
-		Style = PyUnicode_AsUTF8(StyleObj);
-
-	auto Data = Iterable_As1DVector(HeightObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "height does not contain any numeric element.");
-
-	core::CArray LabelData = Iterable_AsArray(LabelsObj);
-	IF_PYERRVALUE_RET(LabelData.size() == 0, "labels does not contain any element.");
-
-	IF_PYERRVALUE_RET(LabelData.size() != Data.size(), "len(height) = len(labels) expected.");
-
-
-	CFrmPlot* frmPlot{ nullptr };
-
-	if (!s_CurPlotWnd || (s_SubPlotInfo.row>=0 && s_SubPlotInfo.col >= 0))
-	{
-		if (!s_CurPlotWnd)
-		{
-			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-			s_CurPlotWnd = frmPlot;
-		}
-		else
-			frmPlot = s_CurPlotWnd;
-
-
-		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		if (strcmp(Style, "c") == 0)
-		{
-			auto BarChrt = std::make_unique<CBarVertClusterChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BarChrt));
-		}
-
-		else if (strcmp(Style, "s") == 0) 
-		{
-			auto BarChrt = std::make_unique<CBarVertStkChart>(frmPlot, Rect);
-			frmPlot->AddChart(std::move(BarChrt));
-		}
-	}
-	else
-		frmPlot = s_CurPlotWnd;
-
-	CBarVertChart* Chart{nullptr};
-	if (strcmp(Style, "c") == 0)
-		Chart = (CBarVertClusterChart*)frmPlot->GetActiveChart();
-	else if (strcmp(Style, "s") == 0) 
-		Chart = (CBarVertStkChart*)frmPlot->GetActiveChart();
-
-
-	TRYBLOCK();
-
-	auto DataCol = std::make_shared<core::CRealColData>(Data);
-	auto LblCol = std::make_shared<core::CStrColData>(LabelData.getstrings());
-	auto DataTbl = std::make_unique<core::CGenericDataTable>();
-	DataTbl->append_col(LblCol);
-	DataTbl->append_col(DataCol);
-
-	CBarVertSeries *Series = nullptr;
-	if (strcmp(Style, "c") == 0)
-		Series = new CBarVertClusterSeries((CBarVertClusterChart *)Chart, std::move(DataTbl));
-
-	else if (strcmp(Style, "s") == 0)
-		Series = new CBarVertStkSeries((CBarVertStkChart *)Chart, std::move(DataTbl));
-
-	wxPen Pen = Series->GetPen();
-	if (LineObj != Py_None)
-		PreparePen(LineObj, Pen);
-	Series->SetPen(Pen);
-
-	wxBrush Brush = Series->GetBrush();
-	if (FillObj != Py_None)
-		PrepareBrush(FillObj, Brush);
-	Series->SetBrush(Brush);
-
-	auto UniqueSeries = std::unique_ptr<CBarVertSeries>(Series);
-	Chart->AddSeries(std::move(UniqueSeries));
-
-	s_SubPlotInfo = SubPlotInfo();
-	
-	return PyCapsule_New((void*)Chart, nullptr, nullptr);
-
-	CATCHRUNTIMEEXCEPTION(nullptr);
-
-	Py_RETURN_NONE;
-}
-
-
-
-
-/**************************************************************************************/
 
 PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 {

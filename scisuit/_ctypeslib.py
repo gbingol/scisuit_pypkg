@@ -265,8 +265,6 @@ pydll.c_stat_test_norm_ad.restype=_ct.py_object
 ----------------------------  PLOT LIBRARY --------------------------------------
 """
 
-pydll.c_plot_bar.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_bar.restype=_ct.py_object
 
 pydll.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_boxplot.restype=_ct.py_object
