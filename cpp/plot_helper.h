@@ -344,7 +344,7 @@ static void PrepareMarker(PyObject* Dict, charts::CSeriesBase* Series)
 static void PrepareTrendline(
 	PyObject* Dict, 
 	wxColor DefaultColor, 
-	charts::CScatterSeriesBase* Series)
+	charts::CScatterSeries* Series)
 {
 	std::string style = "linear";
 	std::string Label{};
