@@ -130,7 +130,7 @@ def layout_test():
 	plt.scatter(x=z, y=f)
 
 	gdi.line((-2, 0.1), (0, 0.5), edgecolor="0 255 0", lw=2, ls= "-.")
-	gdi.rect([-2, 0.5], width=2, height=0.4, edgecolor=[0, 255, 0])
+	gdi.rect([-2, 0.0], width=2, height=0.4, edgecolor=[0, 255, 0])
 
 	gdi.ellipse(xy=(-1, 0.3), width=2, height=0.2, edgecolor="#A02A2A") 
 
@@ -153,6 +153,9 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
+layout_test()
+
+plt.figure()
 
 plt.canvas(x=["",(12,23), "b", "c",""], y=[0,10], xlabel=True, xs=-1.0)
 

@@ -65,6 +65,7 @@ EXTERN void c_plot_gdi_line(
 	PyObject* PenObj);
 
 
+//xy: bottom-left
 EXTERN void c_plot_gdi_rect(
 	double x,
 	double y,

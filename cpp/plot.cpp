@@ -549,7 +549,7 @@ void c_plot_gdi_line(
 }
 
 
-//(x, y) top-left
+//(x, y) bottom-left
 void c_plot_gdi_rect(
 	double x,
 	double y,
