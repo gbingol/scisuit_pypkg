@@ -395,20 +395,11 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 /****************************** Canvas Chart ***************************************/
 
-PyObject* c_plot_canvas(PyObject* args, PyObject* kwargs)
+PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
 {
-	PyObject* XObj = nullptr, * YObj = nullptr;
-
-	const char* kwlist[] = { "x","y", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "OO", const_cast<char**>(kwlist),
-		&XObj, &YObj))
-	{
-		return nullptr;
-	}
-
 	//lower and upper bounds of x and y
-	auto xdata = Iterable_As1DVector(XObj);
-	auto ydata = Iterable_As1DVector(YObj);
+	auto xdata = Iterable_As1DVector(X);
+	auto ydata = Iterable_As1DVector(Y);
 
 	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
 	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");

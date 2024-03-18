@@ -31,8 +31,8 @@ EXTERN PyObject * c_plot_scatter(
 
 
 EXTERN PyObject * c_plot_canvas(
-	PyObject * args, 
-	PyObject* kwargs);
+	PyObject * X, 
+	PyObject* Y);
 
 
 /************************************************************************************/

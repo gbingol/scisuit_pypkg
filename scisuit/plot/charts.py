@@ -159,20 +159,30 @@ def scatter(
 
 def canvas(
 		x:_Iterable, 
-		y:_Iterable):
+		y:_Iterable,
+		xlabel = False,
+		ylabel = False):
 	"""
 	Shows a canvas (an empty chart with axes)
 
 	## Input:
-	`x:` horizontal axis bounds \n
-	`y:` vertical axis bounds
+	`x:` horizontal axis bounds or labels
+	`y:` vertical axis bounds or labels
+	`xlabel:` Parameter `x` contains labels (not bounds)
+	`ylabel:` Parameter `y` contains labels (not bounds)
 	"""
-	assert isinstance(x[0], numbers.Real), "xmin must be a real number"
-	assert isinstance(x[1], numbers.Real), "xmax must be a real number"
-	assert isinstance(y[0], numbers.Real), "ymin must be a real number"
-	assert isinstance(y[1], numbers.Real), "ymax must be a real number"
 
-	return _pydll.c_plot_canvas((), {"x":x, "y":y})
+	if xlabel == False:
+		assert len(x) ==2, "x must contain exactly two numbers"
+		assert isinstance(x[0], numbers.Real), "xmin must be a real number"
+		assert isinstance(x[1], numbers.Real), "xmax must be a real number"
+	
+	if ylabel == False:
+		assert len(y) ==2, "y must contain exactly two numbers"
+		assert isinstance(y[0], numbers.Real), "ymin must be a real number"
+		assert isinstance(y[1], numbers.Real), "ymax must be a real number"
+
+	return _pydll.c_plot_canvas(x, y)
 
 
 
