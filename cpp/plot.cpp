@@ -400,7 +400,9 @@ PyObject* c_plot_canvas(
 	PyObject* X, 
 	PyObject* Y, 
 	bool XHasLabel, 
-	bool YHasLabel)
+	bool YHasLabel,
+	double xs,
+	double ys)
 {
 	std::vector<double> xdata, ydata;
 	std::optional<std::vector<std::string>> XLabels, YLabels;
@@ -414,7 +416,7 @@ PyObject* c_plot_canvas(
 	{
 		auto Len = PyObject_Length(X);
 		xdata = std::vector<double>(Len);
-		std::iota(xdata.begin(), xdata.end(), 0.0);
+		std::iota(xdata.begin(), xdata.end(), xs);
 
 		XLabels = Iterable_As1DVector<std::string>(X);
 	}
@@ -428,7 +430,7 @@ PyObject* c_plot_canvas(
 	{
 		auto Len = PyObject_Length(Y);
 		ydata = std::vector<double>(Len);
-		std::iota(ydata.begin(), ydata.end(), 0.0);
+		std::iota(ydata.begin(), ydata.end(), ys);
 
 		YLabels = Iterable_As1DVector<std::string>(Y);
 	}

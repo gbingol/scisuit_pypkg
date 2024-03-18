@@ -154,7 +154,7 @@ import scisuit.plot.gdi as gdi
 import numpy as np
 
 
-plt.canvas(x=["a", "b", "c"], y=[1,10], xlabel=True, ylabel=False)
+plt.canvas(x=["","a", "b", "c",""], y=[0,10], xlabel=True, xs=-1.0)
 
 plt.figure()
 

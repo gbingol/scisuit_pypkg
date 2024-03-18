@@ -39,7 +39,9 @@ EXTERN PyObject * c_plot_canvas(
 	PyObject * X, 
 	PyObject* Y,
 	bool XHasLabel = false, 
-	bool YHasLabel = false); 
+	bool YHasLabel = false,
+	double xs=0.0,
+	double ys=0.0); 
 
 
 /************************************************************************************/
