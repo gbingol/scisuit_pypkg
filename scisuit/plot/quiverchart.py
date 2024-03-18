@@ -77,7 +77,7 @@ def quiver(
 	
 	niceX = NiceNumbers(_MinX, _MaxX)
 	niceY = NiceNumbers(_MinY, _MaxY)
-	canvas(xmin=niceX.nicemin, xmax=niceX.nicemax, ymin=niceY.nicemin, ymax=niceY.nicemax)
+	canvas(niceX.minmax, niceY.minmax)
 
 	for i in range(len(x)):
 		arrow(p1=(x[i], y[i]), p2=(xu[i], yv[i]),**kwargs)

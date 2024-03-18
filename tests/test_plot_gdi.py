@@ -60,7 +60,7 @@ def heart2():
 	x = 16*np.sin(t)**3
 	y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
 
-	plt.canvas(xmin=-20, xmax=20, ymin=-20, ymax=20)
+	plt.canvas([-20, 20], [-20, 20])
 
 	gdi.curve(x, y, pen = gdi.Pen(plt.C_RED))
 	gdi.text((-4.5,-4), "text", 45, 

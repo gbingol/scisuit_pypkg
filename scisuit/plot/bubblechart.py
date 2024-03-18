@@ -75,10 +75,8 @@ def bubble(
 	NiceX, NiceY = NiceNumbers(MinX, MaxX), NiceNumbers(MinY, MaxY)
 
 	canvas(
-		xmin = NiceX.nicemin - NiceX.tickspace, 
-		xmax = NiceX.nicemax + NiceX.tickspace, 
-		ymin = NiceY.nicemin - NiceY.tickspace, 
-		ymax = NiceY.nicemax + NiceY.tickspace)
+		[NiceX.min - NiceX.tickspace, NiceX.max + NiceX.tickspace], 
+		[NiceY.min - NiceY.tickspace, NiceY.max + NiceY.tickspace])
 	
 	
 	"""
