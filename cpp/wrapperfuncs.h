@@ -133,8 +133,8 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 
 		else if constexpr(std::is_same_v<T, std::string>)
 		{
-			if(PyUnicode_Check(item))
-				Vec.push_back(std::string(PyUnicode_AsUTF8(item)));
+			auto UnicodeObj = PyObject_Str(item);
+			Vec.push_back(std::string(PyUnicode_AsUTF8(UnicodeObj)));
 		}
 
         Py_DECREF(item);
