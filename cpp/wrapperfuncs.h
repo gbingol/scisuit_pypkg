@@ -146,10 +146,6 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 }
 
 
-core::CArray Iterable_AsArray(PyObject* Obj);
-
-//PyObject can contain any type derived from CObject
-std::unique_ptr<core::CObject> PyObject_AsCObject(PyObject* Obj);
 
 /*
     callableObj: Python callable object.
