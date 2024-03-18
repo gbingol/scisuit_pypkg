@@ -50,14 +50,16 @@ class Pen:
 
 
 
-__BRUSH_SOLID = 100 #"solid"
-__BRUSH_TRANSPARENT = 106 #"none"
-__BRUSH_BDIAGHATCH = 111 # "\"
-__BRUSH_CROSSDIAGHATCH = 112 #"x"
-__BRUSH_FDIAGHATCH = 113 #"/"
-__BRUSH_CROSSHATCH = 114 #"+"
-__BRUSH_HORIZHATCH =115 #"-"
-__BRUSH_VERTHATCH = 116 # |
+
+
+__SOLID = 100 #"solid"
+__TRANSPARENT = 106 #"none"
+__BDIAGHATCH = 111 # "\"
+__CROSSDIAGHATCH = 112 #"x"
+__FDIAGHATCH = 113 #"/"
+__CROSSHATCH = 114 #"+"
+__HORIZHATCH =115 #"-"
+__VERTHATCH = 116 # |
 
 	
 class Brush:
@@ -95,14 +97,17 @@ class Brush:
 			("alpha", self.alpha)])
 
 
+
+
+
 class Font:
 	def __init__(self, *args):
 		assert isinstance(args[0], dict), "first argument must be dict"
 		params:dict = args[0]
 		
-		self.size = params.get("size") or params.get("fontsize")
+		self.size = params.get("fontsize")
 		if self.size != None:
-			assert isinstance(self.size, int), "size or fontsize must be int"
+			assert isinstance(self.size, int), "fontsize must be int"
 			assert self.size>0, "size>0 expected"
 		else:
 			self.size = 11
@@ -113,7 +118,7 @@ class Font:
 		else:
 			self.facename = "Arial"
 
-		self.weight:str = params.get("weight") or params.get("fontweight")
+		self.weight:str = params.get("fontweight")
 		if self.weight == None:
 			self.weight = "normal"
 		else:
@@ -121,7 +126,7 @@ class Font:
 			if not self.weight in _weights:
 				raise ValueError("weights: " + ",".join(_weights))
 		
-		self.style = params.get("style") or params.get("fontstyle")
+		self.style = params.get("fontstyle")
 		if self.style == None:
 			self.style = "normal"
 		else:
