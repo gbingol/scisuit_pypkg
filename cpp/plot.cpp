@@ -1,6 +1,7 @@
 #include "plot.h"
 
 #include <list>
+#include <numeric>
 
 #include <wx/wx.h>
 
@@ -395,14 +396,42 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 /****************************** Canvas Chart ***************************************/
 
-PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
+PyObject* c_plot_canvas(
+	PyObject* X, 
+	PyObject* Y, 
+	bool XHasLabel, 
+	bool YHasLabel)
 {
-	//lower and upper bounds of x and y
-	auto xdata = Iterable_As1DVector(X);
-	auto ydata = Iterable_As1DVector(Y);
+	std::vector<double> xdata, ydata;
+	std::optional<std::vector<std::string>> XLabels, YLabels;
 
-	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
-	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
+	if(!XHasLabel)
+	{
+		xdata = Iterable_As1DVector(X);
+		IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
+	}
+	else
+	{
+		auto Len = PyObject_Length(X);
+		xdata = std::vector<double>(Len);
+		std::iota(xdata.begin(), xdata.end(), 0.0);
+
+		XLabels = Iterable_As1DVector<std::string>(X);
+	}
+
+	if(!YHasLabel)
+	{
+		ydata = Iterable_As1DVector(Y);
+		IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
+	}
+	else
+	{
+		auto Len = PyObject_Length(Y);
+		ydata = std::vector<double>(Len);
+		std::iota(ydata.begin(), ydata.end(), 0.0);
+
+		YLabels = Iterable_As1DVector<std::string>(Y);
+	}
 
 	TRYBLOCK();
 
@@ -434,7 +463,11 @@ PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
-	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
+	auto series = std::make_unique<CCanvasSeries>(
+		Chart, 
+		std::move(DTbl), 
+		XHasLabel ? XLabels: std::nullopt, 
+		YHasLabel ? YLabels: std::nullopt);
 
 	Chart->AddSeries(std::move(series));
 

@@ -131,6 +131,12 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
                 Vec.push_back(PyLong_AsLong(item));
         }
 
+		else if constexpr(std::is_same_v<T, std::string>)
+		{
+			if(PyUnicode_Check(item))
+				Vec.push_back(std::string(PyUnicode_AsUTF8(item)));
+		}
+
         Py_DECREF(item);
     }
 

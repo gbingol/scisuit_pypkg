@@ -154,8 +154,7 @@ import scisuit.plot.gdi as gdi
 import numpy as np
 
 
-
-layout_test()
+plt.canvas(x=["a", "b", "c"], y=[1,10], xlabel=True, ylabel=False)
 
 plt.figure()
 
@@ -171,6 +170,7 @@ F = [1.67, 1.36, 1.84, 2.78, 2, 1.7, 4.77, 2.96, 1.54, 2.05]
 P = [337399, 819023, 55230, 797162, 618015, 731371, 310907, 74856, 1418500, 3070070]
 
 plt.bubble(x=L, y=F, s=P)
+
 
 plt.show()
 

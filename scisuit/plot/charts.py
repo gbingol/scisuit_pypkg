@@ -182,7 +182,11 @@ def canvas(
 		assert isinstance(y[0], numbers.Real), "ymin must be a real number"
 		assert isinstance(y[1], numbers.Real), "ymax must be a real number"
 
-	return _pydll.c_plot_canvas(x, y)
+	return _pydll.c_plot_canvas(
+				_ct.py_object(x), 
+				_ct.py_object(y),
+				_ct.c_bool(xlabel), 
+				_ct.c_bool(ylabel))
 
 
 
