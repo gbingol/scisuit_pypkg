@@ -15,15 +15,10 @@
 
 
 
-
 namespace core
 {
-    class CObject;
-    class CVector;
-    class CArray;
+	class CVector;
 }
-
-extern PyTypeObject PythPoly_Type;
 
 
 
@@ -34,25 +29,25 @@ DLLPYBIND bool IsNumpyFloat(PyObject* obj);
 DLLPYBIND std::optional<double> ExtractRealNumber(PyObject* obj);
 
 
-//Is obj a Python subtype None
-static bool IsSubTypeNone(PyObject* obj)
-{
-    return PyType_IsSubtype(obj->ob_type, &_PyNone_Type) == 0 ? false : true;
-}
+PyObject* List_FromCVector(const core::CVector& Vec);
+
+/*
+    callableObj: Python callable object.
+    return value is passed to another function which takes a functional.
+    Ex: double result = math::simpson(func, a, b, iter);
+*/
+std::function<double(double)> Make1DFunction(PyObject* callableObj);
 
 
-//Is obj a Python subtype bool
-static bool IsSubTypeBool(PyObject* obj)
-{
-    return PyType_IsSubtype(obj->ob_type, &PyBool_Type) == 0 ? false : true;
-}
+/*
+    callableObj: Python callable object.
+    return value is passed to another function which takes a functional.
+*/
+std::function<std::complex<double>(std::complex<double>)>
+    MakeComplexFunction(PyObject* callableObj);
 
 
-static bool IsExactTypeBool(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    return std::strcmp(TypeName.c_str(), "bool") == 0 ? true : false;
-}
+
 
 
 //Is obj a Python long
@@ -96,16 +91,7 @@ static bool IsExactTypeRealNumber(PyObject* obj)
 }
 
 
-//is obj a str
-static bool IsExactTypeString(PyObject* obj)
-{
-    std::string TypeName = obj->ob_type->tp_name;
-    return std::strcmp(TypeName.c_str(), "str") == 0 ? true : false;
-}
 
-
-
-PyObject* List_FromCVector(const core::CVector& Vec);
 
 template <typename T=double>
 std::vector<T> Iterable_As1DVector(PyObject* Obj)
@@ -145,22 +131,6 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
     return Vec;
 }
 
-
-
-/*
-    callableObj: Python callable object.
-    return value is passed to another function which takes a functional.
-    Ex: double result = math::simpson(func, a, b, iter);
-*/
-std::function<double(double)> Make1DFunction(PyObject* callableObj);
-
-
-/*
-    callableObj: Python callable object.
-    return value is passed to another function which takes a functional.
-*/
-std::function<std::complex<double>(std::complex<double>)>
-    MakeComplexFunction(PyObject* callableObj);
 
 
 

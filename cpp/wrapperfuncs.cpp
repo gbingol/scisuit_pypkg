@@ -7,9 +7,9 @@
 
 bool IsNumpyInt(PyObject* obj)
 {
-	std::string TypeName = obj->ob_type->tp_name;
-	bool Int32 = std::strcmp(TypeName.c_str(), "numpy.int32") == 0 ? true : false;
-	bool Int64 = std::strcmp(TypeName.c_str(), "numpy.int64") == 0 ? true : false;
+	auto TpNm = obj->ob_type->tp_name;
+	bool Int32 = std::strcmp(TpNm, "numpy.int32") == 0 ? true : false;
+	bool Int64 = std::strcmp(TpNm, "numpy.int64") == 0 ? true : false;
 
 	return Int32 || Int64;
 }
@@ -17,9 +17,9 @@ bool IsNumpyInt(PyObject* obj)
 
 bool IsNumpyFloat(PyObject* obj)
 {
-	std::string TypeName = obj->ob_type->tp_name;
-	bool Float32 = std::strcmp(TypeName.c_str(), "numpy.float32") == 0 ? true : false;
-	bool Float64 = std::strcmp(TypeName.c_str(), "numpy.float64") == 0 ? true : false;
+	auto TpNm = obj->ob_type->tp_name;
+	bool Float32 = std::strcmp(TpNm, "numpy.float32") == 0 ? true : false;
+	bool Float64 = std::strcmp(TpNm, "numpy.float64") == 0 ? true : false;
 
 	return Float32 || Float64;
 }
