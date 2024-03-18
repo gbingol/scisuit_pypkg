@@ -3,7 +3,7 @@ from typing import Iterable as _Iterable
 
 
 
-def minmax(X:_Iterable)->tuple[float]:
+def minmax(X:_Iterable)->tuple[float|int]:
 	_min = X[0]
 	_max = X[0]
 	for i in range(1, len(X)):
@@ -50,12 +50,16 @@ class NiceNumbers:
 		return niceFrac * math.pow(10.0, exponent)
 
 	@property
-	def nicemin(self):
+	def min(self):
 		return self._nicemin
 
 	@property
-	def nicemax(self):
+	def max(self):
 		return self._nicemax
+	
+	@property
+	def minmax(self):
+		return self._nicemin, self._nicemax
 	
 	@property
 	def tickspace(self):
