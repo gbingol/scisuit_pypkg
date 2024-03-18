@@ -320,7 +320,7 @@ def rect(
 		height:int|float, 
 		**kwargs)->None:
 	"""
-	xy: 		(x, y), top-left corner of the rectangle,
+	xy:	(x, y), bottom-left corner of the rectangle,
 	width: 	width of rectangle (>0),
 	height: height of rectangle (>0), 
 	"""	
