@@ -6,7 +6,6 @@
 #include <wx/wx.h>
 
 #include <core/dtypes/basetypes.h>
-#include <core/dtypes/datatable.h>
 
 #include <plotter/charts/numericcharts.h>
 
@@ -93,8 +92,8 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 
 	auto Chart = (CBoxWhiskerChart*)frmPlot->GetActiveChart();
 
-	auto DataTbl = std::make_unique<core::CRealDataTable>();
-	auto NumData = std::make_shared<core::CRealColData>(Data);
+	auto DataTbl = std::make_unique<charts::CRealDataTable>();
+	auto NumData = std::make_shared<charts::CRealColData>(Data);
 	DataTbl->append_col(NumData);
 
 	auto series = std::make_unique<CBoxWhiskerSeries>(Chart, std::move(DataTbl));
@@ -176,8 +175,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
 	
 
-	auto NumData = std::make_shared<core::CRealColData>(Data);
-	auto DataTbl = std::make_unique<core::CRealDataTable>();
+	auto NumData = std::make_shared<charts::CRealColData>(Data);
+	auto DataTbl = std::make_unique<charts::CRealDataTable>();
 	DataTbl->append_col(NumData);
 
 	auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl));
@@ -330,10 +329,10 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 	auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
 				
-	auto YData = std::make_shared<core::CRealColData>(ydata);
-	auto XData = std::make_shared<core::CRealColData>(xdata);
+	auto YData = std::make_shared<charts::CRealColData>(ydata);
+	auto XData = std::make_shared<charts::CRealColData>(xdata);
 
-	auto DTbl = std::make_unique<core::CRealDataTable>();
+	auto DTbl = std::make_unique<charts::CRealDataTable>();
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
@@ -458,10 +457,10 @@ PyObject* c_plot_canvas(
 
 	auto Chart = (CCanvasChart*)frmPlot->GetActiveChart();
 				
-	auto YData = std::make_shared<core::CRealColData>(ydata);
-	auto XData = std::make_shared<core::CRealColData>(xdata);
+	auto YData = std::make_shared<charts::CRealColData>(ydata);
+	auto XData = std::make_shared<charts::CRealColData>(xdata);
 
-	auto DTbl = std::make_unique<core::CRealDataTable>();
+	auto DTbl = std::make_unique<charts::CRealDataTable>();
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
