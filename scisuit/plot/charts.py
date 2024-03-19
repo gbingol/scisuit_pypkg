@@ -291,6 +291,11 @@ def ylim(min:float|None = None, max:float|None = None)->tuple|None:
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 
+def set_xticks(ticks, labels=None)->None:
+	"""Sets the x-ticks and optionally labels"""
+	_pydll.c_plot_set_xticks(_ct.py_object(ticks), _ct.py_object(labels))
+
+
 def legend():
 	"""Create legend"""
 	_pydll.c_plot_legend()

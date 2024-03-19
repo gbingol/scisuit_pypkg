@@ -390,7 +390,11 @@ pydll.c_plot_gdi_marker.restype=None
 pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]
 pydll.c_plot_layout.restype=None
 
-pydll.c_plot_subplot.argtypes = [_ct.c_int, _ct.c_int, _ct.c_int, _ct.c_int]
+pydll.c_plot_subplot.argtypes = [
+						_ct.c_int, 
+						_ct.c_int, 
+						_ct.c_int, 
+						_ct.c_int]
 pydll.c_plot_subplot.restype=None
 
 pydll.c_plot_figure.argtypes = []
@@ -405,8 +409,16 @@ pydll.c_plot_xlabel.restype=None
 pydll.c_plot_ylabel.argtypes = [_ct.py_object]
 pydll.c_plot_ylabel.restype=None
 
-pydll.c_plot_axislim.argtypes = [_ct.py_object, _ct.py_object, _ct.c_char]
+pydll.c_plot_axislim.argtypes = [
+						_ct.py_object, 
+						_ct.py_object, 
+						_ct.c_char]
 pydll.c_plot_axislim.restype=_ct.py_object
+
+pydll.c_plot_set_xticks.argtypes = [
+						_ct.py_object, 
+						_ct.py_object]
+pydll.c_plot_set_xticks.restype=_ct.py_object
 
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None

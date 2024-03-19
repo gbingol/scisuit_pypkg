@@ -176,11 +176,12 @@ multiplier = 0
 
 
 for attribute, measurement in penguin_means.items():
-	offset = width * multiplier - width #matplotlib does not use -width 
+	offset = width * multiplier 
 	rects = plt.bar(x + offset, measurement, width=width)
 	multiplier += 1
 
-
+plt.xlim(min=-0.25)
+plt.set_xticks(x+width, species)
 
 plt.show()
 
