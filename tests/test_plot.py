@@ -152,14 +152,13 @@ def layout_test():
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
-from scisuit.plot.barcharts import bar
 
 
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
 counts = [40, 100, 30, 55]
 
-#bar(fruits, counts)
-#bar(fruits, counts, bottom=counts)
+#plt.bar(fruits, counts)
+#plt.bar(fruits, counts, bottom=counts)
 
 
 
@@ -178,7 +177,7 @@ multiplier = 0
 
 for attribute, measurement in penguin_means.items():
 	offset = width * multiplier - width #matplotlib does not use -width 
-	rects = bar(x + offset, measurement, width=width)
+	rects = plt.bar(x + offset, measurement, width=width)
 	multiplier += 1
 
 
