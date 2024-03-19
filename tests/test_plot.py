@@ -152,13 +152,30 @@ def layout_test():
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
+from scisuit.plot.barcharts import bar
 
-layout_test()
+"""
+import matplotlib.pyplot as plt
 
-plt.figure()
+fig, ax = plt.subplots()
 
-plt.canvas(x=["",(12,23), "b", "c",""], y=[0,10], xlabel=True, xs=-1.0)
+fruits = ["apple", 'blueberry', 'cherry', 'orange']
+counts = [40, 100, 30, 55]
+bar_labels = ['red', 'blue', '_red', 'orange']
+bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
 
+ax.bar(x=fruits, height=counts, label=bar_labels, color=bar_colors)
+
+ax.set_ylabel('fruit supply')
+ax.set_title('Fruit supply by kind and color')
+ax.legend(title='Fruit color')
+
+"""
+fruits = ["apple", 'blueberry', 'cherry', 'orange']
+counts = [40, 100, 30, 55]
+
+bar(x=fruits, height=counts, bottom=0)
+bar(x=fruits, height=counts, bottom=counts)
 plt.show()
 
 
