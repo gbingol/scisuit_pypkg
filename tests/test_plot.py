@@ -176,6 +176,7 @@ counts = [40, 100, 30, 55]
 
 bar(x=fruits, height=counts, bottom=0)
 bar(x=fruits, height=counts, bottom=counts)
+
 plt.show()
 
 

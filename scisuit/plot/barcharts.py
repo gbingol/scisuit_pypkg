@@ -2,7 +2,7 @@ import numpy as np
 from typing import Iterable as _Iterable
 
 from .gdi import rect
-from .charts import canvas
+from .charts import canvas, ylim
 from ..util import NiceNumbers, minmax
 
 
@@ -17,8 +17,12 @@ def _bar_str(x, height, width=0.8, bottom=0):
 
 	_Min = np.min(bottom) if isinstance(bottom, _Iterable) else bottom
 	_Max = np.max(arr + np.array(bottom) if isinstance(bottom, _Iterable) else arr + bottom)
+
+	PrevMin, PrevMax = ylim()
+	_Min = min(_Min, PrevMin)
+	_Max = max(_Max, PrevMax)
+
 	niceY = NiceNumbers(_Min, _Max)
-	#print(_Min, " ", _Max)
 	canvas(x=_x, y=niceY.minmax, xlabel=True, xs=-1.0)
 
 	for i in range(len(height)):
