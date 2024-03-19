@@ -405,6 +405,9 @@ pydll.c_plot_xlabel.restype=None
 pydll.c_plot_ylabel.argtypes = [_ct.py_object]
 pydll.c_plot_ylabel.restype=None
 
+pydll.c_plot_axislim.argtypes = [_ct.py_object, _ct.py_object, _ct.c_char]
+pydll.c_plot_axislim.restype=_ct.py_object
+
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
 

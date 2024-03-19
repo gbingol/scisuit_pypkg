@@ -943,6 +943,45 @@ void c_plot_legend()
 
 
 
+PyObject* c_plot_axislim(PyObject* min, PyObject* max, char SelAxis)
+{
+	if(s_CurPlotWnd == nullptr)
+	{
+		//If no chart available then min=max=0.0
+		PyObject *Tuple = PyTuple_New(2);
+		PyTuple_SetItem(Tuple, 0, Py_BuildValue("d", 0.0));
+		PyTuple_SetItem(Tuple, 1, Py_BuildValue("d", 0.0));
+		return Tuple;
+	}
+
+	TRYBLOCK();
+
+	if(auto chart= s_CurPlotWnd->GetActiveChart())
+	{
+		auto Axis = SelAxis == 'y' ? chart->GetVertAxis() : chart->GetHorizAxis();
+		auto Bounds = Axis->GetBounds();
+
+		if(Py_IsNone(min) && Py_IsNone(max))
+		{
+			PyObject *Tuple = PyTuple_New(2);
+			PyTuple_SetItem(Tuple, 0, Py_BuildValue("d", Bounds.first));
+			PyTuple_SetItem(Tuple, 1, Py_BuildValue("d", Bounds.second));
+			return Tuple;
+		}
+
+		if(!Py_IsNone(min))
+			Axis->SetBounds(std::make_pair(PyFloat_AsDouble(min), Bounds.second), true);
+
+		if(!Py_IsNone(max))
+			Axis->SetBounds(std::make_pair(Bounds.first, PyFloat_AsDouble(max)), true);
+	}
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
 
 
 //------------------------------------------------------------------------

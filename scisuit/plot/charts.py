@@ -277,6 +277,20 @@ def ylabel(label:str):
 	_pydll.c_plot_ylabel(label)
 
 
+def xlim(min:float|None = None, max:float|None = None)->tuple|None:
+	"""Sets or gets the x-limits of the current chart"""
+	assert isinstance(min, int|float|None), "min must be int|float|None"
+	assert isinstance(max, int|float|None), "max must be int|float|None"
+	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("x".encode()))
+
+
+def ylim(min:float|None = None, max:float|None = None)->tuple|None:
+	"""Sets or gets the y-limits of the current chart"""
+	assert isinstance(min, int|float|None), "min must be int|float|None"
+	assert isinstance(max, int|float|None), "max must be int|float|None"
+	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
+
+
 def legend():
 	"""Create legend"""
 	_pydll.c_plot_legend()

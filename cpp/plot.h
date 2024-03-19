@@ -153,6 +153,8 @@ EXTERN void c_plot_xlabel(PyObject* xlabel);
 EXTERN void c_plot_ylabel(PyObject* ylabel);
 EXTERN void c_plot_legend();
 
+//Either returns the limits or sets the limits
+EXTERN PyObject *c_plot_axislim(PyObject *min, PyObject *max, char SelAxis='y');
 
 
 /**********************************************************************************/
