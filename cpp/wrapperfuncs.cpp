@@ -1,8 +1,7 @@
 #include "wrapperfuncs.h"
 
 #include <core/core_funcs.h>
-#include <core/dtypes/mathdtypes.h>
-#include <core/dtypes/basetypes.h>
+#include <core/dtypes.h>
 
 
 bool IsNumpyInt(PyObject* obj)

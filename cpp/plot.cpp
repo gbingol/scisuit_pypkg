@@ -5,7 +5,6 @@
 
 #include <wx/wx.h>
 
-#include <core/dtypes/basetypes.h>
 
 #include <plotter/charts/numericcharts.h>
 
