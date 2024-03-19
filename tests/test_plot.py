@@ -154,28 +154,34 @@ import scisuit.plot.gdi as gdi
 import numpy as np
 from scisuit.plot.barcharts import bar
 
-"""
-import matplotlib.pyplot as plt
-
-fig, ax = plt.subplots()
 
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
 counts = [40, 100, 30, 55]
-bar_labels = ['red', 'blue', '_red', 'orange']
-bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
 
-ax.bar(x=fruits, height=counts, label=bar_labels, color=bar_colors)
+#bar(fruits, counts)
+#bar(fruits, counts, bottom=counts)
 
-ax.set_ylabel('fruit supply')
-ax.set_title('Fruit supply by kind and color')
-ax.legend(title='Fruit color')
 
-"""
-fruits = ["apple", 'blueberry', 'cherry', 'orange']
-counts = [40, 100, 30, 55]
 
-bar(x=fruits, height=counts, bottom=0)
-bar(x=fruits, height=counts, bottom=counts)
+
+species = ("Adelie", "Chinstrap", "Gentoo")
+penguin_means = {
+    'Bill Depth': (18.35, 18.43, 14.98),
+    'Bill Length': (38.79, 48.83, 47.50),
+    'Flipper Length': (189.95, 195.82, 217.19),
+}
+
+x = np.arange(len(species))  # the label locations
+width = 0.25  # the width of the bars
+multiplier = 0
+
+
+for attribute, measurement in penguin_means.items():
+	offset = width * multiplier - width #matplotlib does not use -width 
+	rects = bar(x + offset, measurement, width=width)
+	multiplier += 1
+
+
 
 plt.show()
 
