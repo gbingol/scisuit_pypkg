@@ -336,8 +336,7 @@ def rect(
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 
-	if kwargs.get("hatch") == None:
-		kwargs["hatch"] = "none" #make it transparent by default
+	kwargs["hatch"] = kwargs.get("hatch") or "none" #make it transparent by default
 
 	_pydll.c_plot_gdi_rect(
 			_ct.c_double(xy[0]),
