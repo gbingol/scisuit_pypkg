@@ -394,45 +394,14 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 /****************************** Canvas Chart ***************************************/
 
-PyObject* c_plot_canvas(
-	PyObject* X, 
-	PyObject* Y, 
-	bool XHasLabel, 
-	bool YHasLabel,
-	double xs,
-	double ys)
+PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
 {
-	std::vector<double> xdata, ydata;
-	std::optional<std::vector<std::string>> XLabels, YLabels;
-
-	if(!XHasLabel)
-	{
-		xdata = Iterable_As1DVector(X);
-		IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
-	}
-	else
-	{
-		auto Len = PyObject_Length(X);
-		xdata = std::vector<double>(Len);
-		std::iota(xdata.begin(), xdata.end(), xs);
-
-		XLabels = Iterable_As1DVector<std::string>(X);
-	}
-
-	if(!YHasLabel)
-	{
-		ydata = Iterable_As1DVector(Y);
-		IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
-	}
-	else
-	{
-		auto Len = PyObject_Length(Y);
-		ydata = std::vector<double>(Len);
-		std::iota(ydata.begin(), ydata.end(), ys);
-
-		YLabels = Iterable_As1DVector<std::string>(Y);
-	}
-
+	
+	auto xdata = Iterable_As1DVector(X);
+	auto ydata = Iterable_As1DVector(Y);
+	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
+	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
+	
 	TRYBLOCK();
 
 	CFrmPlot *frmPlot = nullptr;
@@ -463,11 +432,7 @@ PyObject* c_plot_canvas(
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
-	auto series = std::make_unique<CCanvasSeries>(
-		Chart, 
-		std::move(DTbl), 
-		XHasLabel ? XLabels: std::nullopt, 
-		YHasLabel ? YLabels: std::nullopt);
+	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
 
 	Chart->AddSeries(std::move(series));
 

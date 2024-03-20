@@ -30,18 +30,8 @@ EXTERN PyObject * c_plot_scatter(
 	PyObject* kwargs);
 
 
-/*
-	are given X and Y labels or bounds
-	if XHasLabel = false, then X is bounds otherwise labels
-	if YHasLabel = false, then Y is bounds otherwise labels
-*/
-EXTERN PyObject * c_plot_canvas(
-	PyObject * X, 
-	PyObject* Y,
-	bool XHasLabel = false, 
-	bool YHasLabel = false,
-	double xs=0.0,
-	double ys=0.0); 
+//X and Y bounds
+EXTERN PyObject * c_plot_canvas(PyObject * X, PyObject* Y); 
 
 
 /************************************************************************************/
