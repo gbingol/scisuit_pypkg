@@ -170,33 +170,17 @@ def canvas(
 	## Input:
 	`x:` horizontal axis bounds or labels
 	`y:` vertical axis bounds or labels
-	`xlabel:` Parameter `x` contains labels (not bounds)
-	`ylabel:` Parameter `y` contains labels (not bounds)
-	`xs:` If xlabel=True, very first label's number start from xs
-	`ys:` If ylabel=True, very first label's number start from ys
 	"""
+	assert len(x) ==2, "x must contain exactly two numbers"
+	assert isinstance(x[0], numbers.Real), "xmin must be a real number"
+	assert isinstance(x[1], numbers.Real), "xmax must be a real number"
 
-	if xlabel == False:
-		assert len(x) ==2, "x must contain exactly two numbers"
-		assert isinstance(x[0], numbers.Real), "xmin must be a real number"
-		assert isinstance(x[1], numbers.Real), "xmax must be a real number"
-	else:
-		assert isinstance(xs, int|float), "xs must be int|float"
+	assert len(y) ==2, "y must contain exactly two numbers"
+	assert isinstance(y[0], numbers.Real), "ymin must be a real number"
+	assert isinstance(y[1], numbers.Real), "ymax must be a real number"
 	
-	if ylabel == False:
-		assert len(y) ==2, "y must contain exactly two numbers"
-		assert isinstance(y[0], numbers.Real), "ymin must be a real number"
-		assert isinstance(y[1], numbers.Real), "ymax must be a real number"
-	else:
-		assert isinstance(ys, int|float), "xs must be int|float"
 
-	return _pydll.c_plot_canvas(
-				_ct.py_object(x), 
-				_ct.py_object(y),
-				_ct.c_bool(xlabel), 
-				_ct.c_bool(ylabel),
-				_ct.c_double(xs),
-				_ct.c_double(ys))
+	return _pydll.c_plot_canvas(_ct.py_object(x), _ct.py_object(y))
 
 
 
