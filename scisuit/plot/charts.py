@@ -160,16 +160,18 @@ def scatter(
 def canvas(
 		x:_Iterable, 
 		y:_Iterable,
-		xlabel = False,
-		ylabel = False,
-		xs=0.0, 
-		ys=0.0):
+		haxis = True,
+		vaxis = True,
+		hgrid = True,
+		vgrid = True):
 	"""
-	Shows a canvas (an empty chart with axes)
+	Shows a canvas (an empty chart with axes and gridlines)
 
 	## Input:
-	`x:` horizontal axis bounds or labels
-	`y:` vertical axis bounds or labels
+	`x:` horizontal axis bounds 
+	`y:` vertical axis bounds
+	`haxis, vaxis:` Show horizontal and vertical axes
+	`hgrid, vgrid:` Show horizontal and vertical gridlines
 	"""
 	assert len(x) ==2, "x must contain exactly two numbers"
 	assert isinstance(x[0], numbers.Real), "xmin must be a real number"
@@ -179,8 +181,14 @@ def canvas(
 	assert isinstance(y[0], numbers.Real), "ymin must be a real number"
 	assert isinstance(y[1], numbers.Real), "ymax must be a real number"
 	
+	assert isinstance(haxis, bool), "haxis must be bool"
+	assert isinstance(vaxis, bool), "vaxis must be bool"
+	assert isinstance(hgrid, bool), "hgrid must be bool"
+	assert isinstance(vgrid, bool), "vgrid must be bool"
 
-	return _pydll.c_plot_canvas(_ct.py_object(x), _ct.py_object(y))
+	return _pydll.c_plot_canvas(_ct.py_object(x), _ct.py_object(y),
+					haxis, vaxis,
+					hgrid, vgrid)
 
 
 

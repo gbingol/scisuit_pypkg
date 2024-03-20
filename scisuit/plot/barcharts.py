@@ -38,7 +38,15 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 	_Max = max(_Max, PrevMax)
 
 	niceY = NiceNumbers(_Min, _Max)
-	canvas(x=[-width, len(x)], y=niceY.minmax)
+	canvas(
+		x=[-width, len(x)], 
+		y=niceY.minmax, 
+		vgrid=kwargs.get("vgrid") or False,
+		hgrid=kwargs.get("hgrid") if kwargs.get("hgrid")!=None else True,
+		haxis=kwargs.get("haxis") if kwargs.get("haxis")!=None else True,
+		vaxis=kwargs.get("vaxis") if kwargs.get("vaxis")!=None else True
+		)
+
 
 	_Color = color or kwargs.get("fc") or kwargs.get("facecolor")
 	if _Color == None:

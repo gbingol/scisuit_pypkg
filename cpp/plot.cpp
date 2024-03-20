@@ -394,7 +394,13 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 /****************************** Canvas Chart ***************************************/
 
-PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
+PyObject* c_plot_canvas(
+	PyObject* X, 
+	PyObject* Y,
+	bool ShHAxis, 
+	bool ShVAxis,
+	bool ShHGrid,
+	bool ShVGrid)
 {
 	
 	auto xdata = Iterable_As1DVector(X);
@@ -432,7 +438,7 @@ PyObject* c_plot_canvas(PyObject* X, PyObject* Y)
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
-	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl));
+	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl), ShHAxis, ShVAxis, ShHGrid, ShVGrid);
 
 	Chart->AddSeries(std::move(series));
 

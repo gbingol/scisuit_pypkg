@@ -31,7 +31,13 @@ EXTERN PyObject * c_plot_scatter(
 
 
 //X and Y bounds
-EXTERN PyObject * c_plot_canvas(PyObject * X, PyObject* Y); 
+EXTERN PyObject * c_plot_canvas(
+	PyObject * X, 
+	PyObject* Y,
+	bool ShowHAxis = true, 
+	bool ShowVAxis = true,
+	bool ShowHGrid = true,
+	bool ShowVGrid = true); 
 
 
 /************************************************************************************/
