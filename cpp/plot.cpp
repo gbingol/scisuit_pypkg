@@ -827,9 +827,9 @@ void c_plot_show()
 }
 
 
-void c_plot_title(PyObject* LabelObj )
+void c_plot_title(const char* Label)
 {
-	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
+	if (Label == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
 	TRYBLOCK();
@@ -843,16 +843,15 @@ void c_plot_title(PyObject* LabelObj )
 		TextBox = Chart->GetChartTitle();
 	}
 
-	if(auto Label = PyUnicode_AsUTF8(LabelObj))
-		TextBox->SetText(Label);
+	TextBox->SetText(Label);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
-void c_plot_xlabel(PyObject* LabelObj)
+void c_plot_xlabel(const char* Label)
 {
-	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
+	if (Label == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
 	TRYBLOCK();
@@ -867,17 +866,15 @@ void c_plot_xlabel(PyObject* LabelObj)
 		TextBox = Chart->GetHorizAxisTitle();
 	}
 
-	if(auto Label = PyUnicode_AsUTF8(LabelObj))
-		TextBox->SetText(Label);
-
+	TextBox->SetText(Label);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
 
 
-void c_plot_ylabel(PyObject* LabelObj)
+void c_plot_ylabel(const char* Label)
 {
-	if (LabelObj == nullptr || s_CurPlotWnd == nullptr)
+	if (Label == nullptr || s_CurPlotWnd == nullptr)
 		return;
 
 	TRYBLOCK();
@@ -890,9 +887,7 @@ void c_plot_ylabel(PyObject* LabelObj)
 		TextBox = Chart->GetVertAxisTitle();
 	}
 
-	if(auto Label = PyUnicode_AsUTF8(LabelObj))
-		TextBox->SetText(Label);
-
+	TextBox->SetText(Label);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }

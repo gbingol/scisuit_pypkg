@@ -90,7 +90,10 @@ def hist(
 #-----------------------------------------------------------------------------------
 
 
-def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:numbers.Real=101325):
+def psychrometry(
+		Tdb:_Iterable=None, 
+		RH:_Iterable=None, 
+		P:numbers.Real=101325.0):
 	"""
 	Plots psychromety chart.
 
@@ -186,7 +189,9 @@ def canvas(
 	assert isinstance(hgrid, bool), "hgrid must be bool"
 	assert isinstance(vgrid, bool), "vgrid must be bool"
 
-	return _pydll.c_plot_canvas(_ct.py_object(x), _ct.py_object(y),
+	return _pydll.c_plot_canvas(
+					_ct.py_object(x), 
+					_ct.py_object(y),
 					haxis, vaxis,
 					hgrid, vgrid)
 
@@ -200,7 +205,7 @@ def canvas(
 
 
 
-def layout(nrows:int, ncols:int)->None:
+def layout(nrows:numbers.Integral, ncols:numbers.Integral)->None:
 	"""
 	Partitions the current chart window into nrows and ncols \n
 	(similar to a matrix with nrows and ncols) \n
@@ -208,8 +213,8 @@ def layout(nrows:int, ncols:int)->None:
 	nrows: number of rows
 	ncols: number of columns
 	"""
-	assert isinstance(nrows, int), "nrows must be integer"
-	assert isinstance(ncols, int), "ncols must be integer"
+	assert isinstance(nrows, numbers.Integral), "nrows must be integer"
+	assert isinstance(ncols, numbers.Integral), "ncols must be integer"
 
 	assert 0<nrows<=255, "0<nrows<=255 expected"
 	assert 0<ncols<=255, "0<ncols<=255 expected"
@@ -220,7 +225,11 @@ def layout(nrows:int, ncols:int)->None:
 
 
 
-def subplot(row:int, col:int, nrows:int = 1, ncols:int = 1)->None:
+def subplot(
+		row:numbers.Integral, 
+		col:numbers.Integral, 
+		nrows:numbers.Integral = 1, 
+		ncols:numbers.Integral = 1)->None:
 	"""
 	Must be called after the window is partitioned (by layout) to select a cell from the partition. \n
 
@@ -229,10 +238,10 @@ def subplot(row:int, col:int, nrows:int = 1, ncols:int = 1)->None:
 	nrows: number of rows the cell should span 
 	ncols: number of columns the cell should span 
 	"""
-	assert isinstance(row, int), "row must be integer"
-	assert isinstance(col, int), "col must be integer"
-	assert isinstance(nrows, int), "nrows must be integer"
-	assert isinstance(ncols, int), "ncols must be integer"
+	assert isinstance(row, numbers.Integral), "row must be integer"
+	assert isinstance(col, numbers.Integral), "col must be integer"
+	assert isinstance(nrows, numbers.Integral), "nrows must be integer"
+	assert isinstance(ncols, numbers.Integral), "ncols must be integer"
 
 	assert 0 <= row <= 255, "0 <= row <= 255 expected"
 	assert 0 <= col <= 255, "0 <= col <= 255 expected"
@@ -254,19 +263,19 @@ def figure():
 def title(label:str):
 	"""Create chart title"""
 	assert isinstance(label, str), "label must be of type string."
-	_pydll.c_plot_title(label)
+	_pydll.c_plot_title(_ct.c_char_p(label.encode()))
 
 
 def xlabel(label:str):
 	"""Create x-axis label"""
 	assert isinstance(label, str), "label must be of type string."
-	_pydll.c_plot_xlabel(label)
+	_pydll.c_plot_xlabel(_ct.c_char_p(label.encode()))
 
 
 def ylabel(label:str):
 	"""Create y-axis label"""
 	assert isinstance(label, str), "label must be of type string."
-	_pydll.c_plot_ylabel(label)
+	_pydll.c_plot_ylabel(_ct.c_char_p(label.encode()))
 
 
 def xlim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None:

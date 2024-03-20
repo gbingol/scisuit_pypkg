@@ -398,15 +398,15 @@ pydll.c_plot_figure.argtypes = []
 pydll.c_plot_figure.restype=None
 
 
-pydll.c_plot_title.argtypes = [_ct.py_object]
+pydll.c_plot_title.argtypes = [_ct.c_char_p]
 pydll.c_plot_title.restype=None
 
 
-pydll.c_plot_xlabel.argtypes = [_ct.py_object]
+pydll.c_plot_xlabel.argtypes = [_ct.c_char_p]
 pydll.c_plot_xlabel.restype=None
 
 
-pydll.c_plot_ylabel.argtypes = [_ct.py_object]
+pydll.c_plot_ylabel.argtypes = [_ct.c_char_p]
 pydll.c_plot_ylabel.restype=None
 
 

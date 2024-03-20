@@ -144,9 +144,9 @@ EXTERN void c_plot_figure();
 
 EXTERN void c_plot_show();
 
-EXTERN void c_plot_title(PyObject* title);
-EXTERN void c_plot_xlabel(PyObject* xlabel);
-EXTERN void c_plot_ylabel(PyObject* ylabel);
+EXTERN void c_plot_title(const char* title);
+EXTERN void c_plot_xlabel(const char* xlabel);
+EXTERN void c_plot_ylabel(const char* ylabel);
 EXTERN void c_plot_legend();
 
 //Either returns the limits or sets the limits
