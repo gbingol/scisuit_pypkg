@@ -269,14 +269,18 @@ pydll.c_stat_test_norm_ad.restype=_ct.py_object
 pydll.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_boxplot.restype=_ct.py_object
 
+
 pydll.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_histogram.restype=_ct.py_object
+
 
 pydll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_psychrometry.restype=_ct.py_object
 
+
 pydll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
 pydll.c_plot_scatter.restype=_ct.py_object
+
 
 pydll.c_plot_canvas.argtypes = [
 						_ct.py_object, #x-bounds
@@ -298,8 +302,7 @@ pydll.c_plot_gdi_arc.argtypes = [
 					_ct.c_double, #xcenter
 					_ct.c_double, #ycenter
 					_ct.py_object, #dictionary for Pen
-					_ct.py_object] #dictionary for Brush
-					
+					_ct.py_object] #dictionary for Brush				
 pydll.c_plot_gdi_arc.restype=None
 
 
@@ -310,8 +313,7 @@ pydll.c_plot_gdi_arrow.argtypes = [
 					_ct.c_double, #y2
 					_ct.c_double, #angle
 					_ct.c_double, #length
-					_ct.py_object] #dictionary for Pen
-					
+					_ct.py_object] #dictionary for Pen				
 pydll.c_plot_gdi_arrow.restype=None
 
 
@@ -320,8 +322,7 @@ pydll.c_plot_gdi_line.argtypes = [
 					_ct.c_double, #y1
 					_ct.c_double, #x2
 					_ct.c_double, #y2
-					_ct.py_object] #dictionary for Pen
-					
+					_ct.py_object] #dictionary for Pen				
 pydll.c_plot_gdi_line.restype=None
 
 
@@ -332,7 +333,6 @@ pydll.c_plot_gdi_rect.argtypes = [
 					_ct.c_double, #height
 					_ct.py_object, #dictionary for Pen
 					_ct.py_object] #dictionary for Brush
-
 pydll.c_plot_gdi_ellipse.restype=None
 
 
@@ -343,7 +343,6 @@ pydll.c_plot_gdi_ellipse.argtypes = [
 					_ct.c_double, # half height
 					_ct.py_object, #dictionary for Pen
 					_ct.py_object] #dictionary for Brush
-
 pydll.c_plot_gdi_ellipse.restype=None
 
 
@@ -354,7 +353,6 @@ pydll.c_plot_gdi_text.argtypes = [
 					_ct.c_double, # rotation
 					_ct.c_char_p, # color
 					_ct.py_object] #dictionary for Font
-
 pydll.c_plot_gdi_text.restype=None
 
 
@@ -362,7 +360,6 @@ pydll.c_plot_gdi_curve.argtypes = [
 					_ct.py_object, #x-values (iterable)
 					_ct.py_object,#y-values (iterable)
 					_ct.py_object] #dictionary for Pen
-
 pydll.c_plot_gdi_curve.restype=None
 
 
@@ -371,7 +368,6 @@ pydll.c_plot_gdi_polygon.argtypes = [
 					_ct.py_object,#y-values (iterable)
 					_ct.py_object, #dictionary for Pen
 					_ct.py_object] #dictionary for brush
-
 pydll.c_plot_gdi_polygon.restype=None
 
 
@@ -382,13 +378,13 @@ pydll.c_plot_gdi_marker.argtypes = [
 					_ct.c_uint8, # size
 					_ct.py_object, # dictionary for Pen
 					_ct.py_object] #dictionary for Brush
-
 pydll.c_plot_gdi_marker.restype=None
 
 #---------------------------------------------
 
 pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]
 pydll.c_plot_layout.restype=None
+
 
 pydll.c_plot_subplot.argtypes = [
 						_ct.c_int, 
@@ -397,17 +393,22 @@ pydll.c_plot_subplot.argtypes = [
 						_ct.c_int]
 pydll.c_plot_subplot.restype=None
 
+
 pydll.c_plot_figure.argtypes = []
 pydll.c_plot_figure.restype=None
+
 
 pydll.c_plot_title.argtypes = [_ct.py_object]
 pydll.c_plot_title.restype=None
 
+
 pydll.c_plot_xlabel.argtypes = [_ct.py_object]
 pydll.c_plot_xlabel.restype=None
 
+
 pydll.c_plot_ylabel.argtypes = [_ct.py_object]
 pydll.c_plot_ylabel.restype=None
+
 
 pydll.c_plot_axislim.argtypes = [
 						_ct.py_object, 
@@ -415,13 +416,17 @@ pydll.c_plot_axislim.argtypes = [
 						_ct.c_char]
 pydll.c_plot_axislim.restype=_ct.py_object
 
-pydll.c_plot_set_xticks.argtypes = [
+
+pydll.c_plot_set_axisticks.argtypes = [
 						_ct.py_object, 
-						_ct.py_object]
-pydll.c_plot_set_xticks.restype=_ct.py_object
+						_ct.py_object,
+						_ct.c_char]
+pydll.c_plot_set_axisticks.restype=_ct.py_object
+
 
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
+
 
 pydll.c_plot_show.argtypes = []
 pydll.c_plot_show.restype=None

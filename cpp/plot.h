@@ -155,7 +155,10 @@ EXTERN PyObject *c_plot_axislim(
 					PyObject *max, 
 					char SelAxis='y');
 
-EXTERN PyObject* c_plot_set_xticks(PyObject* pos, PyObject* labels);
+EXTERN PyObject* c_plot_set_axisticks(
+					PyObject* pos, 
+					PyObject* labels,
+					char SelAxis = 'x');
 
 
 
