@@ -157,10 +157,10 @@ import numpy as np
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
 counts = [40, 100, 30, 55]
 
-#plt.bar(fruits, counts)
-#plt.bar(fruits, counts, bottom=counts)
+plt.bar(fruits, counts, hatch="/", color=["255 0 0", "0 255 0", "0 0 0", "100 150 50"])
+plt.bar(fruits, counts, bottom=counts)
 
-
+plt.figure()
 
 
 species = ("Adelie", "Chinstrap", "Gentoo")
@@ -180,7 +180,6 @@ for attribute, measurement in penguin_means.items():
 	rects = plt.bar(x + offset, measurement, width=width)
 	multiplier += 1
 
-plt.xlim(min=-0.25)
 plt.set_xticks(x+width, species)
 
 plt.show()
