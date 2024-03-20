@@ -1,4 +1,5 @@
 import numpy as np
+import numbers
 from typing import Iterable as _Iterable
 
 from .gdi import marker
@@ -63,7 +64,7 @@ def bubble(
 	assert isinstance(label, str|None), "'label' must be string"
 	assert isinstance(color, str|tuple|list), "'color' must be str|tuple|list"
 
-	assert isinstance(scale, float|int), "scale must be int|float"
+	assert isinstance(scale, numbers.Real), "scale must be Real"
 	assert 0<scale<2.0, "scale must be in [0, 2]"
 
 

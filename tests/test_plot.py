@@ -155,10 +155,10 @@ import numpy as np
 
 
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
-counts = [40, 100, 30, 55]
+counts = np.array([40, 100, 30, 55], dtype=np.float64)
 
 plt.barh(fruits, counts, hatch="/", color=["255 0 0", "0 255 0", "0 0 0", "100 150 50"])
-plt.barh(fruits, counts, left=counts)
+plt.barh(fruits, counts, left=counts+2)
 
 plt.figure()
 

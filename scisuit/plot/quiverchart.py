@@ -1,4 +1,5 @@
 import numpy as _np
+import numbers
 
 from .charts import canvas
 from .gdi import arrow
@@ -55,7 +56,7 @@ def quiver(
 	assert len(X)==len(Y), "X and Y must have same lengths"
 	assert len(U) == len(V), "U and V must have same lengths"
 	assert len(X) == len(U), "X, Y, U, V must have same lengths"
-	assert isinstance(scale, float|int|None), "scale must be float|int|None"
+	assert isinstance(scale, numbers.Real|None), "scale must be float|int|None"
 
 	x, y = X.flatten(), Y.flatten()
 	u, v = U.flatten(), V.flatten()

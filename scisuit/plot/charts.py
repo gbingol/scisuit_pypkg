@@ -90,7 +90,7 @@ def hist(
 #-----------------------------------------------------------------------------------
 
 
-def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:float|int=101325):
+def psychrometry(Tdb:_Iterable=None, RH:_Iterable=None, P:numbers.Real=101325):
 	"""
 	Plots psychromety chart.
 
@@ -269,17 +269,17 @@ def ylabel(label:str):
 	_pydll.c_plot_ylabel(label)
 
 
-def xlim(min:float|None = None, max:float|None = None)->tuple|None:
+def xlim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None:
 	"""Sets or gets the x-limits of the current chart"""
-	assert isinstance(min, int|float|None), "min must be int|float|None"
-	assert isinstance(max, int|float|None), "max must be int|float|None"
+	assert isinstance(min, numbers.Real|None), "min must be Real|None"
+	assert isinstance(max, numbers.Real|None), "max must be Real|None"
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("x".encode()))
 
 
-def ylim(min:float|None = None, max:float|None = None)->tuple|None:
+def ylim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None:
 	"""Sets or gets the y-limits of the current chart"""
-	assert isinstance(min, int|float|None), "min must be int|float|None"
-	assert isinstance(max, int|float|None), "max must be int|float|None"
+	assert isinstance(min, numbers.Real|None), "min must be Real|None"
+	assert isinstance(max, numbers.Real|None), "max must be Real|None"
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 

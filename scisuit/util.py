@@ -1,9 +1,10 @@
 import math
+import numbers
 from typing import Iterable as _Iterable
 
 
 
-def minmax(X:_Iterable)->tuple[float|int]:
+def minmax(X:_Iterable)->tuple[numbers.Real]:
 	_min = X[0]
 	_max = X[0]
 	for i in range(1, len(X)):

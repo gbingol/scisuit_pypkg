@@ -1,4 +1,5 @@
 import numpy as np
+import numbers
 from typing import Iterable as _Iterable
 from random import randint
 
@@ -17,9 +18,9 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 	`width:` The width of the bars.
 	`bottom:` The y coordinate of the bottom side of the bars.
 	"""
-	assert isinstance(bottom, float|int|_Iterable)
+	assert isinstance(bottom, numbers.Real|_Iterable)
 	if isinstance(bottom, _Iterable):
-		nums = [i for i in bottom if isinstance(i, float|int)]
+		nums = [i for i in bottom if isinstance(i, numbers.Real)]
 		assert len(nums) == len(height), "if bottom is Iterable, its length must be equal to 'height's length"
 	
 	pos = np.array(x)
@@ -54,12 +55,12 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 
 
 	for i in range(len(height)):
-		_bottom = bottom if isinstance(bottom, float|int) else bottom[i]
+		_bottom = bottom if isinstance(bottom, numbers.Real) else bottom[i]
 		_xcord = pos[i]-width/2 if X_HasStr else pos[i]
 		xy = [_xcord, _bottom]
 
 		kwargs["hatch"] = kwargs.get("hatch") or "solid"
-		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], float|int)) else _Color[i]
+		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], numbers.Real)) else _Color[i]
 
 		rect(xy=xy, width=width, height=height[i], **kwargs)
 	
@@ -77,9 +78,9 @@ def barh(y, width, height=0.8, left=0.0, color = None, **kwargs):
 	`width:` The width of the bars.
 	`bottom:` The y coordinate of the bottom side of the bars.
 	"""
-	assert isinstance(left, float|int|_Iterable)
+	assert isinstance(left, numbers.Real|_Iterable)
 	if isinstance(left, _Iterable):
-		nums = [i for i in left if isinstance(i, float|int)]
+		nums = [i for i in left if isinstance(i, numbers.Real)]
 		assert len(nums) == len(width), "if left is Iterable, its length must be equal to 'width's length"
 	
 	pos = np.array(y)
@@ -114,14 +115,14 @@ def barh(y, width, height=0.8, left=0.0, color = None, **kwargs):
 
 
 	for i in range(len(width)):
-		_xcoord = left if isinstance(left, float|int) else left[i]
+		_xcoord = left if isinstance(left, numbers.Real) else left[i]
 		_ycoord = pos[i]-height/2 if X_HasStr else pos[i]
 		xy = [_xcoord, _ycoord]
 
 		kwargs["hatch"] = kwargs.get("hatch") or "solid"
-		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], float|int)) else _Color[i]
+		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], numbers.Real)) else _Color[i]
 
-		rect(xy=xy, width=width[i], height=height, **kwargs)
+		rect(xy=xy, width=float(width[i]), height=float(height), **kwargs)
 	
 	if X_HasStr:
 		set_yticks(pos, y)
