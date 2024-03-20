@@ -157,8 +157,8 @@ import numpy as np
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
 counts = [40, 100, 30, 55]
 
-plt.bar(fruits, counts, hatch="/", color=["255 0 0", "0 255 0", "0 0 0", "100 150 50"], vaxis=False)
-plt.bar(fruits, counts, bottom=counts, vaxis=False)
+plt.barh(fruits, counts, hatch="/", color=["255 0 0", "0 255 0", "0 0 0", "100 150 50"])
+plt.barh(fruits, counts, left=counts)
 
 plt.figure()
 

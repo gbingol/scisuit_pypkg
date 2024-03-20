@@ -3,7 +3,7 @@ from typing import Iterable as _Iterable
 from random import randint
 
 from .gdi import rect
-from .charts import canvas, ylim, set_xticks
+from .charts import canvas, xlim, ylim, set_xticks, set_yticks
 from ..util import NiceNumbers, minmax
 
 
@@ -68,3 +68,60 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 
 
 
+
+
+def barh(y, width, height=0.8, left=0.0, color = None, **kwargs):
+	"""
+	`y:` The y coordinates of the bars or category
+	`height:` The height of the bars.
+	`width:` The width of the bars.
+	`bottom:` The y coordinate of the bottom side of the bars.
+	"""
+	assert isinstance(left, float|int|_Iterable)
+	if isinstance(left, _Iterable):
+		nums = [i for i in left if isinstance(i, float|int)]
+		assert len(nums) == len(width), "if left is Iterable, its length must be equal to 'width's length"
+	
+	pos = np.array(y)
+	X_HasStr = False
+	if isinstance(pos[0], str):
+		pos = list(range(len(y)))
+		X_HasStr = True
+	
+	arr = np.array(width)
+
+	_Min = np.min(left) if isinstance(left, _Iterable) else left
+	_Max = np.max(arr + np.array(left) if isinstance(left, _Iterable) else arr + left)
+
+	PrevMin, PrevMax = xlim()
+	_Min = min(_Min, PrevMin)
+	_Max = max(_Max, PrevMax)
+
+	niceX = NiceNumbers(_Min, _Max)
+	canvas(
+		y=[-height, len(y)], 
+		x=niceX.minmax, 
+		hgrid=kwargs.get("hgrid") or False,
+		vgrid=kwargs.get("vgrid") if kwargs.get("vgrid")!=None else True,
+		haxis=kwargs.get("haxis") if kwargs.get("haxis")!=None else True,
+		vaxis=kwargs.get("vaxis") if kwargs.get("vaxis")!=None else True
+		)
+
+
+	_Color = color or kwargs.get("fc") or kwargs.get("facecolor")
+	if _Color == None:
+		_Color = [randint(0, 255), randint(0, 255), randint(0, 255)]
+
+
+	for i in range(len(width)):
+		_xcoord = left if isinstance(left, float|int) else left[i]
+		_ycoord = pos[i]-height/2 if X_HasStr else pos[i]
+		xy = [_xcoord, _ycoord]
+
+		kwargs["hatch"] = kwargs.get("hatch") or "solid"
+		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], float|int)) else _Color[i]
+
+		rect(xy=xy, width=width[i], height=height, **kwargs)
+	
+	if X_HasStr:
+		set_yticks(pos, y)
