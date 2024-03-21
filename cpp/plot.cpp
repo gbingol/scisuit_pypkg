@@ -948,7 +948,7 @@ PyObject* c_plot_axislim(PyObject* min, PyObject* max, char SelAxis)
 }
 
 
-PyObject* c_plot_set_axisticks(PyObject *pos, PyObject *labels, char SelAxis)
+PyObject* c_plot_set_xticks(PyObject *pos, PyObject *labels)
 {
 	if(s_CurPlotWnd == nullptr)
 		Py_RETURN_NONE;
@@ -957,8 +957,35 @@ PyObject* c_plot_set_axisticks(PyObject *pos, PyObject *labels, char SelAxis)
 
 	if(auto chart= s_CurPlotWnd->GetActiveChart())
 	{
-		auto Axis = SelAxis == 'y' ? chart->GetVertAxis() : chart->GetHorizAxis();
+		auto Axis = chart->GetHorizAxis();
 		
+		auto Positions = Iterable_As1DVector(pos);
+		Axis->SetTickPos(Positions);
+
+		if(!Py_IsNone(labels))
+		{
+			auto _Labels = Iterable_As1DVector<std::string>(labels);
+			Axis->SetLabels(_Labels);
+		}
+	}
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
+PyObject* c_plot_set_yticks(PyObject *pos, PyObject *labels)
+{
+	if(s_CurPlotWnd == nullptr)
+		Py_RETURN_NONE;
+
+	TRYBLOCK();
+
+	if(auto chart= s_CurPlotWnd->GetActiveChart())
+	{
+		auto Axis = chart->GetVertAxis();
+
 		auto Positions = Iterable_As1DVector(pos);
 		Axis->SetTickPos(Positions);
 

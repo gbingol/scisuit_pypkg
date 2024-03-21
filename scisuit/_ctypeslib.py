@@ -417,11 +417,16 @@ pydll.c_plot_axislim.argtypes = [
 pydll.c_plot_axislim.restype=_ct.py_object
 
 
-pydll.c_plot_set_axisticks.argtypes = [
+pydll.c_plot_set_xticks.argtypes = [
 						_ct.py_object, 
-						_ct.py_object,
-						_ct.c_char]
-pydll.c_plot_set_axisticks.restype=_ct.py_object
+						_ct.py_object]
+pydll.c_plot_set_xticks.restype=_ct.py_object
+
+
+pydll.c_plot_set_yticks.argtypes = [
+						_ct.py_object, 
+						_ct.py_object]
+pydll.c_plot_set_yticks.restype=_ct.py_object
 
 
 pydll.c_plot_legend.argtypes = []

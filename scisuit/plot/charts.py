@@ -294,12 +294,12 @@ def ylim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None
 
 def set_xticks(ticks, labels=None)->None:
 	"""Sets the x-ticks and optionally labels"""
-	_pydll.c_plot_set_axisticks(_ct.py_object(ticks), _ct.py_object(labels), _ct.c_char("x".encode()))
+	_pydll.c_plot_set_xticks(_ct.py_object(ticks), _ct.py_object(labels))
 
 
 def set_yticks(ticks, labels=None)->None:
 	"""Sets the x-ticks and optionally labels"""
-	_pydll.c_plot_set_axisticks(_ct.py_object(ticks), _ct.py_object(labels), _ct.c_char("y".encode()))
+	_pydll.c_plot_set_yticks(_ct.py_object(ticks), _ct.py_object(labels))
 
 
 def legend():

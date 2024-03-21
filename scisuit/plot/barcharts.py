@@ -62,7 +62,7 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 		kwargs["hatch"] = kwargs.get("hatch") or "solid"
 		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], numbers.Real)) else _Color[i]
 
-		rect(xy=xy, width=width, height=height[i], **kwargs)
+		rect(xy=xy, width=width, height=float(abs(height[i])), **kwargs)
 	
 	if X_HasStr:
 		set_xticks(pos, x)
@@ -122,7 +122,7 @@ def barh(y, width, height=0.8, left=0.0, color = None, **kwargs):
 		kwargs["hatch"] = kwargs.get("hatch") or "solid"
 		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], numbers.Real)) else _Color[i]
 
-		rect(xy=xy, width=float(width[i]), height=float(height), **kwargs)
+		rect(xy=xy, width=float(abs(width[i])), height=float(height), **kwargs)
 	
 	if X_HasStr:
 		set_yticks(pos, y)
