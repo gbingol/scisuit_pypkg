@@ -178,12 +178,10 @@ mult = 0
 
 for _, measure in Levels.items():
 	offset = width * mult
-	rects = plt.bar(x=x + offset, height=measure, width=width, vaxis=False)
+	rects = plt.bar(x=x + offset, height=measure, width=width)
 	mult += 1
 
-plt.set_xticks(x+width, Categ, align="left")
-plt.set_xposition(300.0)
-plt.set_yposition(3)
+plt.set_xticks(x+width, Categ)
 
 plt.figure()
 
