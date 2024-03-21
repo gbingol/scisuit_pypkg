@@ -326,6 +326,30 @@ def set_yticks(ticks, labels=None, align="center", pos="left")->None:
 				_ct.py_object(labels),
 				_ct.c_char_p(align.encode()),
 				_ct.c_char_p(pos.encode()))
+	
+
+def set_xposition(position:numbers.Real)->None:
+	"""
+	Sets x-axis position
+	
+	`position:` A valid position within limits of y-axis
+	"""
+
+	assert isinstance(position, numbers.Real), "position must be Real"
+
+	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("x".encode()))
+
+
+def set_yposition(position:numbers.Real)->None:
+	"""
+	Sets y-axis position
+	
+	`position:` A valid position within limits of x-axis
+	"""
+
+	assert isinstance(position, numbers.Real), "position must be Real"
+
+	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("y".encode()))
 
 
 def legend():

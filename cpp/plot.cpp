@@ -1031,6 +1031,33 @@ PyObject* c_plot_set_yticks(
 	Py_RETURN_NONE;
 }
 
+
+PyObject *c_plot_set_axispos(double pos, char SelAxis)
+{
+	if(s_CurPlotWnd == nullptr)
+		Py_RETURN_NONE;
+
+	TRYBLOCK();
+
+	if(auto chart= s_CurPlotWnd->GetActiveChart())
+	{
+		auto Axis = SelAxis == 'y'? chart->GetVertAxis() : chart->GetHorizAxis();
+		auto OrthAxis = Axis->GetOrthoAxis();
+
+		auto Bnds = OrthAxis->GetBounds();
+
+		//pos is clamped within bounds of orthogonal axis
+		Axis->CrossThrough(pos, charts::CAxis::CROSS::USER);
+	}
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
+
+
 //------------------------------------------------------------------------
 
 	

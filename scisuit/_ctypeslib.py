@@ -432,6 +432,8 @@ pydll.c_plot_set_yticks.argtypes = [
 						_ct.c_char_p] #Position
 pydll.c_plot_set_yticks.restype=_ct.py_object
 
+pydll.c_plot_set_axispos.argtypes = [_ct.c_double, _ct.c_char]
+pydll.c_plot_set_axispos.restype=_ct.py_object
 
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
