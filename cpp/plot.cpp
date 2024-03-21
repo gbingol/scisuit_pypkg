@@ -948,7 +948,11 @@ PyObject* c_plot_axislim(PyObject* min, PyObject* max, char SelAxis)
 }
 
 
-PyObject* c_plot_set_xticks(PyObject *pos, PyObject *labels)
+PyObject* c_plot_set_xticks(
+	PyObject *pos, 
+	PyObject *labels,
+	const char* Alignment,
+	const char* Position)
 {
 	if(s_CurPlotWnd == nullptr)
 		Py_RETURN_NONE;
@@ -959,10 +963,20 @@ PyObject* c_plot_set_xticks(PyObject *pos, PyObject *labels)
 	{
 		auto Axis = chart->GetHorizAxis();
 		
-		auto Positions = Iterable_As1DVector(pos);
-		Axis->SetTickPos(Positions);
+		auto TickPos = Iterable_As1DVector(pos);
+		Axis->SetTickPos(TickPos);
 
-		if(!Py_IsNone(labels))
+		if(std::strcmp(Alignment, "center") == 0)
+			Axis->SetLabelAlignment(charts::CAxis::LABELALIGN::CENTER);
+		else if(std::strcmp(Alignment, "left") == 0)
+			Axis->SetLabelAlignment(charts::CAxis::LABELALIGN::LEFT);
+
+		if(std::strcmp(Position, "bottom") == 0)
+			Axis->SetLabelPos(charts::CAxis::LABELPOS::BOTTOM);
+		else if (std::strcmp(Position, "top") == 0)
+			Axis->SetLabelPos(charts::CAxis::LABELPOS::TOP);
+
+		if (!Py_IsNone(labels))
 		{
 			auto _Labels = Iterable_As1DVector<std::string>(labels);
 			Axis->SetLabels(_Labels);
@@ -975,7 +989,11 @@ PyObject* c_plot_set_xticks(PyObject *pos, PyObject *labels)
 }
 
 
-PyObject* c_plot_set_yticks(PyObject *pos, PyObject *labels)
+PyObject* c_plot_set_yticks(
+		PyObject *pos, 
+		PyObject *labels,
+		const char* Alignment,
+		const char* Position)
 {
 	if(s_CurPlotWnd == nullptr)
 		Py_RETURN_NONE;
@@ -986,8 +1004,20 @@ PyObject* c_plot_set_yticks(PyObject *pos, PyObject *labels)
 	{
 		auto Axis = chart->GetVertAxis();
 
-		auto Positions = Iterable_As1DVector(pos);
-		Axis->SetTickPos(Positions);
+		auto TickPos = Iterable_As1DVector(pos);
+		Axis->SetTickPos(TickPos);
+
+		if(std::strcmp(Alignment, "center") == 0)
+			Axis->SetLabelAlignment(charts::CAxis::LABELALIGN::CENTER);
+		else if(std::strcmp(Alignment, "top") == 0)
+			Axis->SetLabelAlignment(charts::CAxis::LABELALIGN::TOP);
+		else if(std::strcmp(Alignment, "bottom") == 0)
+			Axis->SetLabelAlignment(charts::CAxis::LABELALIGN::BOTTOM);
+		
+		if(std::strcmp(Position, "left") == 0)
+			Axis->SetLabelPos(charts::CAxis::LABELPOS::LEFT);
+		else if(std::strcmp(Position, "right") == 0)
+			Axis->SetLabelPos(charts::CAxis::LABELPOS::RIGHT);
 
 		if(!Py_IsNone(labels))
 		{

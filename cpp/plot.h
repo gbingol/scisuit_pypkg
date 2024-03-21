@@ -157,11 +157,15 @@ EXTERN PyObject *c_plot_axislim(
 
 EXTERN PyObject* c_plot_set_xticks(
 					PyObject* pos, 
-					PyObject* labels);
+					PyObject* labels,
+					const char* Alignment = "center",
+					const char* Position = "bottom");
 
 EXTERN PyObject* c_plot_set_yticks(
 					PyObject* pos, 
-					PyObject* labels);
+					PyObject* labels,
+					const char* Alignment = "center",
+					const char* Position = "left");
 
 
 /**********************************************************************************/

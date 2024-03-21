@@ -419,13 +419,17 @@ pydll.c_plot_axislim.restype=_ct.py_object
 
 pydll.c_plot_set_xticks.argtypes = [
 						_ct.py_object, 
-						_ct.py_object]
+						_ct.py_object,
+						_ct.c_char_p, #Alignment
+						_ct.c_char_p] #Position
 pydll.c_plot_set_xticks.restype=_ct.py_object
 
 
 pydll.c_plot_set_yticks.argtypes = [
 						_ct.py_object, 
-						_ct.py_object]
+						_ct.py_object,
+						_ct.c_char_p, #Alignment
+						_ct.c_char_p] #Position
 pydll.c_plot_set_yticks.restype=_ct.py_object
 
 

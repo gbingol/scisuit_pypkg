@@ -181,7 +181,7 @@ for _, measure in Levels.items():
 	rects = plt.bar(x=x + offset, height=measure, width=width)
 	mult += 1
 
-plt.set_xticks(x+width, Categ)
+plt.set_xticks(x+width, Categ, align="left")
 
 plt.show()
 

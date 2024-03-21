@@ -292,14 +292,40 @@ def ylim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 
-def set_xticks(ticks, labels=None)->None:
+def set_xticks(ticks, labels=None, align="center", pos="bottom")->None:
 	"""Sets the x-ticks and optionally labels"""
-	_pydll.c_plot_set_xticks(_ct.py_object(ticks), _ct.py_object(labels))
+
+	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
+	
+	assert isinstance(align, str), "align must be str"
+	assert isinstance(pos, str), "pos must be str"
+
+	assert align in ["center", "left"], "align: center or left"
+	assert pos in ["top", "bottom"], "pos: top or bottom"
+
+	_pydll.c_plot_set_xticks(
+				_ct.py_object(ticks), 
+				_ct.py_object(labels),
+				_ct.c_char_p(align.encode()),
+				_ct.c_char_p(pos.encode()))
 
 
-def set_yticks(ticks, labels=None)->None:
+def set_yticks(ticks, labels=None, align="center", pos="left")->None:
 	"""Sets the x-ticks and optionally labels"""
-	_pydll.c_plot_set_yticks(_ct.py_object(ticks), _ct.py_object(labels))
+
+	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
+
+	assert isinstance(align, str), "align must be str"
+	assert isinstance(pos, str), "pos must be str"
+
+	assert align in ["center", "top", "bottom"], "align: center, top or bottom"
+	assert pos in ["left", "right"], "pos: left or right"
+
+	_pydll.c_plot_set_yticks(
+				_ct.py_object(ticks), 
+				_ct.py_object(labels),
+				_ct.c_char_p(align.encode()),
+				_ct.c_char_p(pos.encode()))
 
 
 def legend():
