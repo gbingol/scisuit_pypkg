@@ -155,32 +155,33 @@ import numpy as np
 
 
 fruits = ["apple", 'blueberry', 'cherry', 'orange']
-counts = np.array([40, 100, 30, 55], dtype=np.float64)
+counts = np.array([40, 100, 30, 55])
+pad = 2
 
-plt.barh(fruits, counts, hatch="/", color=["255 0 0", "0 255 0", "0 0 0", "100 150 50"])
-plt.barh(fruits, counts, left=counts+2)
+plt.barh(fruits, counts, hatch="/", color=[(255,0,0), "0 255 0", "0 0 0", "100 150 50"])
+plt.barh(fruits, counts, left=counts+pad)
 
 plt.figure()
 
 
-species = ("Adelie", "Chinstrap", "Gentoo")
-penguin_means = {
-    'Bill Depth': (18.35, 18.43, 14.98),
-    'Bill Length': (38.79, 48.83, 47.50),
-    'Flipper Length': (189.95, 195.82, 217.19),
+Categ = ("Control", "MW", "IR")
+Levels = {
+    'A': (18, 18, 14),
+    'B': (38, 48, 47),
+    'C': (189, 195, 217),
 }
 
-x = np.arange(len(species))  # the label locations
+x = np.arange(len(Categ))  # the label locations
 width = 0.25  # the width of the bars
-multiplier = 0
+mult = 0
 
 
-for attribute, measurement in penguin_means.items():
-	offset = width * multiplier 
-	rects = plt.bar(x + offset, measurement, width=width)
-	multiplier += 1
+for _, measure in Levels.items():
+	offset = width * mult
+	rects = plt.bar(x=x + offset, height=measure, width=width)
+	mult += 1
 
-plt.set_xticks(x+width, species)
+plt.set_xticks(x+width, Categ)
 
 plt.show()
 
