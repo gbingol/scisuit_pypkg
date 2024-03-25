@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scisuit"
-version = "1.2.2"
+version = "1.2.3"
 authors = [{ name="Gokhan Bingol, PhD", email="gbingol@pebytes.com" },]
 description = "Scientific Computing Package"
 readme = "README.md"
@@ -14,7 +14,7 @@ dependencies = ["numpy", ]
 classifiers = [
     "Programming Language :: Python :: 3",
 	"Programming Language :: C++",
-    "License :: Free for non-commercial use",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: Microsoft :: Windows",
 ]
 
