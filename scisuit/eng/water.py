@@ -9,6 +9,8 @@ class Water:
 	
 	def cp(self)->float:
 		"""
+		Computes specific heat capacity, kJ/kgK
+		
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""

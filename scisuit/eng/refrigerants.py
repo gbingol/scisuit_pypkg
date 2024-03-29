@@ -4,14 +4,13 @@ import numpy as _np
 @_dc.dataclass
 class Refrigerant:
 	"""
-	Properties of refrigerants \n
-	S: Saturated \n
-	\n
-	T: Saturation temperature (K) \n
-	P: Saturation pressure (kPa) \n
-	vf, vg: specific volume (m3/kg) \n
-	hf, hg: enthalpy (kJ/kg) \n
-	sf, sg: entropy (kJ/kgK)
+	Properties of refrigerants
+	`S:` Saturated
+	`T:` Saturation temperature (K)
+	`P:` Saturation pressure (kPa)
+	`vf, vg:` specific volume (m3/kg)
+	`hf, hg:` enthalpy (kJ/kg)
+	`sf, sg:` entropy (kJ/kgK)
 	"""
 	@_dc.dataclass
 	class SR12:
