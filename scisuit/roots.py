@@ -37,12 +37,12 @@ def bisect(
 	Finds the root using bisection method, returns (root, Info)
 
 	## Inputs:
-	f: A unary function \n
-	a, b:	The interval where the root lies in \n
-	tol:	tolerance for error \n
-	maxiter: Maximum number of iterations \n
-	method: "bf" for brute-force (halving)  \n
-	"rf" for regula falsi (false position)  \n
+	f: A unary function
+	a, b: The interval where the root lies in
+	tol: tolerance for error
+	maxiter: Maximum number of iterations
+	method: "bf" for brute-force (halving) 
+	"rf" for regula falsi (false position) 
 	modified: True for modified regula falsi method.
 	"""
 	assert callable(f), "f must be function"
@@ -75,7 +75,6 @@ def brentq(
 	a, b: The interval where root lies in \n
 	tol: tolerance for error \n
 	maxiter: Maximum number of iterations during the search for the root
-
 	"""
 	assert callable(f), "f must be function"
 	assert isinstance(a, _numbers.Real), "a must be real number"
@@ -128,10 +127,10 @@ def newton(
 	returns (root, Info)
 
 	## Inputs:
-	f: A unary function \n
-	fprime: derivative of f \n
-	x0, x1: Initial guesses \n
-	tol: tolerance for error \n
+	f: A unary function 
+	fprime: derivative of f 
+	x0, x1: Initial guesses 
+	tol: tolerance for error 
 	maxiter: Max number of iterations
 	"""
 	assert callable(f), "f must be function"
@@ -158,9 +157,9 @@ def ridder(
 	Uses Ridder's method.
 
 	## Inputs:
-	f: A unary function \n
-	a, b:	The interval where the root lies in \n
-	tol: tolerance for error \n
+	f: A unary function 
+	a, b: The interval where the root lies in 
+	tol: tolerance for error 
 	maxiter: Maximum number of iterations
 	"""
 	assert callable(f), "f must be function"
