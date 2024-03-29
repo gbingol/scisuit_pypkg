@@ -58,17 +58,16 @@ def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 
 
 
-def lagrange(x:Iterable, y:Iterable, val:float)->float:
+def lagrange(
+		x:Iterable, 
+		y:Iterable, 
+		value:float)->float:
 	"""
 	Constructs lagrange polynomial from x,y to compute the given value.
-
-	## Inputs:
-	x, y: x and y-values \n
-	val: value in the range of x whose corresponding y value is wish to be known.
 	"""
-	assert issubclass(val, _numbers.Real)
+	assert issubclass(value, _numbers.Real)
 
-	return _pydll.c_fit_lagrange(x, y, _ct.c_double(val))
+	return _pydll.c_fit_lagrange(x, y, _ct.c_double(value))
 
 
 ########################################################################################
@@ -97,14 +96,13 @@ def spline(x:Iterable, y:Iterable)->list[SplineResult]:
 ########################################################################################
 
 
-def expfit(x, y, intercept=None)->list:
+def expfit(
+		x:Iterable, 
+		y:Iterable, 
+		intercept:None|float=None)->list:
 	"""
 	Fits x,y to the equation y = a*exp(b*x) \n
 	Returns [a, b]
-
-	## Inputs:
-	x, y: list/ndarray \n
-	intercept: None or float
 
 	## Note:
 	If intercept is not provided both a, b are computed. \n
@@ -139,14 +137,10 @@ def logistfit(x:Iterable, y:Iterable, limit = None)->list:
 	return _pydll.c_fit_logistfit(x, y, limit)
 
 
-def polyfit(x, y, deg)->tuple:
+def polyfit(x:Iterable, y:Iterable, deg)->tuple:
 	"""
-	Uses numpy.polynomial.polynomial.polyfit \n
-	Returns (coefficients, residuals)
-
-	## Inputs:
-	x, y: list/ndarray
-
+	Uses numpy.polynomial.polynomial.polyfit
+	returns (coefficients, residuals)
 	"""
 	coeffs, stats = _Polynomial.polyfit(x=x, y=y, deg=deg)
 	return coeffs, stats[0]
