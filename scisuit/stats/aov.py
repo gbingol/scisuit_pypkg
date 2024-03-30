@@ -2,6 +2,7 @@ import math
 import numbers
 import numpy as np
 from dataclasses import dataclass
+from typing import Iterable
 
 from .distributions import pf
 from ..fitting import linearinterp
@@ -225,12 +226,14 @@ class aov2_results():
 	Fits:list
 
 
-def aov2(y, x1, x2):
+def aov2(
+		y:Iterable, 
+		x1:Iterable, 
+		x2:Iterable)->aov2_results:
 	"""
 	Performs 2-way ANOVA
 
-	## Input
-	y: Responses \n
+	y: Responses
 	x1, x2: factors
 	"""
 	X1 = x1
@@ -284,7 +287,7 @@ def aov2(y, x1, x2):
 	DFFact1, DFFact2 = len(v1) - 1, len(v2) - 1
 	SSFact1 = np.sum((meanj - GrandMean)**2) * Nreplicate * len(v2)
 	SSFact2 = np.sum((meani - GrandMean)**2) * Nreplicate * len(v1)
-	MSFact1, MSFact2 = SSFact1 / DFFact1, SSFact2 / DFFact2
+	MSFact1, MSFact2 = float(SSFact1) / DFFact1, float(SSFact2) / DFFact2
 
 	SSinteract = 0
 	for i in range(len(v2)):
@@ -295,7 +298,7 @@ def aov2(y, x1, x2):
 	DFinteract = DFFact1 * DFFact2
 	MSinteract = SSinteract / DFinteract
 
-	FvalFact1, FvalFact2, Fvalinteract = MSFact1 / MSerror, MSFact2 / MSerror, MSinteract / MSerror
+	FvalFact1, FvalFact2, Fvalinteract = float(MSFact1 / MSerror), float(MSFact2 / MSerror), float(MSinteract / MSerror)
 	pvalFact1 = 1.0 - pf(FvalFact1, DFFact1, DFerror)
 	pvalFact2 = 1.0 - pf(FvalFact2, DFFact2, DFerror)
 	pvalinteract = 1.0 - pf(Fvalinteract, DFinteract, DFerror)
