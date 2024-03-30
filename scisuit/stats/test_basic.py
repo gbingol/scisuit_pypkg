@@ -380,7 +380,7 @@ class test_tpaired_result:
 	stdev:float #stdev of difference
 
 
-def _test_t1(x, mu, alternative="two.sided", conflevel=0.95):
+def _test_t1(x, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_t1_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
 
@@ -398,7 +398,7 @@ def _test_t1(x, mu, alternative="two.sided", conflevel=0.95):
 	SE = stdev / math.sqrt(N) #Standard Error of Mean
 	
 	xaver = _np.mean(XX)
-	tcritical = (xaver - mu) / SE
+	tcritical = float((xaver - mu) / SE)
 
 	pvalue = 0.0
 	if alternative == "two.sided" or alternative == "notequal":
@@ -437,7 +437,7 @@ def _test_t1(x, mu, alternative="two.sided", conflevel=0.95):
 
 
 
-def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95):
+def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)->tuple[float, test_t2_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
 
@@ -468,7 +468,7 @@ def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)
 		df_denom = 1 / (n1 - 1) * (var1 / n1)**2 + 1 / (n2 - 1) * (var2 / n2)**2
 		df = math.floor(df_num / df_denom)
 
-		tcritical = ((xaver - yaver) - mu) / math.sqrt(var1 / n1 + var2 / n2)
+		tcritical = float((xaver - yaver) - mu) / math.sqrt(var1 / n1 + var2 / n2)
 		SE = math.sqrt(var1 / n1 + var2 / n2)
 	
 	else:
@@ -477,7 +477,7 @@ def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)
 		sp_num = (n1 - 1) * var1 + (n2 - 1) * var2
 		sp = math.sqrt(sp_num / df)
 
-		tcritical = ((xaver - yaver) - mu) / (sp * math.sqrt(1 / n1 + 1 / n2))
+		tcritical = float((xaver - yaver) - mu) / (sp * math.sqrt(1 / n1 + 1 / n2))
 		SE = sp * math.sqrt(1 / n1 + 1 / n2)
 	
 	pvalue = 0
@@ -519,7 +519,7 @@ def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)
 	return pvalue, Result
 
 
-def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95):
+def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_tpaired_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
 
@@ -559,9 +559,23 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95):
 
 
 
-def test_t (x, y = None, varequal=True, alternative="two.sided", mu=0, conflevel=0.95, paired=False ):
+def test_t (
+		x:Iterable, 
+		y:Iterable|None = None, 
+		varequal=True, 
+		alternative="two.sided", 
+		mu:float=0.0, 
+		conflevel=0.95, 
+		paired=False ):
 	"""
 	Performs paired, 1-sample and 2-sample t-test
+
+	x, y: First and second samples
+	varequal: assuming equal variances
+	alternative: 'two.sided', 'less' or 'greater'
+	mu: Assumed difference between samples or assumed mean
+	conflevel: Confidence level, [0,1]
+	paired: For paired t-test
 	"""
 	if y == None:
 		return _test_t1(x=x, mu=mu, alternative=alternative, conflevel=conflevel )	
