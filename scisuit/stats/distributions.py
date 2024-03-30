@@ -280,7 +280,7 @@ def pf(q:Iterable|Real, df1:int, df2:int)->list|Real:
 	assert df1>0, "df1>0 expected"
 	assert df2>0, "df2>0 expected"
 
-	return _pydll.c_stat_pf(q, _ct.c_int(df1), _ct.c_int(df2))
+	return _pydll.c_stat_pf(_ct.py_object(q), _ct.c_int(df1), _ct.c_int(df2))
 
 def qf(p:Iterable|Real, df1:int, df2:int)->list|Real:
 	"""

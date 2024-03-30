@@ -10,6 +10,7 @@ BASIC STATISTICAL TESTS:
 
 
 import math
+from typing import Iterable
 import numpy as _np
 from .._ctypeslib import pydll as _pydll
 
@@ -60,17 +61,22 @@ class test_f_Result:
 
 
 
-def test_f(x, y, ratio:float = 1.0, alternative:str = "two.sided", conflevel:float = 0.95)->tuple:
+def test_f(
+		x:Iterable, 
+		y:Iterable, 
+		ratio:float = 1.0, 
+		alternative:str = "two.sided", 
+		conflevel:float = 0.95)->tuple[float, test_f_Result]:
 	"""
 	Performs F test
 
 	## Return
-	p-value and test_f_Result class. \n
+	p-value and test_f_Result class.
 
 	## Input
-	x/y: First/second sample, ndarray/list \n
-	alternative: "two.sided", "less", "greater" \n
-	ratio: Assumed ratio of variances of the samples \n
+	x/y: First/second sample
+	alternative: "two.sided", "less", "greater"
+	ratio: Assumed ratio of variances of the samples
 	conflevel: Confidence level, [0,1] 
 	"""
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
@@ -91,12 +97,11 @@ def test_f(x, y, ratio:float = 1.0, alternative:str = "two.sided", conflevel:flo
 	df1, df2 = len(XX) - 1, len(YY) -1 #degrees of freedoms
 	
 	var1, var2 = _np.var(XX, ddof = 1), _np.var(YY, ddof = 1)
-	varRatio = var1 / var2
+	varRatio = float(var1) / float(var2)
 
 	Fcritical = varRatio / ratio
 
 	pvalue = 0.0
-
 	if alternative == "two.sided" or alternative == "notequal":
 		#F distribution is non - symmetric
 		a = pf(Fcritical, df1, df2)
