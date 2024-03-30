@@ -62,6 +62,19 @@ def _averageMatrix(Tbl, v2):
 
 
 
+@dataclass
+class aov_results:
+	Treat_DF:int
+	Treat_SS:float
+	Treat_MS:float
+	Error_DF:int
+	Error_SS:float
+	Error_MS:float
+	Total_DF:int
+	Total_SS:float
+	Total_MS:float
+	Fvalue:float
+
 
 
 class aov: 
@@ -86,9 +99,9 @@ class aov:
 
 
 	def __init__(self, *args) -> None:
-		self.m_args = args
-		self.m_Averages = []
-		self.m_SampleSizes = []
+		self._args = args
+		self._Averages = []
+		self._SampleSizes = []
 
 		self.m_MSError=None
 		self.m_DFTreatment=None
@@ -98,80 +111,83 @@ class aov:
 
 
 
-	def compute(self):
+	def compute(self)->tuple[float, aov_results]:
 		SS_Treatment, SS_Error, SS_Total=0, 0, 0
 		NEntries = 0
 
 		#C is a variable defined to speed up computations (see Larsen Marx Chapter 12 on ANOVA)
-		C = 0
+		_c = 0.0
 
-		for elem in self.m_args:
+		for elem in self._args:
 			TypeOK=isinstance(elem, list) or isinstance(elem, np.ndarray)
 			if(TypeOK == False):
 				raise TypeError("list/ndarray expected")
 
 			ElemSize = len(elem)
-			LocalSum=0
+			LocalSum = 0.0
 			
 			for entry in elem:
 				LocalSum += entry
 				SS_Total += entry**2
 			
 			#Required for Tukey test
-			self.m_Averages.append(LocalSum/ElemSize)
-			self.m_SampleSizes.append(ElemSize) 
+			self._Averages.append(LocalSum/ElemSize)
+			self._SampleSizes.append(ElemSize) 
 
-			C += LocalSum
+			_c += LocalSum
 			NEntries += ElemSize
 			SS_Treatment += LocalSum**2/ElemSize
 
             
-		C = C**2 / NEntries
+		_c = _c**2 / NEntries
 		
-		SS_Total = SS_Total - C
-		SS_Treatment = SS_Treatment - C
+		SS_Total = SS_Total - _c
+		SS_Treatment = SS_Treatment - _c
 		SS_Error = SS_Total - SS_Treatment
 
-		self.m_DFError, self.m_DFTreatment = NEntries-len(self.m_args), len(self.m_args)-1 
+		self.m_DFError, self.m_DFTreatment = NEntries-len(self._args), len(self._args)-1 
 		DF_Total = self.m_DFError + self.m_DFTreatment
 
 		MS_Treatment, self.m_MSError = SS_Treatment/self.m_DFTreatment , SS_Error/self.m_DFError
 
 		Fvalue = MS_Treatment/self.m_MSError
 
-		self.m_pvalue = 1 - pf(q = Fvalue, df1 = self.m_DFTreatment, df2 = self.m_DFError)
+		self.m_pvalue = 1 - pf(q = float(Fvalue), df1 = self.m_DFTreatment, df2 = self.m_DFError)
 
-		Dict = dict()
-		Dict["Treatment"] = {'DF':self.m_DFTreatment, 'SS':SS_Treatment, 'MS':MS_Treatment}
-		Dict["Error"] = {'DF':self.m_DFError, 'SS':SS_Error, 'MS':self.m_MSError}
-		Dict["Total"] = {'DF':DF_Total, 'SS':SS_Total, 'MS': SS_Total/DF_Total}
-		Dict["Fvalue"] = Fvalue
+		ResultCls = aov_results(
+			Treat_DF=self.m_DFTreatment,
+			Treat_MS=MS_Treatment,
+			Treat_SS=SS_Treatment,
+			Error_DF=self.m_DFError,
+			Error_SS=SS_Error,
+			Error_MS=self.m_MSError,
+			Total_DF=DF_Total,
+			Total_SS=SS_Total,
+			Total_MS=SS_Total/DF_Total,
+			Fvalue=Fvalue)
+
+		return self.m_pvalue, ResultCls
 
 
-		return self.m_pvalue, Dict
 
-
-
-	def tukey(self, Alpha)->list:
+	def tukey(self, alpha)->list:
 		"""
-		perform tukey test \n
-
-		tukey(Alpha)-> list
+		perform tukey test
 		"""
 		
-		if(len(self.m_Averages) == 0):
+		if(len(self._Averages) == 0):
 			raise RuntimeError("first compute must be called")
 		
-		if(isinstance(Alpha, numbers.Number) == False):
+		if(isinstance(alpha, numbers.Number) == False):
 			raise TypeError("Alpha must be of type number")
 
-		D = qdist(1-Alpha, self.m_DFTreatment-1, self.m_DFError-1) / math.sqrt(self.m_SampleSizes[0])
+		D = qdist(1-alpha, self.m_DFTreatment-1, self.m_DFError-1) / math.sqrt(self._SampleSizes[0])
 		ConfIntervalLength = D*math.sqrt(self.m_MSError)
 
 		self.m_TukeyTable=[]
-		for i in range(len(self.m_Averages)):
-			for j in range(i+1, len(self.m_Averages)):
-				MeanValueDiff = self.m_Averages[i]-self.m_Averages[j]
+		for i in range(len(self._Averages)):
+			for j in range(i+1, len(self._Averages)):
+				MeanValueDiff = self._Averages[i]-self._Averages[j]
 				ConfInterval1 = MeanValueDiff-ConfIntervalLength
 				ConfInterval2 = MeanValueDiff+ConfIntervalLength
 
@@ -188,21 +204,12 @@ class aov:
 		return self.m_TukeyTable
 
 
-	def __str__(self) -> str:
-		if(isinstance(self.m_pvalue, numbers.Number) == False):
-				raise RuntimeError("compute method has not been called")
-		
-		retStr= "p-value = " + str(self.m_pvalue) + "\n"
 
-		retStr += "Pairs \t \t Diff  \t \t Tukey Interval"
-		retStr +="\n"
-		
-		for Entry in self.m_TukeyTable:
-				retStr += str(Entry)
-				retStr += "\n"
-		
-		return retStr
-	
+
+"""
+-------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+"""
 
 
 
