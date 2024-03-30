@@ -35,7 +35,11 @@ def ANOVA1():
 	pval, info = cls.compute()
 
 	print("p-value=" + str(pval))
-	pprint.pprint(info)
+	print(info)
+
+	TukeyList = cls.tukey(0.05)
+	for c in TukeyList:
+		print(c)
 
 
 
@@ -46,4 +50,6 @@ def ftest():
 	print(pval)
 	print(res)
 
-ftest()
+
+
+ANOVA1()
