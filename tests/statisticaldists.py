@@ -64,36 +64,6 @@ def HyperGeometricDist():
 
 
 
-def ttest():
-	from scisuit.stats import test_t
-
-	treat = [24, 43, 58, 71, 43, 49, 61, 44, 67, 49]
-	cont = [42, 43, 55, 54, 20, 85, 33, 41, 19, 60, 53, 42]
-
-	pval, tbl=test_t(x=treat, y=cont, varequal=False)
-
-	print("p-value=" + str(pval))
-	pprint.pprint(tbl)
-
-
-def ANOVA1():
-	from scisuit.stats import aov
-
-	A = np.array([16, 11, 20, 21, 14, 7])
-	B = np.array([21, 12, 14, 17, 13, 17])
-	C = np.array([37, 32, 12, 25, 39, 41])
-	D = np.array([45, 59, 48, 46, 38, 47])
-
-	#perform 1-way ANOVA
-	cls = aov(A, B, C, D)
-
-	#p-value and extra info
-	pval, info = cls.compute()
-
-	print("p-value=" + str(pval))
-	pprint.pprint(info)
-
-
 
 def dmultinom():
 	from scisuit.stats import dmultinom
@@ -184,14 +154,4 @@ def beta():
 	print(qbeta(p=0.1, shape1=0.5, shape2=1))
 
 
-import scisuit.stats as st
 
-#Normal distribution
-print(st.dnorm(0.1, mean=1, sd=2))
-print(st.pnorm(0.1, mean=1, sd=2))
-
-print("\n************************* \n")
-
-#log-normal distribution
-print(st.dlnorm(0.1, meanlog=1, sdlog=2))
-print(st.plnorm(0.1, meanlog=1, sdlog=2))
