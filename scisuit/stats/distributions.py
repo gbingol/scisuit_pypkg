@@ -14,7 +14,7 @@ def dbeta(x:Iterable|Real, shape1:float, shape2:float)->list|Real:
 	"""
 	assert shape1>0, "shape1>0 expected"
 	assert shape2>0, "shape2>0 expected"
-	return _pydll.c_stat_dbeta(x, _ct.c_double(shape1), _ct.c_double(shape2))
+	return _pydll.c_stat_dbeta(_ct.py_object(x), _ct.c_double(shape1), _ct.c_double(shape2))
 
 
 def pbeta(q:Iterable|Real, shape1:float, shape2:float)->list|Real:
@@ -24,7 +24,7 @@ def pbeta(q:Iterable|Real, shape1:float, shape2:float)->list|Real:
 	assert shape1>0, "shape1>0 expected"
 	assert shape2>0, "shape2>0 expected"
 
-	return _pydll.c_stat_pbeta(q, _ct.c_double(shape1), _ct.c_double(shape2))
+	return _pydll.c_stat_pbeta(_ct.py_object(q), _ct.c_double(shape1), _ct.c_double(shape2))
 
 
 def qbeta(p:Iterable|Real, shape1:float, shape2:float)->list|Real:
@@ -34,7 +34,7 @@ def qbeta(p:Iterable|Real, shape1:float, shape2:float)->list|Real:
 	assert shape1>0, "shape1>0 expected"
 	assert shape2>0, "shape2>0 expected"
 
-	return _pydll.c_stat_qbeta(p, _ct.c_double(shape1), _ct.c_double(shape2))
+	return _pydll.c_stat_qbeta(_ct.py_object(p), _ct.c_double(shape1), _ct.c_double(shape2))
 	
 
 def rbeta(n:int, shape1:float, shape2:float)->list:
@@ -56,7 +56,7 @@ def dbinom(x:Iterable|Real, size:int, prob:float)->list|Real:
 	size: number of trials
 	prob: probability of success in each trial
 	"""
-	return _pydll.c_stat_dbinom(x, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_dbinom(_ct.py_object(x), _ct.c_int(size), _ct.c_double(prob))
 
 
 def pbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
@@ -67,7 +67,7 @@ def pbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
 	assert size>0, "size>0 expected"
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
-	return _pydll.c_stat_pbinom(q, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_pbinom(_ct.py_object(q), _ct.c_int(size), _ct.c_double(prob))
 
 
 def qbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
@@ -78,7 +78,7 @@ def qbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	assert size>0, "size>0 expected"
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
-	return _pydll.c_stat_qbinom(p, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_qbinom(_ct.py_object(p), _ct.c_int(size), _ct.c_double(prob))
 	
 
 def rbinom(n:int, size:int, prob:float)->list:
@@ -106,7 +106,7 @@ def dnbinom(x:Iterable|Real, size:int, prob:float)->list|Real:
 	assert size>0, "size>0 expected"
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
-	return _pydll.c_stat_dnbinom(x, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_dnbinom(_ct.py_object(x), _ct.c_int(size), _ct.c_double(prob))
 
 
 def pnbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
@@ -118,7 +118,7 @@ def pnbinom(q:Iterable|Real, size:int, prob:float)->list|Real:
 	assert size>0, "size>0 expected"
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
-	return _pydll.c_stat_pnbinom(q, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_pnbinom(_ct.py_object(q), _ct.c_int(size), _ct.c_double(prob))
 
 def qnbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	"""
@@ -129,7 +129,7 @@ def qnbinom(p:Iterable|Real, size:int, prob:float)->list|Real:
 	assert size>0, "size>0 expected"
 	assert prob>=0 and prob<=1, "prob in [0, 1] expected"
 
-	return _pydll.c_stat_qnbinom(p, _ct.c_int(size), _ct.c_double(prob))
+	return _pydll.c_stat_qnbinom(_ct.py_object(p), _ct.c_int(size), _ct.c_double(prob))
 
 
 def rnbinom(n:int, size, prob)->list:
@@ -160,7 +160,7 @@ def dmultinom(x:Iterable, size:int, prob:Iterable)->float:
 	assert sum(x) == size, "sum(x) == size expected."
 	assert size>0, "size>0 expected"
 
-	return _pydll.c_stat_dmultinom(x, _ct.c_int(size), prob)
+	return _pydll.c_stat_dmultinom(_ct.py_object(x), _ct.c_int(size), prob)
 
 
 def rmultinom(n:int, size:int, prob:Iterable)->list:
@@ -191,24 +191,23 @@ def dchisq(x:Iterable|Real, df:int)->list|Real:
 	df: degrees of freedom
 	"""
 	assert df>0, "df>0 expected"
+	return _pydll.c_stat_dchisq(_ct.py_object(x), _ct.c_int(df))
 
-	return _pydll.c_stat_dchisq(x, _ct.c_int(df))
 
 def pchisq(q:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
-	assert df>0, "df>0 expected"
-	
-	return _pydll.c_stat_pchisq(q, _ct.c_int(df))
+	assert df>0, "df>0 expected"	
+	return _pydll.c_stat_pchisq(_ct.py_object(q), _ct.c_int(df))
+
 
 def qchisq(p:Iterable|Real, df:int)->list|Real:
 	"""
 	df: degrees of freedom
 	"""
 	assert df>0, "df>0 expected"
-	
-	return _pydll.c_stat_qchisq(p, _ct.c_int(df))
+	return _pydll.c_stat_qchisq(_ct.py_object(p), _ct.c_int(df))
 
 
 def rchisq(n:int, df)->list:
@@ -229,7 +228,7 @@ def dexp(x:Iterable|Real, rate = 1.0)->list|Real:
 	x: quantiles
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_dexp(x, _ct.c_double(rate))
+	return _pydll.c_stat_dexp(_ct.py_object(x), _ct.c_double(rate))
 
 
 def pexp(q:Iterable|Real, rate = 1.0)->list|Real:
@@ -237,7 +236,7 @@ def pexp(q:Iterable|Real, rate = 1.0)->list|Real:
 	q: quantiles
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_pexp(q,  _ct.c_double(rate))
+	return _pydll.c_stat_pexp(_ct.py_object(q),  _ct.c_double(rate))
 
 
 def qexp(p:Iterable|Real, rate = 1.0)->list|Real:
@@ -245,7 +244,7 @@ def qexp(p:Iterable|Real, rate = 1.0)->list|Real:
 	p: probabilities
 	rate: 1/mean, where mean is the waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_qexp(p,  _ct.c_double(rate))
+	return _pydll.c_stat_qexp(_ct.py_object(p), _ct.c_double(rate))
 
 
 def rexp(n:int, rate=1.0)->list:
@@ -269,7 +268,7 @@ def df(x:Iterable|Real, df1:int, df2:int)->list|Real:
 	assert df1>0, "df1>0 expected"
 	assert df2>0, "df2>0 expected"
 
-	return _pydll.c_stat_df(x, _ct.c_int(df1), _ct.c_int(df2))
+	return _pydll.c_stat_df(_ct.py_object(x), _ct.c_int(df1), _ct.c_int(df2))
 
 
 def pf(q:Iterable|Real, df1:int, df2:int)->list|Real:
@@ -290,7 +289,7 @@ def qf(p:Iterable|Real, df1:int, df2:int)->list|Real:
 	assert df1>0, "df1>0 expected"
 	assert df2>0, "df2>0 expected"
 
-	return _pydll.c_stat_qf(p, _ct.c_int(df1), _ct.c_int(df2))
+	return _pydll.c_stat_qf(_ct.py_object(p), _ct.c_int(df1), _ct.c_int(df2))
 
 
 def rf(n:int, df1, df2)->list:
@@ -315,7 +314,7 @@ def dgamma(x:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	shape: waiting time for the rth event to occur
 	scale: average waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_dgamma(x, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_dgamma(_ct.py_object(x), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def pgamma(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
@@ -324,7 +323,7 @@ def pgamma(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	shape: waiting time for the rth event to occur
 	scale: average waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_pgamma(q, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_pgamma(_ct.py_object(q), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def qgamma(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
@@ -333,7 +332,7 @@ def qgamma(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	shape: waiting time for the rth event to occur
 	scale: average waiting time for the next event recurrence
 	"""
-	return _pydll.c_stat_qgamma(p, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_qgamma(_ct.py_object(p), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def rgamma(n:int, shape:float, scale=1.0)->list:
@@ -356,7 +355,7 @@ def dgeom(x:Iterable|Real, prob:float)->list|Real:
 	x: Number of failures before success occurs.
 	prob: probability of success in each trial.
 	"""
-	return _pydll.c_stat_dgeom(x, _ct.c_double(prob))
+	return _pydll.c_stat_dgeom(_ct.py_object(x), _ct.c_double(prob))
 
 
 def pgeom(q:Iterable|Real, prob:float)->list|Real:
@@ -364,14 +363,15 @@ def pgeom(q:Iterable|Real, prob:float)->list|Real:
 	q: Number of failures before success occurs.
 	prob: probability of success in each trial.
 	"""
-	return _pydll.c_stat_pgeom(q, _ct.c_double(prob))
+	return _pydll.c_stat_pgeom(_ct.py_object(q), _ct.c_double(prob))
+
 
 def qgeom(p:Iterable|Real, prob:float)->list|Real:
 	"""
 	p: probabilities
 	prob: probability of success in each trial.
 	"""
-	return _pydll.c_stat_qgeom(p, _ct.c_double(prob))
+	return _pydll.c_stat_qgeom(_ct.py_object(p), _ct.c_double(prob))
 
 
 def rgeom(n:int, prob)->list:
@@ -394,7 +394,7 @@ def dhyper(x:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	n: number of bad samples in the urn
 	k: samples drawn from the urn
 	"""
-	return _pydll.c_stat_dhyper(x, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+	return _pydll.c_stat_dhyper(_ct.py_object(x), _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 
 def phyper(q:Iterable|Real, m:int, n:int, k:int)->list|Real:
@@ -403,7 +403,7 @@ def phyper(q:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	n: number of bad samples in the urn
 	k: samples drawn from the urn
 	"""
-	return _pydll.c_stat_phyper(q, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+	return _pydll.c_stat_phyper(_ct.py_object(q), _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 
 def qhyper(p:Iterable|Real, m:int, n:int, k:int)->list|Real:
@@ -412,7 +412,7 @@ def qhyper(p:Iterable|Real, m:int, n:int, k:int)->list|Real:
 	n: number of bad samples in the urn
 	k: samples drawn from the urn
 	"""
-	return _pydll.c_stat_qhyper(p, _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
+	return _pydll.c_stat_qhyper(_ct.py_object(p), _ct.c_int(m), _ct.c_int(n), _ct.c_int(k))
 
 
 def rhyper(nn:int, m:int, n:int, k:int)->list:
@@ -438,7 +438,7 @@ def dnorm(x:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_dnorm(x, _ct.c_double(mean), _ct.c_double(sd))
+	return _pydll.c_stat_dnorm(_ct.py_object(x), _ct.c_double(mean), _ct.c_double(sd))
 
 
 def pnorm(q:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
@@ -446,7 +446,7 @@ def pnorm(q:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_pnorm(q, _ct.c_double(mean), _ct.c_double(sd))
+	return _pydll.c_stat_pnorm(_ct.py_object(q), _ct.c_double(mean), _ct.c_double(sd))
 
 
 def qnorm(p:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
@@ -454,7 +454,7 @@ def qnorm(p:Iterable|Real, mean=0.0, sd=1.0)->list|Real:
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_qnorm(p, _ct.c_double(mean), _ct.c_double(sd))
+	return _pydll.c_stat_qnorm(_ct.py_object(p), _ct.c_double(mean), _ct.c_double(sd))
 
 
 def rnorm(n:int, mean=0.0, sd=1.0)->list:
@@ -477,7 +477,7 @@ def dlnorm(x:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
 	meanlog: mean value of the distribution
 	sdlog: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_dlnorm(x, _ct.c_double(meanlog), _ct.c_double(sdlog))
+	return _pydll.c_stat_dlnorm(_ct.py_object(x), _ct.c_double(meanlog), _ct.c_double(sdlog))
 
 
 def plnorm(q:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
@@ -485,7 +485,7 @@ def plnorm(q:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_plnorm(q, _ct.c_double(meanlog), _ct.c_double(sdlog))
+	return _pydll.c_stat_plnorm(_ct.py_object(q), _ct.c_double(meanlog), _ct.c_double(sdlog))
 
 
 def qlnorm(p:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
@@ -493,7 +493,7 @@ def qlnorm(p:Iterable|Real, meanlog=0.0, sdlog=1.0)->list|Real:
 	mean: mean value of the distribution
 	sd: standard deviation of the distribution
 	"""
-	return _pydll.c_stat_qlnorm(p, _ct.c_double(meanlog), _ct.c_double(sdlog))
+	return _pydll.c_stat_qlnorm(_ct.py_object(p), _ct.c_double(meanlog), _ct.c_double(sdlog))
 
 
 def rlnorm(n:int, meanlog=0.0, sdlog=1.0)->list:
@@ -517,7 +517,7 @@ def dpareto(x:Iterable|Real, location, shape=1.0)->list|Real:
 	shape: shape parameter
 	"""
 	assert location>0 and shape>0, "'location' and 'shape' must be positive"
-	return _pydll.c_stat_dpareto(x, _ct.c_double(location), _ct.c_double(shape))
+	return _pydll.c_stat_dpareto(_ct.py_object(x), _ct.c_double(location), _ct.c_double(shape))
 
 
 def ppareto(q:Iterable|Real, location, shape=1.0)->list|Real:
@@ -526,7 +526,7 @@ def ppareto(q:Iterable|Real, location, shape=1.0)->list|Real:
 	shape: shape parameter
 	"""
 	assert location>0 and shape>0, "'location' and 'shape' must be positive"
-	return _pydll.c_stat_ppareto(q, _ct.c_double(location), _ct.c_double(shape))
+	return _pydll.c_stat_ppareto(_ct.py_object(q), _ct.c_double(location), _ct.c_double(shape))
 
 
 def qpareto(p:Iterable|Real, location, shape=1.0)->list|Real:
@@ -535,7 +535,7 @@ def qpareto(p:Iterable|Real, location, shape=1.0)->list|Real:
 	shape: shape parameter
 	"""
 	assert location>0 and shape>0, "'location' and 'shape' must be positive"
-	return _pydll.c_stat_qpareto(p, _ct.c_double(location), _ct.c_double(shape))
+	return _pydll.c_stat_qpareto(_ct.py_object(p), _ct.c_double(location), _ct.c_double(shape))
 
 
 def rpareto(n:int, location, shape=1.0)->list:
@@ -554,15 +554,15 @@ def rpareto(n:int, location, shape=1.0)->list:
 # ----- Poisson Distribution  -------
 
 def dpois(x:Iterable|Real, mu:float)->list|Real:
-	return _pydll.c_stat_dpois(x, _ct.c_double(mu))
+	return _pydll.c_stat_dpois(_ct.py_object(x), _ct.c_double(mu))
 
 
 def ppois(q:Iterable|Real, mu:float)->list|Real:
-	return _pydll.c_stat_ppois(q, _ct.c_double(mu))
+	return _pydll.c_stat_ppois(_ct.py_object(q), _ct.c_double(mu))
 
 
 def qpois(p:Iterable|Real, mu:float)->list|Real:
-	return _pydll.c_stat_qpois(p, _ct.c_double(mu))
+	return _pydll.c_stat_qpois(_ct.py_object(p), _ct.c_double(mu))
 
 
 def rpois(n:int, mu = 1)->list:
@@ -585,7 +585,7 @@ def dt(x:Iterable|Real, df:int)->list|Real:
 	"""
 	assert df>0, "df>0 expected"
 
-	return _pydll.c_stat_dt(x, _ct.c_int(df))
+	return _pydll.c_stat_dt(_ct.py_object(x), _ct.c_int(df))
 
 
 def pt(q:Iterable|Real, df:int)->list|Real:
@@ -594,7 +594,7 @@ def pt(q:Iterable|Real, df:int)->list|Real:
 	"""
 	assert df>0, "df>0 expected"
 
-	return _pydll.c_stat_pt(q, _ct.c_int(df))
+	return _pydll.c_stat_pt(_ct.py_object(q), _ct.c_int(df))
 
 
 def qt(p:Iterable|Real, df:int)->list|Real:
@@ -603,7 +603,7 @@ def qt(p:Iterable|Real, df:int)->list|Real:
 	"""
 	assert df>0, "df>0 expected"
 
-	return _pydll.c_stat_qt(p, _ct.c_int(df))
+	return _pydll.c_stat_qt(_ct.py_object(p), _ct.c_int(df))
 
 
 def rt(n:int, df)->list:
@@ -621,15 +621,15 @@ def rt(n:int, df)->list:
 # ----- Wilcoxon Sign Rank Distribution  -------
 
 def dsignrank(x:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_dsignrank(x, _ct.c_int(n))
+	return _pydll.c_stat_dsignrank(_ct.py_object(x), _ct.c_int(n))
 
 
 def psignrank(q:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_psignrank(q, _ct.c_int(n))
+	return _pydll.c_stat_psignrank(_ct.py_object(q), _ct.c_int(n))
 
 
 def qsignrank(p:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_qsignrank(p, _ct.c_int(n))
+	return _pydll.c_stat_qsignrank(_ct.py_object(p), _ct.c_int(n))
 
 
 
@@ -642,7 +642,7 @@ def dunif(x:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	assert max>min, "max>min expected"
 
-	return _pydll.c_stat_dunif(x, _ct.c_double(min), _ct.c_double(max))
+	return _pydll.c_stat_dunif(_ct.py_object(x), _ct.c_double(min), _ct.c_double(max))
 
 
 def punif(q:Iterable|Real, min=0.0, max=1.0)->list|Real:
@@ -652,7 +652,7 @@ def punif(q:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	assert max>min, "max>min expected"
 
-	return _pydll.c_stat_punif(q, _ct.c_double(min), _ct.c_double(max))
+	return _pydll.c_stat_punif(_ct.py_object(q), _ct.c_double(min), _ct.c_double(max))
 
 
 def qunif(p:Iterable|Real, min=0.0, max=1.0)->list|Real:
@@ -662,7 +662,7 @@ def qunif(p:Iterable|Real, min=0.0, max=1.0)->list|Real:
 	"""
 	assert max>min, "max>min expected"
 
-	return _pydll.c_stat_qunif(p, _ct.c_double(min), _ct.c_double(max))
+	return _pydll.c_stat_qunif(_ct.py_object(p), _ct.c_double(min), _ct.c_double(max))
 
 
 def runif(n:int, min=0.0, max=1.0)->list:
@@ -688,7 +688,7 @@ def dweibull(x:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	assert shape>0, "shape>0 expected"
 	assert scale>0, "scale>0 expected"
 
-	return _pydll.c_stat_dweibull(x, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_dweibull(_ct.py_object(x), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def pweibull(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
@@ -700,7 +700,7 @@ def pweibull(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	assert shape>0, "shape>0 expected"
 	assert scale>0, "scale>0 expected"
 
-	return _pydll.c_stat_pweibull(q, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_pweibull(_ct.py_object(q), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def qweibull(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
@@ -712,7 +712,7 @@ def qweibull(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	assert shape>0, "shape>0 expected"
 	assert scale>0, "scale>0 expected"
 	
-	return _pydll.c_stat_qweibull(p, _ct.c_double(shape), _ct.c_double(scale))
+	return _pydll.c_stat_qweibull(_ct.py_object(p), _ct.c_double(shape), _ct.c_double(scale))
 
 
 def rweibull(n:int, shape:float, scale=1.0)->list:
