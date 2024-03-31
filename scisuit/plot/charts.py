@@ -19,7 +19,7 @@ _app = _App()
 
 def boxplot(
 	data:_Iterable, 
-	label:str = None, 
+	label:str|None = None, 
 	**kwargs):
 	"""
 	Plots box-whisker chart.
