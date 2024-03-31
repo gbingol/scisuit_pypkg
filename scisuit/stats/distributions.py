@@ -511,7 +511,7 @@ def rlnorm(n:int, meanlog=0.0, sdlog=1.0)->list:
 
 # ----- Pareto Distribution  -------
 
-def dpareto(x:Iterable|Real, location, shape=1.0)->list|Real:
+def dpareto(x:Iterable|Real, location:Real, shape=1.0)->list|Real:
 	"""
 	location: location parameter
 	shape: shape parameter
@@ -520,7 +520,7 @@ def dpareto(x:Iterable|Real, location, shape=1.0)->list|Real:
 	return _pydll.c_stat_dpareto(_ct.py_object(x), _ct.c_double(location), _ct.c_double(shape))
 
 
-def ppareto(q:Iterable|Real, location, shape=1.0)->list|Real:
+def ppareto(q:Iterable|Real, location:Real, shape=1.0)->list|Real:
 	"""
 	location: location parameter
 	shape: shape parameter
@@ -529,7 +529,7 @@ def ppareto(q:Iterable|Real, location, shape=1.0)->list|Real:
 	return _pydll.c_stat_ppareto(_ct.py_object(q), _ct.c_double(location), _ct.c_double(shape))
 
 
-def qpareto(p:Iterable|Real, location, shape=1.0)->list|Real:
+def qpareto(p:Iterable|Real, location:Real, shape=1.0)->list|Real:
 	"""
 	location: location parameter
 	shape: shape parameter
@@ -538,7 +538,7 @@ def qpareto(p:Iterable|Real, location, shape=1.0)->list|Real:
 	return _pydll.c_stat_qpareto(_ct.py_object(p), _ct.c_double(location), _ct.c_double(shape))
 
 
-def rpareto(n:int, location, shape=1.0)->list:
+def rpareto(n:int, location:Real, shape=1.0)->list:
 	"""
 	location: location parameter
 	shape: shape parameter
@@ -615,21 +615,6 @@ def rt(n:int, df)->list:
 
 	return _np.random.standard_t(size=n, df=df).tolist()
 
-
-
-
-# ----- Wilcoxon Sign Rank Distribution  -------
-
-def dsignrank(x:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_dsignrank(_ct.py_object(x), _ct.c_int(n))
-
-
-def psignrank(q:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_psignrank(_ct.py_object(q), _ct.c_int(n))
-
-
-def qsignrank(p:Iterable|Real, n:int)->list|Real:
-	return _pydll.c_stat_qsignrank(_ct.py_object(p), _ct.c_int(n))
 
 
 
@@ -724,3 +709,18 @@ def rweibull(n:int, shape:float, scale=1.0)->list:
 	assert scale>0, "scale>0 expected"
 
 	return (scale*_np.random.weibull(size=n, a=shape, )).tolist()
+
+
+# ----- Wilcoxon Sign Rank Distribution  -------
+
+def dsignrank(x:Iterable|Real, n:int)->list|Real:
+	return _pydll.c_stat_dsignrank(_ct.py_object(x), _ct.c_int(n))
+
+
+def psignrank(q:Iterable|Real, n:int)->list|Real:
+	return _pydll.c_stat_psignrank(_ct.py_object(q), _ct.c_int(n))
+
+
+def qsignrank(p:Iterable|Real, n:int)->list|Real:
+	return _pydll.c_stat_qsignrank(_ct.py_object(p), _ct.c_int(n))
+
