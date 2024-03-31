@@ -308,7 +308,7 @@ def rf(n:int, df1, df2)->list:
 
 # ----- Gamma Distribution  -------
 
-def dgamma(x:Iterable|Real, shape:float, scale = 1.0)->list|Real:
+def dgamma(x:Iterable|Real, shape:Real, scale = 1.0)->list|Real:
 	"""
 	x: quantile	
 	shape: waiting time for the rth event to occur
@@ -326,7 +326,7 @@ def pgamma(q:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	return _pydll.c_stat_pgamma(_ct.py_object(q), _ct.c_double(shape), _ct.c_double(scale))
 
 
-def qgamma(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
+def qgamma(p:Iterable|Real, shape:Real, scale = 1.0)->list|Real:
 	"""
 	p: probabilities
 	shape: waiting time for the rth event to occur
@@ -335,7 +335,7 @@ def qgamma(p:Iterable|Real, shape:float, scale = 1.0)->list|Real:
 	return _pydll.c_stat_qgamma(_ct.py_object(p), _ct.c_double(shape), _ct.c_double(scale))
 
 
-def rgamma(n:int, shape:float, scale=1.0)->list:
+def rgamma(n:int, shape:Real, scale=1.0)->list:
 	"""
 	Draw samples from gamma distribution
 	"""
@@ -358,7 +358,7 @@ def dgeom(x:Iterable|Real, prob:float)->list|Real:
 	return _pydll.c_stat_dgeom(_ct.py_object(x), _ct.c_double(prob))
 
 
-def pgeom(q:Iterable|Real, prob:float)->list|Real:
+def pgeom(q:Iterable|Real, prob:Real)->list|Real:
 	"""
 	q: Number of failures before success occurs.
 	prob: probability of success in each trial.
@@ -366,7 +366,7 @@ def pgeom(q:Iterable|Real, prob:float)->list|Real:
 	return _pydll.c_stat_pgeom(_ct.py_object(q), _ct.c_double(prob))
 
 
-def qgeom(p:Iterable|Real, prob:float)->list|Real:
+def qgeom(p:Iterable|Real, prob:Real)->list|Real:
 	"""
 	p: probabilities
 	prob: probability of success in each trial.
@@ -374,7 +374,7 @@ def qgeom(p:Iterable|Real, prob:float)->list|Real:
 	return _pydll.c_stat_qgeom(_ct.py_object(p), _ct.c_double(prob))
 
 
-def rgeom(n:int, prob)->list:
+def rgeom(n:int, prob:Real)->list:
 	"""
 	Draw samples from geometric distribution
 	"""
