@@ -1,11 +1,14 @@
 import sys, os
 import pprint
-import numpy as np
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
+
+
 import scisuit.stats as st
+import numpy as np
+
 
 def ttest_2sample():
 	from scisuit.stats import test_t
@@ -92,6 +95,14 @@ def AOV2():
 	print(result)
 
 
+def ztest():
+	x = [141, 146, 144, 141, 141, 136, 137, 149, 141, 142, 
+	142, 147, 148, 155, 150, 144, 140, 140, 139, 148, 143, 143, 149, 140, 132, 
+	158, 149, 144, 145, 146, 143, 135, 147, 153, 142, 142, 138, 150, 145, 126]
+
+	pval, tbl=st.test_z(x=x, mu=132.4, sd=6)
+	print(pval)
+	print(tbl)
 
 
 
@@ -104,4 +115,22 @@ def ftest():
 
 
 
-ttest_paired()
+def signtest():
+	data = [4.8, 4.0, 3.8, 4.3, 3.9, 4.6, 3.1, 3.7]
+	pval, result = st.test_sign(data, md=3.55)
+	print(pval)
+	print(result)
+
+
+
+def norm_andersondarling():
+	data = [2.39798, -0.16255, 0.54605, 0.68578, -0.78007, 
+		 1.34234, 1.53208, -0.86899, -0.50855, -0.58256, 
+		 -0.54597, 0.08503, 0.38337, 0.26072, 0.34729]
+	
+	result = st.test_norm_ad(data)
+
+	print(result)
+
+
+norm_andersondarling()

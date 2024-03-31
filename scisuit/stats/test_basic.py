@@ -10,6 +10,7 @@ BASIC STATISTICAL TESTS:
 
 
 import math
+import numbers
 from typing import Iterable
 import numpy as _np
 from .._ctypeslib import pydll as _pydll
@@ -38,7 +39,9 @@ class TestNormRes:
 	pval:float
 	A2:float
 
-def test_norm_ad(x):
+def test_norm_ad(x:Iterable)->TestNormRes:
+	assert isinstance(x, Iterable), "x must be an Iterable object"
+	
 	pval, A2 = _pydll.c_stat_test_norm_ad(x)
 	return TestNormRes(pval, A2)
 
@@ -234,37 +237,36 @@ def _FindCI(xvec, alternative, ConfLevel):
 
 
 
-def test_sign(x, md, y=None, alternative="two.sided", conflevel=0.95):
+def test_sign(
+		x:Iterable, 
+		md:numbers.Real, 
+		y=None, 
+		alternative="two.sided", 
+		conflevel=0.95)->tuple[float, test_sign_Result]:
 	"""
-	
-	## Return
-	p-value and a test_sign_Result class. \n
+	returns p-value and a test_sign_Result class. \n
 
-	## Input
-	x: Sample \n
-	y: Second sample \n
-	md: Median of the population tested by the null hypothesis \n
-	alternative: "two.sided", "less", "greater" \n
+	x: Sample
+	y: Second sample
+	md: Median of the population tested by the null hypothesis
+	alternative: "two.sided", "less", "greater" 
 	conflevel:	Confidence level, [0,1]
 	"""
 
 	NORMALAPPROX = 12
 
-	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
-	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
+	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
+	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX, YY = x, y
-	if isinstance(x, list):
-		XX = _np.asfarray(x)
+	XX = _np.asfarray(x)
 	
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
 	
 	xvec = XX
 
 	if y != None:
-		assert isinstance(y, list) or type(y)==_np.ndarray, "y must be list/ndarray"
-		if isinstance(y, list):
-			YY = _np.asfarray(y)
+		assert isinstance(y, Iterable), "y must be Iterable"
+		YY = _np.asfarray(y)
 
 		assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
 		xvec = XX - YY
@@ -272,7 +274,6 @@ def test_sign(x, md, y=None, alternative="two.sided", conflevel=0.95):
 	NGreater = len(_np.argwhere(xvec>md))
 
 	EqIndex = _np.where(xvec == md)
-	NEqual = len(EqIndex)
 	xvec = _np.delete(xvec, EqIndex)
 
 	pvalue = 0.0
@@ -314,27 +315,27 @@ def test_sign(x, md, y=None, alternative="two.sided", conflevel=0.95):
 
 	Lower, Upper = _FindCI(xvec, alternative, conflevel)
 
-	interpolated = CI_Result(pos=-1, prob=conflevel, CILow=0.0, CIHigh=0.0)
+	interped = CI_Result(pos=-1, prob=conflevel, CILow=0.0, CIHigh=0.0)
 	if alternative == "two.sided" or alternative == "notequal":
 		x1, x2 = Lower.prob, Upper.prob
 
-		interpolated.CILow = _np.interp(conflevel, [x1, x2], [Lower.CILow, Upper.CILow] )
-		interpolated.CIHigh = _np.interp(conflevel, [x1, x2], [Lower.CIHigh, Upper.CIHigh])
+		interped.CILow = _np.interp(conflevel, [x1, x2], [Lower.CILow, Upper.CILow] )
+		interped.CIHigh = _np.interp(conflevel, [x1, x2], [Lower.CIHigh, Upper.CIHigh])
 	
 	elif alternative == "greater":
-		interpolated.CILow = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CILow, Upper.CILow])
-		interpolated.CIHigh = math.inf
+		interped.CILow = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CILow, Upper.CILow])
+		interped.CIHigh = math.inf
 	
 	elif alternative == "less":
-		interpolated.CILow = -math.inf
-		interpolated.CIHigh = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CIHigh, Upper.CIHigh])
+		interped.CILow = -math.inf
+		interped.CIHigh = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CIHigh, Upper.CIHigh])
 	
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
 
 	result = test_sign_Result(
 		lower= Lower,
-		interpolated=interpolated,
+		interpolated=interped,
 		upper = Upper)
 	
 	return pvalue, result
@@ -380,13 +381,15 @@ class test_tpaired_result:
 	stdev:float #stdev of difference
 
 
-def _test_t1(x, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_t1_result]:
+def _test_t1(
+		x:Iterable, 
+		mu:numbers.Real, 
+		alternative="two.sided", 
+		conflevel=0.95)->tuple[float, test_t1_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
-	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
+	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = x
-	if isinstance(x, list):
-		XX = _np.asfarray(x)
+	XX = _np.asfarray(x)
 
 	assert len(XX)>= 3, "container must have at least 3 elements"
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
@@ -437,17 +440,18 @@ def _test_t1(x, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_
 
 
 
-def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)->tuple[float, test_t2_result]:
+def _test_t2(
+		x:Iterable, 
+		y:Iterable, 
+		mu:numbers.Real, 
+		varequal = True, 
+		alternative="two.sided", 
+		conflevel=0.95)->tuple[float, test_t2_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
-	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
+	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = x
-	if isinstance(x, list):
-		XX = _np.asfarray(x)
-	
-	YY = y
-	if isinstance(y, list):
-		YY = _np.asfarray(y)
+	XX = _np.asfarray(x)
+	YY = _np.asfarray(y)
 
 	assert len(XX)>= 3, "x must have at least 3 elements"
 	assert len(YY)>= 3, "y must have at least 3 elements"
@@ -455,8 +459,8 @@ def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)
 	assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
 
 	n1, n2 = len(XX), len(YY)
-	xaver, yaver = _np.mean(XX), _np.mean(YY)
-	s1, s2 = _np.std(XX, ddof = 1), _np.std(YY, ddof = 1)
+	xaver, yaver = float(_np.mean(XX)), float(_np.mean(YY))
+	s1, s2 = float(_np.std(XX, ddof = 1)), float(_np.std(YY, ddof = 1))
 	var1, var2 = s1**2, s2**2
 	alpha = 1 - conflevel
 
@@ -521,7 +525,7 @@ def _test_t2(x, y, mu, varequal = True, alternative="two.sided", conflevel=0.95)
 
 def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_tpaired_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
-	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
+	assert isinstance(x, Iterable), "x must be Iterable"
 
 	XX = x
 	if isinstance(x, list):
@@ -564,8 +568,8 @@ def test_t (
 		y:Iterable|None = None, 
 		varequal=True, 
 		alternative="two.sided", 
-		mu:float=0.0, 
-		conflevel=0.95, 
+		mu:numbers.Real=0.0, 
+		conflevel:numbers.Real=0.95, 
 		paired=False ):
 	"""
 	Performs paired, 1-sample and 2-sample t-test
@@ -604,22 +608,27 @@ class test_z_Result:
 	N:int
 
 
-def test_z(x, sd, mu, alternative="two.sided", conflevel=0.95):
+def test_z(
+		x:Iterable, 
+		sd:numbers.Real, 
+		mu:numbers.Real, 
+		alternative="two.sided", 
+		conflevel=0.95)->tuple[float, test_z_Result]:
 	"""
 	
 	## Return
-	p-value and test_z_Result class. \n
+	p-value and test_z_Result class.
 
 	## Input
-	x: sample,  ndarray/list \n
-	sd: Standard deviation of population \n
-	mu: Assumed mean of population \n
-	alternative: "two.sided", "less", "greater" \n
+	x: sample,  ndarray/list 
+	sd: Standard deviation of population
+	mu: Assumed mean of population
+	alternative: "two.sided", "less", "greater"
 	conflevel: Confidence level, (0,1)
 	"""
-	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
+	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
 	assert sd >= 0, "sd must be >0"
-	assert isinstance(x, list) or type(x)==_np.ndarray, "x must be list/ndarray"
+	assert isinstance(x, Iterable), "x must be Iterable"
 
 	XX = x
 	if isinstance(x, list):
@@ -634,7 +643,7 @@ def test_z(x, sd, mu, alternative="two.sided", conflevel=0.95):
 	stdeviation = _np.std(XX, ddof =1); #sample's standard deviation
 
 	alpha = 1 - conflevel
-	zcritical = (xaver - mu) / SE
+	zcritical = float((xaver - mu) / SE)
 
 	pvalue = 0.0
 
