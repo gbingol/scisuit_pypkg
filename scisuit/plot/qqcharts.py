@@ -68,7 +68,10 @@ def qqnorm(
 
 
 
-def qqplot(x:_Iterable, y:_Iterable, **kwargs):
+def qqplot(
+		x:_Iterable, 
+		y:_Iterable, 
+		**kwargs):
 	"""
 	Plots quantile-quantile chart using two data-sets (x,y)
 

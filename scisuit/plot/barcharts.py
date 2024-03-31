@@ -11,7 +11,13 @@ from ..util import NiceNumbers, minmax
 
 
 
-def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
+def bar(
+		x, 
+		height, 
+		width=0.8, 
+		bottom=0.0, 
+		color = None, 
+		**kwargs):
 	"""
 	`x:` The x coordinates of the bars or category
 	`height:` The height of the bars.
@@ -71,7 +77,13 @@ def bar(x, height, width=0.8, bottom=0.0, color = None, **kwargs):
 
 
 
-def barh(y, width, height=0.8, left=0.0, color = None, **kwargs):
+def barh(
+		y, 
+		width, 
+		height=0.8, 
+		left=0.0, 
+		color = None, 
+		**kwargs):
 	"""
 	`y:` The y coordinates of the bars or category
 	`height:` The height of the bars.
