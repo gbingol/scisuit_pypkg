@@ -60,7 +60,7 @@ def qqnorm(
 		MaxQ = MaxQ*1.1
 
 		lwidth = (kwargs.get("lw") or kwargs.get("linewidth")) or 2
-		scatter(x=(MinQ, MaxQ), y=(MinQ, MaxQ), marker=None, lw=lwidth, **kwargs)
+		scatter(x=(MinQ, MaxQ), y=(MinQ, MaxQ), marker=None, **kwargs)
 
 	scatter(x=Quantiles, y=_np.sort(data), label=label, marker=marker)
 

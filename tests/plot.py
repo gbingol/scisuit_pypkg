@@ -148,44 +148,23 @@ def layout_test():
 
 
 
-
-import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
+import scisuit.plot as plt
 import numpy as np
 
 
-fruits = ["apple", 'blueberry', 'cherry', 'orange']
-counts = np.array([40, 100, 30, 55])
-pad = 2
+x = np.arange(0, 6, 0.5)
+y = x**2
 
-plt.barh(fruits, counts, hatch="/", color=[(255,0,0), "0 255 0", "0 0 0", "100 150 50"])
-plt.barh(fruits, counts, left=counts+pad)
+plt.layout(2,1)
 
-plt.figure()
+#show line and marker with default pen and brush
+plt.subplot(0,0)
+plt.scatter(x=x, y=y, lw=3, ls=":", marker="s", markersize=10)
 
-
-Categ = ("Control", "MW", "IR")
-Levels = {
-    'A': (18, 18, 14),
-    'B': (38, 48, 47),
-    'C': (189, 195, 217),
-}
-
-x = np.arange(len(Categ))  # the label locations
-width = 0.25  # the width of the bars
-mult = 0
-
-
-for _, measure in Levels.items():
-	offset = width * mult
-	rects = plt.bar(x=x + offset, height=measure, width=width)
-	mult += 1
-
-plt.set_xticks(x+width, Categ)
-
-plt.figure()
-
-layout_test()
+#customize marker properties
+plt.subplot(1,0)
+plt.scatter(x=x, y=y, marker=plt.Marker(fc="#00FF00"))
 
 plt.show()
 
