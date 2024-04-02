@@ -15,8 +15,8 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
-	plt.bar(labels=categ, height=A, fc=(0,255,0), hatch="\\")
-	plt.bar(height=B, labels=categ, lw=2)
+	plt.bar(x=categ, height=A, fc=(0,255,0), hatch="\\")
+	plt.bar(height=B, x=categ, lw=2)
 
 
 
@@ -152,6 +152,14 @@ import scisuit.plot.gdi as gdi
 import scisuit.plot as plt
 import numpy as np
 
+
+bar()
+
+plt.figure()
+
+boxplot()
+
+plt.figure()
 
 x = np.arange(0, 6, 0.5)
 y = x**2

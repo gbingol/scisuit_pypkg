@@ -10,36 +10,6 @@ import scisuit.stats as st
 import numpy as np
 
 
-def ttest_2sample():
-	from scisuit.stats import test_t
-
-	treat = [24, 43, 58, 71, 43, 49, 61, 44, 67, 49, 53, 56, 59, 52, 62, 54, 57, 33, 46, 43, 57]
-	cont = [42, 43, 55, 54, 20, 85, 33, 41, 19, 60, 53, 42, 46, 10, 17, 28, 48, 37, 42, 55, 26, 62, 37]
-
-	pval, tbl=test_t(x=treat, y=cont, varequal=False)
-
-	print("p-value=" + str(pval))
-	pprint.pprint(tbl)
-
-
-
-def ttest_1sample():
-	v = [5, 6, 0, 4, 11, 9, 2, 3]
-	pval, tbl=st.test_t(x=v, mu=8.6)
-	print(pval)
-	print(tbl)
-
-
-
-def ttest_paired():
-	pre=[18, 21, 16, 22, 19, 24, 17, 21, 23, 18, 14, 16, 16, 19, 18, 20, 12, 22, 15, 17]
-	post=[22, 25, 17, 24, 16, 29, 20, 23, 19, 20, 15, 15, 18, 26, 18, 24, 18, 25, 19, 16]
-	pvalue, tbl=st.test_t(x=pre, y=post, paired=True)
-	print(pvalue)
-	print(tbl)
-
-
-
 def AOV():
 	from scisuit.stats import aov
 
@@ -95,6 +65,38 @@ def AOV2():
 	print(result)
 
 
+
+def ttest_2sample():
+	from scisuit.stats import test_t
+
+	treat = [24, 43, 58, 71, 43, 49, 61, 44, 67, 49, 53, 56, 59, 52, 62, 54, 57, 33, 46, 43, 57]
+	cont = [42, 43, 55, 54, 20, 85, 33, 41, 19, 60, 53, 42, 46, 10, 17, 28, 48, 37, 42, 55, 26, 62, 37]
+
+	pval, tbl=test_t(x=treat, y=cont, varequal=False)
+
+	print("p-value=" + str(pval))
+	pprint.pprint(tbl)
+
+
+
+def ttest_1sample():
+	v = [5, 6, 0, 4, 11, 9, 2, 3]
+	pval, tbl=st.test_t(x=v, mu=8.6)
+	print(pval)
+	print(tbl)
+
+
+
+def ttest_paired():
+	pre=[18, 21, 16, 22, 19, 24, 17, 21, 23, 18, 14, 16, 16, 19, 18, 20, 12, 22, 15, 17]
+	post=[22, 25, 17, 24, 16, 29, 20, 23, 19, 20, 15, 15, 18, 26, 18, 24, 18, 25, 19, 16]
+	pvalue, tbl=st.test_t(x=pre, y=post, paired=True)
+	print(pvalue)
+	print(tbl)
+
+
+
+
 def ztest():
 	x = [141, 146, 144, 141, 141, 136, 137, 149, 141, 142, 
 	142, 147, 148, 155, 150, 144, 140, 140, 139, 148, 143, 143, 149, 140, 132, 
@@ -133,4 +135,10 @@ def norm_andersondarling():
 	print(result)
 
 
+AOV()
+AOV2()
+ztest()
+ftest()
+signtest()
+ttest_2sample()
 norm_andersondarling()
