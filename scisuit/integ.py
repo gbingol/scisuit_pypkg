@@ -1,11 +1,12 @@
-import numpy as _np
+import ctypes as _ct
 import math as _math
 import numbers as _numbers
-from ._ctypeslib import pydll as _pydll
-import ctypes as _ct
 import types as _types
 from typing import Iterable
 
+import numpy as _np
+
+from ._ctypeslib import pydll as _pydll
 
 
 def trapz(x:list|_np.ndarray, y:list|_np.ndarray)->float:

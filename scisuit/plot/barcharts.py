@@ -1,14 +1,12 @@
-import numpy as np
 import numbers
-from typing import Iterable as _Iterable
 from random import randint
+from typing import Iterable as _Iterable
 
-from .gdi import rect
-from .charts import canvas, xlim, ylim, set_xticks, set_yticks
+import numpy as np
+
 from ..util import NiceNumbers, minmax
-
-
-
+from .charts import canvas, set_xticks, set_yticks, xlim, ylim
+from .gdi import rect
 
 
 def bar(

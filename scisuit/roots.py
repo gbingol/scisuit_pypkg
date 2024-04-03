@@ -1,10 +1,13 @@
-from ._ctypeslib import pydll as _pydll
 import ctypes as _ct
-import numbers as _numbers
-import types as _types
-import numpy as _np
 import dataclasses as _dc
+import numbers as _numbers
 import sys as _sys
+import types as _types
+
+import numpy as _np
+
+from ._ctypeslib import pydll as _pydll
+
 
 
 __all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info"]

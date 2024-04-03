@@ -1,10 +1,14 @@
-import numpy as _np
 from typing import Iterable as _Iterable
-from ..stats import qnorm
-from .charts import scatter
-from .chartelems import Marker
-from ..util import minmax
+
+import numpy as _np
+
 from ..fitting import approx
+from ..stats import qnorm
+from ..util import minmax
+from .chartelems import Marker
+from .charts import scatter
+
+
 
 def _ComputeQuantiles(X:_Iterable)->_Iterable:
 	lenX = len(X)

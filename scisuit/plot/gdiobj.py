@@ -1,4 +1,6 @@
-import numbers
+from numbers import Real
+
+
 
 class Pen:
 	def __init__(self, *args):
@@ -12,7 +14,7 @@ class Pen:
 			assert isinstance(self.color, str|tuple|list), "'edgecolor' must be str|tuple|list"
 		
 		self.alpha = params.get("alpha")
-		assert isinstance(self.alpha, None|numbers.Real)
+		assert isinstance(self.alpha, None|Real)
 
 		self.style = params.get("linestyle") or params.get("ls")
 		if self.style == None:
@@ -74,7 +76,7 @@ class Brush:
 			assert isinstance(self.color, str|tuple|list), "'facecolor' must be str|tuple|list"
 
 		self.alpha = params.get("alpha")
-		assert isinstance(self.alpha, None|numbers.Real)
+		assert isinstance(self.alpha, None|Real)
 
 		self.style = params.get("hatch")
 		if self.style != None:

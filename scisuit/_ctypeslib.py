@@ -1,8 +1,6 @@
 import ctypes as _ct
-from pathlib import Path as _Path
 import sys
-
-
+from pathlib import Path as _Path
 
 """
 Tested with: 3.10.6, 3.11.6, 3.12.0
@@ -39,19 +37,49 @@ pydll.c_eng_psychrometry.restype = _ct.py_object
 ------------------------    ROOTS  --------------------------------------- 
 """
 
-pydll.c_root_bisect.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int, _ct.c_char_p, _ct.c_bool]
+pydll.c_root_bisect.argtypes = [
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_int, 
+	_ct.c_char_p, 
+	_ct.c_bool]
 pydll.c_root_bisect.restype = _ct.py_object
 
-pydll.c_root_brentq.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int]
+pydll.c_root_brentq.argtypes = [
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_int]
 pydll.c_root_brentq.restype = _ct.py_object
 
-pydll.c_root_muller.argtypes = [_ct.py_object, _ct.py_object, _ct.py_object, _ct.py_object, _ct.py_object, _ct.c_double, _ct.c_int]
+pydll.c_root_muller.argtypes = [
+	_ct.py_object, 
+	_ct.py_object, 
+	_ct.py_object, 
+	_ct.py_object, 
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.c_int]
 pydll.c_root_muller.restype = _ct.py_object
 
-pydll.c_root_newton.argtypes = [_ct.py_object, _ct.c_double, _ct.py_object, _ct.py_object, _ct.c_double, _ct.c_int]
+pydll.c_root_newton.argtypes = [
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.py_object, 
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.c_int]
 pydll.c_root_newton.restype = _ct.py_object
 
-pydll.c_root_ridder.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int]
+pydll.c_root_ridder.argtypes = [
+	_ct.py_object, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_double, 
+	_ct.c_int]
 pydll.c_root_ridder.restype = _ct.py_object
 
 

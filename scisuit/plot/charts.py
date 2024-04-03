@@ -3,10 +3,10 @@ import numbers
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
-from .gdiobj import Pen, Brush
-from .chartelems import Marker
-
 from ..app import App as _App
+from .chartelems import Marker
+from .gdiobj import Brush, Pen
+
 
 
 _app = _App()

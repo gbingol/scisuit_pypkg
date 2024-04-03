@@ -1,10 +1,11 @@
-import numpy as np
 import numbers
 from typing import Iterable as _Iterable
 
-from .gdi import marker
-from .charts import canvas
+import numpy as np
+
 from ..util import NiceNumbers, minmax
+from .charts import canvas
+from .gdi import marker
 
 
 def _ComputeAlphas(s:_Iterable)->list[float]:

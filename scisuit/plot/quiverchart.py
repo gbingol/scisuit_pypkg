@@ -1,10 +1,10 @@
-import numpy as _np
 import numbers
 
+import numpy as _np
+
+from ..util import NiceNumbers
 from .charts import canvas
 from .gdi import arrow
-from ..util import NiceNumbers
-
 
 
 def _MinMax(X:_np.ndarray)->tuple[float]:

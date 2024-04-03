@@ -1,4 +1,5 @@
 import ctypes as _ct
+
 from ._ctypeslib import pydll
 
 pydll.c_plot_app.argtypes = []

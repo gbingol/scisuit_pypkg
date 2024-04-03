@@ -1,9 +1,9 @@
-import numpy as _np
+import ctypes as _ct
 import math as _math
 
-import ctypes as _ct
-from .._ctypeslib import pydll as _pydll
+import numpy as _np
 
+from .._ctypeslib import pydll as _pydll
 
 
 

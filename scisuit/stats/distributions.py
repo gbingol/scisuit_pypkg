@@ -1,8 +1,11 @@
-import numpy as _np
 import ctypes as _ct
-from typing import Iterable
 from numbers import Real
+from typing import Iterable
+
+import numpy as _np
+
 from .._ctypeslib import pydll as _pydll
+
 
 
 

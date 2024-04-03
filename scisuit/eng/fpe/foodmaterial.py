@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 import math as _math
 import numbers as _numbers
+
 import numpy as _np
 
-from .foodproperty import Aw, ComputeAw_T
 from ...decorators import override
 from ..defs import Dielectric
-
+from .foodproperty import Aw, ComputeAw_T
 
 """
 Tolerance for temperature differences

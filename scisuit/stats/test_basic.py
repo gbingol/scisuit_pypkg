@@ -1,22 +1,13 @@
-"""
-BASIC STATISTICAL TESTS:
-
-* Anderson-Darling Normality Test
-* F-test
-* Sign-Test
-* t-tests (1-sample, 2-sample, paired)
-* Z-test
-"""
-
-
 import math
 import numbers
-from typing import Iterable
-import numpy as _np
-from .._ctypeslib import pydll as _pydll
-
 from dataclasses import dataclass
-from .distributions import pbinom, pf, qf, pt, qt, pnorm, qnorm
+from typing import Iterable
+
+import numpy as _np
+
+from .._ctypeslib import pydll as _pydll
+from .distributions import pbinom, pf, pnorm, pt, qf, qnorm, qt
+
 
 
 

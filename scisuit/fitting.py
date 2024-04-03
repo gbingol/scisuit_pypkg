@@ -1,10 +1,13 @@
-from ._ctypeslib import pydll as _pydll
 import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
-from numpy.polynomial import polynomial as _Polynomial
-import numpy as _np
 from typing import Iterable
+
+import numpy as _np
+from numpy.polynomial import polynomial as _Polynomial
+
+from ._ctypeslib import pydll as _pydll
+from .util import minmax
 
 
 
@@ -19,15 +22,6 @@ __all__ = [
 	'polyfit', 
 	'powfit', 
 	'SplineResult']
-
-def _MinMax(X:_np.ndarray)->tuple[float]:
-	_min = X[0]
-	_max = X[0]
-	for i in range(1, len(X)):
-		_min = X[i] if X[i]<_min else _min
-		_max = X[i] if X[i]>_max else _max
-	
-	return _min, _max
 
 
 
@@ -173,7 +167,7 @@ def approx(
 
 	v = _np.zeros(n)
 	if type(y) == type(None):
-		Min, Max = _MinMax(x)
+		Min, Max = minmax(x)
 		strideLen = (Max-Min)/(n-1)
 		v[0], v[n-1] = Min, Max
 		for i in range(1, len(v)-1):

@@ -1,12 +1,12 @@
 import math
 import numbers
-import numpy as np
 from dataclasses import dataclass
 from typing import Iterable
 
-from .distributions import pf
-from ..fitting import linearinterp
+import numpy as np
 
+from ..fitting import linearinterp
+from .distributions import pf
 
 __all__ = ['aov', 'aov2_results', 'aov']
 

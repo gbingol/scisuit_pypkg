@@ -1,6 +1,7 @@
 
-from .._ctypeslib import pydll as _pydll
 from numbers import Real as _Real
+
+from .._ctypeslib import pydll as _pydll
 
 
 class PsychrometryResult:
