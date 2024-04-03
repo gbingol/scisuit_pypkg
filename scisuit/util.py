@@ -1,10 +1,10 @@
 import math
-import numbers
+from numbers import Real
 from typing import Iterable as _Iterable
 
 
 
-def minmax(X:_Iterable)->tuple[numbers.Real]:
+def minmax(X:_Iterable)->tuple[Real]:
 	_min = X[0]
 	_max = X[0]
 	for i in range(1, len(X)):
@@ -17,7 +17,11 @@ def minmax(X:_Iterable)->tuple[numbers.Real]:
 
 
 class NiceNumbers:
-	def __init__(self, minimum, maximum, maxticks=10) -> None:
+	def __init__(self, minimum:Real, maximum, maxticks=10) -> None:
+		assert isinstance(minimum, Real), "minimum must be Real."
+		assert isinstance(maximum, Real), "maximum must be Real."
+		assert isinstance(maxticks, int), "maxticks must be int."
+		
 		self._min = minimum
 		self._max = maximum
 		self._maxticks = maxticks
@@ -67,9 +71,8 @@ class NiceNumbers:
 		return self._tickspacing
 	
 
-"""
+
 if __name__ == "__main__":
 	n = NiceNumbers(0.5, 10.25)
-	print(n.nicemax, " ", n.nicemin, " ", n.tickspace)
+	print(n.minmax, " ", n.tickspace)
 	
-"""
