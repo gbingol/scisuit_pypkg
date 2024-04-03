@@ -1,4 +1,5 @@
-import types as _types
+from types import FunctionType
+from numbers import Real
 import math
 
 
@@ -7,8 +8,16 @@ class FiniteDiff:
 	Computes the nth derivative of a function using forward, backward or central
 	finite difference methods 
 	"""
-	def __init__(self, f:_types.FunctionType, x:float, dx=1E-4, n=1) -> None:
-		assert dx>0, "dx>0 expected"
+	def __init__(self, f:FunctionType, x:Real, dx=1E-4, n=1) -> None:
+		assert isinstance(f, FunctionType), "f must be a unary function."
+		assert isinstance(x, Real), "x must be Real."
+
+		assert isinstance(dx, Real), "dx must be Real."
+		assert dx>0, "dx>0 expected."
+
+		assert isinstance(n, int), "n must be int."
+		assert n>=1, "n>=1 expected."
+		
 		self._func = f
 		self._x = x
 		self._dx = dx
@@ -55,16 +64,25 @@ class FiniteDiff:
 
 
 
-def richardson(f:_types.FunctionType, x:float, dx=1E-1, n=1)->float:
+def richardson(f:FunctionType, x:float, dx=1E-1, n=1)->float:
 	"""
-	Richardson Extrapolation for 1st order derivative
+	Richardson Extrapolation for nth order derivative
 	Uses central differences
 	"""
+	assert isinstance(f, FunctionType), "f must be a unary function."
+	assert isinstance(x, Real), "x must be Real."
+
+	assert isinstance(dx, Real), "dx must be Real."
+	assert dx>0, "dx>0 expected."
+
+	assert isinstance(n, int), "n must be int."
+	assert n>=1, "n>=1 expected."
+	
 	h = dx
 	d1 = FiniteDiff(f, x, n=n, dx=h)
 	d2 = FiniteDiff(f, x, n=n, dx=h/2)
 
-	return 4/3*d2.central() - 1/3*d1.central()
+	return 4.0/3.0*d2.central() - 1.0/3.0*d1.central()
 
 
 
