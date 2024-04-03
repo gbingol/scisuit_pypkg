@@ -1,4 +1,4 @@
-import ctypes as _ct
+from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8
 import sys
 from pathlib import Path as _Path
 
@@ -10,7 +10,7 @@ _DLLname = "scisuit_pybind" + str(sys.version_info.major) + str(sys.version_info
 
 #__file__ is guaranteed to be an absolute path in Python 3.9+
 __pt = _Path(__file__)
-pydll = _ct.PyDLL(str(__pt.parents[0] / _DLLname))
+pydll = PyDLL(str(__pt.parents[0] / _DLLname))
 
 
 
@@ -24,10 +24,8 @@ __all__ = ['pydll']
 ------------------------  ENGINEERING --------------------------------------- 
 """
 
-pydll.c_eng_psychrometry.argtypes = [_ct.py_object]
-pydll.c_eng_psychrometry.restype = _ct.py_object
-
-
+pydll.c_eng_psychrometry.argtypes = [py_object]
+pydll.c_eng_psychrometry.restype = py_object
 
 
 
@@ -37,52 +35,20 @@ pydll.c_eng_psychrometry.restype = _ct.py_object
 ------------------------    ROOTS  --------------------------------------- 
 """
 
-pydll.c_root_bisect.argtypes = [
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_int, 
-	_ct.c_char_p, 
-	_ct.c_bool]
-pydll.c_root_bisect.restype = _ct.py_object
+pydll.c_root_bisect.argtypes = [py_object, c_double, c_double, c_double, c_int, c_char_p, c_bool]
+pydll.c_root_bisect.restype = py_object
 
-pydll.c_root_brentq.argtypes = [
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_int]
-pydll.c_root_brentq.restype = _ct.py_object
+pydll.c_root_brentq.argtypes = [py_object, c_double, c_double, c_double, c_int]
+pydll.c_root_brentq.restype = py_object
 
-pydll.c_root_muller.argtypes = [
-	_ct.py_object, 
-	_ct.py_object, 
-	_ct.py_object, 
-	_ct.py_object, 
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.c_int]
-pydll.c_root_muller.restype = _ct.py_object
+pydll.c_root_muller.argtypes = [py_object, py_object, py_object, py_object, py_object, c_double, c_int]
+pydll.c_root_muller.restype = py_object
 
-pydll.c_root_newton.argtypes = [
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.py_object, 
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.c_int]
-pydll.c_root_newton.restype = _ct.py_object
+pydll.c_root_newton.argtypes = [py_object, c_double, py_object, py_object, c_double, c_int]
+pydll.c_root_newton.restype = py_object
 
-pydll.c_root_ridder.argtypes = [
-	_ct.py_object, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_double, 
-	_ct.c_int]
-pydll.c_root_ridder.restype = _ct.py_object
-
-
+pydll.c_root_ridder.argtypes = [py_object, c_double, c_double, c_double, c_int]
+pydll.c_root_ridder.restype = py_object
 
 
 
@@ -94,18 +60,23 @@ pydll.c_root_ridder.restype = _ct.py_object
 ------------------------  FITTING PACKAGE --------------------------------------- 
 """
 
-pydll.c_fit_expfit.argtypes = [_ct.py_object, _ct.py_object, _ct.py_object]
-pydll.c_fit_expfit.restype = _ct.py_object
-pydll.c_fit_lagrange.argtypes = [_ct.py_object, _ct.py_object,_ct.c_double]
-pydll.c_fit_lagrange.restype = _ct.py_object
-pydll.c_fit_logfit.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_fit_logfit.restype = _ct.py_object
-pydll.c_fit_logistfit.argtypes = [_ct.py_object, _ct.py_object, _ct.py_object]
-pydll.c_fit_logistfit.restype = _ct.py_object
-pydll.c_fit_powfit.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_fit_powfit.restype = _ct.py_object
-pydll.c_fit_spline.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_fit_spline.restype = _ct.py_object
+pydll.c_fit_expfit.argtypes = [py_object, py_object, py_object]
+pydll.c_fit_expfit.restype = py_object
+
+pydll.c_fit_lagrange.argtypes = [py_object, py_object,c_double]
+pydll.c_fit_lagrange.restype = py_object
+
+pydll.c_fit_logfit.argtypes = [py_object, py_object]
+pydll.c_fit_logfit.restype = py_object
+
+pydll.c_fit_logistfit.argtypes = [py_object, py_object, py_object]
+pydll.c_fit_logistfit.restype = py_object
+
+pydll.c_fit_powfit.argtypes = [py_object, py_object]
+pydll.c_fit_powfit.restype = py_object
+
+pydll.c_fit_spline.argtypes = [py_object, py_object]
+pydll.c_fit_spline.restype = py_object
 
 
 
@@ -116,14 +87,14 @@ pydll.c_fit_spline.restype = _ct.py_object
 -------------------------------------------------------------------------------
 ------------------------  INTEGRATION --------------------------------------- 
 """
-pydll.c_integ_simpson.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_integ_simpson.restype = _ct.py_object
+pydll.c_integ_simpson.argtypes = [py_object, py_object]
+pydll.c_integ_simpson.restype = py_object
 
-pydll.c_integ_romberg.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_double, _ct.c_int]
-pydll.c_integ_romberg.restype = _ct.py_object
+pydll.c_integ_romberg.argtypes = [py_object, c_double, c_double, c_double, c_int]
+pydll.c_integ_romberg.restype = py_object
 
-pydll.c_integ_fixed_quad.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double, _ct.c_int]
-pydll.c_integ_fixed_quad.restype = _ct.py_object
+pydll.c_integ_fixed_quad.argtypes = [py_object, c_double, c_double, c_int]
+pydll.c_integ_fixed_quad.restype = py_object
 
 
 
@@ -134,154 +105,206 @@ pydll.c_integ_fixed_quad.restype = _ct.py_object
 ------------------------  STATS --------------------------------------- 
 """
 
-pydll.c_stat_dbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
-pydll.c_stat_dbeta.restype=_ct.py_object
-pydll.c_stat_pbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
-pydll.c_stat_pbeta.restype=_ct.py_object
-pydll.c_stat_qbeta.argtypes = [_ct.py_object,  _ct.c_double, _ct.c_double]
-pydll.c_stat_qbeta.restype=_ct.py_object
+pydll.c_stat_dbeta.argtypes = [py_object,  c_double, c_double]
+pydll.c_stat_dbeta.restype=py_object
 
+pydll.c_stat_pbeta.argtypes = [py_object,  c_double, c_double]
+pydll.c_stat_pbeta.restype=py_object
 
-pydll.c_stat_dbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_dbinom.restype=_ct.py_object
-pydll.c_stat_pbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_pbinom.restype=_ct.py_object
-pydll.c_stat_qbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_qbinom.restype=_ct.py_object
+pydll.c_stat_qbeta.argtypes = [py_object,  c_double, c_double]
+pydll.c_stat_qbeta.restype=py_object
 
+#----
 
-pydll.c_stat_dnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_dnbinom.restype=_ct.py_object
-pydll.c_stat_pnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_pnbinom.restype=_ct.py_object
-pydll.c_stat_qnbinom.argtypes = [_ct.py_object, _ct.c_int, _ct.c_double]
-pydll.c_stat_qnbinom.restype=_ct.py_object
+pydll.c_stat_dbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_dbinom.restype=py_object
 
+pydll.c_stat_pbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_pbinom.restype=py_object
 
-pydll.c_stat_dmultinom.argtypes = [_ct.py_object, _ct.c_int, _ct.py_object]
-pydll.c_stat_dmultinom.restype=_ct.py_object
+pydll.c_stat_qbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_qbinom.restype=py_object
 
+#----
 
-pydll.c_stat_dchisq.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_dchisq.restype=_ct.py_object
-pydll.c_stat_pchisq.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_pchisq.restype=_ct.py_object
-pydll.c_stat_qchisq.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_qchisq.restype=_ct.py_object
+pydll.c_stat_dnbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_dnbinom.restype=py_object
 
+pydll.c_stat_pnbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_pnbinom.restype=py_object
 
-pydll.c_stat_dexp.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_dexp.restype=_ct.py_object
-pydll.c_stat_pexp.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_pexp.restype=_ct.py_object
-pydll.c_stat_qexp.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_qexp.restype=_ct.py_object
+pydll.c_stat_qnbinom.argtypes = [py_object, c_int, c_double]
+pydll.c_stat_qnbinom.restype=py_object
 
+#----
 
-pydll.c_stat_df.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
-pydll.c_stat_df.restype=_ct.py_object
-pydll.c_stat_pf.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
-pydll.c_stat_pf.restype=_ct.py_object
-pydll.c_stat_qf.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int]
-pydll.c_stat_qf.restype=_ct.py_object
+pydll.c_stat_dmultinom.argtypes = [py_object, c_int, py_object]
+pydll.c_stat_dmultinom.restype=py_object
 
+#----
 
-pydll.c_stat_dgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dgamma.restype=_ct.py_object
-pydll.c_stat_pgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_pgamma.restype=_ct.py_object
-pydll.c_stat_qgamma.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qgamma.restype=_ct.py_object
+pydll.c_stat_dchisq.argtypes = [py_object, c_int]
+pydll.c_stat_dchisq.restype=py_object
 
+pydll.c_stat_pchisq.argtypes = [py_object, c_int]
+pydll.c_stat_pchisq.restype=py_object
 
-pydll.c_stat_dgeom.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_dgeom.restype=_ct.py_object
-pydll.c_stat_pgeom.argtypes =  [_ct.py_object, _ct.c_double]
-pydll.c_stat_pgeom.restype=_ct.py_object
-pydll.c_stat_qgeom.argtypes =  [_ct.py_object, _ct.c_double]
-pydll.c_stat_qgeom.restype=_ct.py_object
+pydll.c_stat_qchisq.argtypes = [py_object, c_int]
+pydll.c_stat_qchisq.restype=py_object
 
+#----
 
-pydll.c_stat_dhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
-pydll.c_stat_dhyper.restype=_ct.py_object
-pydll.c_stat_phyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
-pydll.c_stat_phyper.restype=_ct.py_object
-pydll.c_stat_qhyper.argtypes = [_ct.py_object, _ct.c_int, _ct.c_int, _ct.c_int]
-pydll.c_stat_qhyper.restype=_ct.py_object
+pydll.c_stat_dexp.argtypes = [py_object, c_double]
+pydll.c_stat_dexp.restype=py_object
 
+pydll.c_stat_pexp.argtypes = [py_object, c_double]
+pydll.c_stat_pexp.restype=py_object
 
-pydll.c_stat_dnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dnorm.restype=_ct.py_object
-pydll.c_stat_pnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_pnorm.restype=_ct.py_object
-pydll.c_stat_qnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qnorm.restype=_ct.py_object
+pydll.c_stat_qexp.argtypes = [py_object, c_double]
+pydll.c_stat_qexp.restype=py_object
 
+#----
 
-pydll.c_stat_dlnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dlnorm.restype=_ct.py_object
-pydll.c_stat_plnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_plnorm.restype=_ct.py_object
-pydll.c_stat_qlnorm.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qlnorm.restype=_ct.py_object
+pydll.c_stat_df.argtypes = [py_object, c_int, c_int]
+pydll.c_stat_df.restype=py_object
 
+pydll.c_stat_pf.argtypes = [py_object, c_int, c_int]
+pydll.c_stat_pf.restype=py_object
 
-pydll.c_stat_dpareto.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dpareto.restype=_ct.py_object
-pydll.c_stat_ppareto.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_ppareto.restype=_ct.py_object
-pydll.c_stat_qpareto.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qpareto.restype=_ct.py_object
+pydll.c_stat_qf.argtypes = [py_object, c_int, c_int]
+pydll.c_stat_qf.restype=py_object
 
+#----
 
-pydll.c_stat_dpois.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_dpois.restype=_ct.py_object
-pydll.c_stat_ppois.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_ppois.restype=_ct.py_object
-pydll.c_stat_qpois.argtypes = [_ct.py_object, _ct.c_double]
-pydll.c_stat_qpois.restype=_ct.py_object
+pydll.c_stat_dgamma.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dgamma.restype=py_object
 
+pydll.c_stat_pgamma.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_pgamma.restype=py_object
 
-pydll.c_stat_dt.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_dt.restype=_ct.py_object
-pydll.c_stat_pt.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_pt.restype=_ct.py_object
-pydll.c_stat_qt.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_qt.restype=_ct.py_object
+pydll.c_stat_qgamma.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qgamma.restype=py_object
 
+#----
 
-pydll.c_stat_dunif.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dunif.restype=_ct.py_object
-pydll.c_stat_punif.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_punif.restype=_ct.py_object
-pydll.c_stat_qunif.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qunif.restype=_ct.py_object
+pydll.c_stat_dgeom.argtypes = [py_object, c_double]
+pydll.c_stat_dgeom.restype=py_object
 
+pydll.c_stat_pgeom.argtypes =  [py_object, c_double]
+pydll.c_stat_pgeom.restype=py_object
 
-pydll.c_stat_dweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_dweibull.restype=_ct.py_object
-pydll.c_stat_pweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_pweibull.restype=_ct.py_object
-pydll.c_stat_qweibull.argtypes = [_ct.py_object, _ct.c_double, _ct.c_double]
-pydll.c_stat_qweibull.restype=_ct.py_object
+pydll.c_stat_qgeom.argtypes =  [py_object, c_double]
+pydll.c_stat_qgeom.restype=py_object
 
+#----
 
-pydll.c_stat_dsignrank.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_dsignrank.restype=_ct.py_object
-pydll.c_stat_psignrank.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_psignrank.restype=_ct.py_object
-pydll.c_stat_qsignrank.argtypes = [_ct.py_object, _ct.c_int]
-pydll.c_stat_qsignrank.restype=_ct.py_object
+pydll.c_stat_dhyper.argtypes = [py_object, c_int, c_int, c_int]
+pydll.c_stat_dhyper.restype=py_object
 
+pydll.c_stat_phyper.argtypes = [py_object, c_int, c_int, c_int]
+pydll.c_stat_phyper.restype=py_object
 
-pydll.c_stat_moveavg.argtypes = [_ct.py_object, _ct.py_object, _ct.c_int]
-pydll.c_stat_moveavg.restype=_ct.py_object
+pydll.c_stat_qhyper.argtypes = [py_object, c_int, c_int, c_int]
+pydll.c_stat_qhyper.restype=py_object
 
-pydll.c_stat_rolling.argtypes = [_ct.py_object, _ct.py_object, _ct.c_int]
-pydll.c_stat_rolling.restype=_ct.py_object
+#----
 
-pydll.c_stat_test_norm_ad.argtypes = [_ct.py_object]
-pydll.c_stat_test_norm_ad.restype=_ct.py_object
+pydll.c_stat_dnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dnorm.restype=py_object
+
+pydll.c_stat_pnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_pnorm.restype=py_object
+
+pydll.c_stat_qnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qnorm.restype=py_object
+
+#----
+
+pydll.c_stat_dlnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dlnorm.restype=py_object
+
+pydll.c_stat_plnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_plnorm.restype=py_object
+
+pydll.c_stat_qlnorm.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qlnorm.restype=py_object
+
+#----
+
+pydll.c_stat_dpareto.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dpareto.restype=py_object
+
+pydll.c_stat_ppareto.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_ppareto.restype=py_object
+
+pydll.c_stat_qpareto.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qpareto.restype=py_object
+
+#----
+
+pydll.c_stat_dpois.argtypes = [py_object, c_double]
+pydll.c_stat_dpois.restype=py_object
+
+pydll.c_stat_ppois.argtypes = [py_object, c_double]
+pydll.c_stat_ppois.restype=py_object
+
+pydll.c_stat_qpois.argtypes = [py_object, c_double]
+pydll.c_stat_qpois.restype=py_object
+
+#----
+
+pydll.c_stat_dt.argtypes = [py_object, c_int]
+pydll.c_stat_dt.restype=py_object
+
+pydll.c_stat_pt.argtypes = [py_object, c_int]
+pydll.c_stat_pt.restype=py_object
+
+pydll.c_stat_qt.argtypes = [py_object, c_int]
+pydll.c_stat_qt.restype=py_object
+
+#----
+
+pydll.c_stat_dunif.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dunif.restype=py_object
+
+pydll.c_stat_punif.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_punif.restype=py_object
+
+pydll.c_stat_qunif.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qunif.restype=py_object
+
+#----
+
+pydll.c_stat_dweibull.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_dweibull.restype=py_object
+
+pydll.c_stat_pweibull.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_pweibull.restype=py_object
+
+pydll.c_stat_qweibull.argtypes = [py_object, c_double, c_double]
+pydll.c_stat_qweibull.restype=py_object
+
+#----
+
+pydll.c_stat_dsignrank.argtypes = [py_object, c_int]
+pydll.c_stat_dsignrank.restype=py_object
+
+pydll.c_stat_psignrank.argtypes = [py_object, c_int]
+pydll.c_stat_psignrank.restype=py_object
+
+pydll.c_stat_qsignrank.argtypes = [py_object, c_int]
+pydll.c_stat_qsignrank.restype=py_object
+
+#----
+
+pydll.c_stat_moveavg.argtypes = [py_object, py_object, c_int]
+pydll.c_stat_moveavg.restype=py_object
+
+pydll.c_stat_rolling.argtypes = [py_object, py_object, c_int]
+pydll.c_stat_rolling.restype=py_object
+
+pydll.c_stat_test_norm_ad.argtypes = [py_object]
+pydll.c_stat_test_norm_ad.restype=py_object
 
 
 
@@ -294,131 +317,131 @@ pydll.c_stat_test_norm_ad.restype=_ct.py_object
 """
 
 
-pydll.c_plot_boxplot.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_boxplot.restype=_ct.py_object
+pydll.c_plot_boxplot.argtypes = [py_object, py_object]
+pydll.c_plot_boxplot.restype=py_object
 
 
-pydll.c_plot_histogram.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_histogram.restype=_ct.py_object
+pydll.c_plot_histogram.argtypes = [py_object, py_object]
+pydll.c_plot_histogram.restype=py_object
 
 
-pydll.c_plot_psychrometry.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_psychrometry.restype=_ct.py_object
+pydll.c_plot_psychrometry.argtypes = [py_object, py_object]
+pydll.c_plot_psychrometry.restype=py_object
 
 
-pydll.c_plot_scatter.argtypes = [_ct.py_object, _ct.py_object]
-pydll.c_plot_scatter.restype=_ct.py_object
+pydll.c_plot_scatter.argtypes = [py_object, py_object]
+pydll.c_plot_scatter.restype=py_object
 
 
 pydll.c_plot_canvas.argtypes = [
-						_ct.py_object, #x-bounds
-						_ct.py_object, #y-bounds
-						_ct.c_bool, # Show Horiz Axis
-						_ct.c_bool, # Show Vert Axis
-						_ct.c_bool, # Show Horiz Gridlines
-						_ct.c_bool] # Show Vert Gridlines
-pydll.c_plot_canvas.restype=_ct.py_object
+						py_object, #x-bounds
+						py_object, #y-bounds
+						c_bool, # Show Horiz Axis
+						c_bool, # Show Vert Axis
+						c_bool, # Show Horiz Gridlines
+						c_bool] # Show Vert Gridlines
+pydll.c_plot_canvas.restype=py_object
 
 
 
 #-----------------------------------------
 pydll.c_plot_gdi_arc.argtypes = [
-					_ct.c_double, #x1
-					_ct.c_double, #y1
-					_ct.c_double, #x2
-					_ct.c_double, #y2
-					_ct.c_double, #xcenter
-					_ct.c_double, #ycenter
-					_ct.py_object, #dictionary for Pen
-					_ct.py_object] #dictionary for Brush				
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					c_double, #xcenter
+					c_double, #ycenter
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush				
 pydll.c_plot_gdi_arc.restype=None
 
 
 pydll.c_plot_gdi_arrow.argtypes = [
-					_ct.c_double, #x1
-					_ct.c_double, #y1
-					_ct.c_double, #x2
-					_ct.c_double, #y2
-					_ct.c_double, #angle
-					_ct.c_double, #length
-					_ct.py_object] #dictionary for Pen				
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					c_double, #angle
+					c_double, #length
+					py_object] #dictionary for Pen				
 pydll.c_plot_gdi_arrow.restype=None
 
 
 pydll.c_plot_gdi_line.argtypes = [
-					_ct.c_double, #x1
-					_ct.c_double, #y1
-					_ct.c_double, #x2
-					_ct.c_double, #y2
-					_ct.py_object] #dictionary for Pen				
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					py_object] #dictionary for Pen				
 pydll.c_plot_gdi_line.restype=None
 
 
 pydll.c_plot_gdi_rect.argtypes = [
-					_ct.c_double, #x of top-left
-					_ct.c_double, #y of top-left
-					_ct.c_double, #width
-					_ct.c_double, #height
-					_ct.py_object, #dictionary for Pen
-					_ct.py_object] #dictionary for Brush
+					c_double, #x of top-left
+					c_double, #y of top-left
+					c_double, #width
+					c_double, #height
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush
 pydll.c_plot_gdi_ellipse.restype=None
 
 
 pydll.c_plot_gdi_ellipse.argtypes = [
-					_ct.c_double, # x of center
-					_ct.c_double, # y of center
-					_ct.c_double, # half width
-					_ct.c_double, # half height
-					_ct.py_object, #dictionary for Pen
-					_ct.py_object] #dictionary for Brush
+					c_double, # x of center
+					c_double, # y of center
+					c_double, # half width
+					c_double, # half height
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush
 pydll.c_plot_gdi_ellipse.restype=None
 
 
 pydll.c_plot_gdi_text.argtypes = [
-					_ct.c_double, # x of top-left
-					_ct.c_double, # y of top-left
-					_ct.c_char_p, # text
-					_ct.c_double, # rotation
-					_ct.c_char_p, # color
-					_ct.py_object] #dictionary for Font
+					c_double, # x of top-left
+					c_double, # y of top-left
+					c_char_p, # text
+					c_double, # rotation
+					c_char_p, # color
+					py_object] #dictionary for Font
 pydll.c_plot_gdi_text.restype=None
 
 
 pydll.c_plot_gdi_curve.argtypes = [
-					_ct.py_object, #x-values (iterable)
-					_ct.py_object,#y-values (iterable)
-					_ct.py_object] #dictionary for Pen
+					py_object, #x-values (iterable)
+					py_object,#y-values (iterable)
+					py_object] #dictionary for Pen
 pydll.c_plot_gdi_curve.restype=None
 
 
 pydll.c_plot_gdi_polygon.argtypes = [
-					_ct.py_object, #x-values (iterable)
-					_ct.py_object,#y-values (iterable)
-					_ct.py_object, #dictionary for Pen
-					_ct.py_object] #dictionary for brush
+					py_object, #x-values (iterable)
+					py_object,#y-values (iterable)
+					py_object, #dictionary for Pen
+					py_object] #dictionary for brush
 pydll.c_plot_gdi_polygon.restype=None
 
 
 pydll.c_plot_gdi_marker.argtypes = [
-					_ct.c_double, # x of centroid
-					_ct.c_double, # y of centroid
-					_ct.c_char_p, # type
-					_ct.c_uint8, # size
-					_ct.py_object, # dictionary for Pen
-					_ct.py_object] #dictionary for Brush
+					c_double, # x of centroid
+					c_double, # y of centroid
+					c_char_p, # type
+					c_uint8, # size
+					py_object, # dictionary for Pen
+					py_object] #dictionary for Brush
 pydll.c_plot_gdi_marker.restype=None
 
 #---------------------------------------------
 
-pydll.c_plot_layout.argtypes = [_ct.c_int, _ct.c_int]
+pydll.c_plot_layout.argtypes = [c_int, c_int]
 pydll.c_plot_layout.restype=None
 
 
 pydll.c_plot_subplot.argtypes = [
-						_ct.c_int, 
-						_ct.c_int, 
-						_ct.c_int, 
-						_ct.c_int]
+						c_int, 
+						c_int, 
+						c_int, 
+						c_int]
 pydll.c_plot_subplot.restype=None
 
 
@@ -426,42 +449,42 @@ pydll.c_plot_figure.argtypes = []
 pydll.c_plot_figure.restype=None
 
 
-pydll.c_plot_title.argtypes = [_ct.c_char_p]
+pydll.c_plot_title.argtypes = [c_char_p]
 pydll.c_plot_title.restype=None
 
 
-pydll.c_plot_xlabel.argtypes = [_ct.c_char_p]
+pydll.c_plot_xlabel.argtypes = [c_char_p]
 pydll.c_plot_xlabel.restype=None
 
 
-pydll.c_plot_ylabel.argtypes = [_ct.c_char_p]
+pydll.c_plot_ylabel.argtypes = [c_char_p]
 pydll.c_plot_ylabel.restype=None
 
 
 pydll.c_plot_axislim.argtypes = [
-						_ct.py_object, 
-						_ct.py_object, 
-						_ct.c_char]
-pydll.c_plot_axislim.restype=_ct.py_object
+						py_object, 
+						py_object, 
+						c_char]
+pydll.c_plot_axislim.restype=py_object
 
 
 pydll.c_plot_set_xticks.argtypes = [
-						_ct.py_object, 
-						_ct.py_object,
-						_ct.c_char_p, #Alignment
-						_ct.c_char_p] #Position
-pydll.c_plot_set_xticks.restype=_ct.py_object
+						py_object, 
+						py_object,
+						c_char_p, #Alignment
+						c_char_p] #Position
+pydll.c_plot_set_xticks.restype=py_object
 
 
 pydll.c_plot_set_yticks.argtypes = [
-						_ct.py_object, 
-						_ct.py_object,
-						_ct.c_char_p, #Alignment
-						_ct.c_char_p] #Position
-pydll.c_plot_set_yticks.restype=_ct.py_object
+						py_object, 
+						py_object,
+						c_char_p, #Alignment
+						c_char_p] #Position
+pydll.c_plot_set_yticks.restype=py_object
 
-pydll.c_plot_set_axispos.argtypes = [_ct.c_double, _ct.c_char]
-pydll.c_plot_set_axispos.restype=_ct.py_object
+pydll.c_plot_set_axispos.argtypes = [c_double, c_char]
+pydll.c_plot_set_axispos.restype=py_object
 
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None
