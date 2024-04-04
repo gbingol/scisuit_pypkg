@@ -6,7 +6,7 @@ from typing import Iterable
 import numpy as np
 
 from ..fitting import linearinterp
-from .distributions import pf
+from ._distributions import pf
 
 __all__ = ['aov', 'aov2_results', 'aov']
 

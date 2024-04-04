@@ -1,9 +1,7 @@
 import math
-import numbers
-
 import numpy as np
 
-from .distributions import pf, pt, qt
+from ._distributions import pf, pt, qt
 
 
 
