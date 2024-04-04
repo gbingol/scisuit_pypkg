@@ -1,11 +1,3 @@
-import ctypes as _ct
-
-from dataclasses import dataclass as _dataclass
-
-
-
-
-
 from ._core import kurt, mode, moveavg, rolling, sample, skew
 
 from ._aov import aov, aov2, aov2_results
