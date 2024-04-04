@@ -136,7 +136,7 @@ def test_normality(x=None):
 	
 	if x == None: x=_data
 	
-	result_ad = st.test_norm_ad(x)
+	result_ad = st.anderson(x)
 	print("Anderson-Darling: ", result_ad)
 
 	result_ks = st.ks_1samp(x)
@@ -155,4 +155,4 @@ norm_andersondarling()
 """
 
 from scisuit.stats import rf
-test_normality(rf(50, df1=2, df2=4))
+test_normality()

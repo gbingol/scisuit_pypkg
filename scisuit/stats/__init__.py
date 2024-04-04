@@ -12,7 +12,7 @@ from .aov import aov, aov2, aov2_results
 from .linregress import linregress
 
 from .test_basic import \
-	test_norm_ad, ADTestRes, \
+	anderson, ADTestRes, \
 	ks_1samp, Ks1SampletestResult, \
 	test_f, test_f_Result, \
 	test_sign, test_sign_Result,\

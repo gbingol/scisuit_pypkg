@@ -26,8 +26,14 @@ class ADTestRes:
 	A2:float
 
 
-def test_norm_ad(x:Iterable)->ADTestRes:
+def anderson(x:Iterable)->ADTestRes:
+	"""
+	Performs Anderson-Darling test
+	"""
 	assert isinstance(x, Iterable), "x must be an Iterable object"
+	
+	_xx = [v for v in x if isinstance(v, numbers.Real)]
+	assert len(x) == len(_xx), "x must contain only Real numbers"
 	
 	pval, A2 = _pydll.c_stat_test_norm_ad(x)
 	return ADTestRes(pvalue=pval, A2=A2)
