@@ -125,21 +125,22 @@ def signtest():
 
 
 
-def norm_andersondarling():
-	data = [2.39798, -0.16255, 0.54605, 0.68578, -0.78007, 
+
+
+
+def test_normality(x=None):
+
+	_data = [2.39798, -0.16255, 0.54605, 0.68578, -0.78007, 
 		 1.34234, 1.53208, -0.86899, -0.50855, -0.58256, 
 		 -0.54597, 0.08503, 0.38337, 0.26072, 0.34729]
 	
-	result = st.test_norm_ad(data)
+	if x == None: x=_data
+	
+	result_ad = st.test_norm_ad(x)
+	print("Anderson-Darling: ", result_ad)
 
-	print(result)
-
-
-def ks1sampletest():
-	from scisuit.stats import ks_1samp, Ks1SampletestResult
-	x = [-0.62467049, 0.02793576, 0.17729038, 0.23238647, 0.28809798, 0.41124504, 0.7944974, 0.84870481]
-
-	print(ks_1samp(x))
+	result_ks = st.ks_1samp(x)
+	print("Kolmogorov-Smirnov: ", result_ks)
 
 
 """
@@ -152,3 +153,6 @@ ttest_2sample()
 norm_andersondarling()
 
 """
+
+from scisuit.stats import rf
+test_normality(rf(50, df1=2, df2=4))
