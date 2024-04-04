@@ -22,7 +22,7 @@ from .distributions import pbinom, pf, pnorm, pt, qf, qnorm, qt, psmirnov
 
 @dataclass
 class ADTestRes:
-	pval:float
+	pvalue:float
 	A2:float
 
 
@@ -30,7 +30,7 @@ def test_norm_ad(x:Iterable)->ADTestRes:
 	assert isinstance(x, Iterable), "x must be an Iterable object"
 	
 	pval, A2 = _pydll.c_stat_test_norm_ad(x)
-	return ADTestRes(pval, A2)
+	return ADTestRes(pvalue=pval, A2=A2)
 
 
 
@@ -41,9 +41,8 @@ def test_norm_ad(x:Iterable)->ADTestRes:
 class Ks1SampletestResult:
 	D:float #test statistic
 	pvalue:float
-	Dplus:float #D+
-	Dminus:float #D-
-	D_location:float #location of max distance (D)
+	D_loc:float #location of max distance (D)
+	D_sign:int
 	
 
 
@@ -72,15 +71,12 @@ def ks_1samp(x:Iterable)->Ks1SampletestResult:
 	Dplus, dplus_loc = float(dplus[_plus]), float(x[_plus])
 	
 	Dvalue = max(Dplus, Dminus)
-	d_loc = dplus_loc if Dplus>Dminus else dminus_loc
 
-	prob = 1-psmirnov(Dvalue, n)
 	return Ks1SampletestResult(
-					D=Dvalue, 
-					Dplus=Dplus, 
-					Dminus=Dminus, 
-					pvalue=prob,
-					D_location=d_loc)
+					D = Dvalue, 
+					pvalue = 1-psmirnov(Dvalue, n),
+					D_sign = 1 if Dplus>Dminus else -1,
+					D_loc = dplus_loc if Dplus>Dminus else dminus_loc)
 
 
 
