@@ -1,6 +1,7 @@
 import numbers
 from dataclasses import dataclass
 from typing import Iterable
+from types import FunctionType
 
 import numpy as _np
 
@@ -45,20 +46,23 @@ class Ks1SampletestResult:
 	
 
 
-def ks_1samp(x:Iterable)->Ks1SampletestResult:
+def ks_1samp(
+		x:Iterable, 
+		cdf:FunctionType=pnorm, 
+		args:tuple=())->Ks1SampletestResult:
 	"""
 	Performs two.sided Kolmogorov-Smirnov test
-
-	Note: By default, the CDF values are generated using pnorm function.
 	"""
 	assert isinstance(x, Iterable), "x must be Iterable"
 
 	_xx = [v for v in x if isinstance(v, numbers.Real)]
 	assert len(x) == len(_xx), "x must contain only Real numbers"
 
+	assert isinstance(cdf, FunctionType), "cdf must be a function"
+
 	n = len(x)
 	x = _np.sort(x)
-	cdfvals = pnorm(x)
+	cdfvals = cdf(x, *args)
 	
 	dplus = (_np.arange(1.0, n + 1) / n - cdfvals)
 	_plus = dplus.argmax()

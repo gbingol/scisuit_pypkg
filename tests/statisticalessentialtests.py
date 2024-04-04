@@ -154,5 +154,6 @@ norm_andersondarling()
 
 """
 
-from scisuit.stats import rf
-test_normality()
+from scisuit.stats import rf, pf
+result_ks = st.ks_1samp(x=rf(50, 4,2), cdf=pf, args=(4, 2))
+print("Kolmogorov-Smirnov: ", result_ks)
