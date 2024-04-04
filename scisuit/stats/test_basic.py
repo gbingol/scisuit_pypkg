@@ -6,37 +6,81 @@ from typing import Iterable
 import numpy as _np
 
 from .._ctypeslib import pydll as _pydll
-from .distributions import pbinom, pf, pnorm, pt, qf, qnorm, qt
-
-
-
-
-__all__ = ['test_norm_ad', 'TestNormRes',
-		'test_f', 'test_f_Result', 
-		'test_sign', 'test_sign_Result', 'CI_Result',
-		'test_t', 'test_t1_result', 'test_t2_result', 'test_tpaired_result', 
-		'test_z', 'test_z_Result' ]
+from .distributions import pbinom, pf, pnorm, pt, qf, qnorm, qt, psmirnov
 
 
 
 
 
 
+"""
+ --------------- Normality Tests -----------------
+"""
 
-""" *********** Anderson-Darling Test ******************* """
+
+# ----  Anderson-Darling Test -----
 
 @dataclass
-class TestNormRes:
+class ADTestRes:
 	pval:float
 	A2:float
 
-def test_norm_ad(x:Iterable)->TestNormRes:
+
+def test_norm_ad(x:Iterable)->ADTestRes:
 	assert isinstance(x, Iterable), "x must be an Iterable object"
 	
 	pval, A2 = _pydll.c_stat_test_norm_ad(x)
-	return TestNormRes(pval, A2)
+	return ADTestRes(pval, A2)
 
 
+
+
+# ------- Kolmogorov-Smirnov Test
+
+@dataclass
+class Ks1SampletestResult:
+	D:float #test statistic
+	pvalue:float
+	Dplus:float #D+
+	Dminus:float #D-
+	D_location:float #location of max distance (D)
+	
+
+
+def ks_1samp(x:Iterable)->Ks1SampletestResult:
+	"""
+	Performs two.sided Kolmogorov-Smirnov test
+
+	Note: By default, the CDF values are generated using pnorm function.
+	"""
+	assert isinstance(x, Iterable), "x must be Iterable"
+
+	_xx = [v for v in x if isinstance(v, numbers.Real)]
+	assert len(x) == len(_xx), "x must contain only Real numbers"
+
+	n = len(x)
+	x = _np.sort(x)
+	cdfvals = pnorm(x)
+	
+	dplus = (_np.arange(1.0, n + 1) / n - cdfvals)
+	_plus = dplus.argmax()
+
+	dminus = (cdfvals - _np.arange(0.0, n)/n)
+	_minus = dminus.argmax()
+
+	Dminus, dminus_loc = float(dminus[_minus]), float(x[_minus])
+	Dplus, dplus_loc = float(dplus[_plus]), float(x[_plus])
+	
+	Dvalue = max(Dplus, Dminus)
+	d_loc = dplus_loc if Dplus>Dminus else dminus_loc
+
+	prob = 1-psmirnov(Dvalue, n)
+	return Ks1SampletestResult(
+					D=Dvalue, 
+					Dplus=Dplus, 
+					Dminus=Dminus, 
+					pvalue=prob,
+					D_location=d_loc)
 
 
 

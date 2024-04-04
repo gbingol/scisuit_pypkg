@@ -8,6 +8,7 @@
 	extern "C" DLLPYBIND
 
 
+
 //beta distribution
 EXTERN PyObject* c_stat_dbeta(
 	PyObject* X, 
@@ -23,6 +24,7 @@ EXTERN PyObject* c_stat_qbeta(
 	PyObject* pvalObj, 
 	double shape1, 
 	double shape2);
+
 
 
 //binomial distribution
@@ -42,6 +44,7 @@ EXTERN PyObject * c_stat_qbinom(
 	double prob);
 
 
+
 //negative-binomial distribution
 EXTERN PyObject* c_stat_dnbinom(
 	PyObject* X, 
@@ -59,11 +62,13 @@ EXTERN PyObject* c_stat_qnbinom(
 	double prob);
 
 
+
 //multinomial distribution
 EXTERN PyObject* c_stat_dmultinom(
 	PyObject* X, 
 	int size_, 
 	PyObject* probs);
+
 
 
 //chisq distribution
@@ -80,6 +85,7 @@ EXTERN PyObject * c_stat_qchisq(
 	int df);
 
 
+
 //exponential distribution
 EXTERN PyObject* c_stat_dexp(
 	PyObject* xvalObj, 
@@ -92,6 +98,7 @@ EXTERN PyObject* c_stat_pexp(
 EXTERN PyObject* c_stat_qexp(
 	PyObject* pvalObj, 
 	double rate = 1.0);
+
 
 
 //F distribution
@@ -111,6 +118,7 @@ EXTERN PyObject * c_stat_qf(
 	int df2);
 
 
+
 //Gamma distribution
 EXTERN PyObject* c_stat_dgamma(
 	PyObject* xvalObj, 
@@ -128,6 +136,7 @@ EXTERN PyObject* c_stat_qgamma(
 	double scale = 1.0);
 
 
+
 //geometric distribution
 EXTERN PyObject* c_stat_dgeom(
 	PyObject* X, 
@@ -140,6 +149,7 @@ EXTERN PyObject* c_stat_pgeom(
 EXTERN PyObject* c_stat_qgeom(
 	PyObject* pvalObj, 
 	double prob);
+
 
 
 //hypergeometric distribution
@@ -162,6 +172,7 @@ EXTERN PyObject* c_stat_qhyper(
 	int k); 
 
 
+
 //Normal distribution
 EXTERN PyObject * c_stat_dnorm(
 	PyObject * xvalObj, 
@@ -177,6 +188,7 @@ EXTERN PyObject * c_stat_qnorm(
 	PyObject * pvalObj, 
 	double mean = 0.0, 
 	double sd = 1.0);
+
 
 
 //Lognormal distribution
@@ -196,6 +208,7 @@ EXTERN PyObject* c_stat_qlnorm(
 	double sdlog = 1.0);
 
 
+
 //Pareto distribution
 EXTERN PyObject* c_stat_dpareto(
 	PyObject* xvalObj, 
@@ -213,6 +226,7 @@ EXTERN PyObject* c_stat_qpareto(
 	double shape = 1.0);
 
 
+
 //Poisson distribution
 EXTERN PyObject * c_stat_dpois(
 	PyObject * xvalObj, 
@@ -228,6 +242,15 @@ EXTERN PyObject * c_stat_qpois(
 
 
 
+
+//Kolmogorov-Smirnov Dist
+EXTERN PyObject * c_stat_psmirnov(
+	PyObject * qvalObj, 
+	int n);
+
+
+
+
 //t distribution
 EXTERN PyObject* c_stat_dt(
 	PyObject* xvalObj, 
@@ -240,6 +263,7 @@ EXTERN PyObject* c_stat_pt(
 EXTERN PyObject* c_stat_qt(
 	PyObject* pvalObj, 
 	int df);
+
 
 
 //uniform distribution
@@ -259,6 +283,7 @@ EXTERN PyObject* c_stat_qunif(
 	double max = 0.0);
 
 
+
 //weibull distribution
 EXTERN PyObject* c_stat_dweibull(
 	PyObject* xvalObj, 
@@ -276,6 +301,7 @@ EXTERN PyObject* c_stat_qweibull(
 	double scale);
 
 
+
 //wilcoxon sign rank distribution
 EXTERN PyObject* c_stat_dsignrank(
 	PyObject* xvalObj, 
@@ -288,6 +314,8 @@ EXTERN PyObject* c_stat_psignrank(
 EXTERN PyObject* c_stat_qsignrank(
 	PyObject* pvalObj, 
 	int n);
+
+
 
 
 

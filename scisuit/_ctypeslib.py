@@ -251,6 +251,13 @@ pydll.c_stat_ppois.restype=py_object
 pydll.c_stat_qpois.argtypes = [py_object, c_double]
 pydll.c_stat_qpois.restype=py_object
 
+
+#---
+
+pydll.c_stat_psmirnov.argtypes = [py_object, c_int]
+pydll.c_stat_psmirnov.restype=py_object
+
+
 #----
 
 pydll.c_stat_dt.argtypes = [py_object, c_int]

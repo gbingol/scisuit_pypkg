@@ -878,6 +878,26 @@ PyObject* c_stat_qt(PyObject* pvalObj, int df)
 
 
 
+//Kolmogorov-Smirnov Dist
+PyObject * c_stat_psmirnov(PyObject * qvalObj, int n)
+{
+	TRYBLOCK();
+	
+	if (IsExactTypeRealNumber(qvalObj))
+	{
+		double pval = ExtractRealNumber(qvalObj).value();
+		return Py_BuildValue("d", dist::psmirnov(pval, n));
+	}
+	
+	auto Vec = Iterable_As1DVector(qvalObj);
+	return List_FromCVector(dist::psmirnov(Vec, n));
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
 /*  -----------        uniform distribution -------------------*/
 
 PyObject* c_stat_dunif(PyObject* xvalObj, double min, double max)

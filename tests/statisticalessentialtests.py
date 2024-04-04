@@ -135,6 +135,13 @@ def norm_andersondarling():
 	print(result)
 
 
+def ks1sampletest():
+	from scisuit.stats import ks_1samp, Ks1SampletestResult
+	x = [-0.62467049, 0.02793576, 0.17729038, 0.23238647, 0.28809798, 0.41124504, 0.7944974, 0.84870481]
+
+	print(ks_1samp(x))
+
+
 """
 AOV()
 AOV2()
@@ -145,19 +152,3 @@ ttest_2sample()
 norm_andersondarling()
 
 """
-
-from scipy import stats
-from scisuit.stats import pnorm
-
-x = [-0.62467049, 0.02793576, 0.17729038, 0.23238647, 0.28809798, 0.41124504, 0.7944974, 0.84870481, 1.01102608, 1.56985712]
-
-N = len(x)
-x = np.sort(x)
-cdfvals = pnorm(x)
-np_one = np.int8(1)
-dminus = (cdfvals - np.arange(0.0, N)/N)
-amax = dminus.argmax()
-loc_max = x[amax]
-
-print(dminus[amax], loc_max)
-print(stats.kstest(x, stats.norm.cdf))
