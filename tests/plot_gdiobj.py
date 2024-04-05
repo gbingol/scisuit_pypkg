@@ -9,13 +9,11 @@ sys.path.insert(0, os.getcwd())
 
 
 def scatter_errorbar():
-
-	import math
 	import numpy as np
-	import scisuit.plot as plt
+	import math
 
-
-	measurement = [0, 20, 100] #temperatures
+	#temperatures
+	measurement = [0, 20, 50] 
 
 	#Energy absorbed at different temperatures
 	data = np.array([
@@ -28,26 +26,26 @@ def scatter_errorbar():
 	std = np.std(data, axis=1, ddof=1)
 	se = std/ math.sqrt(data.shape[1])
 
-	plt.scatter(x = measurement, y = mean)
+	plt.canvas(x=[-10,60], y=[40,90])
 	for i in range(len(measurement)):
 		x1 = measurement[i]
 		x2 = x1
 		y1, y2 = mean[i] + se[i], mean[i] - se[i]
-		gdi.line([x1, y1], [x2, y2], edgecolor = plt.C_BLACK, ls = "--", lw=2)
+		gdi.line([x1, y1], [x2, y2], ls = "--", lw=2, ec="#FF0000")
+
+		gdi.marker(xy=(x1,mean[i]))
 
 
-
-
-import scisuit.plot as plt
-import scisuit.plot.gdi as gdi
 
 
 def drawlines():
+	"""Draws similar to letter H"""
 	plt.canvas(x=[-5,5], y=[-5,5])
 
 	gdi.line(p1=[-3,-3], p2=[-3, 3], lw=3)
 	gdi.line(p1=[3, -3], p2=[3,3], ec="0 10 255", lw=3, ls="--")
 	gdi.line(p1=[-3,0], p2=[3,0], lw=3, ls=":", ec="255 0 0")
+
 
 
 
@@ -67,6 +65,7 @@ def drawrects():
 
 
 def drawrotatedtext():
+	"""Text with different rotations"""
 	plt.canvas(x=[-5,5], y=[-5,5])
 
 	angles = range(0, 360, 45)
@@ -79,6 +78,7 @@ def drawrotatedtext():
 
 
 def drawrotatedarrows():
+	"""Arrow with different colors and angles"""
 	from random import randrange as rr
 	from math import cos, sin, radians
 
@@ -95,7 +95,32 @@ def drawrotatedarrows():
 
 
 def drawarc():
-	gdi.arc(center = (4,3), p1=(6, 3), p2=(2,3))
+	"""Draws half circle"""
+	plt.canvas(x=[1,7], y=[2,6])
+
+	c, p1, p2 = (4,3), (6, 3), (2,3)
+
+	gdi.arc(center=c , p1=p1, p2=p2, fc="#00FF00")
+	gdi.text(xy=c, label="C")
+	gdi.text(xy=p1, label="p1")
+	gdi.text(xy=p2, label="p2")
+
+	plt.show()
+
+
+
+def drawpolygon():
+	"""Shows a triangle"""
+	plt.canvas(x=[0,6], y=[0,4])
+
+	x = [1,3,5]
+	y = [1,3,1]
+
+	#alternatively, list(zip(x,y))
+	xy = [(1,1), (3,3), (5,1)]
+
+	gdi.polygon(xy=xy, fc="#FF12AA")
+
 
 
 
@@ -128,20 +153,15 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-t= np.linspace(-10, 10, 1000)
-x = 16*np.sin(t)**3
-y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
+plt.canvas(x=[0,6], y=[0,4])
 
-plt.canvas(x=[-20, 20], y=[-20, 20], 
-	haxis=False, vaxis=False, #axes are not shown
-	hgrid=False, vgrid=False) #gridlines are not shown
+x = [1,3,5]
+y = [1,3,1]
 
-gdi.curve(x, y, ec="#FF0000")
-gdi.text((-4.5,-4), "Thank You", 45, 
-		 fontsize=25, 
-		 fontcolor="#00FF00")
+#alternatively, list(zip(x,y))
+xy = [(1,1), (3,3), (5,1)]
+
+gdi.polygon(xy=xy, fc="#FF12AA")
 
 plt.show()
-
-
 

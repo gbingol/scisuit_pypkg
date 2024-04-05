@@ -82,7 +82,8 @@ def arc(
 	`p2:` (x2, y2) -> end of arc
 
 	## Note:
-	To be able to plot a circular arc, the plot area must be a square.
+	- The arc is drawn in a counter-clockwise direction between the start and the end points.
+	- To plot a circular arc, the plot area must be a square.
 	"""
 
 
@@ -278,32 +279,25 @@ def line(
 
 
 
-def polygon(
-		x: _Iterable, 
-		y:_Iterable, 
-		**kwargs)->None:
+def polygon(xy:_Iterable, **kwargs)->None:
 	"""
 	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The first and last points are automatically closed.
 
-	`x:` x values
-	`y:` y values
+	At least 3 points expected.
 	"""
 
-	assert isinstance(x, _Iterable), "x must be Iterable"
-	assert isinstance(y, _Iterable), "y must be Iterable"
-
-	#pre-check
-	assert len(x) == len(y), "x and y must have same lengths"
-
-	_x = [i for i in x if isinstance(i, numbers.Real)]
-	assert len(_x) >= 3, "x must contain at least 3 real numbers"
-
-	_y = [i for i in y if isinstance(i, numbers.Real)]
-	assert len(_y) >= 3, "y must contain at least 3 real numbers"
-
-	#processed-check
-	assert len(_x) == len(_y), "x and y must have same lengths"
+	assert isinstance(xy, _Iterable), "xy must be Iterable"
+	assert len(xy)>=3, "x must contain at least 3 Iterables"
+	
+	
+	for v in xy:
+		assert isinstance(v, _Iterable), "xy must contain Iterables"
+		assert len(v) == 2, "Each iterable's length in xy must be exactly equal to 2"
+		_x = [i for i in v if isinstance(i, numbers.Real)]
+		assert len(_x) == 2, "Each iterable in xy must contain exactly two Real numbers"
+	
+	x, y = list(zip(*xy))
 
 	_pydll.c_plot_gdi_polygon(
 			x, y, 
