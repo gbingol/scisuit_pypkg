@@ -13,8 +13,8 @@ def text(
 		rotation:float = 0.0,
 		**kwargs)->None:
 	"""
-	xy: 	(x, y), top-left,
-	label: 	text to be drawn,
+	xy: (x, y), top-left,
+	label: text to be drawn,
 	rotation: rotation angle (>0 is counterclockwise; the full angle is 360 degrees)
 	labelcolor: label color RGB as str|tuple|list
 	"""
