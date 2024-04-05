@@ -123,6 +123,13 @@ def drawpolygon():
 
 
 
+def drawellipse():
+	plt.canvas(x=[-5,5], y=[-5,5])
+
+	gdi.ellipse(xy=(0,-2), width=2, height=2, lw=2)
+	gdi.ellipse(xy=(0,2.2), width=3, height=2, ec="#FF0000", lw=2)
+
+
 
 def heart1():
 	t= np.linspace(-10, 10, 1000)
@@ -153,15 +160,9 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
-plt.canvas(x=[0,6], y=[0,4])
+plt.canvas(x=[-5,5], y=[-5,5])
 
-x = [1,3,5]
-y = [1,3,1]
-
-#alternatively, list(zip(x,y))
-xy = [(1,1), (3,3), (5,1)]
-
-gdi.polygon(xy=xy, fc="#FF12AA")
+gdi.ellipse(xy=(0,-2), width=2, height=2, lw=2)
+gdi.ellipse(xy=(0,2.2), width=3, height=2, ec="#FF0000", lw=2)
 
 plt.show()
-

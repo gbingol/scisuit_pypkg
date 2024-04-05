@@ -111,6 +111,27 @@ def bubble():
 	plt.bubble(x=L, y=F, s=P)
 
 
+def canvasopts():
+	plt.layout(2,2)
+
+	#All shown
+	plt.subplot(0,0)
+	plt.canvas(x=[0,5], y=[0,5])
+
+	#Horizontal axis not shown
+	plt.subplot(0,1)
+	plt.canvas(x=[0,5], y=[0,5], haxis=False)
+
+	#Vertical axis not displayed
+	plt.subplot(1,0)
+	plt.canvas(x=[0,5], y=[0,5], vaxis=False)
+
+	#Gridlines are not displayed
+	plt.subplot(1,1)
+	plt.canvas(x=[0,5], y=[0,5], vgrid=False, hgrid=False)
+
+
+
 
 def layout_test():
 	from math import sqrt, pi
@@ -153,26 +174,23 @@ import scisuit.plot as plt
 import numpy as np
 
 
-bar()
+plt.layout(2,2)
 
-plt.figure()
-
-boxplot()
-
-plt.figure()
-
-x = np.arange(0, 6, 0.5)
-y = x**2
-
-plt.layout(2,1)
-
-#show line and marker with default pen and brush
+#All shown
 plt.subplot(0,0)
-plt.scatter(x=x, y=y, lw=3, ls=":", marker="s", markersize=10)
+plt.canvas(x=[0,5], y=[0,5])
 
-#customize marker properties
+#Horizontal axis not shown
+plt.subplot(0,1)
+plt.canvas(x=[0,5], y=[0,5], haxis=False)
+
+#Vertical axis not displayed
 plt.subplot(1,0)
-plt.scatter(x=x, y=y, marker=plt.Marker(fc="#00FF00"))
+plt.canvas(x=[0,5], y=[0,5], vaxis=False)
+
+#Gridlines are not displayed
+plt.subplot(1,1)
+plt.canvas(x=[0,5], y=[0,5], vgrid=False, hgrid=False)
 
 plt.show()
 
