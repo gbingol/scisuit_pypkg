@@ -42,30 +42,84 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 
 
+def drawlines():
+	plt.canvas(x=[-5,5], y=[-5,5])
+
+	gdi.line(p1=[-3,-3], p2=[-3, 3], lw=3)
+	gdi.line(p1=[3, -3], p2=[3,3], ec="0 10 255", lw=3, ls="--")
+	gdi.line(p1=[-3,0], p2=[3,0], lw=3, ls=":", ec="255 0 0")
 
 
-#gdi.arc(center = (4,3), p1=(6, 3), p2=(2,3),  
-#		pen=gdi.Pen(plt.COLOR_GREEN, width=3), 
-#		brush=gdi.Brush(plt.COLOR_BROWN, plt.BRUSH_FDIAGHATCH))
+
+def drawrects():
+	plt.canvas(x=[-5,5], y=[-5,5])
+
+	gdi.rect([-4, -3], width=3, height=4, 
+			ec="20 50 100", 
+			lw=2, 
+			ls="--")
+	gdi.rect([0, -1], width=4, height=3, 
+			ec="#FF0000", 
+			lw=2, 
+			fc="0 255 255", 
+			hatch="/")
+	
+
+
+def drawrotatedtext():
+	plt.canvas(x=[-5,5], y=[-5,5])
+
+	angles = range(0, 360, 45)
+	r = 1
+	for alpha in angles:
+		rad = alpha*math.pi/180
+		loc = [r*math.cos(rad), r*math.sin(rad)]
+		gdi.text(loc, label="Hello Python", rotation=alpha)
+
+
+
+def drawrotatedarrows():
+	from random import randrange as rr
+	from math import cos, sin, radians
+
+	plt.canvas(x=[-5,5], y=[-5,5])
+
+	r1, r2 = 1.0, 4.0
+
+	p=lambda r, d: [r*cos(radians(d)), r*sin(radians(d))]
+	for i in range(0, 360, 45):
+		color = [rr(0, 255), rr(0, 255), rr(0, 255)]
+		gdi.arrow(p(r1, i), p(r2, i), ec=color, lw=3)
+
+
+
+
+def drawarc():
+	gdi.arc(center = (4,3), p1=(6, 3), p2=(2,3))
+
+
 
 def heart1():
 	t= np.linspace(-10, 10, 1000)
-	#x=np.sin(t)*np.cos(t)*np.log(np.abs(t))
-	#y=np.abs(t)**0.3*np.sqrt(np.cos(t))
+	x=np.sin(t)*np.cos(t)*np.log(np.abs(t))
+	y=np.abs(t)**0.3*np.sqrt(np.cos(t))
 
 
 
 def heart2():
+	import numpy as np
 	t= np.linspace(-10, 10, 1000)
 	x = 16*np.sin(t)**3
 	y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
 
-	plt.canvas([-20, 20], [-20, 20])
+	plt.canvas(x=[-20, 20], y=[-20, 20], 
+		haxis=False, vaxis=False, #axes are not shown
+		hgrid=False, vgrid=False) #gridlines are not shown
 
-	gdi.curve(x, y, pen = gdi.Pen(plt.C_RED))
-	gdi.text((-4.5,-4), "text", 45, 
-			font= gdi.Font(size=25, color=plt.C_GREEN))
-
+	gdi.curve(x, y, ec="#FF0000")
+	gdi.text((-4.5,-4), "Thank You", 45, 
+			fontsize=25, 
+			fontcolor="#00FF00")
 
 
 
@@ -74,32 +128,20 @@ import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 import numpy as np
 
+t= np.linspace(-10, 10, 1000)
+x = 16*np.sin(t)**3
+y = 13*np.cos(t)-5*np.cos(2*t)-2*np.cos(3*t)-np.cos(4*t)
 
+plt.canvas(x=[-20, 20], y=[-20, 20], 
+	haxis=False, vaxis=False, #axes are not shown
+	hgrid=False, vgrid=False) #gridlines are not shown
 
-x = [32, 42, 110, 115, 118, 145, 150]
-y = [1400, 1800, 1750, 1900, 2600, 2210, 2450]
-
-
-
-#plot a simple scatter chart
-plt.scatter(x=x, y=y, lw=1, ec="0 255 0", markersize=10, )
-
-poly = np.polyfit(x, y, 1)
-
-for i in range(len(x)):
-	rv = np.polyval(poly, x[i])
-	#experimental data
-	p1 = (x[i], y[i])
-
-	#regression data
-	p2 = (x[i], rv)
-
-	label = str(int(y[i] -rv))
-
-	gdi.line(p1, p2, ls="-", lw=4, label=label )
-
-gdi.rect([50, 2000], width=50, height=500, hatch="\\", facecolor=(255, 0, 0))
+gdi.curve(x, y, ec="#FF0000")
+gdi.text((-4.5,-4), "Thank You", 45, 
+		 fontsize=25, 
+		 fontcolor="#00FF00")
 
 plt.show()
+
 
 
