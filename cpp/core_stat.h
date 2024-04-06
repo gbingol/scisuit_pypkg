@@ -331,6 +331,6 @@ EXTERN PyObject* c_stat_rolling(
 
 EXTERN PyObject* c_stat_test_norm_ad(PyObject* Obj);
 
-
+EXTERN PyObject* c_stat_test_shapirowilkinson(PyObject* Obj);
 
 #undef EXTERN

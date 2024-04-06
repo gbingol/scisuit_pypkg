@@ -1191,3 +1191,23 @@ PyObject* c_stat_test_norm_ad(PyObject* Obj)
 
 	return nullptr;
 }
+
+
+PyObject* c_stat_test_shapirowilkinson(PyObject* Obj)
+{
+	auto Data = Iterable_As1DVector(Obj);
+	TRYBLOCK();
+	
+	auto Result = tests::ShapiroWilkinson(Data);
+
+	auto TupleObj = PyTuple_New(3);
+	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", Result.w));
+	PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", Result.pw));
+	PyTuple_SetItem(TupleObj, 2, Py_BuildValue("s", Result.msg.c_str()));
+
+	return TupleObj;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	return nullptr;
+}

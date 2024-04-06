@@ -154,6 +154,16 @@ norm_andersondarling()
 
 """
 
-from scisuit.stats import rf, pf
-result_ks = st.ks_1samp(x=rf(50, 4,2), cdf=pf, args=(4, 2))
+
+_data = [2.39798, -0.16255, 0.54605, 0.68578, -0.78007, 
+		 1.34234, 1.53208, -0.86899, -0.50855, -0.58256, 
+		 -0.54597, 0.08503, 0.38337, 0.26072, 0.34729]
+
+result_ad = st.anderson(_data)
+print("Anderson-Darling: ", result_ad)
+
+result_ks = st.ks_1samp(_data)
 print("Kolmogorov-Smirnov: ", result_ks)
+
+from scipy.stats import shapiro
+print(shapiro(_data))
