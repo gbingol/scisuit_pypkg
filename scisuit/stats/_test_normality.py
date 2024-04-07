@@ -90,17 +90,25 @@ def ks_1samp(
 class ShapiroTestResult:
 	pvalue:float
 	W:float #test statistics
-	msg:str #warning msg if exists
+	msg:str #warning message, if exists
 
 
-def shapiro(x:Iterable)->ADTestRes:
+def shapiro(x:Iterable)->ShapiroTestResult:
 	"""
-	Performs Anderson-Darling test
+	Performs Shapiro-Wilkinson test
+
+	- x must be iterable containing only Real numbers
+	- x must have at least length 3.
+	- if len(x)>5000, W is accurate, but the p-value may not be.
 	"""
-	assert isinstance(x, Iterable), "x must be an Iterable object"
+	assert isinstance(x, Iterable), "x must be an Iterable object."
+
+	N = len(x)
+	if N < 3:
+		raise ValueError("x must be at least length 3.")
 	
 	_xx = [v for v in x if isinstance(v, numbers.Real)]
-	assert len(x) == len(_xx), "x must contain only Real numbers"
+	assert N == len(_xx), "x must contain only Real numbers."
 	
 	result = _pydll.c_stat_test_shapirowilkinson(x)
 	return ShapiroTestResult(W=result[0], pvalue=result[1], msg=result[2])
