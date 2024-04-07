@@ -12,7 +12,8 @@ from ._test_basic import \
 
 from ._test_normality import \
 	anderson, ADTestRes, \
-	ks_1samp, Ks1SampletestResult
+	ks_1samp, Ks1SampletestResult, \
+	shapiro, ShapiroTestResult
 
 
 from ._distributions import \

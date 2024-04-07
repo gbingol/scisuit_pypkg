@@ -17,7 +17,7 @@ from ._distributions import pnorm, psmirnov
 @dataclass
 class ADTestRes:
 	pvalue:float
-	A2:float
+	A2:float #test statistics
 
 
 def anderson(x:Iterable)->ADTestRes:
@@ -39,8 +39,8 @@ def anderson(x:Iterable)->ADTestRes:
 
 @dataclass
 class Ks1SampletestResult:
-	D:float #test statistic
 	pvalue:float
+	D:float #test statistics
 	D_loc:float #location of max distance (D)
 	D_sign:int
 	
@@ -76,7 +76,31 @@ def ks_1samp(
 	Dvalue = max(Dplus, Dminus)
 
 	return Ks1SampletestResult(
-					D = Dvalue, 
 					pvalue = 1-psmirnov(Dvalue, n),
+					D = Dvalue, 
 					D_sign = 1 if Dplus>Dminus else -1,
 					D_loc = dplus_loc if Dplus>Dminus else dminus_loc)
+
+
+
+
+# ----  Shapiro-Wilkinson Test -----
+
+@dataclass
+class ShapiroTestResult:
+	pvalue:float
+	W:float #test statistics
+	msg:str #warning msg if exists
+
+
+def shapiro(x:Iterable)->ADTestRes:
+	"""
+	Performs Anderson-Darling test
+	"""
+	assert isinstance(x, Iterable), "x must be an Iterable object"
+	
+	_xx = [v for v in x if isinstance(v, numbers.Real)]
+	assert len(x) == len(_xx), "x must contain only Real numbers"
+	
+	result = _pydll.c_stat_test_shapirowilkinson(x)
+	return ShapiroTestResult(W=result[0], pvalue=result[1], msg=result[2])

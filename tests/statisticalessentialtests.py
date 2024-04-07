@@ -165,5 +165,8 @@ print("Anderson-Darling: ", result_ad)
 result_ks = st.ks_1samp(_data)
 print("Kolmogorov-Smirnov: ", result_ks)
 
+result_sw = st.shapiro(_data)
+print("Shapiro-Wilkinson: ", result_sw)
+
 from scipy.stats import shapiro
-print(shapiro(_data))
+print("Scipy: ", shapiro(_data))

@@ -314,6 +314,8 @@ pydll.c_stat_test_norm_ad.argtypes = [py_object]
 pydll.c_stat_test_norm_ad.restype=py_object
 
 
+pydll.c_stat_test_shapirowilkinson.argtypes = [py_object]
+pydll.c_stat_test_shapirowilkinson.restype=py_object
 
 
 
