@@ -278,22 +278,39 @@ def ylabel(label:str):
 	_pydll.c_plot_ylabel(_ct.c_char_p(label.encode()))
 
 
-def xlim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None:
-	"""Sets or gets the x-limits of the current chart"""
+def xlim(
+		min:numbers.Real|None = None, 
+		max:numbers.Real|None = None)->tuple|None:
+	"""
+	Sets or gets the x-limits of the current chart
+	"""
 	assert isinstance(min, numbers.Real|None), "min must be Real|None"
 	assert isinstance(max, numbers.Real|None), "max must be Real|None"
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("x".encode()))
 
 
-def ylim(min:numbers.Real|None = None, max:numbers.Real|None = None)->tuple|None:
-	"""Sets or gets the y-limits of the current chart"""
+def ylim(
+		min:numbers.Real|None = None, 
+		max:numbers.Real|None = None)->tuple|None:
+	"""
+	Sets or gets the y-limits of the current chart
+	"""
 	assert isinstance(min, numbers.Real|None), "min must be Real|None"
 	assert isinstance(max, numbers.Real|None), "max must be Real|None"
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 
-def set_xticks(ticks, labels=None, align="center", pos="bottom")->None:
-	"""Sets the x-ticks and optionally labels"""
+def set_xticks(
+		ticks:_Iterable, 
+		labels=None, 
+		align="center", 
+		pos="bottom")->None:
+	"""
+	Sets the x-ticks and optionally labels
+
+	align: "center", "left"
+	pos: "top", "bottom"
+	"""
 
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
 	
@@ -310,8 +327,17 @@ def set_xticks(ticks, labels=None, align="center", pos="bottom")->None:
 				_ct.c_char_p(pos.encode()))
 
 
-def set_yticks(ticks, labels=None, align="center", pos="left")->None:
-	"""Sets the x-ticks and optionally labels"""
+def set_yticks(
+		ticks:_Iterable, 
+		labels=None, 
+		align="center", 
+		pos="left")->None:
+	"""
+	Sets the x-ticks and optionally labels.
+
+	align: "center", "top", "bottom"
+	pos: "left", "right"
+	"""
 
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
 
@@ -336,7 +362,6 @@ def set_xposition(position:numbers.Real)->None:
 	"""
 
 	assert isinstance(position, numbers.Real), "position must be Real"
-
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("x".encode()))
 
 
@@ -348,7 +373,6 @@ def set_yposition(position:numbers.Real)->None:
 	"""
 
 	assert isinstance(position, numbers.Real), "position must be Real"
-
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("y".encode()))
 
 
