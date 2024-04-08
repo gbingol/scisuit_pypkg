@@ -172,20 +172,3 @@ def skew(y:_np.ndarray | list):
 	skew_p /= (n * std_p**3.0);
 
 	return _math.sqrt(n * (n - 1)) * skew_p/(n-2)
-
-
-
-
-def sample(y, size:int, replace = False):
-	"""
-	y: ndarray / list.
-
-	## Example
-	ss = _np.linspace(start=1, stop=10, num=10) \n
-	s = sample(ss, 4) \n
-	s1 = sample(ss, 11, replace=True) \n
-	s2 = sample(ss, 11, replace=False) \n
-	print(s1)
-	"""
-
-	return _np.random.choice(a=y, size=size,  replace=replace)
