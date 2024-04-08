@@ -1114,34 +1114,6 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 
 
 
-PyObject* c_stat_moveavg(PyObject* X, PyObject* Y, int Period)
-{
-	CHECKPOSITIVE_RET(Period, "period must be >0");
-	IF_PYERRVALUE_RET(Period < 2, "period must be >=2");
-
-	auto xvec = Iterable_As1DVector(X); 
-	auto yvec = Iterable_As1DVector(Y);
-
-	TRYBLOCK();
-	
-	auto MoveAver = fitting::moveavg(xvec, yvec, Period);
-
-	auto ListX = List_FromCVector(MoveAver.m_X);
-	auto ListY = List_FromCVector(MoveAver.m_Y);
-
-	auto Tuple = PyTuple_New(2);
-	PyTuple_SetItem(Tuple, 0, ListX);
-	PyTuple_SetItem(Tuple, 1, ListY);
-
-	return Tuple;
-	
-	CATCHRUNTIMEEXCEPTION(nullptr);
-
-	Py_RETURN_NONE;
-}
-
-
-
 PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 {
 	CHECKPOSITIVE_RET(Period, "period must be >0");

@@ -167,6 +167,3 @@ print("Kolmogorov-Smirnov: ", result_ks)
 
 result_sw = st.shapiro(_data)
 print("Shapiro-Wilkinson: ", result_sw)
-
-from scipy.stats import shapiro
-print("Scipy: ", shapiro(_data))

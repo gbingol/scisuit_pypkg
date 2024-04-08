@@ -319,11 +319,6 @@ EXTERN PyObject* c_stat_qsignrank(
 
 
 
-EXTERN PyObject* c_stat_moveavg(
-	PyObject* X, 
-	PyObject* Y, 
-	int Period = 2);
-
 EXTERN PyObject* c_stat_rolling(
 	PyObject* X, 
 	PyObject* Y, 

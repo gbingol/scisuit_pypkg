@@ -1,4 +1,4 @@
-from ._core import kurt, mode, moveavg, rolling, sample, skew
+from ._core import kurt, mode, moveavg, rolling, skew
 
 from ._aov import aov, aov2, aov2_results
 from ._linregress import linregress

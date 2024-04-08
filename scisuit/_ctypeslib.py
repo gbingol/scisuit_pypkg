@@ -304,8 +304,6 @@ pydll.c_stat_qsignrank.restype=py_object
 
 #----
 
-pydll.c_stat_moveavg.argtypes = [py_object, py_object, c_int]
-pydll.c_stat_moveavg.restype=py_object
 
 pydll.c_stat_rolling.argtypes = [py_object, py_object, c_int]
 pydll.c_stat_rolling.restype=py_object

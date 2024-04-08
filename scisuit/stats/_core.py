@@ -2,25 +2,24 @@ import ctypes as _ct
 import math as _math
 
 import numpy as _np
+from typing import Iterable 
+from numbers import Real
 
 from .._ctypeslib import pydll as _pydll
 
 
 
 
-def kurt(y:_np.ndarray | list):
+def kurt(y:Iterable)->float:
 	"""
-	Computes excess kurtosis. \n
-	y: ndarray / list.
+	Computes excess kurtosis.
 	"""
 	n = len(y)
 
-	assert n >= 4, "list/ndarray must have at least 4 elements"
-	assert isinstance(y, list) or isinstance(y, _np.ndarray), "list/ndarray expected"
+	assert n >= 4, "y must have at least 4 elements"
+	assert isinstance(y, Iterable), "Iterable object expected"
 	
-	Arr = y
-	if(isinstance(y, list)):
-		Arr = _np.asfarray(y)
+	Arr = _np.asfarray(y)
 
 	avg = _np.mean(Arr)
 	stdev = _np.std(Arr, ddof=1)
@@ -35,24 +34,19 @@ def kurt(y:_np.ndarray | list):
 
 
 
-def mode(y:_np.ndarray | list)->tuple:
+def mode(y:Iterable)->tuple[list[Real], int]:
 	"""
 	Computes mode
 
-	## Example
-	arr = np.array([1, 3, 5, 5, 7, 9, 3, 5, 7, 3, 6])
-	print(mode(y = arr))
+	Returns the most frequently occuring number(s) and 
+	the number of times it occurs.
 	"""
 	n = len(y)
 
-	assert n >= 3, "list/ndarray must have at least 3 elements"
-	assert isinstance(y, list) or isinstance(y, _np.ndarray), "list/ndarray expected"
+	assert n >= 3, "y must have at least 3 elements"
+	assert isinstance(y, Iterable), "Iterable object expected"
 	
-	Arr = None
-	if(isinstance(y, list)):
-		Arr = _np.asarray(y)
-	else:
-		Arr = _np.array(y)
+	Arr = _np.asarray(y)
 
 	values, counts = _np.unique(Arr, return_counts=True)
 	if(len(values) == len(Arr)):
@@ -65,110 +59,89 @@ def mode(y:_np.ndarray | list)->tuple:
 
 
 
-def moveavg(x, y, period=2):
-	return _pydll.c_stat_moveavg(x, y, _ct.c_int(period))
-
-
-
 class rolling:
 
 	"""
 	A class to compute rolling window mean, std, var min, max...
 
 	## Example:
-	>>r = rolling(x, y, period=2) \n
-	>>r.mean() \n
-	>>r.var() \n \n
-
-	OR \n
-	
-	>>r=rolling(x, y, period=2).mean() \n
-
-	If multiple calls required, prefer the first way for efficiency.
-
+	>> r = rolling(x, y, period=2) \n
+	>> r.mean() \n
+	>> r.var() 
 	"""
 
      
-	def __init__(self, x:list, y:list, period:int = 2):
-		assert isinstance(x, list) or isinstance(x, _np.ndarray), "x must be of type list/ndarray"
-		assert isinstance(y, list) or isinstance(y, _np.ndarray), "y must be of type list/ndarray"
+	def __init__(
+			self, 
+			x:Iterable, 
+			y:Iterable, 
+			period:int = 2):
+		assert isinstance(x, Iterable), "x must be of type Iterable"
+		assert isinstance(y, Iterable), "y must be of type Iterable"
 		assert isinstance(period, int), "period must be of type int"
 
-		self._m_X, self._m_Windows = _pydll.c_stat_rolling(x=x, y=y, period=period)
+		self._m_X, self._m_Windows = _pydll.c_stat_rolling(_ct.py_object(x), _ct.py_object(y), _ct.c_int(period))
 		
+
+	def mean(self)->list[Real]:
+		"""computes mean"""
+		return self.__compute(self.__mean)
+
+	def median(self)->list[Real]:
+		"""computes median"""
+		return self.__compute(self.__median)
+	
+	def min(self)->list[Real]:
+		"""computes minimum"""
+		return self.__compute(min)
+	
+	def max(self)->list[Real]:
+		"""computes maximum"""
+		return self.__compute(max)
+	
 
 	def __compute(self, func)->list:
 		"""
 		Calls the parameter func on self._m_Windows
 		Returns a 1D list containing real numbers
 		"""
-		retList = []
-		for Lst in self._m_Windows:
-			retList.append(func(Lst))
-		
-		return retList
-	
-
-	def get(self):
-		"""
-		When mean, median, min, max member funcs do not meet the purpose.\n
-		To process rolling windows data (2D list) manually. n
-		get()->(list, 2D list)
-		"""
-		return self._m_X, self._m_Windows
-	
-
-	def mean(self):
-		return self.__compute(self.__mean)
-
-	def median(self):
-		return self.__compute(self.__median)
-	
-	def min(self):
-		return self.__compute(min)
-	
-	def max(self):
-		return self.__compute(max)
+		return [func(v) for v in self._m_Windows]
 
 	
-
 	def __mean(self, lst:list):
 		return sum(lst)/len(lst)
 
-	def __median(self, arg):
-		arr:_np.ndarray = arg
-
-		if isinstance(arg, list):
-			arr = _np.asfarray(arg)
-		
+	def __median(self, arg:Iterable):
+		arr = _np.asfarray(arg)
 		return float(_np.median(arr))
 
 
+def moveavg(x, y, period=2)->tuple[list[Real], list[Real]]:
+	"""
+	Computes the moving average, similar to rolling.mean()
+	returns corresponding x and mean values
+	"""
+	c = rolling(x,y, period)
+	return x[period-1:], c.mean()
 
 
-def skew(y:_np.ndarray | list):
+
+
+
+def skew(y:Iterable)->float:
 	"""
 	Computes the skewness of a distribution
-
-	## Example
-	y = _np.random.standard_normal(1000)
-	print(skew(y))
-	
 	"""
 	n = len(y)
 
-	assert n >= 3, "list/ndarray must have at least 3 elements"
-	assert isinstance(y, list) or isinstance(y, _np.ndarray), "list/ndarray expected"
+	assert n >= 3, "y must have at least 3 elements"
+	assert isinstance(y, Iterable), "Iterable object expected"
 	
-	Arr = None
-	if(isinstance(y, list)):
-		Arr = _np.asarray(y)
-	else:
-		Arr = _np.array(y)
+	Arr = _np.asarray(y)
 	
-	avg, std_p = _np.mean(Arr), _np.std(Arr)
+	avg, std_p = float(_np.mean(Arr)), float(_np.std(Arr))
 
-	skew_p = _np.sum((Arr-avg)**3)
-	skew_p /= (n * std_p**3.0);
+	skew_p = float(_np.sum((Arr-avg)**3))
+	skew_p /= float(n * std_p**3.0)
 
 	return _math.sqrt(n * (n - 1)) * skew_p/(n-2)
