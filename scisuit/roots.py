@@ -184,9 +184,6 @@ def toms748(
 	"""
 	Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions
 
-	Returns: if converges to a root, then (root, error), otherwise False
-
-	## Inputs:
 	f: A unary function whose root is sought after
 	a, b: The interval where root lies in,
 	tol: tolerance for error
