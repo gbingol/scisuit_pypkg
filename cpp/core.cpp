@@ -9,6 +9,8 @@
 #include <core/math/roots.h>
 #include <core/eng/psychrometry.h>
 
+#include <boost/math/tools/toms748_solve.hpp>
+
 #include "wrapperfuncs.h"
 
 using namespace core::math;
@@ -294,6 +296,38 @@ PyObject* c_root_ridder(
 	Py_RETURN_NONE;
 }
 
+
+
+PyObject* c_root_toms748(
+	PyObject* FuncObj, 
+	double a, 
+	double b, 
+	double tol, 
+	int maxiter)
+{
+	ASSERT_CALLABLE_RET(FuncObj, "First parameter must be callable.");
+	auto func = Make1DFunction(FuncObj);
+
+	try
+	{
+		auto bitTol = 1.0 - std::log10(tol) / std::log10(2);
+		auto tolboost = boost::math::tools::eps_tolerance<double>(bitTol);
+		
+		auto res = roots::toms748(func, a, b, tolboost, maxiter);
+
+		PyObject *TupleObj = PyTuple_New(2);
+		PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", res.first));
+		PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", res.second));
+
+		return TupleObj;
+	}
+	catch(const std::exception& e)
+	{
+		return Py_BuildValue("O", Py_False);
+	}
+	
+	Py_RETURN_NONE;
+}
 
 
 

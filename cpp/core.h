@@ -56,6 +56,13 @@ EXTERN PyObject * c_root_ridder(PyObject * FuncObj,
 	int maxiter = 100);
 
 
+EXTERN PyObject * c_root_toms748(
+	PyObject * FuncObj,
+	double a,
+	double b,
+	double tol = 1e-5,
+	int maxiter = 100);
+
 
 
 /*******************************   FITTING   ****************************************/

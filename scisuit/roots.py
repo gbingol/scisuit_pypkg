@@ -10,7 +10,7 @@ from ._ctypeslib import pydll as _pydll
 
 
 
-__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info"]
+__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info", "toms748"]
 
 
 @_dc.dataclass
@@ -173,6 +173,42 @@ def ridder(
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
+
+
+def toms748(
+	f:_types.FunctionType, 
+	a:float, 
+	b:float, 
+	tol=1E-5, 
+	maxiter=100)->tuple[float, Info]:
+	"""
+	Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions
+
+	Returns: if converges to a root, then (root, error), otherwise False
+
+	## Inputs:
+	f: A unary function whose root is sought after
+	a, b: The interval where root lies in,
+	tol: tolerance for error
+	maxiter: Maximum number of iterations during the search for the root
+
+	## Reference:
+	https://beta.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/roots_noderiv/TOMS748.html
+	"""
+	assert callable(f), "f must be function"
+	assert isinstance(a, _numbers.Real), "a must be real number"
+	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert a<b, "a<b expected"
+	assert 0<tol<1, "0<tol<1 expected"
+
+	result = _pydll.c_root_toms748(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	r1, r2 = result[0], result[1]
+
+	if isinstance(result, tuple):
+		return float(r1 + r2)/2.0, Info(err=abs(r1-r2), iter=-1, conv=True, msg="")
+	
+	# did not converge
+	return 0.0, Info(err=_sys.float_info.max, iter=-1, conv=False, msg="")
 
 
 

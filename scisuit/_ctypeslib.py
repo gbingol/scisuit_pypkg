@@ -50,7 +50,8 @@ pydll.c_root_newton.restype = py_object
 pydll.c_root_ridder.argtypes = [py_object, c_double, c_double, c_double, c_int]
 pydll.c_root_ridder.restype = py_object
 
-
+pydll.c_root_toms748.argtypes = [py_object, c_double, c_double, c_double, c_int]
+pydll.c_root_toms748.restype = py_object
 
 
 

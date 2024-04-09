@@ -29,6 +29,7 @@ endif()
 #wxWidgets directories
 include_directories(C:/_libs/wxWidgets/include)
 include_directories(C:/_libs/wxWidgets/lib/mswu)
+include_directories(C:/_libs/boost/)
 
 #Python directory
 include_directories(${PYHOME}/include)
