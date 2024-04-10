@@ -174,24 +174,13 @@ import scisuit.plot as plt
 import numpy as np
 
 
-plt.layout(2,2)
+import matplotlib.pyplot as mplt
 
-#All shown
-plt.subplot(0,0)
-plt.canvas(x=[0,5], y=[0,5])
+x = [0, 1, 2, 3]
+y= [-10, 100, 1000, 10000]
 
-#Horizontal axis not shown
-plt.subplot(0,1)
-plt.canvas(x=[0,5], y=[0,5], haxis=False)
-
-#Vertical axis not displayed
-plt.subplot(1,0)
-plt.canvas(x=[0,5], y=[0,5], vaxis=False)
-
-#Gridlines are not displayed
-plt.subplot(1,1)
-plt.canvas(x=[0,5], y=[0,5], vgrid=False, hgrid=False)
-
-plt.show()
+mplt.scatter(x=x, y=y)
+mplt.yscale("log")
+mplt.show()
 
 
