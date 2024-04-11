@@ -6,8 +6,8 @@ import numbers as _numbers
 import numpy as _np
 
 from ...decorators import override
-from ..defs import Dielectric
-from .foodproperty import Aw, ComputeAw_T
+from .._defs import Dielectric
+from ._foodproperty import Aw, ComputeAw_T
 
 """
 Tolerance for temperature differences

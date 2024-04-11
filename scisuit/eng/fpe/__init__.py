@@ -6,4 +6,4 @@ from .foodmaterial import Food, Beverage, Juice, Cereal, Legume, Nut, Dairy, Fru
 
 
 """Different methods to compute water activity and specific heat capacity"""
-from .foodproperty import Aw, Cp
+from ._foodproperty import Aw, Cp
