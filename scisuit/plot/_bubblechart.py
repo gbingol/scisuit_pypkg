@@ -4,7 +4,7 @@ from typing import Iterable as _Iterable
 import numpy as np
 
 from ..util import NiceNumbers, minmax
-from .charts import canvas
+from ._charts import canvas
 from .gdi import marker
 
 

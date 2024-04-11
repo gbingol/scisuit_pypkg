@@ -3,7 +3,7 @@ import numbers
 import numpy as _np
 
 from ..util import NiceNumbers
-from .charts import canvas
+from ._charts import canvas
 from .gdi import arrow
 
 

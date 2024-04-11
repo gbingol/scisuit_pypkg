@@ -5,8 +5,8 @@ import numpy as _np
 from ..fitting import approx
 from ..stats import qnorm
 from ..util import minmax
-from .chartelems import Marker
-from .charts import scatter
+from ._chartelems import Marker
+from ._charts import scatter
 
 
 

@@ -4,7 +4,7 @@ import numbers
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
-from .gdiobj import Brush, Font, Pen
+from ._gdiobj import Brush, Font, Pen
 
 
 def text(

@@ -1,4 +1,4 @@
-from .gdiobj import Pen, Brush
+from ._gdiobj import Pen, Brush
 
 
 class Marker:

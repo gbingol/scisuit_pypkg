@@ -4,8 +4,8 @@ from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
 from ..app import App as _App
-from .chartelems import Marker
-from .gdiobj import Brush, Pen
+from ._chartelems import Marker
+from ._gdiobj import Brush, Pen
 
 
 
@@ -24,9 +24,8 @@ def boxplot(
 	"""
 	Plots box-whisker chart.
 
-	## Input
-	data : Data to be plotted \n
-	label: Name of the series
+	`data:` Data to be plotted 
+	`label:` Name of the series
 	"""
 	assert isinstance(data, _Iterable), "'data' must be iterable"
 	
@@ -54,11 +53,10 @@ def hist(
 	"""
 	Plots histogram
 
-	## Input
-	data:	Numeric data \n
-	density : density histogram if true otherwise frequency.\n
-	cumulative : True, cumulative distribution  \n
-	breaks : Number of breaks or the break points, int/iterable
+	`data:`	Numeric data
+	`density:` density histogram if true otherwise frequency.
+	`cumulative:` True, cumulative distribution 
+	`breaks:` Number of breaks or the break points, int/iterable
 
 	## Note
 	If density=True and cumulative=True, then the histogram is 
@@ -97,10 +95,9 @@ def psychrometry(
 	"""
 	Plots psychromety chart.
 
-	## Input
-	Tdb: [min, max], minimum and maximum dry-bulb temperatures (Celcius) \n
-	RH: A list in increasing order containing the requested relative humidity (%) lines \n
-	P: Absolute pressure (Pa)
+	`Tdb:` [min, max], minimum and maximum dry-bulb temperatures (Celcius) 
+	`RH:` A list in increasing order containing the requested relative humidity (%) lines 
+	`P:` Absolute pressure (Pa)
 	"""
 	return _pydll.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
 
@@ -119,10 +116,10 @@ def scatter(
 	"""
 	Plot scatter charts
 
-	x, y:	x- and y-data 
-	label: Label of the series 
-	smooth: Uses smoothing algorith to smooth lines (instead of broken)
-	marker: Marker class to specify marker properties
+	`x, y:`	x- and y-data 
+	`label:` Label of the series 
+	`smooth:` Uses smoothing algorith to smooth lines (instead of broken)
+	`marker:` Marker class to specify marker properties
 
 	## Note:
 	- To plot lines set `lw` to an int > 0.
@@ -159,7 +156,6 @@ def scatter(
 
 
 
-
 def canvas(
 		x:_Iterable, 
 		y:_Iterable,
@@ -170,7 +166,6 @@ def canvas(
 	"""
 	Shows a canvas (an empty chart with axes and gridlines)
 
-	## Input:
 	`x:` horizontal axis bounds 
 	`y:` vertical axis bounds
 	`haxis, vaxis:` Show horizontal and vertical axes
@@ -198,20 +193,16 @@ def canvas(
 
 
 
-"""
------------------------------------------------------------------------------------
------------------------------------------------------------------------------------
-"""
-
-
+"""-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------"""
 
 def layout(nrows:numbers.Integral, ncols:numbers.Integral)->None:
 	"""
 	Partitions the current chart window into nrows and ncols \n
 	(similar to a matrix with nrows and ncols) \n
 
-	nrows: number of rows
-	ncols: number of columns
+	`nrows:` number of rows
+	`ncols:` number of columns
 	"""
 	assert isinstance(nrows, numbers.Integral), "nrows must be integer"
 	assert isinstance(ncols, numbers.Integral), "ncols must be integer"
@@ -233,10 +224,10 @@ def subplot(
 	"""
 	Must be called after the window is partitioned (by layout) to select a cell from the partition. \n
 
-	row: row position of the cell (must be less than partition's number of rows),
-	col: column position of the cell (must be less than partition's number of columns),
-	nrows: number of rows the cell should span 
-	ncols: number of columns the cell should span 
+	`row:` row position of the cell (must be less than partition's number of rows),
+	`col:` column position of the cell (must be less than partition's number of columns),
+	`nrows:` number of rows the cell should span 
+	`ncols:` number of columns the cell should span 
 	"""
 	assert isinstance(row, numbers.Integral), "row must be integer"
 	assert isinstance(col, numbers.Integral), "col must be integer"
@@ -255,9 +246,11 @@ def subplot(
 		_ct.c_int(ncols))
 
 
+
 def figure():
 	"""Start a new plot window"""
 	_pydll.c_plot_figure()
+
 
 
 def title(label:str):
@@ -266,16 +259,19 @@ def title(label:str):
 	_pydll.c_plot_title(_ct.c_char_p(label.encode()))
 
 
+
 def xlabel(label:str):
 	"""Create x-axis label"""
 	assert isinstance(label, str), "label must be of type string."
 	_pydll.c_plot_xlabel(_ct.c_char_p(label.encode()))
 
 
+
 def ylabel(label:str):
 	"""Create y-axis label"""
 	assert isinstance(label, str), "label must be of type string."
 	_pydll.c_plot_ylabel(_ct.c_char_p(label.encode()))
+
 
 
 def xlim(
@@ -289,6 +285,7 @@ def xlim(
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("x".encode()))
 
 
+
 def ylim(
 		min:numbers.Real|None = None, 
 		max:numbers.Real|None = None)->tuple|None:
@@ -300,6 +297,7 @@ def ylim(
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 
+
 def set_xticks(
 		ticks:_Iterable, 
 		labels=None, 
@@ -307,11 +305,9 @@ def set_xticks(
 		pos="bottom")->None:
 	"""
 	Sets the x-ticks and optionally labels
-
-	align: "center", "left"
-	pos: "top", "bottom"
+	`align:` "center", "left"
+	`pos:` "top", "bottom"
 	"""
-
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
 	
 	assert isinstance(align, str), "align must be str"
@@ -334,11 +330,9 @@ def set_yticks(
 		pos="left")->None:
 	"""
 	Sets the x-ticks and optionally labels.
-
-	align: "center", "top", "bottom"
-	pos: "left", "right"
+	`align:` "center", "top", "bottom"
+	`pos:` "left", "right"
 	"""
-
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
 
 	assert isinstance(align, str), "align must be str"
@@ -354,38 +348,61 @@ def set_yticks(
 				_ct.c_char_p(pos.encode()))
 	
 
+
 def set_xposition(position:numbers.Real)->None:
 	"""
 	Sets x-axis position
-	
 	`position:` A valid position within limits of y-axis
 	"""
-
 	assert isinstance(position, numbers.Real), "position must be Real"
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("x".encode()))
+
 
 
 def set_yposition(position:numbers.Real)->None:
 	"""
 	Sets y-axis position
-	
 	`position:` A valid position within limits of x-axis
 	"""
-
 	assert isinstance(position, numbers.Real), "position must be Real"
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("y".encode()))
 
 
-def legend():
+
+def xscale(value:str)->None:
+	"""
+	Sets x-axis scale
+	`value:` "linear", "log"
+	"""
+	if not value in ["linear", "log"]:
+		raise ValueError("value must be 'linear'', 'log'")
+	
+	_pydll.c_plot_axisscale(_ct.c_char_p(value.encode()), _ct.c_char("x".encode()))
+
+
+
+def yscale(value:str)->None:
+	"""
+	Sets y-axis scale
+	`value:` "linear", "log"
+	"""
+	if not value in ["linear", "log"]:
+		raise ValueError("value must be 'linear'', 'log'")
+	
+	_pydll.c_plot_axisscale(_ct.c_char_p(value.encode()), _ct.c_char("y".encode()))
+
+
+
+def legend()->None:
 	"""Create legend"""
 	_pydll.c_plot_legend()
 
 
-def show(shared = False):
+
+def show(shared = False)->None:
 	"""
 	Starts main loop and shows the chart(s) \n
-	
-	shared: if there is any other application using a main loop
+	`shared:` if there is any other application using a main loop
 	"""
 	_pydll.c_plot_show()
 	_app.mainloop(shared)

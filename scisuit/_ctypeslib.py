@@ -491,8 +491,14 @@ pydll.c_plot_set_yticks.argtypes = [
 						c_char_p] #Position
 pydll.c_plot_set_yticks.restype=py_object
 
+#param2: x, y
 pydll.c_plot_set_axispos.argtypes = [c_double, c_char]
 pydll.c_plot_set_axispos.restype=py_object
+
+#param1: linear, log | param2: x, y
+pydll.c_plot_axisscale.argtypes = [c_char_p, c_char]
+pydll.c_plot_axisscale.restype=py_object
+
 
 pydll.c_plot_legend.argtypes = []
 pydll.c_plot_legend.restype=None

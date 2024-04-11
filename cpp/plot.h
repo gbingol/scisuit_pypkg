@@ -200,6 +200,11 @@ PyObject* c_plot_set_axispos(
 				double pos, 
 				char SelAxis);
 
+EXTERN 
+PyObject* c_plot_axisscale(
+				const char* scale, 
+				char SelAxis);
+
 
 /**********************************************************************************/
 	
