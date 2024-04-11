@@ -174,13 +174,10 @@ import scisuit.plot as plt
 import numpy as np
 
 
-import matplotlib.pyplot as mplt
+Re = [1E2, 10E6]
+Friction = [0.01, 0.1]
 
-x = [0, 1, 2, 3]
-y= [-10, 100, 1000, 10000]
-
-mplt.scatter(x=x, y=y)
-mplt.yscale("log")
-mplt.show()
-
+plt.canvas(x=Re, y=Friction)
+plt.xscale("log")
+plt.show()
 
