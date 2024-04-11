@@ -1066,10 +1066,7 @@ PyObject *c_plot_axisscale(const char* scale, char SelAxis)
 	if(auto chart= s_CurPlotWnd->GetActiveChart())
 	{
 		auto Axis = SelAxis == 'y'? chart->GetVertAxis() : chart->GetHorizAxis();
-		auto OrthAxis = Axis->GetOrthoAxis();
-
-		auto Bnds = OrthAxis->GetBounds();
-
+		
 		if(std::strcmp(scale, "log") == 0)
 			Axis->SetScale(charts::CAxis::SCALE::LOG);
 	}
