@@ -1,4 +1,6 @@
 import math
+from typing import Iterable as _Iterable
+
 import numpy as np
 
 from ._distributions import pf, pt, qt
@@ -146,7 +148,7 @@ class simple_linregress:
 
 
 
-	def summary(self):
+	def summary(self)->linregressResult:
 		assert self.m_coeffs.size > 0, "compute must be called first"
 		
 		N = self.m_yobs.size
@@ -332,7 +334,7 @@ class multiple_linregress:
 		return retStr
 
 
-	def summary(self):
+	def summary(self)->linregressResult:
 		assert len(self.m_coeffs) > 0, "compute must be called first"
 
 		nrows, ncols = self.m_factor.shape
@@ -438,14 +440,17 @@ class multiple_linregress:
 
 
 
-def linregress(yobs, factor, intercept=True, alpha=0.05):
+def linregress(
+		yobs:_Iterable, 
+		factor:_Iterable[_Iterable], 
+		intercept=True, 
+		alpha=0.05)->simple_linregress|multiple_linregress:
 	"""
 	Performs simple/multiple linear regression
 
-	## Input
-	yobs: Dependent data (ndarray|list) \n
-	factor: independent data (2D list| 2D ndarray) \n
-	intercept: True if there is intercept \n
+	yobs: Dependent data 
+	factor: independent data (must be 2D)
+	intercept: True if there is intercept
 	alpha: significance level
 	"""
 	Observed = yobs

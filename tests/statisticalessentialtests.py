@@ -66,6 +66,24 @@ def AOV2():
 
 
 
+def linregression():
+	factor = [3900, 3350, 3220, 3220, 2790, 2780, 2770, 
+    2290, 2160, 1890, 1810, 1800, 1770, 
+    1700, 1680, 1510, 1500, 1410, 1270, 1200, 1090] 
+
+	response = [256.9, 211.6, 238.1, 211.8, 194.1, 124.5, 187.3, 
+    110.5, 233.1, 150.3, 124.7, 41.2, 182.1, 118.1, 31.9, 114.3, 144.9, 
+    59.7, 126.9, 43.9, 136.3] 
+
+    
+	slm = st.linregress(response, factor) 
+	slp_inter = slm.compute()
+	print("Coefficients:", slp_inter)
+
+	summary = slm.summary()
+	print("p-value:", summary.pvalue)
+
+
 def ttest_2sample():
 	from scisuit.stats import test_t
 
@@ -167,3 +185,5 @@ print("Kolmogorov-Smirnov: ", result_ks)
 
 result_sw = st.shapiro(_data)
 print("Shapiro-Wilkinson: ", result_sw)
+
+
