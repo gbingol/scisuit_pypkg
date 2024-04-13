@@ -13,7 +13,7 @@ __all__=['linregress', 'linregressResult']
 
 
 
-def FitZeroIntercept(yobs:np.ndarray, factor:np.ndarray):
+def _FitZeroIntercept(yobs:np.ndarray, factor:np.ndarray):
 	"""
 	Equation to be solved: a1.x=y1, a2.x=y2 ..... an.x=yn
 
@@ -118,7 +118,7 @@ class simple_linregress:
 			self.m_coeffs = np.polyfit(self.m_factor, self.m_yobs, 1)
 		else:
 			self.m_coeffs = np.zeros(2)
-			self.m_coeffs[0] = FitZeroIntercept(self.m_yobs, self.m_factor)
+			self.m_coeffs[0] = _FitZeroIntercept(self.m_yobs, self.m_factor)
 		
 		return self.m_coeffs.tolist()
 
