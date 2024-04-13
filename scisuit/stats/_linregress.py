@@ -50,45 +50,36 @@ class linregressResult:
 		self.m_Dict = Dict
       
 	@property
-	def all(self):
-		"""returns the dictionary containing all results"""
-		return self.m_Dict
-
-
-	@property
-	def R2(self):
+	def R2(self)->float:
 		return self.m_Dict["R2"]
 	
 	@property
-	def stderr(self):
+	def stderr(self)->float:
 		"""standard error"""
 		return self.m_Dict["SE"]
 
 	@property
-	def pvalue(self):
+	def pvalue(self)->float:
 		"""p-value from ANOVA stat"""
 		return self.m_Dict["ANOVA"]["pvalue"]
       
 
 	@property
-	def fvalue(self):
+	def fvalue(self)->float:
 		"""F-value from ANOVA stats"""
 		return self.m_Dict["ANOVA"]["Fvalue"]
       
-     
 
 	@property
-	def intercept(self):
+	def intercept(self)->dict|None:
 		"""
 		returns {coeff, pvalue, tvalue, SE, CILow, CIHigh}
 		"""
-		if(len(self.m_Dict["CoefStats"])>1):
-			return self.m_Dict["CoefStats"][0]
-		
-		return None
+		return self.m_Dict["CoefStats"][0] if len(self.m_Dict["CoefStats"])>1 else None
+
 
 	@property
-	def ANOVA(self):
+	def ANOVA(self)->dict:
 		"""
 		returns {DF_Residual, SS_Residual, MS_Residual, DF_Regression, SS_Regression, MS_Regression 
 		SS_Total, Fvalue, pvalue}
@@ -96,7 +87,7 @@ class linregressResult:
 		return self.m_Dict["ANOVA"]
 
 	@property
-	def coeffstat(self):
+	def coeffstat(self)->dict:
 		"""
 		{coeff, pvalue, tvalue, SE, CILow, CIHigh}
 		"""
@@ -119,32 +110,17 @@ class simple_linregress:
 		self.m_alpha = alpha
 		
 
-	def compute(self)->list:
+	def compute(self)->list[float]:
 		"""
 		returns [slope, [intercept]] and must be called before summary()
 		"""
-		if(self.m_intercept):
+		if self.m_intercept:
 			self.m_coeffs = np.polyfit(self.m_factor, self.m_yobs, 1)
 		else:
 			self.m_coeffs = np.zeros(2)
 			self.m_coeffs[0] = FitZeroIntercept(self.m_yobs, self.m_factor)
 		
 		return self.m_coeffs.tolist()
-
-
-
-
-	def __str__(self) -> str:
-		assert len(self.m_coeffs) > 0, "compute must be called first"
-
-		retStr=""
-		if(self.m_intercept):
-			retStr += str(self.m_coeffs[0])+"*x + " + str(self.m_coeffs[1])
-		else:
-			retStr += str(self.m_coeffs[0])+"*x" 
-		
-		return retStr
-
 
 
 
@@ -169,7 +145,7 @@ class simple_linregress:
 
 
 		df = N-2
-		if(self.m_intercept == False):
+		if self.m_intercept == False:
 			df = N-1
 			SS_Total=sum_y2
             
@@ -179,12 +155,13 @@ class simple_linregress:
 
 		SS_Residual = float(sum(residual**2))
 		SS_Regression = SS_Total - SS_Residual
-
 		MS_Regression, MS_Residual = SS_Regression, SS_Residual/df
 
-		ANOVA = {"DF_Residual":df, "SS_Residual":SS_Residual, "MS_Residual":MS_Residual,
+		ANOVA = {
+			"DF_Residual":df, "SS_Residual":SS_Residual, "MS_Residual":MS_Residual,
 			"DF_Regression":1, "SS_Regression":SS_Regression, "MS_Regression":MS_Regression, 
-			"SS_Total":SS_Total}
+			"SS_Total":SS_Total
+			}
 		
 		ANOVA["Fvalue"] = float(MS_Regression/MS_Residual)
 		ANOVA["pvalue"] = 1 - pf(float(MS_Regression/MS_Residual), 1, df)
@@ -195,11 +172,11 @@ class simple_linregress:
 			pvalue=0
 
 			#area on the left of tcrit + area on the right of positive
-			if(t_beta<=0):
+			if t_beta<=0:
 				pvalue = pt(q=t_beta, df=df) + (1-pt(q=abs(t_beta), df=df))
 			
 			#area on the right of positive tcritical + area on the left of negative tcritical
-			elif(t_beta>0):
+			else:
 				pvalue = (1-pt(q=t_beta, df=df)) + pt(q=-t_beta, df=df) 
 			
 
@@ -231,12 +208,9 @@ class simple_linregress:
 
 		CoefStats=[]
 
-
-		#tbl0
 		if(self.m_intercept):
 			SE_beta0 = s*math.sqrt(sum_x2)/(math.sqrt(N)*math.sqrt(sum_mean_x))
-			t_beta0 = beta0/SE_beta0
-			
+			t_beta0 = beta0/SE_beta0		
 			tbl0 = CoeffStat(beta0, SE_beta0, t_beta0)
 
 			CoefStats=[tbl0, tbl1]
@@ -244,21 +218,19 @@ class simple_linregress:
 			CoefStats=[tbl1]
 
 
-		R2=SS_Regression/SS_Total
-
-		retTable={"CoefStats":CoefStats, "ANOVA":ANOVA, "R2":R2, "SE":s}
-
-		ResultClass = linregressResult(retTable)
-
-		return ResultClass
+		return linregressResult({
+			"CoefStats":CoefStats, 
+			"ANOVA":ANOVA, 
+			"R2":SS_Regression/SS_Total, 
+			"SE":s})
 
 
-	def residuals(self)->tuple:
+
+	def residuals(self)->tuple[list, list]:
 		IsIntercept = self.m_intercept
 		Coeffs = self.m_coeffs
 
-		Residuals = []
-		Fits = []
+		Residuals, Fits = [], []
 
 		NRows = self.m_factor.shape
 
@@ -274,7 +246,7 @@ class simple_linregress:
 			Residuals.append(float(residual))
 			Fits.append(float(fit))
 		
-		return (Residuals, Fits)
+		return Residuals, Fits
 
 
 
@@ -301,37 +273,14 @@ class multiple_linregress:
 	def compute(self)->list:
 		self.m_modifiedMatrix = np.copy(self.m_factor)
 
-		if(self.m_intercept):
+		if self.m_intercept:
 			NRows = self.m_factor.shape[0]
 			ones = np.ones(NRows)
 			self.m_modifiedMatrix = np.insert(self.m_modifiedMatrix, 0, values=ones, axis=1)
 
 		self.m_coeffs = np.linalg.lstsq(a=self.m_modifiedMatrix, b=self.m_yobs, rcond=None)[0]
-
 		return self.m_coeffs.tolist()
 
-
-	def __str__(self) -> str:
-		""" returns as a0 + a1*X1 + a2*X2 + ... """
-		assert len(self.m_coeffs) > 0, "compute must be called first"
-
-		retStr=""
-		N = len(self.m_coeffs)
-		
-		if(self.m_intercept):
-			retStr += str(self.m_coeffs[0]) + " + "
-			
-			for i in range(1, N-1):
-				retStr += str(self.m_coeffs[i]) + "*x" + str(i) + " + "
-			
-			retStr += str(self.m_coeffs[N-1]) + "*x" + str(N-1)
-		else:
-			for i in range(0, N-1):
-				retStr += str(self.m_coeffs[i]) + "*x" +str(i+1) + " + "
-			
-			retStr += str(self.m_coeffs[N-1]) + "*x" +str(N)
-		
-		return retStr
 
 
 	def summary(self)->linregressResult:
@@ -343,7 +292,7 @@ class multiple_linregress:
 		ypredicted = np.zeros(nrows)
 
 		SS_Total, SS_Residual = 0, 0
-		sum_y2=0
+		sum_y2=0.0
 		for i in range(nrows):
 			#row vector * col vector = number
 			ypredicted[i] = np.dot(self.m_modifiedMatrix[i, :], self.m_coeffs)
@@ -355,19 +304,15 @@ class multiple_linregress:
 		NObservations = nrows
 		DF_Regression = ncols
 		DF_Residual = NObservations - (DF_Regression + 1)
-		if(not self.m_intercept):
+
+		if not self.m_intercept:
 			DF_Residual = NObservations - DF_Regression
 			SS_Total = sum_y2
 		
-		DF_Total = DF_Regression + DF_Residual
 
 		SS_Regression = SS_Total - SS_Residual
-
-		R2 = SS_Regression/SS_Total
-
 		MS_Residual = SS_Residual / DF_Residual
 		MS_Regression = SS_Regression/DF_Regression
-
 		FValue = MS_Regression/MS_Residual
 
 		pvalue = 1 - pf(float(FValue), DF_Regression, DF_Residual)
@@ -392,10 +337,8 @@ class multiple_linregress:
 			Tvalue = self.m_coeffs[i]/SE[i]
 			tbl["tvalue"] = Tvalue
 
-			if(Tvalue>=0):
-				tbl["pvalue"] = 2*(1 - pt(q=float(Tvalue), df = nrows-1))
-			else:
-				tbl["pvalue"] = 2*pt(q=float(Tvalue), df = nrows-1)
+			_pt = pt(q=float(Tvalue), df = nrows-1)
+			tbl["pvalue"] = 2*(1 - _pt) if Tvalue>=0 else 2*_pt
 			
 			
 			invTval = qt(self.m_alpha/2.0, DF_Residual)
@@ -408,21 +351,21 @@ class multiple_linregress:
 
 			CoefStats.append(tbl)
 
+		return linregressResult({
+			"CoefStats":CoefStats, 
+			"ANOVA":ANOVA, 
+			"R2":SS_Regression/SS_Total, 
+			"SE":SE})
 
-		retTable = {"CoefStats":CoefStats, "ANOVA":ANOVA, "R2":R2, "SE":SE}
-
-		return linregressResult(retTable)
 
 
-	def residuals(self)->tuple:
+	def residuals(self)->tuple[list, list]:
 		IsIntercept = self.m_intercept
 		Coeffs = self.m_coeffs
 
-		Residuals = []
-		Fits = []
+		Residuals, Fits = [], []
 
 		NRows, NCols = self.m_factor.shape
-
 		for i in range(NRows):
 			Intercept = float(Coeffs[0]) if IsIntercept else 0.0
 			fit = Intercept
@@ -435,14 +378,14 @@ class multiple_linregress:
 			Residuals.append(float(residual))
 			Fits.append(float(fit))
 		
-		return (Residuals, Fits)
+		return Residuals, Fits
 
 
 
 
 def linregress(
 		yobs:_Iterable, 
-		factor:_Iterable[_Iterable], 
+		factor:_Iterable | _Iterable[_Iterable], 
 		intercept=True, 
 		alpha=0.05)->simple_linregress|multiple_linregress:
 	"""
@@ -453,14 +396,8 @@ def linregress(
 	intercept: True if there is intercept
 	alpha: significance level
 	"""
-	Observed = yobs
-	Factor = factor
-
-	if(isinstance(yobs, list)):
-		Observed = np.asfarray(yobs)
-
-	if(isinstance(factor, list)):
-		Factor = np.asfarray(factor)
+	Observed = np.asfarray(yobs)
+	Factor = np.asfarray(factor)
 
 	IsMatrix = len(Factor.shape) == 2
 	IsVector = len(Factor.shape) == 1
@@ -472,4 +409,4 @@ def linregress(
 		return simple_linregress(Observed, Factor, intercept, alpha)
 	
 	else:
-		return TypeError("factor must be either list, 2D list, numpy.ndarray")
+		return TypeError("factor must be either Iterable, Iterable[Iterable]")

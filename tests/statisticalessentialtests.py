@@ -186,4 +186,4 @@ print("Kolmogorov-Smirnov: ", result_ks)
 result_sw = st.shapiro(_data)
 print("Shapiro-Wilkinson: ", result_sw)
 
-
+linregression()
