@@ -174,10 +174,6 @@ import scisuit.plot as plt
 import numpy as np
 
 
-Re = [1E2, 10E6]
-Friction = [0.01, 0.1]
-
-plt.canvas(x=Re, y=Friction)
-plt.xscale("log")
+plt.moody()
 plt.show()
 

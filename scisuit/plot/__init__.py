@@ -8,5 +8,6 @@ from ._quiverchart import quiver, dirfield
 from ._qqcharts import qqnorm, qqplot
 from ._bubblechart import bubble
 from ._barcharts import bar, barh
+from ._moody import moody
 
 from ._chartelems import Marker
