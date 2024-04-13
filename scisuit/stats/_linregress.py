@@ -392,7 +392,7 @@ def linregress(
 	Performs simple/multiple linear regression
 
 	yobs: Dependent data 
-	factor: independent data (must be 2D)
+	factor: independent data
 	intercept: True if there is intercept
 	alpha: significance level
 	"""
