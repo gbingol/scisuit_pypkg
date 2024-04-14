@@ -1,8 +1,8 @@
 import math
 
 from ..roots import brentq
-from ._charts import canvas, xscale
-from .gdi import marker, line, curve
+from ._charts import canvas, xscale, yscale
+from .gdi import marker, line, curve, text
 from ..util import NiceNumbers
 
 
@@ -16,11 +16,12 @@ def _Colebrook(f, Re, E_D):
 
 
 def moody():
-	Reynolds = [1E3, 10E6] #Reynolds number
+	Reynolds = [1E3, 1E7] #Reynolds number
 	FricFact = [0.01, 0.08] #friction factor
 
 	canvas(x=Reynolds, y=FricFact)
 	xscale("log")
+	#yscale("log")
 
 	#laminar flow 0<Re<2300
 	fD = lambda Re: 64.0/Re
@@ -31,7 +32,7 @@ def moody():
 	#Turbulent Region - Re>=4000
 	Re = [4000, 6000, 9000, 15000, 30000, 60000, 120E3, 250E3, 1E6, 5E6]
 
-	e_d = [1E-5, 5E-5, 1E-4, 5E-4, 1E-3, 5E-3, 0.01, 0.02, 0.05]
+	e_d = [1E-6, 1E-5, 5E-5, 1E-4, 1E-3, 5E-3, 0.01, 0.02, 0.05]
 
 	for _e_d in e_d:
 		x, y = [], []
@@ -40,6 +41,8 @@ def moody():
 			friction, _ = brentq(_cb, a=0.001, b=0.08)
 			x.append(re)
 			y.append(friction)
+
+		text(xy=(re, friction), label=str(_e_d))
 		curve(x, y)
 
 		
