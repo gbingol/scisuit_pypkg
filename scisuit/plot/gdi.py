@@ -11,13 +11,15 @@ def text(
 		xy:tuple|list, 
 		label:str,
 		rotation:float = 0.0,
-		anchor:str = "tl",
+		hanchor:str = "l",
+		vanchor:str = "t",
 		**kwargs)->None:
 	"""
 	xy: (x, y), top-left,
 	label: text to be drawn,
 	rotation: rotation in degrees (>0 is counter-clockwise), anchor point is top-left
-	anchor: "tl", "bl" "cl" for top-left, bottom-left and center-left.
+	hanchor: horizontal anchor, "l", "c" "r" for left, center, right.
+	vanchor: vertical anchor, "t", "c", "b" for top, center and bottom
 	labelcolor: label color
 	"""
 	assert isinstance(xy, tuple|list), "xy must be tuple|list"
@@ -30,15 +32,19 @@ def text(
 	_color = kwargs.get("labelcolor") or "0 0 0"
 	assert isinstance(_color, str|tuple|list), "color must be str|tuple|list"
 
-	assert isinstance(anchor, str), "anchor must be str"
-	assert anchor.upper() in ["TL", "CL", "BL"], "anchor must be 'tl', 'bl' 'cl'"
+	assert isinstance(hanchor, str), "hanchor must be str"
+	assert hanchor.upper() in ["L", "C", "R"], "hanchor must be 'l', 'c', 'r'"
+
+	assert isinstance(vanchor, str), "vanchor must be str"
+	assert vanchor.upper() in ["T", "C", "B"], "vanchor must be 't', 'c', 'b'"
 
 	_pydll.c_plot_gdi_text(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(label.encode()),
 			_ct.c_double(rotation),
-			_ct.c_char_p(anchor.upper().encode()),
+			_ct.c_char(hanchor.upper().encode()),
+			_ct.c_char(vanchor.upper().encode()),
 			_ct.c_char_p(_color.encode()),
 			dict(Font(kwargs)))
 

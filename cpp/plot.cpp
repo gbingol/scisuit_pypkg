@@ -593,7 +593,8 @@ void c_plot_gdi_text(
 	double y,
 	const char* text, 
 	double angle,//positive angles are counterclockwise; the full angle is 360 degrees
-	const char* anchor,
+	char hanchor,
+	char vanchor,
 	const char* color,
 	PyObject* FontObj)
 
@@ -617,7 +618,7 @@ void c_plot_gdi_text(
 		return;
 	};
 
-	NumChart->DrawText(x, y, text, angle, anchor, font, textColor);
+	NumChart->DrawText(x, y, text, angle, hanchor, vanchor, font, textColor);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }

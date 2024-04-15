@@ -410,7 +410,8 @@ pydll.c_plot_gdi_text.argtypes = [
 					c_double, # y of top-left
 					c_char_p, # text
 					c_double, # rotation
-					c_char_p, #anchor
+					c_char, #halign
+					c_char, #valign
 					c_char_p, # color
 					py_object] #dictionary for Font
 pydll.c_plot_gdi_text.restype=None
