@@ -13,6 +13,10 @@ def _Colebrook(f, Re, E_D):
 
 	return 1/math.sqrt(f) + temp2
 
+def _vonKarman(f, E_D):
+	temp = 2.0* math.log10(E_D/3.7) 
+	return 1/math.sqrt(f) + temp
+
 
 
 def moody():
@@ -42,7 +46,8 @@ def moody():
 			x.append(re)
 			y.append(friction)
 
-		text(xy=(re, friction*1.05), label=str(_e_d))
+		text(xy=(re, friction), label=str(_e_d), anchor="cl")
 		curve(x, y, lw=2, ec="#A52A2A")
 
+	
 		

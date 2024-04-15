@@ -96,6 +96,7 @@ void c_plot_gdi_text(
 	double y,
 	const char* text, 
 	double angle, //positive angles are counterclockwise; the full angle is 360 degrees
+	const char* anchor, 
 	const char* color,
 	PyObject* FontObj); 
 
