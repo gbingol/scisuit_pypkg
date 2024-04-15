@@ -1,17 +1,15 @@
 import math
+from typing import Iterable
 
 from ..roots import brentq
-from ._charts import canvas, xscale, yscale
-from .gdi import line, curve, text, rect
+from ._charts import canvas, title, xlabel, xscale, ylabel, yscale
+from .gdi import arrow, curve, line, rect, text
 
 
 def _Colebrook(f, Re, E_D):
-	#inside log
 	temp1 = E_D/3.7 + 2.51/(Re*math.sqrt(f)) 
 	temp2 = 2.0* math.log10(temp1) 
-
 	return 1/math.sqrt(f) + temp2
-
 
 
 def _TurbulenceOnset(E_D):	
@@ -36,61 +34,85 @@ def _TurbulenceOnset(E_D):
 
 
 
+def moody(
+		Re:Iterable = [1E3, 1E7],
+		friction:Iterable = [0.01, 0.09],
+		showlaminar = True,
+		showtransition = True,
+		showturbulent = True):
+	"""
+	`Re:` Reynolds number range
+	`friction:`  Friction factor range
+	`showlaminar:` show laminar line and related info
+	`showtransition:` show transition region and related info
+	`showturbulent:` show fully turbulent line and related info
+	"""
+	assert isinstance(Re, Iterable), "Re must be iterable"
+	assert len(Re)==2, "Re must have length 2"
 
-def moody():
-	Reynolds = [1E3, 1E7] #Reynolds number
-	FricFact = [0.01, 0.09] #friction factor
+	assert isinstance(friction, Iterable), "friction must be iterable"
+	assert len(friction)==2, "friction must have length 2"
 
-	canvas(x=Reynolds, y=FricFact)
+	canvas(
+		x=(float(Re[0]), float(Re[1])), 
+		y=(float(friction[0]), float(friction[1])))
 	xscale("log")
 	yscale("log")
 
 	"""
 	laminar flow 0<Re<2300
 	"""
-	fD = lambda Re: 64.0/Re
-	p1 = (1000, fD(1000))
-	p2 = (2300, fD(2300))
-	line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000")
-
-
-	text(xy=p2, label="Laminar\nf = 64/Re", hanchor="c")
+	if showlaminar:
+		fD = lambda _Re: 64.0/_Re
+		p1 = (1000, fD(1000))
+		p2 = (2300, fD(2300))
+		line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000")
+		text(xy=p2, label="Laminar Flow\nf = 64/Re", hanchor="c")
 
 	"""
 	transition region 2300<Re<4000
 	btmleft: x (onset of transition), y(roughly 64/Re)
 	rectangle's width = 4000-2300=1700, height=0.08-0.03
 	"""
-	btmleft = (2300, 0.03)
-	rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080")
-	text(xy=(3000, 0.07), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
+	if showtransition:
+		btmleft = (2300, 0.03)
+		rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080")
+		text(xy=(3000, 0.07), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
 
 	"""
 	Turbulent Region - Re>=4000
 	"""
-	Re = [4000, 6000, 9000, 12E3, 20E3, 30E3, 60E3, 120E3, 250E3, 1E6, 5E6]
+	Re_Turbulent = [4000, 6000, 9000, 12E3, 20E3, 30E3, 60E3, 120E3, 250E3, 1E6, 5E6]
 	e_d = [5E-5, 1E-4, 5E-4, 1E-3,2.5E-3, 5E-3, 0.01, 0.02, 0.03, 0.04, 0.05]
 
 	TurbulenceLine = []
 	for _e_d in e_d:
 		x, y = [], []
 		TurbulenceLine.append(_TurbulenceOnset(_e_d))
-		for re in Re:
-			_cb = lambda f: _Colebrook(f, re, _e_d)
+		for _Re in Re_Turbulent:
+			_cb = lambda f: _Colebrook(f, _Re, _e_d)
 			friction, _ = brentq(_cb, a=0.001, b=0.08)
-			x.append(re)
+			x.append(_Re)
 			y.append(friction)
 
-		text(xy=(re, friction), label=str(_e_d), vanchor="c")
+		text(xy=(_Re, friction), label=str(_e_d), vanchor="c")
 		curve(x, y, lw=2, ec="#A52A2A")
-
 
 	"""
 	fully rough turbulent flow line
 	E/D=0.06 appended so that the dashed line will be slightly above E/D=0.05 line
 	"""
-	TurbulenceLine.append(_TurbulenceOnset(0.06))
-	_turbulence = list(zip(*TurbulenceLine))
-	curve(x=_turbulence[0], y=_turbulence[1], lw=2, ls="--")
-	
+	if showturbulent:
+		TurbulenceLine.append(_TurbulenceOnset(0.06))
+		_turbulence = list(zip(*TurbulenceLine))
+		curve(x=_turbulence[0], y=_turbulence[1], lw=2, ls="--")
 		
+		midpoint = int(len(TurbulenceLine)/2)
+		xx, yy=_turbulence[0][midpoint], _turbulence[1][midpoint]
+		_p1 = (15E3, 0.015)
+		arrow(p1=_p1, p2=(xx,yy), lw=2)
+		text(xy=_p1, label="Complete Turbulence", hanchor="c")
+
+	xlabel("Reynolds Number")
+	ylabel("Friction Factor")
+	title("Moody Diagram")
