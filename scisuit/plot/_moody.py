@@ -39,7 +39,7 @@ def _TurbulenceOnset(E_D):
 
 def moody():
 	Reynolds = [1E3, 1E7] #Reynolds number
-	FricFact = [0.01, 0.08] #friction factor
+	FricFact = [0.01, 0.09] #friction factor
 
 	canvas(x=Reynolds, y=FricFact)
 	xscale("log")
@@ -54,7 +54,7 @@ def moody():
 	line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000")
 
 
-	text(xy=p2, label="Laminar\n f=64/Re", hanchor="c")
+	text(xy=p2, label="Laminar\nf = 64/Re", hanchor="c")
 
 	"""
 	transition region 2300<Re<4000
@@ -62,13 +62,13 @@ def moody():
 	rectangle's width = 4000-2300=1700, height=0.08-0.03
 	"""
 	btmleft = (2300, 0.03)
-	rect(xy=btmleft, width=1700, height=0.05, hatch="/", ls="--", fc="#808080")
+	rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080")
+	text(xy=(3000, 0.07), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
 
 	"""
 	Turbulent Region - Re>=4000
 	"""
 	Re = [4000, 6000, 9000, 12E3, 20E3, 30E3, 60E3, 120E3, 250E3, 1E6, 5E6]
-
 	e_d = [5E-5, 1E-4, 5E-4, 1E-3,2.5E-3, 5E-3, 0.01, 0.02, 0.03, 0.04, 0.05]
 
 	TurbulenceLine = []
@@ -87,7 +87,9 @@ def moody():
 
 	"""
 	fully rough turbulent flow line
+	E/D=0.06 appended so that the dashed line will be slightly above E/D=0.05 line
 	"""
+	TurbulenceLine.append(_TurbulenceOnset(0.06))
 	_turbulence = list(zip(*TurbulenceLine))
 	curve(x=_turbulence[0], y=_turbulence[1], lw=2, ls="--")
 	

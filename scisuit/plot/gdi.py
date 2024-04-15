@@ -17,7 +17,7 @@ def text(
 	"""
 	xy: (x, y), top-left,
 	label: text to be drawn,
-	rotation: rotation in degrees (>0 is counter-clockwise), anchor point is top-left
+	rotation: rotation in degrees (>0 is counter-clockwise)
 	hanchor: horizontal anchor, "l", "c" "r" for left, center, right.
 	vanchor: vertical anchor, "t", "c", "b" for top, center and bottom
 	labelcolor: label color
@@ -29,7 +29,7 @@ def text(
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers"
 	
-	_color = kwargs.get("labelcolor") or "0 0 0"
+	_color = kwargs.get("labelcolor") or "#000000"
 	assert isinstance(_color, str|tuple|list), "color must be str|tuple|list"
 
 	assert isinstance(hanchor, str), "hanchor must be str"
