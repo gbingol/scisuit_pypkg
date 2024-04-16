@@ -77,7 +77,7 @@ def moody(
 	if showtransition:
 		btmleft = (2300, 0.03)
 		rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080")
-		text(xy=(3000, 0.07), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
+		text(xy=(3300, 0.06), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
 
 	"""
 	Turbulent Region - Re>=4000
@@ -110,7 +110,7 @@ def moody(
 		midpoint = int(len(TurbulenceLine)/2)
 		xx, yy=_turbulence[0][midpoint], _turbulence[1][midpoint]
 		_p1 = (15E3, 0.015)
-		arrow(p1=_p1, p2=(xx,yy), lw=2)
+		arrow(p1=_p1, p2=(xx,yy), lw=2, length=0.05)
 		text(xy=_p1, label="Complete Turbulence", hanchor="c")
 
 	xlabel("Reynolds Number")
