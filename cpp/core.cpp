@@ -551,7 +551,7 @@ PyObject* c_optimize_bracket(
 	double a,
 	double b,
 	double growlimit,
-	std::uint16_t maxiter)
+	std::uint32_t maxiter)
 {
 	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);

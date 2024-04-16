@@ -135,7 +135,7 @@ EXTERN PyObject* c_optimize_bracket(
 	double a,
 	double b,
 	double growlimit = 100,
-	std::uint16_t maxiter = 1000);
+	std::uint32_t maxiter = 1000);
 
 
 /******************************   ENGINEERING    **************************************/
