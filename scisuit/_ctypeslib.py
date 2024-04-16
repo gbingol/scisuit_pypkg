@@ -1,4 +1,4 @@
-from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8
+from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8, c_uint32
 import sys
 from pathlib import Path as _Path
 
@@ -97,6 +97,20 @@ pydll.c_integ_romberg.restype = py_object
 pydll.c_integ_fixed_quad.argtypes = [py_object, c_double, c_double, c_int]
 pydll.c_integ_fixed_quad.restype = py_object
 
+
+
+"""
+-------------------------------------------------------------------------------
+------------------------  OPTIMIZATION --------------------------------------- 
+"""
+
+pydll.c_optimize_bracket.argtypes = [
+					py_object, #function
+					c_double, #a
+					c_double, #b
+					c_double, #growlimit
+					c_uint32] #maxiter
+pydll.c_optimize_bracket.restype = py_object #dict {a, b, c, fa, fb, fc}
 
 
 
