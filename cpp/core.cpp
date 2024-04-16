@@ -6,6 +6,7 @@
 #include <core/core_funcs.h>
 #include <core/math/fitting.h>
 #include <core/math/integrate.h>
+#include <core/math/optimize.h>
 #include <core/math/roots.h>
 #include <core/eng/psychrometry.h>
 
@@ -539,6 +540,40 @@ PyObject* c_integ_fixed_quad(
 	Py_RETURN_NONE;
 }
 
+
+
+/************************   OPTIMIZE ****************************/
+
+
+
+PyObject* c_optimize_bracket(
+	PyObject* FuncObj,
+	double a,
+	double b,
+	double growlimit,
+	std::uint16_t maxiter)
+{
+	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
+	auto func = Make1DFunction(FuncObj);
+
+	TRYBLOCK();
+
+	auto R = core::math::optimize::bracket(func, a, b, growlimit, maxiter);
+	auto dict = PyDict_New();
+	PyDict_SetItemString(dict, "a", Py_BuildValue("d", R.a));
+	PyDict_SetItemString(dict, "b", Py_BuildValue("d", R.b));
+	PyDict_SetItemString(dict, "c", Py_BuildValue("d", R.c));
+
+	PyDict_SetItemString(dict, "fa", Py_BuildValue("d", R.fa));
+	PyDict_SetItemString(dict, "fb", Py_BuildValue("d", R.fb));
+	PyDict_SetItemString(dict, "fc", Py_BuildValue("d", R.fc));
+
+	return dict;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
 
 
 

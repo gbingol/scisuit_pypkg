@@ -1,4 +1,6 @@
 #pragma once
+
+#include <cstdint>
 #include <Python.h>
 
 #include "dllimpexp.h"
@@ -118,6 +120,22 @@ EXTERN PyObject* c_integ_fixed_quad(
 	double b,
 	int n = 5);
 
+
+
+
+
+
+
+/************************   OPTIMIZE ****************************/
+
+
+
+EXTERN PyObject* c_optimize_bracket(
+	PyObject* FuncObj,
+	double a,
+	double b,
+	double growlimit = 100,
+	std::uint16_t maxiter = 1000);
 
 
 /******************************   ENGINEERING    **************************************/
