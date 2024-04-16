@@ -186,4 +186,18 @@ print("Kolmogorov-Smirnov: ", result_ks)
 result_sw = st.shapiro(_data)
 print("Shapiro-Wilkinson: ", result_sw)
 
-linregression()
+
+from scisuit.stats import rchisq, pchisq, ks_1samp
+
+data = rchisq(n=100, df=5)
+#test normality
+print("Normality test")
+result = ks_1samp(x=data)
+print(result)
+
+#test chisq
+print("\nChisq test")
+result = ks_1samp(data, cdf=pchisq, args=(5,))
+print(result)
+
+
