@@ -18,8 +18,8 @@ class BracketResult:
 
 def bracket(
 	f:_types.FunctionType, 
-	xa:_numbers.Real, 
-	xb:_numbers.Real, 
+	xa:_numbers.Real = 0.0, 
+	xb:_numbers.Real = 1.0, 
 	grow_limit=110,
 	maxiter=1000)->BracketResult:
 	"""
