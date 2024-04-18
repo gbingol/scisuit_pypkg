@@ -110,9 +110,16 @@ pydll.c_optimize_bracket.argtypes = [
 					c_double, #b
 					c_double, #growlimit
 					c_uint32] #maxiter
-pydll.c_optimize_bracket.restype = py_object #dict {a, b, c, fa, fb, fc}
+pydll.c_optimize_bracket.restype = py_object 
 
 
+pydll.c_optimize_golden.argtypes = [
+					py_object, #function
+					c_double, #xlow
+					c_double, #xhigh
+					c_double, #tol
+					c_uint32] #maxiter
+pydll.c_optimize_golden.restype = py_object 
 
 
 """

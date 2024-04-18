@@ -577,6 +577,32 @@ PyObject* c_optimize_bracket(
 
 
 
+PyObject* c_optimize_golden(
+	PyObject* FuncObj,
+	double xlow,
+	double xhigh,
+	double tol,
+	std::uint32_t maxiter)
+{
+	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
+	auto func = Make1DFunction(FuncObj);
+
+	TRYBLOCK();
+
+	auto R = core::math::optimize::golden(func, xlow, xhigh, maxiter, tol);
+	auto tuple = PyTuple_New(3);
+	PyTuple_SetItem(tuple, 0,  Py_BuildValue("d", R.xopt));
+	PyTuple_SetItem(tuple, 1, Py_BuildValue("d", R.error));
+	PyTuple_SetItem(tuple, 2, Py_BuildValue("i", R.iter));
+
+	return tuple;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
 
 /******************************   ENGINEERING    **************************************/
 

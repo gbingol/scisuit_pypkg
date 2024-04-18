@@ -106,6 +106,7 @@ EXTERN PyObject* c_integ_simpson(
 	PyObject* X, 
 	PyObject* Y);
 
+
 EXTERN PyObject* c_integ_romberg(
 	PyObject* FuncObj,
 	double a,
@@ -125,10 +126,7 @@ EXTERN PyObject* c_integ_fixed_quad(
 
 
 
-
 /************************   OPTIMIZE ****************************/
-
-
 
 EXTERN PyObject* c_optimize_bracket(
 	PyObject* FuncObj,
@@ -136,6 +134,15 @@ EXTERN PyObject* c_optimize_bracket(
 	double b,
 	double growlimit = 100,
 	std::uint32_t maxiter = 1000);
+
+
+EXTERN PyObject* c_optimize_golden(
+	PyObject* FuncObj,
+	double xlow,
+	double xhigh,
+	double tol = 1E-6,
+	std::uint32_t maxiter = 1000);
+
 
 
 /******************************   ENGINEERING    **************************************/

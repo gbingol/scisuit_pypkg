@@ -47,3 +47,43 @@ def bracket(
 						_ct.c_uint32(maxiter))
 	
 	return BracketResult(a=d["a"], b=d["b"], c=d["c"], fa=d["fa"], fb=d["fb"], fc=d["fc"])
+
+
+
+@_dc.dataclass
+class GoldenResult:
+	xopt:float
+	err: float
+	iter: int
+
+
+def golden(
+	f:_types.FunctionType, 
+	xlow:_numbers.Real, 
+	xhigh:_numbers.Real, 
+	tol=1E-6,
+	maxiter=1000)->GoldenResult:
+	"""
+	Finds the *local* minimum using golden section method
+
+	## Inputs:
+	f: A unary function
+	xlow, xhigh: Initial guesses, local minimum need to be contained within this interval.
+	tol: tolerance.
+	maxiter: Maximum number of iterations
+	"""
+	assert isinstance(f, _types.FunctionType), "f must be function"
+	assert isinstance(xlow, _numbers.Real), "xlow must be real number"
+	assert isinstance(xhigh, _numbers.Real), "xhigh must be real number"
+	assert isinstance(tol, _numbers.Real), "tol must be real number"
+	assert isinstance(maxiter, int), "maxiter must be int"
+
+	assert maxiter>0, "maxiter>0 expected"
+
+	xopt, err, iter =_pydll.c_optimize_golden(_ct.py_object(f), 
+						_ct.c_double(xlow), 
+						_ct.c_double(xhigh),
+						_ct.c_double(tol),
+						_ct.c_uint32(maxiter))
+	
+	return GoldenResult(xopt=xopt, err=err, iter=iter)
