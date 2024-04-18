@@ -121,29 +121,47 @@ def newton(
 	x0:float, 
 	x1=None, 
 	fprime=None, 
+	fprime2=None,
 	tol=1E-5, 
 	maxiter=100)->tuple[float, Info]:
 	"""
-	If fprime is provided then uses Newton-Raphson method  \n
-	If fprime is not provided, then x1 must be provided uses Secant method.
-
-	returns (root, Info)
+	- fprime != None, Newton-Raphson is used,
+	- fprime2 != None, Halley's method is used,
+	- fprime == None, x1 must be provided and Secant method is used.
 
 	## Inputs:
 	f: A unary function 
 	fprime: derivative of f 
+	fprime2: second derivative of f 
 	x0, x1: Initial guesses 
 	tol: tolerance for error 
 	maxiter: Max number of iterations
 	"""
-	assert callable(f), "f must be function"
-	assert isinstance(x0, _numbers.Real)
+	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(x0, _numbers.Real), "x0 must be Real number"
+
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
+
 	if(fprime == None):
 		assert isinstance(x1, _numbers.Real), "If fprime not provided, x1 must be a real number"
 	else:
-		assert callable(fprime), "If fprime is provided, it must be of type function."
+		assert isinstance(fprime, _types.FunctionType), "If not None, fprime must be function."
 
-	root, lst = _pydll.c_root_newton(f, _ct.c_double(x0), x1, fprime, _ct.c_double(tol), _ct.c_int(maxiter))
+	if fprime2 != None:
+		assert isinstance(fprime2, _types.FunctionType), "If not None, fprime2 must be function."
+
+	root, lst = _pydll.c_root_newton(
+								_ct.py_object(f), 
+								_ct.c_double(x0), 
+								_ct.py_object(x1), 
+								_ct.py_object(fprime), 
+								_ct.py_object(fprime2),
+								_ct.c_double(tol), 
+								_ct.c_int(maxiter))
 
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
@@ -165,9 +183,15 @@ def ridder(
 	tol: tolerance for error 
 	maxiter: Maximum number of iterations
 	"""
-	assert callable(f), "f must be function"
+	assert isinstance(f, _types.FunctionType), "f must be function."
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
+
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
 	
 	root, lst = _pydll.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
@@ -192,11 +216,17 @@ def toms748(
 	## Reference:
 	https://beta.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/roots_noderiv/TOMS748.html
 	"""
-	assert callable(f), "f must be function"
+	assert isinstance(f, _types.FunctionType), "f must be function."
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 	assert a<b, "a<b expected"
-	assert 0<tol<1, "0<tol<1 expected"
+
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
+	
 
 	result = _pydll.c_root_toms748(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 	r1, r2 = result[0], result[1]

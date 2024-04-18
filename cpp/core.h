@@ -47,6 +47,7 @@ EXTERN PyObject * c_root_newton(PyObject * FuncObj,
 	double X0,
 	PyObject * X1,
 	PyObject * FPrimeObj,
+	PyObject *FPrime2Obj,
 	double tol = 1e-5,
 	int maxiter = 100);
 

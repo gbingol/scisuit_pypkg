@@ -44,7 +44,15 @@ pydll.c_root_brentq.restype = py_object
 pydll.c_root_muller.argtypes = [py_object, py_object, py_object, py_object, py_object, c_double, c_int]
 pydll.c_root_muller.restype = py_object
 
-pydll.c_root_newton.argtypes = [py_object, c_double, py_object, py_object, c_double, c_int]
+pydll.c_root_newton.argtypes = [
+					py_object, #f
+					c_double, #X0
+					py_object, #X1
+					py_object, #fprime
+					py_object, #fprime2
+					c_double, #tol
+					c_int #maxiter
+				]
 pydll.c_root_newton.restype = py_object
 
 pydll.c_root_ridder.argtypes = [py_object, c_double, c_double, c_double, c_int]

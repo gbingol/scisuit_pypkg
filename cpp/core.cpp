@@ -228,6 +228,7 @@ PyObject* c_root_newton(
 	double X0, 
 	PyObject* X1, 
 	PyObject* FPrimeObj, 
+	PyObject *FPrime2Obj,
 	double tol, 
 	int maxiter)
 {
@@ -240,9 +241,15 @@ PyObject* c_root_newton(
 
 	if (FPrimeObj != Py_None)
 	{
-		ASSERT_CALLABLE_RET(FPrimeObj, "fprime must be callable.");
 		auto func_prime = Make1DFunction(FPrimeObj);
-		res = roots::newtonraphson(func, X0, func_prime, tol, maxiter);
+
+		if (FPrime2Obj != Py_None)
+		{
+			auto func_prime2 = Make1DFunction(FPrime2Obj);
+			res = roots::halley(func, X0, func_prime, func_prime2, tol, maxiter);
+		}
+		else
+			res = roots::newtonraphson(func, X0, func_prime, tol, maxiter);
 	}
 	else
 	{
