@@ -11,6 +11,7 @@
 #include <core/eng/psychrometry.h>
 
 #include <boost/math/tools/toms748_solve.hpp>
+#include <boost/math/tools/minima.hpp>
 
 #include "wrapperfuncs.h"
 
@@ -594,6 +595,36 @@ PyObject* c_optimize_golden(
 	PyTuple_SetItem(tuple, 0,  Py_BuildValue("d", R.xopt));
 	PyTuple_SetItem(tuple, 1, Py_BuildValue("d", R.error));
 	PyTuple_SetItem(tuple, 2, Py_BuildValue("i", R.iter));
+
+	return tuple;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
+
+PyObject* c_optimize_brent(
+	PyObject* FuncObj,
+	double xlow,
+	double xhigh,
+	std::uintmax_t maxiter)
+{
+	auto func = Make1DFunction(FuncObj);
+	const int double_bits = std::numeric_limits<double>::digits;
+    auto maxit = maxiter;
+
+	TRYBLOCK();
+
+	auto R = boost::math::tools::brent_find_minima(func, xlow, xhigh, double_bits, maxit);
+	if(maxit == maxiter)
+		throw std::runtime_error("maxiter exceeded");
+
+	auto tuple = PyTuple_New(3);
+	PyTuple_SetItem(tuple, 0,  Py_BuildValue("d", R.first)); //xopt 
+	PyTuple_SetItem(tuple, 1, Py_BuildValue("d", R.second)); // f(xopt)
+	PyTuple_SetItem(tuple, 2, Py_BuildValue("i", maxit)); //number of iterations
 
 	return tuple;
 

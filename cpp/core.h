@@ -144,6 +144,12 @@ EXTERN PyObject* c_optimize_golden(
 	std::uint32_t maxiter = 1000);
 
 
+EXTERN PyObject* c_optimize_brent(
+	PyObject* FuncObj,
+	double xlow,
+	double xhigh,
+	std::uintmax_t maxiter = 1000);
+
 
 /******************************   ENGINEERING    **************************************/
 

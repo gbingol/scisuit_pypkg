@@ -50,6 +50,8 @@ def bracket(
 
 
 
+#-------------------------------------------------------------------
+
 @_dc.dataclass
 class GoldenResult:
 	xopt:float
@@ -87,3 +89,45 @@ def golden(
 						_ct.c_uint32(maxiter))
 	
 	return GoldenResult(xopt=xopt, err=err, iter=iter)
+
+
+
+
+#-----------------------------------------------------------------
+
+@_dc.dataclass
+class BrentResult:
+	xopt:float
+	fval: float
+	iter: int
+
+
+def brent(
+	f:_types.FunctionType, 
+	xlow:_numbers.Real, 
+	xhigh:_numbers.Real, 
+	maxiter=500)->BrentResult:
+	"""
+	Finds the minimum using Brent's method
+
+	## Inputs:
+	f: A unary function
+	xlow, xhigh: Initial guesses, local minimum need to be contained within this interval.
+	maxiter: Maximum number of iterations
+
+	## Reference
+	https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/brent_minima.html
+	"""
+	assert isinstance(f, _types.FunctionType), "f must be function"
+	assert isinstance(xlow, _numbers.Real), "xlow must be real number"
+	assert isinstance(xhigh, _numbers.Real), "xhigh must be real number"
+	assert isinstance(maxiter, int), "maxiter must be int"
+
+	assert maxiter>0, "maxiter>0 expected"
+
+	xopt, fxopt, iter =_pydll.c_optimize_brent(_ct.py_object(f), 
+						_ct.c_double(xlow), 
+						_ct.c_double(xhigh),
+						_ct.c_longlong(maxiter))
+	
+	return BrentResult(xopt=xopt, fval=fxopt, iter=iter)

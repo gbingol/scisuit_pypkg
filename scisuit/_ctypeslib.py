@@ -1,4 +1,4 @@
-from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8, c_uint32
+from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8, c_uint32, c_longlong
 import sys
 from pathlib import Path as _Path
 
@@ -120,6 +120,14 @@ pydll.c_optimize_golden.argtypes = [
 					c_double, #tol
 					c_uint32] #maxiter
 pydll.c_optimize_golden.restype = py_object 
+
+
+pydll.c_optimize_brent.argtypes = [
+					py_object, #function
+					c_double, #xlow
+					c_double, #xhigh
+					c_longlong] #maxiter
+pydll.c_optimize_brent.restype = py_object 
 
 
 """

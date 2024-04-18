@@ -6,7 +6,7 @@ sys.path.insert(0, os.getcwd())
 
 from timeit import timeit
 import scipy.optimize as opt
-from scisuit.optimize import bracket, golden
+from scisuit.optimize import bracket, golden, brent
 
 def f(x):
 	return 10*x**2 + 3*x + 5
@@ -34,3 +34,6 @@ print(bracket(f2))
 
 print(opt.golden(f2, brack=(2,4)))
 print(golden(f2, xlow=-2, xhigh=4, tol=1E-9))
+
+print(opt.brent(f2, full_output=True))
+print(brent(f2, xlow=-2, xhigh=4))
