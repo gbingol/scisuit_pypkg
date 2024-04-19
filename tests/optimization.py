@@ -6,13 +6,17 @@ sys.path.insert(0, os.getcwd())
 
 from timeit import timeit
 import scipy.optimize as opt
-from scisuit.optimize import bracket, golden, brent
+from scisuit.optimize import bracket, golden, brent, parabolic
 
 def f(x):
 	return 10*x**2 + 3*x + 5
 
 def f2(x):
 	return (x-1)**2
+
+#maximum
+def f3(x):
+	return -(2*math.sin(x) -x**2/10)
 
 def performance():
 	n = 1000
@@ -35,5 +39,7 @@ print(bracket(f2))
 print(opt.golden(f2, brack=(2,4)))
 print(golden(f2, xlow=-2, xhigh=4, tol=1E-9))
 
-print(opt.brent(f2, full_output=True))
-print(brent(f2, xlow=-2, xhigh=4))
+print(opt.brent(f3, full_output=True))
+print(brent(f3, xlow=-2, xhigh=4))
+
+print(parabolic(f3, xa=10, xb=4))

@@ -131,3 +131,48 @@ def brent(
 						_ct.c_longlong(maxiter))
 	
 	return BrentResult(xopt=xopt, fval=fxopt, iter=iter)
+
+
+
+#----------------------------------------------------------
+
+@_dc.dataclass
+class ParabolicResult:
+	xopt:float
+	err: float
+	iter: int
+
+
+def parabolic(
+	f:_types.FunctionType, 
+	xa:_numbers.Real, 
+	xb:_numbers.Real, 
+	xc:None | _numbers.Real = None,
+	tol=1E-6,
+	maxiter=1000)->ParabolicResult:
+	"""
+	Finds the minimum using quadratic interpolation algorithm
+
+	## Inputs:
+	f: A unary function
+	xa, xb, xc: initial guesses
+	tol: tolerance.
+	maxiter: Maximum number of iterations
+	"""
+	assert isinstance(f, _types.FunctionType), "f must be function"
+	assert isinstance(xa, _numbers.Real), "xa must be real number"
+	assert isinstance(xb, _numbers.Real), "xb must be real number"
+	assert isinstance(xc, _numbers.Real | None), "xc must be None or real number"
+	assert isinstance(tol, _numbers.Real), "tol must be real number"
+	assert isinstance(maxiter, int), "maxiter must be int"
+
+	assert maxiter>0, "maxiter>0 expected"
+
+	xopt, err, iter =_pydll.c_optimize_parabolic(_ct.py_object(f), 
+						_ct.c_double(xa), 
+						_ct.c_double(xb),
+						_ct.py_object(xc),
+						_ct.c_double(tol),
+						_ct.c_uint32(maxiter))
+	
+	return ParabolicResult(xopt=xopt, err=err, iter=iter)
