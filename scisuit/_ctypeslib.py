@@ -130,6 +130,16 @@ pydll.c_optimize_golden.argtypes = [
 pydll.c_optimize_golden.restype = py_object 
 
 
+pydll.c_optimize_parabolic.argtypes = [
+					py_object, #function
+					c_double, #xa
+					c_double, #xb
+					py_object, #xc
+					c_double, #tol
+					c_uint32] #maxiter
+pydll.c_optimize_parabolic.restype = py_object 
+
+
 pydll.c_optimize_brent.argtypes = [
 					py_object, #function
 					c_double, #xlow

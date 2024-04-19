@@ -612,6 +612,37 @@ PyObject* c_optimize_golden(
 
 
 
+PyObject* c_optimize_parabolic(
+	PyObject* FuncObj,
+	double xa,
+	double xb,
+	PyObject* xc,
+	double tol,
+	std::uint32_t maxiter)
+{
+	auto func = Make1DFunction(FuncObj);
+
+	TRYBLOCK();
+
+	std::optional<double> c = std::nullopt;
+	if(!Py_IsNone(xc))
+		c = PyFloat_AsDouble(xc);
+
+	auto R = core::math::optimize::parabolic(func, xa, xb,c, maxiter, tol);
+	auto tuple = PyTuple_New(3);
+	PyTuple_SetItem(tuple, 0,  Py_BuildValue("d", R.xopt));
+	PyTuple_SetItem(tuple, 1, Py_BuildValue("d", R.error));
+	PyTuple_SetItem(tuple, 2, Py_BuildValue("i", R.iter));
+
+	return tuple;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
+
 PyObject* c_optimize_brent(
 	PyObject* FuncObj,
 	double xlow,

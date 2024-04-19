@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 #include <Python.h>
 
 #include "dllimpexp.h"
@@ -141,6 +142,15 @@ EXTERN PyObject* c_optimize_golden(
 	PyObject* FuncObj,
 	double xlow,
 	double xhigh,
+	double tol = 1E-6,
+	std::uint32_t maxiter = 1000);
+
+
+EXTERN PyObject* c_optimize_parabolic(
+	PyObject* FuncObj,
+	double xa,
+	double xb,
+	PyObject* xc,
 	double tol = 1E-6,
 	std::uint32_t maxiter = 1000);
 
