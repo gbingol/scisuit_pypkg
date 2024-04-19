@@ -160,13 +160,17 @@ def parabolic(
 	maxiter: Maximum number of iterations
 	"""
 	assert isinstance(f, _types.FunctionType), "f must be function"
-	assert isinstance(xa, _numbers.Real), "xa must be real number"
-	assert isinstance(xb, _numbers.Real), "xb must be real number"
-	assert isinstance(xc, _numbers.Real | None), "xc must be None or real number"
-	assert isinstance(tol, _numbers.Real), "tol must be real number"
+	assert isinstance(xa, _numbers.Real), "xa must be real"
+	assert isinstance(xb, _numbers.Real), "xb must be real"
+	assert isinstance(xc, _numbers.Real | None), "xc must be None or real"
+	assert isinstance(tol, _numbers.Real), "tol must be real"
 	assert isinstance(maxiter, int), "maxiter must be int"
 
 	assert maxiter>0, "maxiter>0 expected"
+
+	assert abs(xa-xb)>tol, "xa and xb must be different"
+	if isinstance(xc, _numbers.Real):
+		assert abs(xc-xb), "xa != xb != xc expected"
 
 	xopt, err, iter =_pydll.c_optimize_parabolic(_ct.py_object(f), 
 						_ct.c_double(xa), 
