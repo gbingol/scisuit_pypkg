@@ -62,13 +62,21 @@ std::function<double(double)> Make1DFunction(PyObject* funcObj)
         PyObject* ObjX = PyFloat_FromDouble(x);
 
         if (!ObjX)
-            throw std::exception("Can not make real number");
+		{
+			auto err = std::string("Attempted to convert to real number: ") + PyUnicode_AsUTF8(PyObject_Str(ObjX));
+			throw std::exception(err.c_str());
+		}
 
         PyObject* pArgs = PyTuple_Pack(1, ObjX);
         PyObject* pValue = PyObject_CallObject(funcObj, pArgs);
 
         if (!pValue)
-            throw std::exception("Malformed function: cannot handle real numbers");
+		{
+			auto err = std::string("Could not evaluate ") + PyUnicode_AsUTF8(PyObject_Str(funcObj));
+			err += " at : " + std::to_string(x);
+						
+			throw std::exception(err.c_str());
+		}
 
         double retVal = PyFloat_AsDouble(pValue);
 
