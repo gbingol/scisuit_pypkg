@@ -52,13 +52,16 @@ def ks_1samp(
 		args:tuple=())->Ks1SampletestResult:
 	"""
 	Performs two.sided Kolmogorov-Smirnov test
+
+	Reference:
+	- Simard R & L'Ecuyer P (2011) "Computing the Two-Sided Kolmogorov-Smirnov Distribution". 
+	  J of Statistical Software, 39:11.
 	"""
 	assert isinstance(x, Iterable), "x must be Iterable"
+	assert isinstance(cdf, FunctionType), "cdf must be a function"
 
 	_xx = [v for v in x if isinstance(v, numbers.Real)]
 	assert len(x) == len(_xx), "x must contain only Real numbers"
-
-	assert isinstance(cdf, FunctionType), "cdf must be a function"
 
 	n = len(x)
 	x = _np.sort(x)
@@ -100,6 +103,12 @@ def shapiro(x:Iterable)->ShapiroTestResult:
 	- x must be iterable containing only Real numbers
 	- x must have at least length 3.
 	- if len(x)>5000, W is accurate, but the p-value may not be.
+
+	Reference:
+	- Royston P (1995). Remark AS R94: A Remark on Algorithm AS 181: The W-test for Normality
+	  J of the Royal Statistical Society. Series C 44:4 pp. 547-551
+	- Shapiro SS & Wilk MB (1965). An Analysis of Variance Test for Normality
+	  Biometrika Vol. 52, No. 3/4, pp. 591-611
 	"""
 	assert isinstance(x, Iterable), "x must be an Iterable object."
 
