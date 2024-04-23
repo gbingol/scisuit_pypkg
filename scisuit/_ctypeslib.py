@@ -549,7 +549,7 @@ pydll.c_plot_axisscale.argtypes = [c_char_p, c_char]
 pydll.c_plot_axisscale.restype=py_object
 
 
-pydll.c_plot_legend.argtypes = []
+pydll.c_plot_legend.argtypes = [py_object, py_object]
 pydll.c_plot_legend.restype=None
 
 

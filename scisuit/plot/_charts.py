@@ -27,10 +27,10 @@ def boxplot(
 	`data:` Data to be plotted 
 	`label:` Name of the series
 	"""
-	assert isinstance(data, _Iterable), "'data' must be iterable"
+	assert isinstance(data, _Iterable), "'data' must be iterable."
 	
 	if label != None:
-		assert isinstance(label, str), "'label' must be string"
+		assert isinstance(label, str), "'label' must be string."
 
 	return _pydll.c_plot_boxplot((), {
 		"data":data, 
@@ -62,16 +62,16 @@ def hist(
 	If density=True and cumulative=True, then the histogram is 
 	normalized so that the cumulative end-value is 1.0
 	"""
-	assert isinstance(density, bool), "'density' must be bool"
-	assert isinstance(cumulative, bool), "'cumulative' must be bool"
+	assert isinstance(density, bool), "'density' must be bool."
+	assert isinstance(cumulative, bool), "'cumulative' must be bool."
 
 	if breaks != None:
-		assert isinstance(breaks, int) or isinstance(breaks, _Iterable), "'breaks' must be int/Iterable"
+		assert isinstance(breaks, int) or isinstance(breaks, _Iterable), "'breaks' must be int/Iterable."
 		if isinstance(breaks, int):
-			assert breaks>0, "'breaks' if integer, must be >0"
+			assert breaks>0, "'breaks' if integer, must be >0."
 		else:
 			Nums = [i for i in breaks if isinstance(i, int) or isinstance(i, float)]
-			assert len(Nums)>0, "'breaks' (iterable) do not contain any number"
+			assert len(Nums)>0, "'breaks' (iterable) do not contain any number."
 
 	return _pydll.c_plot_histogram((), {
 			"data":data, 
@@ -127,17 +127,17 @@ def scatter(
 	- Customize line with (lw, ls and edgecolor properties)
 	- Customize marker with (line properties +  facecolor, hatch)
 	"""
-	assert isinstance(x, _Iterable), "x must be iterable object"
-	assert isinstance(y, _Iterable), "y must be iterable object"
-	assert len(x) == len(y), "x and y must have same lengths"
+	assert isinstance(x, _Iterable), "x must be iterable object."
+	assert isinstance(y, _Iterable), "y must be iterable object."
+	assert len(x) == len(y), "x and y must have same lengths."
 
-	assert isinstance(smooth, bool), "'smooth' must be bool"
+	assert isinstance(smooth, bool), "'smooth' must be bool."
 
 	if label != None:
-		assert isinstance(label, str), "'label' must be string"
+		assert isinstance(label, str), "'label' must be string."
 	
 	_mark = marker
-	assert isinstance(_mark, str|Marker|None), "marker must be str|Marker"
+	assert isinstance(_mark, str|Marker|None), "marker must be str|Marker."
 	if isinstance(_mark, str):
 		_mark = None if \
 						(_mark.isspace() or len(_mark)==0) else \
@@ -171,18 +171,18 @@ def canvas(
 	`haxis, vaxis:` Show horizontal and vertical axes
 	`hgrid, vgrid:` Show horizontal and vertical gridlines
 	"""
-	assert len(x) ==2, "x must contain exactly two numbers"
-	assert isinstance(x[0], numbers.Real), "xmin must be a real number"
-	assert isinstance(x[1], numbers.Real), "xmax must be a real number"
+	assert len(x) ==2, "x must contain exactly two numbers."
+	assert isinstance(x[0], numbers.Real), "xmin must be a real number."
+	assert isinstance(x[1], numbers.Real), "xmax must be a real number."
 
-	assert len(y) ==2, "y must contain exactly two numbers"
-	assert isinstance(y[0], numbers.Real), "ymin must be a real number"
-	assert isinstance(y[1], numbers.Real), "ymax must be a real number"
+	assert len(y) ==2, "y must contain exactly two numbers."
+	assert isinstance(y[0], numbers.Real), "ymin must be a real number."
+	assert isinstance(y[1], numbers.Real), "ymax must be a real number."
 	
-	assert isinstance(haxis, bool), "haxis must be bool"
-	assert isinstance(vaxis, bool), "vaxis must be bool"
-	assert isinstance(hgrid, bool), "hgrid must be bool"
-	assert isinstance(vgrid, bool), "vgrid must be bool"
+	assert isinstance(haxis, bool), "haxis must be bool."
+	assert isinstance(vaxis, bool), "vaxis must be bool."
+	assert isinstance(hgrid, bool), "hgrid must be bool."
+	assert isinstance(vgrid, bool), "vgrid must be bool."
 
 	return _pydll.c_plot_canvas(
 					_ct.py_object(x), 
@@ -204,8 +204,8 @@ def layout(nrows:numbers.Integral, ncols:numbers.Integral)->None:
 	`nrows:` number of rows
 	`ncols:` number of columns
 	"""
-	assert isinstance(nrows, numbers.Integral), "nrows must be integer"
-	assert isinstance(ncols, numbers.Integral), "ncols must be integer"
+	assert isinstance(nrows, numbers.Integral), "nrows must be integer."
+	assert isinstance(ncols, numbers.Integral), "ncols must be integer."
 
 	assert 0<nrows<=255, "0<nrows<=255 expected"
 	assert 0<ncols<=255, "0<ncols<=255 expected"
@@ -229,10 +229,10 @@ def subplot(
 	`nrows:` number of rows the cell should span 
 	`ncols:` number of columns the cell should span 
 	"""
-	assert isinstance(row, numbers.Integral), "row must be integer"
-	assert isinstance(col, numbers.Integral), "col must be integer"
-	assert isinstance(nrows, numbers.Integral), "nrows must be integer"
-	assert isinstance(ncols, numbers.Integral), "ncols must be integer"
+	assert isinstance(row, numbers.Integral), "row must be integer."
+	assert isinstance(col, numbers.Integral), "col must be integer."
+	assert isinstance(nrows, numbers.Integral), "nrows must be integer."
+	assert isinstance(ncols, numbers.Integral), "ncols must be integer."
 
 	assert 0 <= row <= 255, "0 <= row <= 255 expected"
 	assert 0 <= col <= 255, "0 <= col <= 255 expected"
@@ -280,8 +280,8 @@ def xlim(
 	"""
 	Sets or gets the x-limits of the current chart
 	"""
-	assert isinstance(min, numbers.Real|None), "min must be Real|None"
-	assert isinstance(max, numbers.Real|None), "max must be Real|None"
+	assert isinstance(min, numbers.Real|None), "min must be Real|None."
+	assert isinstance(max, numbers.Real|None), "max must be Real|None."
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("x".encode()))
 
 
@@ -292,8 +292,8 @@ def ylim(
 	"""
 	Sets or gets the y-limits of the current chart
 	"""
-	assert isinstance(min, numbers.Real|None), "min must be Real|None"
-	assert isinstance(max, numbers.Real|None), "max must be Real|None"
+	assert isinstance(min, numbers.Real|None), "min must be Real|None."
+	assert isinstance(max, numbers.Real|None), "max must be Real|None."
 	return _pydll.c_plot_axislim(_ct.py_object(min), _ct.py_object(max), _ct.c_char("y".encode()))
 
 
@@ -308,13 +308,13 @@ def set_xticks(
 	`align:` "center", "left"
 	`pos:` "top", "bottom"
 	"""
-	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
+	assert isinstance(ticks, _Iterable), "ticks must be Iterable object."
 	
-	assert isinstance(align, str), "align must be str"
-	assert isinstance(pos, str), "pos must be str"
+	assert isinstance(align, str), "align must be str."
+	assert isinstance(pos, str), "pos must be str."
 
-	assert align in ["center", "left"], "align: center or left"
-	assert pos in ["top", "bottom"], "pos: top or bottom"
+	assert align in ["center", "left"], "align: center or left."
+	assert pos in ["top", "bottom"], "pos: top or bottom."
 
 	_pydll.c_plot_set_xticks(
 				_ct.py_object(ticks), 
@@ -333,13 +333,13 @@ def set_yticks(
 	`align:` "center", "top", "bottom"
 	`pos:` "left", "right"
 	"""
-	assert isinstance(ticks, _Iterable), "ticks must be Iterable object"
+	assert isinstance(ticks, _Iterable), "ticks must be Iterable object."
 
-	assert isinstance(align, str), "align must be str"
-	assert isinstance(pos, str), "pos must be str"
+	assert isinstance(align, str), "align must be str."
+	assert isinstance(pos, str), "pos must be str."
 
-	assert align in ["center", "top", "bottom"], "align: center, top or bottom"
-	assert pos in ["left", "right"], "pos: left or right"
+	assert align in ["center", "top", "bottom"], "align: center, top or bottom."
+	assert pos in ["left", "right"], "pos: left or right."
 
 	_pydll.c_plot_set_yticks(
 				_ct.py_object(ticks), 
@@ -354,7 +354,7 @@ def set_xposition(position:numbers.Real)->None:
 	Sets x-axis position
 	`position:` A valid position within limits of y-axis
 	"""
-	assert isinstance(position, numbers.Real), "position must be Real"
+	assert isinstance(position, numbers.Real), "position must be Real."
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("x".encode()))
 
 
@@ -364,7 +364,7 @@ def set_yposition(position:numbers.Real)->None:
 	Sets y-axis position
 	`position:` A valid position within limits of x-axis
 	"""
-	assert isinstance(position, numbers.Real), "position must be Real"
+	assert isinstance(position, numbers.Real), "position must be Real."
 	_pydll.c_plot_set_axispos(_ct.c_double(position), _ct.c_char("y".encode()))
 
 
@@ -393,9 +393,16 @@ def yscale(value:str)->None:
 
 
 
-def legend()->None:
+def legend(nrows:int|None = None, ncols:int|None = None)->None:
 	"""Create legend"""
-	_pydll.c_plot_legend()
+	if nrows != None:
+		assert isinstance(nrows, int), "nrows must be int."
+		assert nrows>0, "nrows=None or >0 expected."
+	if ncols != None:
+		assert isinstance(ncols, int), "ncols must be int."
+		assert ncols>0, "ncols=None or >0 expected."
+
+	_pydll.c_plot_legend(_ct.py_object(nrows), _ct.py_object(ncols))
 
 
 

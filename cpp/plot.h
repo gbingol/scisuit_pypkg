@@ -174,7 +174,9 @@ EXTERN
 void c_plot_ylabel(const char* ylabel);
 
 EXTERN 
-void c_plot_legend();
+void c_plot_legend(
+	PyObject* nrows, 
+	PyObject* ncols);
 
 //Either returns the limits or sets the limits
 EXTERN 

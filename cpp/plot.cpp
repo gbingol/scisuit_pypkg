@@ -12,6 +12,8 @@
 #include <plotter/windows/frmplot.h>
 #include <plotter/elems/chartelement.h>
 #include <plotter/elems/trendline.h>
+#include <plotter/elems/plotareabase.h>
+#include <plotter/elems/legend.h>
 
 
 #include "wrapperfuncs.h"
@@ -896,16 +898,29 @@ void c_plot_ylabel(const char* Label)
 }
 
 
-void c_plot_legend()
+void c_plot_legend(
+	PyObject* nrows, 
+	PyObject* ncols)
 {
 	if(s_CurPlotWnd == nullptr)
 		return;
 
 	TRYBLOCK();
 
+	std::optional<std::size_t> NRows, NCols;
+
 	if(auto s= s_CurPlotWnd->GetActiveChart())
-		s->CreateElement(CChartBase::Elems::LEGEND);
-	
+	{
+		if(!Py_IsNone(nrows))
+			NRows = PyLong_AsLong(nrows);
+
+		if(!Py_IsNone(ncols))
+			NCols = PyLong_AsLong(ncols);
+
+		auto xy = s->GetPlotArea()->GetTopRight();
+		auto Legend = s->CreateLegend(xy, NRows, NCols);
+		s->RefreshRect(Legend->GetBoundRect().Inflate(5, 5));
+	}
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
