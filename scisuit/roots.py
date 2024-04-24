@@ -10,7 +10,7 @@ from ._ctypeslib import pydll as _pydll
 
 
 
-__all__ = ['bisect', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info", "toms748"]
+__all__ = ['bisect','itp', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info", "toms748"]
 
 
 @_dc.dataclass
@@ -61,7 +61,57 @@ def bisect(
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
 
+#-----------------------------------------
 
+def itp(
+	f:_types.FunctionType, 
+	a:_numbers.Real, 
+	b:_numbers.Real, 
+	k1:_numbers.Real = 0.1,
+	k2:_numbers.Real = 2.5656733089749,
+	tol:_numbers.Real=1E-5, 
+	maxiter:int=100)->tuple[float, Info]:
+	"""
+	Finds the root using itp (interpolation, truncation, projection) method
+
+	## Inputs:
+	f: A unary function
+	a, b: The interval where the root lies in
+	k1, k2: parameters to control interpolation phase
+	tol: tolerance for error
+	maxiter: Maximum number of iterations
+
+	## Reference:
+	- Oliveira IFD & Takahashi RHC (2020). An Enhancement of the Bisection Method Average 
+	  Performance Preserving Minmax Optimality, ACM Transactions on Mathematical Software, 47:1
+	"""
+	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(a, _numbers.Real), "a must be real number"
+	assert isinstance(b, _numbers.Real), "b must be real number"
+
+	assert isinstance(k1, _numbers.Real), "k1 must be real number"
+	assert isinstance(k2, _numbers.Real), "k2 must be real number"
+
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
+
+	root, lst =_pydll.c_root_itp(
+			_ct.py_object(f), 
+			_ct.c_double(a), 
+			_ct.c_double(b),
+			_ct.c_double(k1),
+			_ct.c_double(k2), 
+			_ct.c_double(tol), 
+			_ct.c_int(maxiter))
+	
+	return root, Info(lst[0], lst[1], lst[2], lst[3])
+
+
+
+#-----------------------------------------
 
 def brentq(
 	f:_types.FunctionType, 
@@ -83,12 +133,20 @@ def brentq(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
+
 	root, lst = _pydll.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
 
 
+
+#-----------------------------------------
 
 def muller(
 	f:_types.FunctionType, 
@@ -109,12 +167,20 @@ def muller(
 	"""
 	assert callable(f), "f must be function"
 	assert isinstance(x0, _numbers.Complex), "x0 must be a Complex/Real number"
+
+	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert tol>0, "tol>0 expected"
+
+	assert isinstance(maxiter, int), "maxiter must be int"
+	assert maxiter>0, "maxiter>0 expected"
 	
 	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
 
+
+#-----------------------------------------
 
 def newton(
 	f:_types.FunctionType, 
@@ -167,6 +233,7 @@ def newton(
 
 
 
+#-----------------------------------------
 
 def ridder(
 	f:_types.FunctionType, 
@@ -198,6 +265,8 @@ def ridder(
 	return root, Info(None, lst[0], lst[1], lst[2])
 
 
+
+#-----------------------------------------
 
 def toms748(
 	f:_types.FunctionType, 
@@ -238,6 +307,8 @@ def toms748(
 	return 0.0, Info(err=_sys.float_info.max, iter=-1, conv=False, msg="")
 
 
+
+#-----------------------------------------
 
 def fsolve(
 		F:list[_types.FunctionType], 

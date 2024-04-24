@@ -34,7 +34,12 @@ f2 = {
 }
 
 
-from scisuit.roots import newton
+from scisuit.roots import newton, itp, bisect
+
+print(itp(f=lambda x: x**2-5, a=0, b=3))
+print(bisect(f=lambda x: x**2-5, a=0, b=3))
+
+print("-----------------------")
 
 x0,  x1 = -1.4, 1
 print(newton(f=f1["f"], x0=x0, x1=x1))

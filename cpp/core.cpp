@@ -109,6 +109,41 @@ PyObject* c_root_bisect(
 
 
 
+PyObject* c_root_itp(
+	PyObject * FuncObj,
+	double a,
+	double b,
+	double k1,
+	double k2,
+	double TOLERANCE,
+	size_t MAXITERATIONS)
+{
+	auto func = Make1DFunction(FuncObj);
+
+	TRYBLOCK();
+
+	auto res = roots::itp(func, a, b, k1, k2, TOLERANCE, MAXITERATIONS);
+
+	PyObject* List = PyList_New(4);
+	PyList_SetItem(List, 0, Py_BuildValue("d", res.Error));
+	PyList_SetItem(List, 1, Py_BuildValue("i", res.NIter));
+	PyList_SetItem(List, 2, Py_BuildValue("O", res.Converged ? Py_True : Py_False));
+	PyList_SetItem(List, 3, Py_BuildValue("s", res.Msg.c_str()));
+
+	PyObject* TupleObj = PyTuple_New(2);
+	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", res.Root));
+	PyTuple_SetItem(TupleObj, 1, List);
+
+	return TupleObj;
+	
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
+
+
+
+
 PyObject* c_root_brentq(
 	PyObject* FuncObj, 
 	double a, 

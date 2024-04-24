@@ -38,11 +38,37 @@ pydll.c_eng_psychrometry.restype = py_object
 pydll.c_root_bisect.argtypes = [py_object, c_double, c_double, c_double, c_int, c_char_p, c_bool]
 pydll.c_root_bisect.restype = py_object
 
-pydll.c_root_brentq.argtypes = [py_object, c_double, c_double, c_double, c_int]
+
+pydll.c_root_itp.argtypes = [
+					py_object, #f
+					c_double, #a
+					c_double, #b
+					c_double, #k1
+					c_double, #k2
+					c_double, #TOL
+					c_int] #maxiter
+pydll.c_root_itp.restype = py_object
+
+
+pydll.c_root_brentq.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
 pydll.c_root_brentq.restype = py_object
 
-pydll.c_root_muller.argtypes = [py_object, py_object, py_object, py_object, py_object, c_double, c_int]
+
+pydll.c_root_muller.argtypes = [
+					py_object, 
+					py_object, 
+					py_object, 
+					py_object, 
+					py_object, 
+					c_double, 
+					c_int]
 pydll.c_root_muller.restype = py_object
+
 
 pydll.c_root_newton.argtypes = [
 					py_object, #f
@@ -55,10 +81,22 @@ pydll.c_root_newton.argtypes = [
 				]
 pydll.c_root_newton.restype = py_object
 
-pydll.c_root_ridder.argtypes = [py_object, c_double, c_double, c_double, c_int]
+
+pydll.c_root_ridder.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
 pydll.c_root_ridder.restype = py_object
 
-pydll.c_root_toms748.argtypes = [py_object, c_double, c_double, c_double, c_int]
+
+pydll.c_root_toms748.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
 pydll.c_root_toms748.restype = py_object
 
 
@@ -72,17 +110,22 @@ pydll.c_root_toms748.restype = py_object
 pydll.c_fit_expfit.argtypes = [py_object, py_object, py_object]
 pydll.c_fit_expfit.restype = py_object
 
+
 pydll.c_fit_lagrange.argtypes = [py_object, py_object,c_double]
 pydll.c_fit_lagrange.restype = py_object
+
 
 pydll.c_fit_logfit.argtypes = [py_object, py_object]
 pydll.c_fit_logfit.restype = py_object
 
+
 pydll.c_fit_logistfit.argtypes = [py_object, py_object, py_object]
 pydll.c_fit_logistfit.restype = py_object
 
+
 pydll.c_fit_powfit.argtypes = [py_object, py_object]
 pydll.c_fit_powfit.restype = py_object
+
 
 pydll.c_fit_spline.argtypes = [py_object, py_object]
 pydll.c_fit_spline.restype = py_object
