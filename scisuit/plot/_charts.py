@@ -393,7 +393,9 @@ def yscale(value:str)->None:
 
 
 
-def legend(nrows:int|None = None, ncols:int|None = None)->None:
+def legend(
+		nrows:int|None = None, 
+		ncols:int|None = None)->None:
 	"""Create legend"""
 	if nrows != None:
 		assert isinstance(nrows, int), "nrows must be int."
