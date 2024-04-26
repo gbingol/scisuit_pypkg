@@ -22,21 +22,21 @@ def text(
 	vanchor: vertical anchor, "t", "c", "b" for top, center and bottom
 	labelcolor: label color
 	"""
-	assert isinstance(xy, tuple|list), "xy must be tuple|list"
-	assert isinstance(label, str), "label must be string"
-	assert isinstance(rotation, numbers.Real), "rotation must be real number"
+	assert isinstance(xy, tuple|list), "xy must be tuple|list."
+	assert isinstance(label, str), "label must be string."
+	assert isinstance(rotation, numbers.Real), "rotation must be real number."
 
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p must contain exactly two real numbers"
+	assert len(_p1) == 2, "p must contain exactly two real numbers."
 	
 	_color = kwargs.get("labelcolor") or "#000000"
-	assert isinstance(_color, str|tuple|list), "color must be str|tuple|list"
+	assert isinstance(_color, str|tuple|list), "color must be str|tuple|list."
 
-	assert isinstance(hanchor, str), "hanchor must be str"
-	assert hanchor.upper() in ["L", "C", "R"], "hanchor must be 'l', 'c', 'r'"
+	assert isinstance(hanchor, str), "hanchor must be str."
+	assert hanchor.upper() in ["L", "C", "R"], "hanchor must be 'l', 'c', 'r' ."
 
 	assert isinstance(vanchor, str), "vanchor must be str"
-	assert vanchor.upper() in ["T", "C", "B"], "vanchor must be 't', 'c', 'b'"
+	assert vanchor.upper() in ["T", "C", "B"], "vanchor must be 't', 'c', 'b' ."
 
 	_pydll.c_plot_gdi_text(
 			_ct.c_double(xy[0]),
@@ -61,14 +61,14 @@ def marker(
 	`size:`	size of the marker in pixels
 	"""
 
-	assert isinstance(xy, tuple|list), "xy must be tuple|list"
-	assert isinstance(type, str), "type must be string"
-	assert isinstance(size, int), "size must be int"
+	assert isinstance(xy, tuple|list), "xy must be tuple|list."
+	assert isinstance(type, str), "type must be string."
+	assert isinstance(size, int), "size must be int."
 
-	assert 1<size<=100, "1 < size <= 100 expected"
+	assert 1<size<=100, "1 < size <= 100 expected."
 
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p must contain exactly two real numbers"
+	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_marker(
 			_ct.c_double(xy[0]),
@@ -96,18 +96,18 @@ def arc(
 	"""
 
 
-	assert isinstance(center, tuple|list), "center must be tuple|list"
-	assert isinstance(p1, tuple|list), "p1 must be tuple|list"
-	assert isinstance(p2, tuple|list), "p2 must be tuple|list"
+	assert isinstance(center, tuple|list), "center must be tuple|list."
+	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
+	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
 
 	_c = [i for i in center if isinstance(i, numbers.Real)]
-	assert len(_c) == 2, "center must contain exactly two real numbers"
+	assert len(_c) == 2, "center must contain exactly two real numbers."
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
+	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
 	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
-	assert len(_p2) == 2, "p2 must contain exactly two real numbers"
+	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_arc(
 			_ct.c_double(p1[0]),
@@ -133,19 +133,19 @@ def arrow(
 	`length:` ratio of the length of the head-line to the main-line
 	"""
 
-	assert isinstance(p1, tuple|list), "p1 must be tuple|list"
-	assert isinstance(p2, tuple|list), "p2 must be tuple|list"
-	assert isinstance(angle, numbers.Real), "angle must be Real"
-	assert isinstance(length, float), "length must be float"
+	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
+	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
+	assert isinstance(angle, numbers.Real), "angle must be Real."
+	assert isinstance(length, float), "length must be float."
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
+	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
 	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
-	assert len(_p2) == 2, "p2 must contain exactly two real numbers"
+	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
-	assert 5 < angle <=180, "5 < angle <=180 expected" 
-	assert 0.01 < length < 1, "0.01 < length < 1 expected"
+	assert 5 < angle <=180, "5 < angle <=180 expected." 
+	assert 0.01 < length < 1, "0.01 < length < 1 expected."
 
 	_pydll.c_plot_gdi_arrow(
 			_ct.c_double(p1[0]),
@@ -170,20 +170,20 @@ def curve(
 	`y:` y values
 	"""
 
-	assert isinstance(x, _Iterable), "x must be Iterable"
-	assert isinstance(y, _Iterable), "y must be Iterable"
+	assert isinstance(x, _Iterable), "x must be Iterable."
+	assert isinstance(y, _Iterable), "y must be Iterable."
 
 	#pre-check
-	assert len(x) == len(y), "x and y must have same lengths"
+	assert len(x) == len(y), "x and y must have same lengths."
 
 	_x = [i for i in x if isinstance(i, numbers.Real)]
-	assert len(_x) >= 3, "x must contain at least 3 real numbers"
+	assert len(_x) >= 3, "x must contain at least 3 real numbers."
 
 	_y = [i for i in y if isinstance(i, numbers.Real)]
-	assert len(_y) >= 3, "y must contain at least 3 real numbers"
+	assert len(_y) >= 3, "y must contain at least 3 real numbers."
 
 	#processed-check
-	assert len(_x) == len(_y), "x and y must have same lengths"
+	assert len(_x) == len(_y), "x and y must have same lengths."
 
 	_pydll.c_plot_gdi_curve(x, y, dict(Pen(kwargs)))
 
@@ -200,15 +200,15 @@ def ellipse(
 	height: half height (>0),
 	"""
 
-	assert isinstance(xy, tuple|list), "p must be tuple|list"
-	assert isinstance(width, numbers.Real), "width must be real number"
-	assert isinstance(height, numbers.Real), "height must be real number"
+	assert isinstance(xy, tuple|list), "p must be tuple|list."
+	assert isinstance(width, numbers.Real), "width must be real number."
+	assert isinstance(height, numbers.Real), "height must be real number."
 	
-	assert width>0, "width>0 expected"
-	assert height>0, "height>0 expected"
+	assert width>0, "width>0 expected."
+	assert height>0, "height>0 expected."
 
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p must contain exactly two real numbers"
+	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	if kwargs.get("hatch") == None:
 		kwargs["hatch"] = "none"
@@ -233,14 +233,14 @@ def line(
 	`p2:` (x2, y2)
 	`label:` After stripping, if len(label)>0, it is shown in legend
 	"""
-	assert isinstance(p1, tuple|list), "p1 must be tuple|list"
-	assert isinstance(p2, tuple|list), "p2 must be tuple|list"
+	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
+	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
+	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
 	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
-	assert len(_p2) == 2, "p2 must contain exactly two real numbers"
+	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_line(
 			_ct.c_double(p1[0]),
@@ -262,15 +262,15 @@ def polygon(
 	At least 3 points expected.
 	"""
 
-	assert isinstance(xy, _Iterable), "xy must be Iterable"
-	assert len(xy)>=3, "x must contain at least 3 Iterables"
+	assert isinstance(xy, _Iterable), "xy must be Iterable."
+	assert len(xy)>=3, "x must contain at least 3 Iterables."
 	
 	
 	for v in xy:
-		assert isinstance(v, _Iterable), "xy must contain Iterables"
-		assert len(v) == 2, "Each iterable's length in xy must be exactly equal to 2"
+		assert isinstance(v, _Iterable), "xy must contain Iterables."
+		assert len(v) == 2, "Each iterable's length in xy must be exactly equal to 2."
 		_x = [i for i in v if isinstance(i, numbers.Real)]
-		assert len(_x) == 2, "Each iterable in xy must contain exactly two Real numbers"
+		assert len(_x) == 2, "Each iterable in xy must contain exactly two Real numbers."
 	
 	x, y = list(zip(*xy))
 
@@ -293,15 +293,15 @@ def rect(
 	height: height of rectangle (>0), 
 	"""	
 
-	assert isinstance(xy, tuple|list), "xy must be tuple|list"
-	assert isinstance(width, numbers.Real), "width must be real number"
-	assert isinstance(height, numbers.Real), "height must be real number"
+	assert isinstance(xy, tuple|list), "xy must be tuple|list."
+	assert isinstance(width, numbers.Real), "width must be real number."
+	assert isinstance(height, numbers.Real), "height must be real number."
 
-	assert width>0, "width>0 expected"
-	assert height>0, "height>0 expected"
+	assert width>0, "width>0 expected."
+	assert height>0, "height>0 expected."
 
 	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
-	assert len(_p1) == 2, "p must contain exactly two real numbers"
+	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	kwargs["hatch"] = kwargs.get("hatch") or "none" #make it transparent by default
 
