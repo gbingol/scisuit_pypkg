@@ -471,6 +471,7 @@ pydll.c_plot_gdi_line.argtypes = [
 					c_double, #y1
 					c_double, #x2
 					c_double, #y2
+					c_char_p, # label
 					py_object] #dictionary for Pen				
 pydll.c_plot_gdi_line.restype=None
 

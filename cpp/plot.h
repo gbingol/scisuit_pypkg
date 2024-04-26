@@ -65,6 +65,7 @@ void c_plot_gdi_line(
 	double y1,
 	double x2,
 	double y2,
+	const char* label,
 	PyObject* PenObj);
 
 
@@ -181,9 +182,9 @@ void c_plot_legend(
 //Either returns the limits or sets the limits
 EXTERN 
 PyObject *c_plot_axislim(
-					PyObject *min, 
-					PyObject *max, 
-					char SelAxis='y');
+			PyObject *min, 
+			PyObject *max, 
+			char SelAxis='y');
 
 EXTERN 
 PyObject* c_plot_set_xticks(

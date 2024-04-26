@@ -255,37 +255,9 @@ def line(
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
 			_ct.c_double(p2[1]),
+			_ct.c_char_p(label.encode()),
 			dict(Pen(kwargs)))
 	
-	_txt = label.rstrip()
-	_txt = _txt.lstrip()
-
-	if _txt != "":
-		_labelcolor = kwargs.get("labelcolor") or "0 0 0"
-		_labeldist = kwargs.get("labeldist") or 0.45
-		assert isinstance(_labeldist, float), "labeldist must be float"
-		assert isinstance(_labelcolor, str|tuple|list), "labelcolor must be str|tuple|list"
-
-		dy = p2[1] - p1[1]
-		dx = p2[0] - p1[0]
-		Slope = math.atan2(dy, dx)
-
-		TL = (
-				p1[0] + _labeldist * math.cos(Slope) ,
-				p1[1] + _labeldist * math.sin(Slope))
-
-		
-		#As of this point slope is in degrees (0, 180) or (0, -180)
-		Slope = Slope*180/math.pi
-
-		if Slope<0:
-			Slope += 180
-
-		if Slope>90:
-			Slope = 90 - Slope
-	
-		text(TL, label, Slope, **kwargs)
-
 
 
 def polygon(xy:_Iterable, **kwargs)->None:

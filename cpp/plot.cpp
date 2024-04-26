@@ -499,6 +499,7 @@ void c_plot_gdi_line(
 	double y1,
 	double x2,
 	double y2,
+	const char* label,
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
@@ -517,7 +518,7 @@ void c_plot_gdi_line(
 		return;
 	};
 
-	NumChart->DrawLine(x1, y1, x2, y2, pen);
+	NumChart->DrawLine(x1, y1, x2, y2, label, pen);
 }
 
 
