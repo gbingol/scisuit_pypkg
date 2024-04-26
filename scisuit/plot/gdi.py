@@ -231,17 +231,10 @@ def line(
 	"""
 	`p1:` (x1, y1)
 	`p2:` (x2, y2)
-	`label:` a text to be shown along with line
-
-	## Note:
-	If label is specified:
-	`labeldist:float:` (0, 1) pos = start + labeldist*length
-	`labelcolor:str|tuple|float` label color
+	`label:` After stripping, if len(label)>0, it is shown in legend
 	"""
-
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list"
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list"
-
 
 	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers"
@@ -249,18 +242,19 @@ def line(
 	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers"
 
-
 	_pydll.c_plot_gdi_line(
 			_ct.c_double(p1[0]),
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
 			_ct.c_double(p2[1]),
-			_ct.c_char_p(label.encode()),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)))
 	
 
 
-def polygon(xy:_Iterable, **kwargs)->None:
+def polygon(
+		xy:_Iterable, 
+		**kwargs)->None:
 	"""
 	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The first and last points are automatically closed.
