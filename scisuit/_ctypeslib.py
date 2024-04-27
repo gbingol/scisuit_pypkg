@@ -481,6 +481,7 @@ pydll.c_plot_gdi_rect.argtypes = [
 					c_double, #y of top-left
 					c_double, #width
 					c_double, #height
+					c_char_p, # label
 					py_object, #dictionary for Pen
 					py_object] #dictionary for Brush
 pydll.c_plot_gdi_ellipse.restype=None

@@ -482,15 +482,8 @@ void c_plot_gdi_arrow(
 	PreparePen(PenObj, pen);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawArrow(x1, y1, x2, y2, angle, length, pen);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawArrow(x1, y1, x2, y2, angle, length, pen);
 }
 
 
@@ -510,15 +503,8 @@ void c_plot_gdi_line(
 	PreparePen(PenObj, pen);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawLine(x1, y1, x2, y2, label, pen);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawLine(x1, y1, x2, y2, label, pen);
 }
 
 
@@ -528,6 +514,7 @@ void c_plot_gdi_rect(
 	double y,
 	double width,
 	double height,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj)
 {
@@ -543,15 +530,8 @@ void c_plot_gdi_rect(
 	PrepareBrush(BrushObj, brush);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawRect(x, y, width, height, pen, brush);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawRect(x, y, width, height, label, pen, brush);
 }
 
 
@@ -577,15 +557,8 @@ void c_plot_gdi_ellipse(
 	PrepareBrush(BrushObj, brush);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
-	auto NumChart = dynamic_cast<CNumericChart *>(Chart);
-
-	if (NumChart == nullptr)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	}
-
-	NumChart->DrawEllipse(x, y, width, height, pen, brush);
+	if(auto NumChart = dynamic_cast<CNumericChart *>(Chart))
+		NumChart->DrawEllipse(x, y, width, height, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -614,15 +587,8 @@ void c_plot_gdi_text(
 	wxColor textColor = StringToColor(color);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawText(x, y, text, angle, hanchor, vanchor, font, textColor);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawText(x, y, text, angle, hanchor, vanchor, font, textColor);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -652,15 +618,8 @@ void c_plot_gdi_arc(
 	PrepareBrush(BrushObj, brush);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -684,15 +643,8 @@ void c_plot_gdi_curve(
 	auto Y = Iterable_As1DVector(YObj);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawCurve(X, Y, pen);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawCurve(X, Y, pen);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -721,15 +673,8 @@ void c_plot_gdi_polygon(
 	auto Y = Iterable_As1DVector(YObj);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawPolygon(X, Y, pen, brush);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawPolygon(X, Y, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -757,15 +702,8 @@ void c_plot_gdi_marker(
 	PrepareBrush(BrushObj, brush);
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
-	auto NumChart = dynamic_cast<CNumericChart*>(Chart);
-
-	if(NumChart == nullptr) 
-	{
-		PyErr_SetString(PyExc_RuntimeError, "drawing functions are only supported by Numeric Charts");
-		return;
-	};
-
-	NumChart->DrawMarker(x, y, Type, Size, pen, brush);
+	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
+		NumChart->DrawMarker(x, y, Type, Size, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }

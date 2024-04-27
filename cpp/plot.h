@@ -76,6 +76,7 @@ void c_plot_gdi_rect(
 	double y,
 	double width,
 	double height,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj);
 

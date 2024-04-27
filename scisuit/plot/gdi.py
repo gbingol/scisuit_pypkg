@@ -1,6 +1,5 @@
 import ctypes as _ct
-import math
-import numbers
+from numbers import Real as _Real
 from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
@@ -24,9 +23,9 @@ def text(
 	"""
 	assert isinstance(xy, tuple|list), "xy must be tuple|list."
 	assert isinstance(label, str), "label must be string."
-	assert isinstance(rotation, numbers.Real), "rotation must be real number."
+	assert isinstance(rotation, _Real), "rotation must be real number."
 
-	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers."
 	
 	_color = kwargs.get("labelcolor") or "#000000"
@@ -67,7 +66,7 @@ def marker(
 
 	assert 1<size<=100, "1 < size <= 100 expected."
 
-	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_marker(
@@ -100,13 +99,13 @@ def arc(
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
 
-	_c = [i for i in center if isinstance(i, numbers.Real)]
+	_c = [i for i in center if isinstance(i, _Real)]
 	assert len(_c) == 2, "center must contain exactly two real numbers."
 
-	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
+	_p1 = [i for i in p1 if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
-	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
+	_p2 = [i for i in p2 if isinstance(i, _Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_arc(
@@ -124,7 +123,7 @@ def arc(
 def arrow(
 		p1:tuple|list, 
 		p2:tuple|list, 
-		angle:numbers.Real = 45, #45 degrees
+		angle:_Real = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
 		**kwargs)->None:
 	"""
@@ -135,13 +134,13 @@ def arrow(
 
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
-	assert isinstance(angle, numbers.Real), "angle must be Real."
+	assert isinstance(angle, _Real), "angle must be Real."
 	assert isinstance(length, float), "length must be float."
 
-	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
+	_p1 = [i for i in p1 if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
-	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
+	_p2 = [i for i in p2 if isinstance(i, _Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
 	assert 5 < angle <=180, "5 < angle <=180 expected." 
@@ -176,10 +175,10 @@ def curve(
 	#pre-check
 	assert len(x) == len(y), "x and y must have same lengths."
 
-	_x = [i for i in x if isinstance(i, numbers.Real)]
+	_x = [i for i in x if isinstance(i, _Real)]
 	assert len(_x) >= 3, "x must contain at least 3 real numbers."
 
-	_y = [i for i in y if isinstance(i, numbers.Real)]
+	_y = [i for i in y if isinstance(i, _Real)]
 	assert len(_y) >= 3, "y must contain at least 3 real numbers."
 
 	#processed-check
@@ -191,8 +190,8 @@ def curve(
 
 def ellipse(
 		xy:tuple|list, 
-		width:numbers.Real, 
-		height:numbers.Real, 
+		width:_Real, 
+		height:_Real, 
 		**kwargs)->None:
 	"""
 	xy:	 	(x, y), center,
@@ -201,13 +200,13 @@ def ellipse(
 	"""
 
 	assert isinstance(xy, tuple|list), "p must be tuple|list."
-	assert isinstance(width, numbers.Real), "width must be real number."
-	assert isinstance(height, numbers.Real), "height must be real number."
+	assert isinstance(width, _Real), "width must be real number."
+	assert isinstance(height, _Real), "height must be real number."
 	
 	assert width>0, "width>0 expected."
 	assert height>0, "height>0 expected."
 
-	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	if kwargs.get("hatch") == None:
@@ -235,11 +234,12 @@ def line(
 	"""
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
+	assert isinstance(label, str), "label must be str."
 
-	_p1 = [i for i in p1 if isinstance(i, numbers.Real)]
+	_p1 = [i for i in p1 if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
 
-	_p2 = [i for i in p2 if isinstance(i, numbers.Real)]
+	_p2 = [i for i in p2 if isinstance(i, _Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
 	_pydll.c_plot_gdi_line(
@@ -269,7 +269,7 @@ def polygon(
 	for v in xy:
 		assert isinstance(v, _Iterable), "xy must contain Iterables."
 		assert len(v) == 2, "Each iterable's length in xy must be exactly equal to 2."
-		_x = [i for i in v if isinstance(i, numbers.Real)]
+		_x = [i for i in v if isinstance(i, _Real)]
 		assert len(_x) == 2, "Each iterable in xy must contain exactly two Real numbers."
 	
 	x, y = list(zip(*xy))
@@ -284,8 +284,9 @@ def polygon(
 
 def rect(
 		xy:tuple|list, 
-		width:numbers.Real, 
-		height:numbers.Real, 
+		width:_Real, 
+		height:_Real, 
+		label:str = "",
 		**kwargs)->None:
 	"""
 	xy:	(x, y), bottom-left corner of the rectangle,
@@ -294,13 +295,14 @@ def rect(
 	"""	
 
 	assert isinstance(xy, tuple|list), "xy must be tuple|list."
-	assert isinstance(width, numbers.Real), "width must be real number."
-	assert isinstance(height, numbers.Real), "height must be real number."
+	assert isinstance(width, _Real), "width must be real number."
+	assert isinstance(height, _Real), "height must be real number."
+	assert isinstance(label, str), "label must be str."
 
 	assert width>0, "width>0 expected."
 	assert height>0, "height>0 expected."
 
-	_p1 = [i for i in xy if isinstance(i, numbers.Real)]
+	_p1 = [i for i in xy if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
 	kwargs["hatch"] = kwargs.get("hatch") or "none" #make it transparent by default
@@ -310,5 +312,6 @@ def rect(
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)),
 			dict(Brush(kwargs)))
