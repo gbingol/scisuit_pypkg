@@ -12,7 +12,7 @@ def text(
 		rotation:float = 0.0,
 		hanchor:str = "l",
 		vanchor:str = "t",
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	xy: (x, y), top-left,
 	label: text to be drawn,
@@ -37,7 +37,7 @@ def text(
 	assert isinstance(vanchor, str), "vanchor must be str"
 	assert vanchor.upper() in ["T", "C", "B"], "vanchor must be 't', 'c', 'b' ."
 
-	_pydll.c_plot_gdi_text(
+	return _pydll.c_plot_gdi_text(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(label.encode()),
@@ -53,7 +53,7 @@ def marker(
 		xy:tuple|list, 
 		type:str = "c",
 		size:int = 5,
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	`xy:`	(x, y), centroid,
 	`type:`	type of the marker, "c", "t", "r", "x",
@@ -69,7 +69,7 @@ def marker(
 	_p1 = [i for i in xy if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p must contain exactly two real numbers."
 
-	_pydll.c_plot_gdi_marker(
+	return _pydll.c_plot_gdi_marker(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(type.encode()),
@@ -83,7 +83,7 @@ def arc(
 		center:tuple|list, 
 		p1:tuple|list, 
 		p2:tuple|list,
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	`center:` (x, y) -> center point of arc
 	`p1:` (x1, y1) -> start of arc
@@ -108,7 +108,7 @@ def arc(
 	_p2 = [i for i in p2 if isinstance(i, _Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
-	_pydll.c_plot_gdi_arc(
+	return _pydll.c_plot_gdi_arc(
 			_ct.c_double(p1[0]),
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
@@ -125,7 +125,7 @@ def arrow(
 		p2:tuple|list, 
 		angle:_Real = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line
 	`angle:` angle between the two head-lines
@@ -146,7 +146,7 @@ def arrow(
 	assert 5 < angle <=180, "5 < angle <=180 expected." 
 	assert 0.01 < length < 1, "0.01 < length < 1 expected."
 
-	_pydll.c_plot_gdi_arrow(
+	return _pydll.c_plot_gdi_arrow(
 			_ct.c_double(p1[0]),
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
@@ -160,7 +160,7 @@ def arrow(
 def curve(
 		x: _Iterable, 
 		y:_Iterable, 
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The curve is only guaranteed to pass from (x1, y1) and (xn, yn).
@@ -184,7 +184,7 @@ def curve(
 	#processed-check
 	assert len(_x) == len(_y), "x and y must have same lengths."
 
-	_pydll.c_plot_gdi_curve(x, y, dict(Pen(kwargs)))
+	return _pydll.c_plot_gdi_curve(x, y, dict(Pen(kwargs)))
 
 
 
@@ -192,7 +192,7 @@ def ellipse(
 		xy:tuple|list, 
 		width:_Real, 
 		height:_Real, 
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	xy:	 	(x, y), center,
 	width: 	half width (>0),
@@ -212,7 +212,7 @@ def ellipse(
 	if kwargs.get("hatch") == None:
 		kwargs["hatch"] = "none"
 
-	_pydll.c_plot_gdi_ellipse(
+	return _pydll.c_plot_gdi_ellipse(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),
@@ -226,7 +226,7 @@ def line(
 		p1:tuple|list, 
 		p2:tuple|list, 
 		label:str = "",
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	`p1:` (x1, y1)
 	`p2:` (x2, y2)
@@ -242,7 +242,7 @@ def line(
 	_p2 = [i for i in p2 if isinstance(i, _Real)]
 	assert len(_p2) == 2, "p2 must contain exactly two real numbers."
 
-	_pydll.c_plot_gdi_line(
+	return _pydll.c_plot_gdi_line(
 			_ct.c_double(p1[0]),
 			_ct.c_double(p1[1]),
 			_ct.c_double(p2[0]),
@@ -254,7 +254,7 @@ def line(
 
 def polygon(
 		xy:_Iterable, 
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The first and last points are automatically closed.
@@ -274,7 +274,7 @@ def polygon(
 	
 	x, y = list(zip(*xy))
 
-	_pydll.c_plot_gdi_polygon(
+	return _pydll.c_plot_gdi_polygon(
 			x, y, 
 			dict(Pen(kwargs)), 
 			dict(Brush(kwargs)))
@@ -287,7 +287,7 @@ def rect(
 		width:_Real, 
 		height:_Real, 
 		label:str = "",
-		**kwargs)->None:
+		**kwargs)->int:
 	"""
 	xy:	(x, y), bottom-left corner of the rectangle,
 	width: 	width of rectangle (>0),
@@ -307,7 +307,7 @@ def rect(
 
 	kwargs["hatch"] = kwargs.get("hatch") or "none" #make it transparent by default
 
-	_pydll.c_plot_gdi_rect(
+	return _pydll.c_plot_gdi_rect(
 			_ct.c_double(xy[0]),
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),

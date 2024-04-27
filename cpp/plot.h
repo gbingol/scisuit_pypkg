@@ -49,7 +49,7 @@ PyObject * c_plot_canvas(
 
 
 EXTERN 
-void c_plot_gdi_arrow(
+size_t c_plot_gdi_arrow(
 	double x1,
 	double y1,
 	double x2,
@@ -60,7 +60,7 @@ void c_plot_gdi_arrow(
 
 
 EXTERN 
-void c_plot_gdi_line(
+size_t c_plot_gdi_line(
 	double x1,
 	double y1,
 	double x2,
@@ -71,7 +71,7 @@ void c_plot_gdi_line(
 
 //xy: bottom-left
 EXTERN 
-void c_plot_gdi_rect(
+size_t c_plot_gdi_rect(
 	double x,
 	double y,
 	double width,
@@ -82,7 +82,7 @@ void c_plot_gdi_rect(
 
 
 EXTERN 
-void c_plot_gdi_ellipse(
+size_t c_plot_gdi_ellipse(
 	double x,
 	double y,
 	double width,
@@ -93,7 +93,7 @@ void c_plot_gdi_ellipse(
 
 //(x,y) top-left
 EXTERN 
-void c_plot_gdi_text(
+size_t c_plot_gdi_text(
 	double x,
 	double y,
 	const char* text, 
@@ -106,7 +106,7 @@ void c_plot_gdi_text(
 
 // (x1,y1): start, (x2, y2):end, (xc, yc): center
 EXTERN 
-void c_plot_gdi_arc(
+size_t c_plot_gdi_arc(
 	double x1,
 	double y1,
 	double x2,
@@ -118,14 +118,14 @@ void c_plot_gdi_arc(
 
 
 EXTERN 
-void c_plot_gdi_curve(
+size_t c_plot_gdi_curve(
 	PyObject* XObj,
 	PyObject* YObj,
 	PyObject* PenObj);
 
 
 EXTERN 
-void c_plot_gdi_polygon(
+size_t c_plot_gdi_polygon(
 	PyObject* XObj,
 	PyObject* YObj,
 	PyObject* PenObj,
@@ -134,7 +134,7 @@ void c_plot_gdi_polygon(
 
 //(x,y) centroid
 EXTERN 
-void c_plot_gdi_marker(
+size_t c_plot_gdi_marker(
 	double x,
 	double y,
 	const char* Type, 

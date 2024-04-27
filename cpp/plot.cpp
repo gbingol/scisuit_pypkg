@@ -465,7 +465,7 @@ PyObject* c_plot_canvas(
 ************************************************************************************
 */
 
-void c_plot_gdi_arrow(
+size_t c_plot_gdi_arrow(
 	double x1,
 	double y1,
 	double x2,
@@ -475,7 +475,7 @@ void c_plot_gdi_arrow(
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	//default pen (black, width=2 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
@@ -483,11 +483,13 @@ void c_plot_gdi_arrow(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawArrow(x1, y1, x2, y2, angle, length, pen);
+		return NumChart->DrawArrow(x1, y1, x2, y2, angle, length, pen);
+
+	return 0;
 }
 
 
-void c_plot_gdi_line(
+size_t c_plot_gdi_line(
 	double x1,
 	double y1,
 	double x2,
@@ -496,7 +498,7 @@ void c_plot_gdi_line(
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	//default pen (black, width=2 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 2);
@@ -504,12 +506,14 @@ void c_plot_gdi_line(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawLine(x1, y1, x2, y2, label, pen);
+		return NumChart->DrawLine(x1, y1, x2, y2, label, pen);
+	
+	return 0;
 }
 
 
 //(x, y) bottom-left
-void c_plot_gdi_rect(
+size_t c_plot_gdi_rect(
 	double x,
 	double y,
 	double width,
@@ -519,7 +523,7 @@ void c_plot_gdi_rect(
 	PyObject* BrushObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	//default pen (black, width=1 pixels, solid)
 	wxPen pen = wxPen(wxColour(0, 0, 0), 1);
@@ -531,12 +535,14 @@ void c_plot_gdi_rect(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawRect(x, y, width, height, label, pen, brush);
+		return NumChart->DrawRect(x, y, width, height, label, pen, brush);
+	
+	return 0;
 }
 
 
 //(x, y) center
-void c_plot_gdi_ellipse(
+size_t c_plot_gdi_ellipse(
 	double x,
 	double y,
 	double width, //half width
@@ -545,7 +551,7 @@ void c_plot_gdi_ellipse(
 	PyObject* BrushObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 	// default pen (black, width=1 pixels, solid)
@@ -558,14 +564,16 @@ void c_plot_gdi_ellipse(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 	if(auto NumChart = dynamic_cast<CNumericChart *>(Chart))
-		NumChart->DrawEllipse(x, y, width, height, pen, brush);
+		return NumChart->DrawEllipse(x, y, width, height, pen, brush);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 
 
-void c_plot_gdi_text(
+size_t c_plot_gdi_text(
 	double x,
 	double y,
 	const char* text, 
@@ -577,7 +585,7 @@ void c_plot_gdi_text(
 
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 
@@ -588,13 +596,15 @@ void c_plot_gdi_text(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawText(x, y, text, angle, hanchor, vanchor, font, textColor);
+		return NumChart->DrawText(x, y, text, angle, hanchor, vanchor, font, textColor);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 
-void c_plot_gdi_arc(
+size_t c_plot_gdi_arc(
 	double x1,
 	double y1,
 	double x2,
@@ -605,7 +615,7 @@ void c_plot_gdi_arc(
 	PyObject* BrushObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 
@@ -619,19 +629,21 @@ void c_plot_gdi_arc(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
+		return NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 
-void c_plot_gdi_curve(
+size_t c_plot_gdi_curve(
 	PyObject* XObj,
 	PyObject* YObj,
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 
@@ -644,20 +656,22 @@ void c_plot_gdi_curve(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawCurve(X, Y, pen);
+		return NumChart->DrawCurve(X, Y, pen);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 
-void c_plot_gdi_polygon(
+size_t c_plot_gdi_polygon(
 	PyObject* XObj,
 	PyObject* YObj,
 	PyObject* PenObj,
 	PyObject* BrushObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 
@@ -674,13 +688,15 @@ void c_plot_gdi_polygon(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawPolygon(X, Y, pen, brush);
+		return NumChart->DrawPolygon(X, Y, pen, brush);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 
-void c_plot_gdi_marker(
+size_t c_plot_gdi_marker(
 	double x, 
 	double y, 
 	const char *Type, 
@@ -689,7 +705,7 @@ void c_plot_gdi_marker(
 	PyObject *BrushObj)
 {
 	if (s_CurPlotWnd == nullptr)
-		return;
+		return 0;
 
 	TRYBLOCK();
 
@@ -703,9 +719,11 @@ void c_plot_gdi_marker(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		NumChart->DrawMarker(x, y, Type, Size, pen, brush);
+		return NumChart->DrawMarker(x, y, Type, Size, pen, brush);
 
-	CATCHRUNTIMEEXCEPTION(NOTHING);
+	CATCHRUNTIMEEXCEPTION(0);
+
+	return 0;
 }
 
 /*

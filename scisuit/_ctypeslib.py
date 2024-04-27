@@ -1,4 +1,4 @@
-from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8, c_uint32, c_longlong
+from ctypes import PyDLL, c_bool, c_char, c_char_p, c_double, c_int, py_object, c_uint8, c_uint32, c_longlong, c_ulonglong
 import sys
 from pathlib import Path as _Path
 
@@ -452,7 +452,7 @@ pydll.c_plot_gdi_arc.argtypes = [
 					c_double, #ycenter
 					py_object, #dictionary for Pen
 					py_object] #dictionary for Brush				
-pydll.c_plot_gdi_arc.restype=None
+pydll.c_plot_gdi_arc.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_arrow.argtypes = [
@@ -463,7 +463,7 @@ pydll.c_plot_gdi_arrow.argtypes = [
 					c_double, #angle
 					c_double, #length
 					py_object] #dictionary for Pen				
-pydll.c_plot_gdi_arrow.restype=None
+pydll.c_plot_gdi_arrow.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_line.argtypes = [
@@ -473,7 +473,7 @@ pydll.c_plot_gdi_line.argtypes = [
 					c_double, #y2
 					c_char_p, # label
 					py_object] #dictionary for Pen				
-pydll.c_plot_gdi_line.restype=None
+pydll.c_plot_gdi_line.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_rect.argtypes = [
@@ -484,7 +484,7 @@ pydll.c_plot_gdi_rect.argtypes = [
 					c_char_p, # label
 					py_object, #dictionary for Pen
 					py_object] #dictionary for Brush
-pydll.c_plot_gdi_ellipse.restype=None
+pydll.c_plot_gdi_ellipse.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_ellipse.argtypes = [
@@ -494,7 +494,7 @@ pydll.c_plot_gdi_ellipse.argtypes = [
 					c_double, # half height
 					py_object, #dictionary for Pen
 					py_object] #dictionary for Brush
-pydll.c_plot_gdi_ellipse.restype=None
+pydll.c_plot_gdi_ellipse.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_text.argtypes = [
@@ -506,14 +506,14 @@ pydll.c_plot_gdi_text.argtypes = [
 					c_char, #valign
 					c_char_p, # color
 					py_object] #dictionary for Font
-pydll.c_plot_gdi_text.restype=None
+pydll.c_plot_gdi_text.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_curve.argtypes = [
 					py_object, #x-values (iterable)
 					py_object,#y-values (iterable)
 					py_object] #dictionary for Pen
-pydll.c_plot_gdi_curve.restype=None
+pydll.c_plot_gdi_curve.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_polygon.argtypes = [
@@ -521,7 +521,7 @@ pydll.c_plot_gdi_polygon.argtypes = [
 					py_object,#y-values (iterable)
 					py_object, #dictionary for Pen
 					py_object] #dictionary for brush
-pydll.c_plot_gdi_polygon.restype=None
+pydll.c_plot_gdi_polygon.restype=c_ulonglong
 
 
 pydll.c_plot_gdi_marker.argtypes = [
@@ -531,7 +531,7 @@ pydll.c_plot_gdi_marker.argtypes = [
 					c_uint8, # size
 					py_object, # dictionary for Pen
 					py_object] #dictionary for Brush
-pydll.c_plot_gdi_marker.restype=None
+pydll.c_plot_gdi_marker.restype=c_ulonglong
 
 #---------------------------------------------
 
