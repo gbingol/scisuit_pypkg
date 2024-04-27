@@ -53,6 +53,7 @@ def marker(
 		xy:tuple|list, 
 		type:str = "c",
 		size:int = 5,
+		label:str = "",
 		**kwargs)->int:
 	"""
 	`xy:`	(x, y), centroid,
@@ -63,6 +64,7 @@ def marker(
 	assert isinstance(xy, tuple|list), "xy must be tuple|list."
 	assert isinstance(type, str), "type must be string."
 	assert isinstance(size, int), "size must be int."
+	assert isinstance(label, str), "label must be str."
 
 	assert 1<size<=100, "1 < size <= 100 expected."
 
@@ -74,6 +76,7 @@ def marker(
 			_ct.c_double(xy[1]),
 			_ct.c_char_p(type.encode()),
 			_ct.c_uint8(size),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)),
 			dict(Brush(kwargs)))
 
@@ -83,6 +86,7 @@ def arc(
 		center:tuple|list, 
 		p1:tuple|list, 
 		p2:tuple|list,
+		label:str = "",
 		**kwargs)->int:
 	"""
 	`center:` (x, y) -> center point of arc
@@ -98,6 +102,7 @@ def arc(
 	assert isinstance(center, tuple|list), "center must be tuple|list."
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
+	assert isinstance(label, str), "label must be str."
 
 	_c = [i for i in center if isinstance(i, _Real)]
 	assert len(_c) == 2, "center must contain exactly two real numbers."
@@ -115,6 +120,7 @@ def arc(
 			_ct.c_double(p2[1]),
 			_ct.c_double(center[0]),
 			_ct.c_double(center[1]),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)),
 			dict(Brush(kwargs)))
 
@@ -125,6 +131,7 @@ def arrow(
 		p2:tuple|list, 
 		angle:_Real = 45, #45 degrees
 		length:float = 0.1, #10% length of main-line
+		label:str = "",
 		**kwargs)->int:
 	"""
 	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line
@@ -136,6 +143,7 @@ def arrow(
 	assert isinstance(p2, tuple|list), "p2 must be tuple|list."
 	assert isinstance(angle, _Real), "angle must be Real."
 	assert isinstance(length, float), "length must be float."
+	assert isinstance(label, str), "label must be str."
 
 	_p1 = [i for i in p1 if isinstance(i, _Real)]
 	assert len(_p1) == 2, "p1 must contain exactly two real numbers."
@@ -153,6 +161,7 @@ def arrow(
 			_ct.c_double(p2[1]),
 			_ct.c_double(angle),
 			_ct.c_double(length),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)))
 
 
@@ -160,6 +169,7 @@ def arrow(
 def curve(
 		x: _Iterable, 
 		y:_Iterable, 
+		label:str = "",
 		**kwargs)->int:
 	"""
 	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
@@ -171,6 +181,7 @@ def curve(
 
 	assert isinstance(x, _Iterable), "x must be Iterable."
 	assert isinstance(y, _Iterable), "y must be Iterable."
+	assert isinstance(label, str), "label must be str."
 
 	#pre-check
 	assert len(x) == len(y), "x and y must have same lengths."
@@ -184,7 +195,11 @@ def curve(
 	#processed-check
 	assert len(_x) == len(_y), "x and y must have same lengths."
 
-	return _pydll.c_plot_gdi_curve(x, y, dict(Pen(kwargs)))
+	return _pydll.c_plot_gdi_curve(
+			x, 
+			y, 
+			_ct.c_char_p(label.strip().encode()),
+			dict(Pen(kwargs)))
 
 
 
@@ -192,6 +207,7 @@ def ellipse(
 		xy:tuple|list, 
 		width:_Real, 
 		height:_Real, 
+		label:str = "",
 		**kwargs)->int:
 	"""
 	xy:	 	(x, y), center,
@@ -202,6 +218,7 @@ def ellipse(
 	assert isinstance(xy, tuple|list), "p must be tuple|list."
 	assert isinstance(width, _Real), "width must be real number."
 	assert isinstance(height, _Real), "height must be real number."
+	assert isinstance(label, str), "label must be str."
 	
 	assert width>0, "width>0 expected."
 	assert height>0, "height>0 expected."
@@ -217,6 +234,7 @@ def ellipse(
 			_ct.c_double(xy[1]),
 			_ct.c_double(width),
 			_ct.c_double(height),
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)),
 			dict(Brush(kwargs)))	
 
@@ -254,6 +272,7 @@ def line(
 
 def polygon(
 		xy:_Iterable, 
+		label:str = "",
 		**kwargs)->int:
 	"""
 	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
@@ -264,7 +283,8 @@ def polygon(
 
 	assert isinstance(xy, _Iterable), "xy must be Iterable."
 	assert len(xy)>=3, "x must contain at least 3 Iterables."
-	
+
+	assert isinstance(label, str), "label must be str."
 	
 	for v in xy:
 		assert isinstance(v, _Iterable), "xy must contain Iterables."
@@ -276,6 +296,7 @@ def polygon(
 
 	return _pydll.c_plot_gdi_polygon(
 			x, y, 
+			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)), 
 			dict(Brush(kwargs)))
 

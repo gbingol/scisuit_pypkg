@@ -472,6 +472,7 @@ size_t c_plot_gdi_arrow(
 	double y2,
 	double angle,
 	double length,
+	const char* label,
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
@@ -483,7 +484,7 @@ size_t c_plot_gdi_arrow(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		return NumChart->DrawArrow(x1, y1, x2, y2, angle, length, pen);
+		return NumChart->DrawArrow(x1, y1, x2, y2, angle, length, label, pen);
 
 	return 0;
 }
@@ -547,6 +548,7 @@ size_t c_plot_gdi_ellipse(
 	double y,
 	double width, //half width
 	double height, //half height
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj)
 {
@@ -564,7 +566,7 @@ size_t c_plot_gdi_ellipse(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 	if(auto NumChart = dynamic_cast<CNumericChart *>(Chart))
-		return NumChart->DrawEllipse(x, y, width, height, pen, brush);
+		return NumChart->DrawEllipse(x, y, width, height, label, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(0);
 
@@ -611,6 +613,7 @@ size_t c_plot_gdi_arc(
 	double y2,
 	double xc,
 	double yc,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj)
 {
@@ -629,7 +632,7 @@ size_t c_plot_gdi_arc(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		return NumChart->DrawArc(x1, y1, x2, y2, xc, yc, pen, brush);
+		return NumChart->DrawArc(x1, y1, x2, y2, xc, yc, label, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(0);
 
@@ -640,6 +643,7 @@ size_t c_plot_gdi_arc(
 size_t c_plot_gdi_curve(
 	PyObject* XObj,
 	PyObject* YObj,
+	const char* label,
 	PyObject* PenObj)
 {
 	if (s_CurPlotWnd == nullptr)
@@ -656,7 +660,7 @@ size_t c_plot_gdi_curve(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		return NumChart->DrawCurve(X, Y, pen);
+		return NumChart->DrawCurve(X, Y, label, pen);
 
 	CATCHRUNTIMEEXCEPTION(0);
 
@@ -667,6 +671,7 @@ size_t c_plot_gdi_curve(
 size_t c_plot_gdi_polygon(
 	PyObject* XObj,
 	PyObject* YObj,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj)
 {
@@ -688,7 +693,7 @@ size_t c_plot_gdi_polygon(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		return NumChart->DrawPolygon(X, Y, pen, brush);
+		return NumChart->DrawPolygon(X, Y, label, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(0);
 
@@ -701,6 +706,7 @@ size_t c_plot_gdi_marker(
 	double y, 
 	const char *Type, 
 	std::uint8_t Size, 
+	const char* label,
 	PyObject *PenObj, 
 	PyObject *BrushObj)
 {
@@ -719,7 +725,7 @@ size_t c_plot_gdi_marker(
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();	
 	if(auto NumChart = dynamic_cast<CNumericChart*>(Chart))
-		return NumChart->DrawMarker(x, y, Type, Size, pen, brush);
+		return NumChart->DrawMarker(x, y, Type, Size, label, pen, brush);
 
 	CATCHRUNTIMEEXCEPTION(0);
 

@@ -56,6 +56,7 @@ size_t c_plot_gdi_arrow(
 	double y2,
 	double angle,
 	double length,
+	const char* label,
 	PyObject* PenObj);
 
 
@@ -87,6 +88,7 @@ size_t c_plot_gdi_ellipse(
 	double y,
 	double width,
 	double height,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj);
 
@@ -113,6 +115,7 @@ size_t c_plot_gdi_arc(
 	double y2,
 	double xc,
 	double yc,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj);
 
@@ -121,6 +124,7 @@ EXTERN
 size_t c_plot_gdi_curve(
 	PyObject* XObj,
 	PyObject* YObj,
+	const char* label,
 	PyObject* PenObj);
 
 
@@ -128,6 +132,7 @@ EXTERN
 size_t c_plot_gdi_polygon(
 	PyObject* XObj,
 	PyObject* YObj,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj);
 
@@ -139,6 +144,7 @@ size_t c_plot_gdi_marker(
 	double y,
 	const char* Type, 
 	std::uint8_t Size,
+	const char* label,
 	PyObject* PenObj,
 	PyObject* BrushObj); 
 
