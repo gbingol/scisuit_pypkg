@@ -732,6 +732,39 @@ size_t c_plot_gdi_marker(
 	return 0;
 }
 
+
+void c_plot_gdi_setvisibility(
+	size_t objid,
+	PyObject *objects)
+{
+	if (s_CurPlotWnd == nullptr)
+		return;
+
+	auto Chart = s_CurPlotWnd->GetActiveChart();
+	auto &GDIObjects = Chart->GetGDIObjects();
+
+	auto N = GDIObjects.size();
+	if(objid == 0  || objid>N)
+	{
+		PyErr_SetString(PyExc_ValueError, "invalid base id.");
+		return;
+	}
+
+	auto v = Iterable_As1DVector<size_t>(objects);
+	for(auto id: v)
+	{
+		if(id == 0  || id>N)
+		{
+			PyErr_SetString(PyExc_ValueError, "target contains invalid id.");
+			return;
+		}
+	}
+
+	GDIObjects[objid - 1].targetvisibilities = v;
+}
+
+
+
 /*
 ************************************************************************************
 ************************************************************************************

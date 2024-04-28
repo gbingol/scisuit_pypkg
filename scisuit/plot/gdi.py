@@ -336,3 +336,14 @@ def rect(
 			_ct.c_char_p(label.strip().encode()),
 			dict(Pen(kwargs)),
 			dict(Brush(kwargs)))
+
+
+def setvisibility(baseid:int, target:_Iterable)->None:
+	"""sets the visibility of target ids based on baseid's visibility"""
+	assert isinstance(baseid, int), "baseid must be int."
+
+	assert isinstance(target, _Iterable), "target must be Iterable object."
+	_target = [i for i in target if isinstance(i, int)]
+	assert len(_target) == len(target), "target must contain only int."
+
+	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(baseid), _ct.py_object(target))

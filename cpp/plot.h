@@ -149,10 +149,14 @@ size_t c_plot_gdi_marker(
 	PyObject* BrushObj); 
 
 
+EXTERN
+void c_plot_gdi_setvisibility(
+	size_t objid,
+	PyObject *objects);
 
 /************************************************************************************/
 
-EXTERN 
+EXTERN
 void c_plot_layout(int nrows, int ncols);
 
 EXTERN 

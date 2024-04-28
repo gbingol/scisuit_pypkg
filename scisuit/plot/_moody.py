@@ -3,7 +3,7 @@ from typing import Iterable
 
 from ..roots import brentq
 from ._charts import canvas, title, xlabel, xscale, ylabel, yscale
-from .gdi import arrow, curve, line, rect, text
+from .gdi import arrow, curve, line, rect, text, setvisibility
 
 
 def _Colebrook(f, Re, E_D):
@@ -78,6 +78,7 @@ def moody(
 		btmleft = (2300, 0.03)
 		idrect = rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080", label="transition")
 		idtext = text(xy=(3300, 0.06), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
+		setvisibility(idrect, [idtext])
 
 	"""
 	Turbulent Region - Re>=4000

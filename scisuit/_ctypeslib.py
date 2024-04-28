@@ -538,6 +538,13 @@ pydll.c_plot_gdi_marker.argtypes = [
 					py_object] #dictionary for Brush
 pydll.c_plot_gdi_marker.restype=c_ulonglong
 
+
+pydll.c_plot_gdi_setvisibility.argtypes = [
+					c_ulonglong, #base id
+					py_object] #target ids
+pydll.c_plot_gdi_marker.restype=None
+
+
 #---------------------------------------------
 
 pydll.c_plot_layout.argtypes = [c_int, c_int]
