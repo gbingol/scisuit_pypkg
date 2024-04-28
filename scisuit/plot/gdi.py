@@ -339,21 +339,23 @@ def rect(
 
 
 
-def setvisibility(source:int, target:_Iterable)->None:
+def setvisibility(
+		owner:int, 
+		members:_Iterable[int])->None:
 	"""
-	sets the visibility of target ids based on source id's visibility
+	sets the visibility of members based on owner's visibility
 	
 	## Inputs:
-	source: gdi object whose visibility is to be tracked,
-	target: gdi objects whose visibility will be synched with source
+	`owner:` A gdi object whose visibility will affect members' visibility,
+	`members:` gdi object(s) whose visibility will be synched with owner
 
 	## Note: 
-	This function is rather useful (meaningful) if visibilities will be adjusted at runtime.
+	This function is rather useful (meaningful) if visibilities will be manipulated at runtime.
 	"""
-	assert isinstance(source, int), "source must be int."
+	assert isinstance(owner, int), "owner must be int."
 
-	assert isinstance(target, _Iterable), "target must be Iterable object."
-	_target = [i for i in target if isinstance(i, int)]
-	assert len(_target) == len(target), "target must contain only int."
+	assert isinstance(members, _Iterable), "members must be Iterable object."
+	_target = [i for i in members if isinstance(i, int)]
+	assert len(_target) == len(members), "members must contain only int."
 
-	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(source), _ct.py_object(target))
+	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(owner), _ct.py_object(members))
