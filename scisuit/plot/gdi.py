@@ -338,12 +338,22 @@ def rect(
 			dict(Brush(kwargs)))
 
 
-def setvisibility(baseid:int, target:_Iterable)->None:
-	"""sets the visibility of target ids based on baseid's visibility"""
-	assert isinstance(baseid, int), "baseid must be int."
+
+def setvisibility(source:int, target:_Iterable)->None:
+	"""
+	sets the visibility of target ids based on source id's visibility
+	
+	## Inputs:
+	source: gdi object whose visibility is to be tracked,
+	target: gdi objects whose visibility will be synched with source
+
+	## Note: 
+	This function is rather useful (meaningful) if visibilities will be adjusted at runtime.
+	"""
+	assert isinstance(source, int), "source must be int."
 
 	assert isinstance(target, _Iterable), "target must be Iterable object."
 	_target = [i for i in target if isinstance(i, int)]
 	assert len(_target) == len(target), "target must contain only int."
 
-	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(baseid), _ct.py_object(target))
+	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(source), _ct.py_object(target))
