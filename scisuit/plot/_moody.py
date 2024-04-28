@@ -66,7 +66,7 @@ def moody(
 		fD = lambda _Re: 64.0/_Re
 		p1 = (1000, fD(1000))
 		p2 = (2300, fD(2300))
-		line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000")
+		line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000", label="laminar")
 		text(xy=p2, label="Laminar Flow\nf = 64/Re", hanchor="c")
 
 	"""
@@ -76,8 +76,8 @@ def moody(
 	"""
 	if showtransition:
 		btmleft = (2300, 0.03)
-		rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080")
-		text(xy=(3300, 0.06), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
+		idrect = rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080", label="transition")
+		idtext = text(xy=(3300, 0.06), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
 
 	"""
 	Turbulent Region - Re>=4000
@@ -96,7 +96,7 @@ def moody(
 			y.append(friction)
 
 		text(xy=(_Re, friction), label=str(_e_d), vanchor="c")
-		curve(x, y, lw=2, ec="#A52A2A")
+		curve(x, y, lw=2, ec="#A52A2A", label=str(_e_d))
 
 	"""
 	fully rough turbulent flow line
@@ -110,7 +110,7 @@ def moody(
 		midpoint = int(len(TurbulenceLine)/2)
 		xx, yy=_turbulence[0][midpoint], _turbulence[1][midpoint]
 		_p1 = (15E3, 0.015)
-		arrow(p1=_p1, p2=(xx,yy), lw=2, length=0.05)
+		arrow(p1=_p1, p2=(xx,yy), lw=2, length=0.05, label="arrow")
 		text(xy=_p1, label="Complete Turbulence", hanchor="c")
 
 	xlabel("Reynolds Number")
