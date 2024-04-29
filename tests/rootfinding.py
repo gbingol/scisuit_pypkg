@@ -21,34 +21,34 @@ def performance():
 	print("toms748:", timeit(lambda: toms748(**kwargs, tol=1E-16), number=N))
 
 
-f1 = {
-	"f":lambda x: x**2 - (1-x)**9,
-	"fprime": lambda x: 2*x + 9*(1-x)**8,
-	"fprime2": lambda x: 2 - 72*(1-x)**7
-}
 
-f2 = {
-	"f":lambda x: 1/8 * (9 - 1/x),
-	"fprime": lambda x: 1 /(8*x**2),
-	"fprime2": lambda x: -1/(4*x**3)
-}
+"""
 
+f1 = { "f":lambda x: x**2 - (1-x)**9,
+	"df": lambda x: 2*x + 9*(1-x)**8,
+	"d2f": lambda x: 2 - 72*(1-x)**7 }
 
-from scisuit.roots import newton, itp, bisect
+f2 = { "f":lambda x: 1/8 * (9 - 1/x),
+	"df": lambda x: 1 /(8*x**2),
+	"d2f": lambda x: -1/(4*x**3) }
 
-print(itp(f=lambda x: x**2-5, a=0, b=3))
-print(bisect(f=lambda x: x**2-5, a=0, b=3))
+from scisuit.roots import newton
 
-print("-----------------------")
-
-x0,  x1 = -1.4, 1
-print(newton(f=f1["f"], x0=x0, x1=x1))
-print(newton(f=f1["f"], x0=x0, fprime=f1["fprime"]))
-print(newton(f=f1["f"], x0=x0, fprime=f1["fprime"], fprime2=f1["fprime2"]))
+args = {"f":f1["f"], "x0":-1.4}
+print(
+	newton(**args, x1=1),
+	newton(**args, fprime=f1["df"]),
+	newton(**args, fprime=f1["df"], fprime2=f1["d2f"]), 
+	sep="\n")
 
 print("-----------------------")
 
-x0, x1 = 0.001, 0.25
-print(newton(f=f2["f"], x0=x0, x1=x1))
-print(newton(f=f2["f"], x0=x0, fprime=f2["fprime"]))
-print(newton(f=f2["f"], x0=x0, fprime=f2["fprime"], fprime2=f2["fprime2"]))
+args = {"f":f2["f"], "x0":0.001}
+print(
+	newton(**args, x1=0.25),
+	newton(**args, fprime=f2["df"]),
+	newton(**args, fprime=f2["df"], fprime2=f2["d2f"]),
+	sep="\n")
+
+
+"""
