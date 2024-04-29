@@ -760,7 +760,7 @@ void c_plot_gdi_setvisibility(
 		}
 	}
 
-	GDIObjects[objid - 1].targetvisibilities = v;
+	GDIObjects[objid - 1].vis_members = v;
 }
 
 
