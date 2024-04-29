@@ -733,9 +733,9 @@ size_t c_plot_gdi_marker(
 }
 
 
-void c_plot_gdi_setvisibility(
-	size_t objid,
-	PyObject *objects)
+void c_plot_gdi_makegroup(
+	size_t ownerid,
+	PyObject *members)
 {
 	if (s_CurPlotWnd == nullptr)
 		return;
@@ -744,13 +744,13 @@ void c_plot_gdi_setvisibility(
 	auto &GDIObjects = Chart->GetGDIObjects();
 
 	auto N = GDIObjects.size();
-	if(objid == 0  || objid>N)
+	if(ownerid == 0  || ownerid > N)
 	{
 		PyErr_SetString(PyExc_ValueError, "invalid base id.");
 		return;
 	}
 
-	auto v = Iterable_As1DVector<size_t>(objects);
+	auto v = Iterable_As1DVector<size_t>(members);
 	for(auto id: v)
 	{
 		if(id == 0  || id>N)
@@ -760,7 +760,7 @@ void c_plot_gdi_setvisibility(
 		}
 	}
 
-	GDIObjects[objid - 1].vis_members = v;
+	GDIObjects[ownerid - 1].members = v;
 }
 
 

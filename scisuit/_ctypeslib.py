@@ -539,10 +539,10 @@ pydll.c_plot_gdi_marker.argtypes = [
 pydll.c_plot_gdi_marker.restype=c_ulonglong
 
 
-pydll.c_plot_gdi_setvisibility.argtypes = [
-					c_ulonglong, #base id
-					py_object] #target ids
-pydll.c_plot_gdi_marker.restype=None
+pydll.c_plot_gdi_makegroup.argtypes = [
+					c_ulonglong, #owner id
+					py_object] #member ids
+pydll.c_plot_gdi_makegroup.restype=None
 
 
 #---------------------------------------------

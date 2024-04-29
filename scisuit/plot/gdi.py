@@ -339,18 +339,18 @@ def rect(
 
 
 
-def setvisibility(
+def makegroup(
 		owner:int, 
 		members:_Iterable[int])->None:
 	"""
-	sets the visibility of members based on owner's visibility
+	sets the properties of members based on owner's properties
 	
 	## Inputs:
-	`owner:` A gdi object whose visibility will affect members' visibility,
-	`members:` gdi object(s) whose visibility will be synched with owner
+	`owner:` A gdi object whose properties will affect members' properties,
+	`members:` gdi object(s) whose properties will be synched with owner
 
 	## Note: 
-	This function is rather useful (meaningful) if visibilities will be manipulated at runtime.
+	This function is rather useful (meaningful) if properties will be manipulated at runtime.
 	"""
 	assert isinstance(owner, int), "owner must be int."
 
@@ -358,4 +358,7 @@ def setvisibility(
 	_target = [i for i in members if isinstance(i, int)]
 	assert len(_target) == len(members), "members must contain only int."
 
-	_pydll.c_plot_gdi_setvisibility(_ct.c_ulonglong(owner), _ct.py_object(members))
+	_pydll.c_plot_gdi_makegroup(
+		_ct.c_ulonglong(owner), 
+		_ct.py_object(set(members)) #unique ids
+		)

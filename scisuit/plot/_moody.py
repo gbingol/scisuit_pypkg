@@ -3,7 +3,7 @@ from typing import Iterable
 
 from ..roots import brentq
 from ._charts import canvas, title, xlabel, xscale, ylabel, yscale
-from .gdi import arrow, curve, line, rect, text, setvisibility
+from .gdi import arrow, curve, line, rect, text, makegroup
 
 
 def _Colebrook(f, Re, E_D):
@@ -61,7 +61,7 @@ def moody(
 	p2 = (2300, fD(2300))
 	idline = line(p1=p1, p2=p2, lw=2, ls="--", ec="#FF0000", label="laminar")
 	idtxt = text(xy=p2, label="Laminar Flow\nf = 64/Re", hanchor="c")
-	setvisibility(idline, [idtxt])
+	makegroup(idline, [idtxt])
 
 	"""
 	transition region 2300<Re<4000
@@ -71,7 +71,7 @@ def moody(
 	btmleft = (2300, 0.03)
 	idrect = rect(xy=btmleft, width=1700, height=0.05, hatch="solid", alpha=0.5, ls="--", fc="#808080", label="transition")
 	idtext = text(xy=(3300, 0.06), label="Transition Region", rotation=-90, labelcolor="#A52A2A")
-	setvisibility(idrect, [idtext])
+	makegroup(idrect, [idtext])
 
 	"""
 	Turbulent Region - Re>=4000
@@ -91,7 +91,8 @@ def moody(
 
 		id1 = text(xy=(_Re, friction), label=str(_e_d), vanchor="c")
 		idcurve = curve(x, y, lw=2, ec="#A52A2A", label=str(_e_d))
-		setvisibility(idcurve, [id1])
+		makegroup(idcurve, [id1])
+
 
 	"""
 	fully rough turbulent flow line
@@ -106,7 +107,7 @@ def moody(
 	_p1 = (15E3, 0.015)
 	idturbarr = arrow(p1=_p1, p2=(xx,yy), lw=2, length=0.05)
 	idturbtxt = text(xy=_p1, label="Complete Turbulence", hanchor="c")
-	setvisibility(idturbcurve, [idturbtxt, idturbarr])
+	makegroup(idturbcurve, [idturbtxt, idturbarr])
 
 
 	xlabel("Reynolds Number")

@@ -150,9 +150,9 @@ size_t c_plot_gdi_marker(
 
 
 EXTERN
-void c_plot_gdi_setvisibility(
-	size_t objid,
-	PyObject *objects);
+void c_plot_gdi_makegroup(
+	size_t ownerid,
+	PyObject *members);
 
 /************************************************************************************/
 
