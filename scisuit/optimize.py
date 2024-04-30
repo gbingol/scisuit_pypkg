@@ -32,7 +32,7 @@ def bracket(
 	grow_limit: Maximum grow limit.
 	maxiter: Maximum number of iterations
 
-	## Reference:
+	## References:
 	- Press WH, Teukolsky SA, Vetterling WT, Flannery BP (2007). 
 	  Numerical Recipes The Art of Scientific Computing. Cambridge Uni Press.
 	"""
@@ -77,6 +77,11 @@ def golden(
 	xlow, xhigh: Initial guesses, local minimum need to be contained within this interval.
 	tol: tolerance.
 	maxiter: Maximum number of iterations
+
+	## References:
+	- Chapra SC, Canale RP (2013). Numerical Methods for Engineers, 7th Ed. McGraw Hill Education.
+	- Press WH, Teukolsky SA, Vetterling WT, Flannery BP (2007). 
+	  Numerical Recipes The Art of Scientific Computing. Cambridge University Press.
 	"""
 	assert isinstance(f, _types.FunctionType), "f must be function"
 	assert isinstance(xlow, _numbers.Real), "xlow must be real number"
@@ -119,8 +124,8 @@ def brent(
 	xlow, xhigh: Initial guesses, local minimum need to be contained within this interval.
 	maxiter: Maximum number of iterations
 
-	## Reference
-	https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/brent_minima.html
+	## References
+	- https://www.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/brent_minima.html
 	"""
 	assert isinstance(f, _types.FunctionType), "f must be function"
 	assert isinstance(xlow, _numbers.Real), "xlow must be real number"
@@ -162,6 +167,10 @@ def parabolic(
 	xa, xb, xc: initial guesses
 	tol: tolerance.
 	maxiter: Maximum number of iterations
+
+	## References: 
+	- Chapra SC, Canale RP (2013). Numerical Methods for Engineers, 7th Ed. McGraw Hill Education.
+	- Cheney W, Kincaid D (2007). Numerical Mathematics and Computing, 6th Ed. Brooks Cole 
 	"""
 	assert isinstance(f, _types.FunctionType), "f must be function"
 	assert isinstance(xa, _numbers.Real), "xa must be real"
