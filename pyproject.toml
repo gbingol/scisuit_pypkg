@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scisuit"
-version = "1.2.5"
+version = "1.3.0"
 authors = [{ name="Gokhan Bingol, PhD", email="gbingol@pebytes.com" },]
 description = "Scientific Computing Package"
 readme = "README.md"
