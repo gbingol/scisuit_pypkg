@@ -8,7 +8,7 @@ from timeit import timeit
 import scipy.optimize as opt
 from scisuit.optimize import bracket, golden, brent, parabolic
 
-def f(x):
+def f1(x):
 	return 10*x**2 + 3*x + 5
 
 def f2(x):
@@ -18,28 +18,21 @@ def f2(x):
 def f3(x):
 	return -(2*math.sin(x) -x**2/10)
 
-def performance():
-	n = 1000
-
-	print("Scipy")
-	print("bracket:", timeit(lambda: opt.bracket(f2), number=n))
-	print("golden:", timeit(lambda: opt.golden(f2), number=n))
+def performance(f, n=1000):
+	print(
+		"Scipy", "\n",
+		"bracket:", timeit(lambda: opt.bracket(f), number=n), "\n", 
+		"golden:", timeit(lambda: opt.golden(f), number=n), "\n",
+		"brent:", timeit(lambda: opt.brent(f), number=n))
 
 	print("----------------------")
 
-	print("scisuit")
-	print("bracket:", timeit(lambda: bracket(f2), number=n))
-	print("golden:", timeit(lambda: golden(f2, xlow=-2, xhigh=4, tol=1E-9), number=n))
+	print(
+		"scisuit", "\n",
+		"bracket:", timeit(lambda: bracket(f), number=n), "\n",
+		"golden:", timeit(lambda: golden(f, xlow=-2, xhigh=4, tol=1E-9), number=n), "\n", 
+		"brent:", timeit(lambda: brent(f, xlow=-2, xhigh=4), number=n))
 
 
-
-print(opt.bracket(f2))
-print(bracket(f2))
-
-print(opt.golden(f2, brack=(2,4)))
-print(golden(f2, xlow=-2, xhigh=4, tol=1E-9))
-
-print(opt.brent(f3, full_output=True))
-print(brent(f3, xlow=-2, xhigh=4))
-
-print(parabolic(f3, xa=10, xb=4))
+performance(f1)
+performance(f2)

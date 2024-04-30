@@ -52,3 +52,13 @@ print(
 
 
 """
+
+from scisuit.roots import brentq, bisect, itp
+
+
+kwargs = {"f": lambda x: x**2-5, "a":0.01, "b":5}
+
+print(
+	"bisect: ", bisect(**kwargs), "\n",
+	"brentq: ", brentq(**kwargs), "\n",
+	"itp: ", itp(**kwargs))
