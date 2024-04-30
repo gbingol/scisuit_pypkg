@@ -31,6 +31,10 @@ def bracket(
 	xa, xb: Initial guesses, local minimum need not be contained within this interval.
 	grow_limit: Maximum grow limit.
 	maxiter: Maximum number of iterations
+
+	## Reference:
+	- Press WH, Teukolsky SA, Vetterling WT, Flannery BP (2007). 
+	  Numerical Recipes The Art of Scientific Computing. Cambridge Uni Press.
 	"""
 	assert isinstance(f, _types.FunctionType), "f must be function"
 	assert isinstance(xa, _numbers.Real), "xa must be real number"
