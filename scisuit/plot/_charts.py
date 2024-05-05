@@ -162,7 +162,8 @@ def canvas(
 		haxis = True,
 		vaxis = True,
 		hgrid = True,
-		vgrid = True):
+		vgrid = True,
+		scale = False):
 	"""
 	Shows a canvas (an empty chart with axes and gridlines)
 
@@ -183,12 +184,14 @@ def canvas(
 	assert isinstance(vaxis, bool), "vaxis must be bool."
 	assert isinstance(hgrid, bool), "hgrid must be bool."
 	assert isinstance(vgrid, bool), "vgrid must be bool."
+	assert isinstance(scale, bool), "scale must be bool."
 
 	return _pydll.c_plot_canvas(
 					_ct.py_object(x), 
 					_ct.py_object(y),
 					haxis, vaxis,
-					hgrid, vgrid)
+					hgrid, vgrid,
+					scale)
 
 
 

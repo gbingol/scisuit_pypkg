@@ -437,7 +437,8 @@ pydll.c_plot_canvas.argtypes = [
 						c_bool, # Show Horiz Axis
 						c_bool, # Show Vert Axis
 						c_bool, # Show Horiz Gridlines
-						c_bool] # Show Vert Gridlines
+						c_bool, # Show Vert Gridlines
+						c_bool] # Allow Rescale
 pydll.c_plot_canvas.restype=py_object
 
 

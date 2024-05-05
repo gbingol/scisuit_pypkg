@@ -6,7 +6,7 @@ import numpy as np
 
 from ..util import NiceNumbers, minmax
 from ._charts import canvas, set_xticks, set_yticks, xlim, ylim
-from .gdi import rect
+from .gdi import rect, makegroup
 
 
 def bar(
@@ -15,6 +15,7 @@ def bar(
 		width=0.8, 
 		bottom=0.0, 
 		color = None, 
+		label:str|None = None,
 		**kwargs):
 	"""
 	`x:` The x coordinates of the bars or category
@@ -49,7 +50,8 @@ def bar(
 		vgrid=kwargs.get("vgrid") or False,
 		hgrid=kwargs.get("hgrid") if kwargs.get("hgrid")!=None else True,
 		haxis=kwargs.get("haxis") if kwargs.get("haxis")!=None else True,
-		vaxis=kwargs.get("vaxis") if kwargs.get("vaxis")!=None else True
+		vaxis=kwargs.get("vaxis") if kwargs.get("vaxis")!=None else True,
+		scale=kwargs.get("scale") if kwargs.get("scale")!=None else False
 		)
 
 
@@ -57,7 +59,8 @@ def bar(
 	if _Color == None:
 		_Color = [randint(0, 255), randint(0, 255), randint(0, 255)]
 
-
+	ownerid = 0
+	members = []
 	for i in range(len(height)):
 		_bottom = bottom if isinstance(bottom, numbers.Real) else bottom[i]
 		_xcord = pos[i]-width/2 if X_HasStr else pos[i]
@@ -66,7 +69,14 @@ def bar(
 		kwargs["hatch"] = kwargs.get("hatch") or "solid"
 		kwargs["facecolor"] = kwargs["fc"] = _Color if (isinstance(_Color, str) or isinstance(_Color[0], numbers.Real)) else _Color[i]
 
-		rect(xy=xy, width=width, height=float(abs(height[i])), **kwargs)
+		if i==0 and isinstance(label, str):
+			ownerid = rect(xy=xy, width=width, height=float(abs(height[i])), label=label, **kwargs)
+		else:
+			id = rect(xy=xy, width=width, height=float(abs(height[i])), **kwargs)
+			members.append(id)
+	
+	if ownerid>0 and len(members)>0:
+		makegroup(owner=ownerid, members=members)	
 	
 	if X_HasStr:
 		set_xticks(pos, x)

@@ -403,7 +403,8 @@ PyObject* c_plot_canvas(
 	bool ShHAxis, 
 	bool ShVAxis,
 	bool ShHGrid,
-	bool ShVGrid)
+	bool ShVGrid,
+	bool Rescale)
 {
 	
 	auto xdata = Iterable_As1DVector(X);
@@ -441,7 +442,7 @@ PyObject* c_plot_canvas(
 	DTbl->append_col(XData);
 	DTbl->append_col(YData);
 
-	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl), ShHAxis, ShVAxis, ShHGrid, ShVGrid);
+	auto series = std::make_unique<CCanvasSeries>(Chart, std::move(DTbl), ShHAxis, ShVAxis, ShHGrid, ShVGrid, Rescale);
 
 	Chart->AddSeries(std::move(series));
 

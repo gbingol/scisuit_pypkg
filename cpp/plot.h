@@ -42,7 +42,8 @@ PyObject * c_plot_canvas(
 	bool ShowHAxis = true, 
 	bool ShowVAxis = true,
 	bool ShowHGrid = true,
-	bool ShowVGrid = true); 
+	bool ShowVGrid = true,
+	bool Rescale = false); 
 
 
 /************************************************************************************/
