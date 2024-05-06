@@ -1,13 +1,11 @@
 import numbers
-import sys
 from random import randint
 from typing import Iterable as _Iterable
 
 import numpy as np
 
-from ..util import NiceNumbers, minmax
 from ._charts import canvas, set_xticks, set_yticks, xlim, ylim
-from .gdi import rect, makegroup
+from .gdi import makegroup, rect
 
 
 def bar(
