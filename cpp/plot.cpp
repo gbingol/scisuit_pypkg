@@ -407,8 +407,17 @@ PyObject* c_plot_canvas(
 	bool Rescale)
 {
 	
-	auto xdata = Iterable_As1DVector(X);
-	auto ydata = Iterable_As1DVector(Y);
+	std::vector<double> xdata, ydata;
+	if(!Py_IsNone(X))
+		xdata = Iterable_As1DVector(X);
+	else
+		xdata = {std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest()};
+
+	if(!Py_IsNone(Y))
+		ydata = Iterable_As1DVector(Y);
+	else
+		ydata = {std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest()};
+		
 	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
 	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
 	

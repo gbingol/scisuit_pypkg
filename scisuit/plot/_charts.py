@@ -157,8 +157,8 @@ def scatter(
 
 
 def canvas(
-		x:_Iterable, 
-		y:_Iterable,
+		x:_Iterable|None, 
+		y:_Iterable|None,
 		haxis = True,
 		vaxis = True,
 		hgrid = True,
@@ -171,20 +171,28 @@ def canvas(
 	`y:` vertical axis bounds
 	`haxis, vaxis:` Show horizontal and vertical axes
 	`hgrid, vgrid:` Show horizontal and vertical gridlines
+	`scale:` Should the chart automatically scale itself to be able to accomodate GDI objects
 	"""
-	assert len(x) ==2, "x must contain exactly two numbers."
-	assert isinstance(x[0], numbers.Real), "xmin must be a real number."
-	assert isinstance(x[1], numbers.Real), "xmax must be a real number."
 
-	assert len(y) ==2, "y must contain exactly two numbers."
-	assert isinstance(y[0], numbers.Real), "ymin must be a real number."
-	assert isinstance(y[1], numbers.Real), "ymax must be a real number."
+	assert isinstance(x, _Iterable|None), "x must be Iterable|None."
+	assert isinstance(y, _Iterable|None), "y must be Iterable|None."
+	assert isinstance(scale, bool), "scale must be bool."
+
+	if scale == False:
+		assert isinstance(x, _Iterable), "x must be Iterable."
+		assert len(x) ==2, "x must contain exactly two numbers."
+		assert isinstance(x[0], numbers.Real), "xmin must be a real number."
+		assert isinstance(x[1], numbers.Real), "xmax must be a real number."
+
+		assert isinstance(y, _Iterable), "y must be Iterable."
+		assert len(y) ==2, "y must contain exactly two numbers."
+		assert isinstance(y[0], numbers.Real), "ymin must be a real number."
+		assert isinstance(y[1], numbers.Real), "ymax must be a real number."
 	
 	assert isinstance(haxis, bool), "haxis must be bool."
 	assert isinstance(vaxis, bool), "vaxis must be bool."
 	assert isinstance(hgrid, bool), "hgrid must be bool."
 	assert isinstance(vgrid, bool), "vgrid must be bool."
-	assert isinstance(scale, bool), "scale must be bool."
 
 	return _pydll.c_plot_canvas(
 					_ct.py_object(x), 

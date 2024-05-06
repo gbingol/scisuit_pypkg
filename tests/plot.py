@@ -16,7 +16,7 @@ def bar():
 	B = [13, 23, 8, 13]
 
 	plt.bar(x=categ, height=A, fc=(0,255,0), label="A", hatch="\\")
-	plt.bar(height=B, x=categ, lw=2)
+	plt.bar(height=B, x=categ, label="B", lw=2, bottom=A)
 
 
 
