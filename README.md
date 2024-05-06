@@ -1,11 +1,7 @@
 ## scisuit
 
-A computing and plotting library designed with engineers
+A computing and visualization library designed with engineers
 in mind..
-
-## Platform
-
-Windows and Python 3.10, 3.11 and 3.12.
 
 
 &nbsp;
@@ -14,9 +10,12 @@ Windows and Python 3.10, 3.11 and 3.12.
 ## Available Libraries
 
 1. Plotting,
-2. Engineering
-3. Statistical Distributions and Tests,
-4. Numerics: Roots, Integration, Fitting
+2. Engineering,
+3. Statistics,
+4. Roots, 
+5. Integration, 
+6. Fitting, 
+7. Optimization
 
 
 &nbsp;
@@ -24,11 +23,9 @@ Windows and Python 3.10, 3.11 and 3.12.
 
 ## Plot Library
 
-Completely interactive charts (Bar, Box-Whisker, Bubble, Histogram, Line, Pie, Psychrometry, 
+Interactive charts (Bar, Box-Whisker, Bubble, Direction Field, Histogram, Moody, Psychrometry, 
 QQnorm, QQplot, Quiver, Scatter). Using the `plot.gdi` library existing charts can be extended 
 or new visualizations can be created.
-
-![Multiple charts](chart_multiple.png)
 
 
 A simple scatter chart example:
@@ -44,17 +41,6 @@ y = x**2 - 2*x + 5
 plt.scatter(x=x, y=y)
 plt.show()
 ```
-
-Once the chart is displayed, let's say a trendline is wished to be added:
-
-1. Click on one of the data points to select the series,
-2. Right-click and select "Add trendline",
-3. By default a linear trendline will be added. 
-
-Just right-click again and select "Format Trendline" and following options will be shown:
-
-![Scatter with trendline options](chart_scatter_trendline.png)
-
 
 
 
@@ -129,7 +115,7 @@ aw = 0.194
 
 ## Statistics Library
 
-Follows R notation especially for statistical distributions.
+Many statistical tests & distributions.
 
 ```python
 import scisuit.stats as st
