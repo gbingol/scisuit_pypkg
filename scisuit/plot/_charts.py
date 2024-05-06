@@ -171,7 +171,7 @@ def canvas(
 	`y:` vertical axis bounds
 	`haxis, vaxis:` Show horizontal and vertical axes
 	`hgrid, vgrid:` Show horizontal and vertical gridlines
-	`scale:` Should the chart automatically scale itself to be able to accomodate GDI objects
+	`scale:` Should the chart automatically scale its limits
 	"""
 
 	assert isinstance(x, _Iterable|None), "x must be Iterable|None."
