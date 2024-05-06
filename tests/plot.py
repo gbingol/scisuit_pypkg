@@ -111,26 +111,6 @@ def bubble():
 	plt.bubble(x=L, y=F, s=P)
 
 
-def canvasopts():
-	plt.layout(2,2)
-
-	#All shown
-	plt.subplot(0,0)
-	plt.canvas(x=[0,5], y=[0,5])
-
-	#Horizontal axis not shown
-	plt.subplot(0,1)
-	plt.canvas(x=[0,5], y=[0,5], haxis=False)
-
-	#Vertical axis not displayed
-	plt.subplot(1,0)
-	plt.canvas(x=[0,5], y=[0,5], vaxis=False)
-
-	#Gridlines are not displayed
-	plt.subplot(1,1)
-	plt.canvas(x=[0,5], y=[0,5], vgrid=False, hgrid=False)
-
-
 
 
 def layout_test():
