@@ -756,7 +756,7 @@ void c_plot_gdi_makegroup(
 	auto N = GDIObjects.size();
 	if(ownerid == 0  || ownerid > N)
 	{
-		PyErr_SetString(PyExc_ValueError, "invalid base id.");
+		PyErr_SetString(PyExc_RuntimeError, "invalid owner id.");
 		return;
 	}
 
@@ -765,7 +765,7 @@ void c_plot_gdi_makegroup(
 	{
 		if(id == 0  || id>N)
 		{
-			PyErr_SetString(PyExc_ValueError, "target contains invalid id.");
+			PyErr_SetString(PyExc_RuntimeError, "members contain invalid id.");
 			return;
 		}
 	}
