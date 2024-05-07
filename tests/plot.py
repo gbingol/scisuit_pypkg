@@ -31,8 +31,25 @@ def bar():
 def histogram():
 	import scisuit.stats as stat
 
-	x=stat.rnorm(500)
+	x=stat.rnorm(100)
+
+	plt.layout(2,2)
+
+	plt.subplot(0,0)
 	plt.hist(x, fc="255 0 0", lw=2, ec=[0,255,0])
+	plt.title("Freedman Diaconis")
+
+	plt.subplot(1,0)
+	plt.hist(x, fc="0 200 50", lw=2, ec=[0,255,255], binmethod="rice")
+	plt.title("Rice")
+
+	plt.subplot(0,1)
+	plt.hist(x, fc="0 0 255", lw=2, ec=[0,255,0], binmethod="sturges")
+	plt.title("Sturges")
+
+	plt.subplot(1, 1)
+	plt.hist(x, fc="255 50 100", lw=2, ec=[0,255,0], binmethod="scott")
+	plt.title("Scott")
 
 
 
@@ -137,13 +154,6 @@ def layout_test():
 	plt.hist(z, density=True)
 	plt.scatter(x=z, y=f)
 
-	gdi.line((-2, 0.1), (0, 0.5), edgecolor="0 255 0", lw=2, ls= "-.")
-	gdi.rect([-2, 0.0], width=2, height=0.4, edgecolor=[0, 255, 0])
-
-	gdi.ellipse(xy=(-1, 0.3), width=2, height=0.2, edgecolor="#A02A2A") 
-
-	gdi.text([-1, 0.3], label="hello world", rotation=180)
-
 
 	#new chart
 	t = np.arange(0.0, 2.0, 0.2)
@@ -160,5 +170,5 @@ import scisuit.plot.gdi as gdi
 import scisuit.plot as plt
 import numpy as np
 
-bar()
+histogram()
 plt.show()

@@ -136,16 +136,17 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 
 PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 {
-	PyObject* DataObj; 
-	PyObject* ModeObj = Py_None; //  string
-	PyObject* CumulObj = Py_None; //  bool
-	PyObject* BreaksObj = Py_None; //  int/list/Vector
-	PyObject* FillObj = Py_None;
-	PyObject* LineObj = Py_None;
+	PyObject *DataObj, 
+	*ModeObj = Py_None, //  string
+	*CumulObj = Py_None, //  bool
+	*BinMethod{nullptr},
+	*BreaksObj = Py_None, //  int/list/Vector
+	*FillObj = Py_None,
+	*LineObj = Py_None;
 
-	const char* kwlist[] = { "data", "mode", "cumulative", "breaks", "fill", "line", NULL };
-	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOO", const_cast<char**>(kwlist),
-		&DataObj, &ModeObj, &CumulObj, &BreaksObj, &FillObj, &LineObj))
+	const char* kwlist[] = { "data", "mode", "cumulative", "binmethod", "breaks", "fill", "line", NULL };
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "O|OOOOOO", const_cast<char**>(kwlist),
+		&DataObj, &ModeObj, &CumulObj, &BinMethod, &BreaksObj, &FillObj, &LineObj))
 	{
 		return nullptr;
 	}
@@ -181,7 +182,18 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	auto DataTbl = std::make_unique<charts::CRealDataTable>();
 	DataTbl->append_col(NumData);
 
-	auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl));
+	std::string _Mtd = PyUnicode_AsUTF8(BinMethod);
+	core::math::CHistogram::BinMethod BinMtd = core::math::CHistogram::BinMethod::FREEDDIAC;
+	if(_Mtd == "rice")
+		BinMtd = core::math::CHistogram::BinMethod::RICE;
+	else if(_Mtd == "sqrt")
+		BinMtd = core::math::CHistogram::BinMethod::SQRT;
+	else if(_Mtd == "sturges")
+		BinMtd = core::math::CHistogram::BinMethod::STURGES;
+	else if(_Mtd == "scott")
+		BinMtd = core::math::CHistogram::BinMethod::SCOTT;
+
+	auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl), BinMtd);
 
 	wxPen Pen = series->GetPen();
 	if (LineObj != Py_None)

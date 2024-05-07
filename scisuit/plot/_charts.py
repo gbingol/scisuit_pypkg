@@ -48,6 +48,7 @@ def hist(
 		data:_Iterable, 
 		density = False, #frequency 
 		cumulative = False, 
+		binmethod:str = "freedmandiaconis",
 		breaks:int|_Iterable = None, 
 		**kwargs):
 	"""
@@ -56,14 +57,23 @@ def hist(
 	`data:`	Numeric data
 	`density:` density histogram if true otherwise frequency.
 	`cumulative:` True, cumulative distribution 
+	`binmethod:` freedmandiaconis, rice, sqrt, sturges or scott
 	`breaks:` Number of breaks or the break points, int/iterable
 
 	## Note
-	If density=True and cumulative=True, then the histogram is 
-	normalized so that the cumulative end-value is 1.0
+	- If density=True and cumulative=True, then the histogram is 
+	  normalized so that the cumulative end-value is 1.0
+	
+	- If breaks is specified, then binmethod is not taken into account
 	"""
 	assert isinstance(density, bool), "'density' must be bool."
 	assert isinstance(cumulative, bool), "'cumulative' must be bool."
+
+	assert isinstance(binmethod, str), "binmethod must be str"
+
+	_binmethods = ["freedmandiaconis", "rice", "sqrt", "sturges", "scott"]
+	if not binmethod in _binmethods:
+		raise ValueError("binmethods: " + str(_binmethods))
 
 	if breaks != None:
 		assert isinstance(breaks, int) or isinstance(breaks, _Iterable), "'breaks' must be int/Iterable."
@@ -77,6 +87,7 @@ def hist(
 			"data":data, 
 			"mode":"f" if not density else "d", 
 			"cumulative":cumulative , 
+			"binmethod": binmethod, 
 			"breaks":breaks, 
 			"fill":dict(Brush(kwargs)), 
 			"line":dict(Pen(kwargs))})
