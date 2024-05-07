@@ -44,3 +44,16 @@ gdi.makegroup(id1, [id2])
 
 plt.legend(3,2)
 plt.show()
+
+
+from math import sqrt, pi
+from scisuit.stats import rbinom
+n=60 ; p=0.4
+
+#Generate random numbers from a binomial dist
+x = np.array(rbinom(n=100, size=n, prob=p))
+z = (x - n*p)/sqrt(n*p*(1-p))
+f = 1.0/sqrt(2*pi)*np.exp(-z**2/2.0)
+
+plt.hist(z, density=True)
+plt.scatter(x=z, y=f)
