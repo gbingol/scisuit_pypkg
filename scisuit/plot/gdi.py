@@ -350,7 +350,8 @@ def makegroup(
 	`members:` gdi object(s) whose properties will be synched with owner
 
 	## Note: 
-	This function is rather useful (meaningful) if properties will be manipulated at runtime.
+	- This function is rather useful (meaningful) if properties will be manipulated at runtime.
+	- GDI objects only have unique ID's for each chart (in a multiple chart environment care should be taken).
 	"""
 	assert isinstance(owner, int), "owner must be int."
 
