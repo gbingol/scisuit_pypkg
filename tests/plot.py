@@ -51,7 +51,20 @@ def histogram():
 	plt.hist(x, fc="255 50 100", lw=2, ec=[0,255,0], binmethod="scott")
 	plt.title("Scott")
 
+	
+	plt.figure()
 
+
+	plt.layout(2,2)
+
+	plt.subplot(0,0)
+	plt.hist(x, fc="255 0 0", lw=2, ec=[0,255,0])
+	
+	plt.subplot(1,0)
+	plt.hist(x, breaks=np.linspace(-2,2, 10))
+	
+	plt.subplot(1,1)
+	plt.hist(x, breaks=7)
 
 
 def qqnorm():
