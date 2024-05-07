@@ -2,7 +2,8 @@ import math
 from typing import Iterable
 
 from ..roots import brentq
-from ._charts import canvas, title, xlabel, xscale, ylabel, yscale
+from ._charts import canvas 
+from ._chartfuncs import title, xlabel, xscale, ylabel, yscale
 from .gdi import arrow, curve, line, rect, text, makegroup
 
 

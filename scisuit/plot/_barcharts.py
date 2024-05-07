@@ -4,7 +4,8 @@ from typing import Iterable as _Iterable
 
 import numpy as np
 
-from ._charts import canvas, set_xticks, set_yticks, xlim, ylim
+from ._charts import canvas
+from ._chartfuncs import set_xticks, set_yticks, xlim, ylim
 from .gdi import makegroup, rect
 
 
@@ -126,7 +127,7 @@ def barh(
 		else:
 			id = rect(xy=xy, width=float(abs(width[i])), height=float(height), **kwargs)
 			members.append(id)
-		
+	
 	if ownerid>0 and len(members)>0:
 		makegroup(owner=ownerid, members=members)	
 	

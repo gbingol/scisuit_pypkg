@@ -15,8 +15,15 @@ def bar():
 	A = [44, 55, 41, 67]
 	B = [13, 23, 8, 13]
 
+	plt.layout(2,1)
+
+	plt.subplot(0,0)
 	plt.bar(x=categ, height=A, fc=(0,255,0), label="A", hatch="\\")
 	plt.bar(height=B, x=categ, label="B", lw=2, bottom=A)
+
+	plt.subplot(1,0)
+	plt.barh(y=categ, width=A, fc=(0,255,0), label="A", hatch="\\")
+	plt.barh(width=B, y=categ, label="B", lw=2, bottom=A)
 
 
 
