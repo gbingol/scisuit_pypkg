@@ -75,7 +75,7 @@ def hist(
 	if not binmethod in _binmethods:
 		raise ValueError("binmethods: " + str(_binmethods))
 
-	if breaks != None:
+	if isinstance(breaks, _Iterable):
 		assert isinstance(breaks, int) or isinstance(breaks, _Iterable), "'breaks' must be int/Iterable."
 		if isinstance(breaks, int):
 			assert breaks>0, "'breaks' if integer, must be >0."
@@ -88,7 +88,7 @@ def hist(
 			"mode":"f" if not density else "d", 
 			"cumulative":cumulative , 
 			"binmethod": binmethod, 
-			"breaks":breaks, 
+			"breaks":list(breaks) if isinstance(breaks, _Iterable) else breaks, 
 			"fill":dict(Brush(kwargs)), 
 			"line":dict(Pen(kwargs))})
 
