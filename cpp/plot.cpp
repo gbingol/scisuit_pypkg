@@ -1135,18 +1135,12 @@ void c_plot_app()
 }
 
 
-bool c_plot_mainloop(bool sharedLoop)
+bool c_plot_mainloop()
 {	
 	if (!s_APP)
 		return true;
 
 	CFrmPlot::SetApp(s_APP);
-
-	if (!sharedLoop)
-		CFrmPlot::SetCloseMode(CFrmPlot::CLOSE::NORMAL);
-	else
-		CFrmPlot::SetCloseMode(CFrmPlot::CLOSE::HIDE_DESTROY);
-
 
 	if (!s_APP->IsMainLoopRunning())
 	{

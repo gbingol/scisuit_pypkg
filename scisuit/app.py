@@ -5,7 +5,7 @@ from ._ctypeslib import pydll
 pydll.c_plot_app.argtypes = []
 pydll.c_plot_app.restype = None
 
-pydll.c_plot_mainloop.argtypes = [_ct.c_bool]
+pydll.c_plot_mainloop.argtypes = []
 pydll.c_plot_mainloop.restype=_ct.c_bool
 
 pydll.c_plot_ismainlooprunning.argtypes = []
@@ -27,14 +27,13 @@ class App:
 		pydll.c_plot_app()
 	
 
-	def mainloop(self, shared=False):
+	def mainloop(self):
 		"""
-		Starts the main loop \n
-		shared: True, if there is any other application using a main loop \n
+		Starts the main loop
 
 		returns True if mainloop is started
 		"""
-		return pydll.c_plot_mainloop(_ct.c_bool(shared))
+		return pydll.c_plot_mainloop()
 
 
 	def ismainlooprunning(self):

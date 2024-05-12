@@ -222,10 +222,9 @@ def legend(
 
 
 
-def show(shared = False)->None:
+def show()->None:
 	"""
 	Starts main loop and shows the chart(s) \n
-	`shared:` if there is any other application using a main loop
 	"""
 	_pydll.c_plot_show()
-	_app.mainloop(shared)
+	_app.mainloop()

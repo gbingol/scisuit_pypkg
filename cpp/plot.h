@@ -229,7 +229,7 @@ EXTERN
 void c_plot_app();
 
 EXTERN 
-bool c_plot_mainloop(bool sharedLoop = false);
+bool c_plot_mainloop();
 
 EXTERN 
 bool c_plot_ismainlooprunning();
