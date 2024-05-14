@@ -209,5 +209,5 @@ import scisuit.plot.gdi as gdi
 import scisuit.plot as plt
 import numpy as np
 
-engcharts()
+bar()
 plt.show()

@@ -222,9 +222,9 @@ def legend(
 
 
 
-def show()->None:
+def show(antialiasing=False)->None:
 	"""
 	Starts main loop and shows the chart(s) \n
 	"""
-	_pydll.c_plot_show()
+	_pydll.c_plot_show(_ct.c_bool(antialiasing))
 	_app.mainloop()

@@ -611,7 +611,8 @@ pydll.c_plot_legend.argtypes = [py_object, py_object]
 pydll.c_plot_legend.restype=None
 
 
-pydll.c_plot_show.argtypes = []
+pydll.c_plot_show.argtypes = [
+							c_bool] #antialiasing
 pydll.c_plot_show.restype=None
 
 

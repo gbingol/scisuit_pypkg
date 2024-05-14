@@ -175,7 +175,7 @@ EXTERN
 void c_plot_figure();
 
 EXTERN 
-void c_plot_show();
+void c_plot_show(bool antialiasing);
 
 EXTERN 
 void c_plot_title(const char* title);

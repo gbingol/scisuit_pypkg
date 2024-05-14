@@ -828,7 +828,7 @@ void c_plot_figure()
 }
 
 	
-void c_plot_show()
+void c_plot_show(bool antialiasing)
 {
 	TRYBLOCK();
 
@@ -838,7 +838,10 @@ void c_plot_show()
 	s_PlotWndList.push_back(s_CurPlotWnd);
 
 	for (auto Wnd : s_PlotWndList)
+	{
+		Wnd->SetAntialiasing(antialiasing);
 		Wnd->Show();
+	}
 
 	s_PlotWndList.clear();
 	s_CurPlotWnd = nullptr;
