@@ -33,7 +33,7 @@ def get_python_abi_tag():
 
 setup(
     name='scisuit',
-    version='1.3.2',
+    version='1.3.3',
     author='Gokhan Bingol, PhD',
     author_email='gbingol@pebytes.com',
     description='Scientific Computing Package',
