@@ -46,8 +46,9 @@ PyObject * c_plot_canvas(
 	bool Rescale = false); 
 
 
-/************************************************************************************/
 
+
+/************************************************************************************/
 
 EXTERN 
 size_t c_plot_gdi_arrow(
@@ -155,10 +156,16 @@ void c_plot_gdi_makegroup(
 	size_t ownerid,
 	PyObject *members);
 
+
+
+
+
+
 /************************************************************************************/
 
 EXTERN
 void c_plot_layout(int nrows, int ncols);
+
 
 EXTERN 
 void c_plot_subplot(
@@ -174,22 +181,36 @@ void c_plot_subplot(
 EXTERN 
 void c_plot_figure();
 
+
+EXTERN
+void c_plot_savefig(
+	const char *fullpath, 
+	const char *format,
+	size_t width,
+	size_t height);
+
+
 EXTERN 
 void c_plot_show(bool antialiasing);
+
 
 EXTERN 
 void c_plot_title(const char* title);
 
+
 EXTERN 
 void c_plot_xlabel(const char* xlabel);
 
+
 EXTERN 
 void c_plot_ylabel(const char* ylabel);
+
 
 EXTERN 
 void c_plot_legend(
 	PyObject* nrows, 
 	PyObject* ncols);
+
 
 //Either returns the limits or sets the limits
 EXTERN 
@@ -198,12 +219,14 @@ PyObject *c_plot_axislim(
 			PyObject *max, 
 			char SelAxis='y');
 
+
 EXTERN 
 PyObject* c_plot_set_xticks(
 			PyObject* pos, 
 			PyObject* labels,
 			const char* Alignment = "center",
 			const char* Position = "bottom");
+
 
 EXTERN 
 PyObject* c_plot_set_yticks(
@@ -212,15 +235,20 @@ PyObject* c_plot_set_yticks(
 			const char* Alignment = "center",
 			const char* Position = "left");
 
+
 EXTERN 
 PyObject* c_plot_set_axispos(
 				double pos, 
 				char SelAxis);
 
+
 EXTERN 
 PyObject* c_plot_axisscale(
 				const char* scale, 
 				char SelAxis);
+
+
+
 
 
 /**********************************************************************************/

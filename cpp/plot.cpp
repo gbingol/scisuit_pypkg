@@ -827,6 +827,34 @@ void c_plot_figure()
 	s_NROWS = s_NCOLS = 1;
 }
 
+
+
+void c_plot_savefig(
+	const char *fullpath,
+	const char *format,
+	size_t width,
+	size_t height)
+{
+	if(s_CurPlotWnd == nullptr)
+		return;
+
+	TRYBLOCK();
+
+	wxBitmap bmp(width, height);
+
+	wxMemoryDC memDC;
+	memDC.SelectObject(bmp);
+	memDC.SetBackground(wxColor(255,255,255));
+	memDC.Clear();
+
+	for(auto chart: s_CurPlotWnd->GetChartList())
+		chart->Draw(&memDC);
+	
+	memDC.SelectObject(wxNullBitmap);
+
+	CATCHRUNTIMEEXCEPTION(NOTHING);
+}
+
 	
 void c_plot_show(bool antialiasing)
 {
