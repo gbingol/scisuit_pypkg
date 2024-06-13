@@ -209,9 +209,12 @@ import scisuit.plot.gdi as gdi
 import scisuit.plot as plt
 import numpy as np
 
-x = np.arange(0, 6, 0.5)
-y = x**2
-plt.scatter(x=x, y=y, lw=3, ls=":", marker="s", markersize=10)
-plt.title("Scatter")
+scatter()
 
-plt.savefig("C:\\Users\\gbing\\Documents\\Visual Studio 2022\\Projects\\scisuit_pypkg\\scisuit\\abc.xpm")
+plt.figure()
+
+histogram()
+
+#plt.savefig("C:\\Users\\gbing\\Documents\\Visual Studio 2022\\Projects\\scisuit_pypkg\\scisuit\\abc.xpm")
+
+plt.show()

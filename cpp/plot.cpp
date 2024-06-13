@@ -75,27 +75,17 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 
 	TRYBLOCK();
 
-	CFrmPlot *frmPlot = nullptr;
-
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-		{
-			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-			s_CurPlotWnd = frmPlot;
-		}
-		else
-			frmPlot = s_CurPlotWnd;
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
 
-		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(frmPlot, Rect);
-		frmPlot->AddChart(std::move(BW_Chrt));
+		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
+		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(s_CurPlotWnd, Rect);
+		s_CurPlotWnd->AddChart(std::move(BW_Chrt));
 	}
-	else
-		frmPlot = s_CurPlotWnd;
 
-
-	auto Chart = (CBoxWhiskerChart*)frmPlot->GetActiveChart();
+	auto Chart = (CBoxWhiskerChart*)s_CurPlotWnd->GetActiveChart();
 
 	auto DataTbl = std::make_unique<charts::CRealDataTable>();
 	auto NumData = std::make_shared<charts::CRealColData>(Data);
@@ -160,27 +150,18 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 	TRYBLOCK();
 
-	CFrmPlot *frmPlot{nullptr};
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-		{
-			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-			s_CurPlotWnd = frmPlot;
-		}
-		else
-			frmPlot = s_CurPlotWnd;
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
 
-		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		auto Histogram = std::make_unique<CHistogramChart>(frmPlot, Rect);
-		frmPlot->AddChart(std::move(Histogram));
+		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
+		auto Histogram = std::make_unique<CHistogramChart>(s_CurPlotWnd, Rect);
+		s_CurPlotWnd->AddChart(std::move(Histogram));
 	}
-	else
-		frmPlot = s_CurPlotWnd;
 
-	auto Chart = (CHistogramChart*)frmPlot->GetActiveChart();
+	auto Chart = (CHistogramChart*)s_CurPlotWnd->GetActiveChart();
 	
-
 	auto NumData = std::make_shared<charts::CRealColData>(Data);
 	auto DataTbl = std::make_unique<charts::CRealDataTable>();
 	DataTbl->append_col(NumData);
@@ -230,7 +211,8 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
 		}
-		else{
+		else
+		{
 			auto Breaks = std::move(Iterable_As1DVector(BreaksObj));
 			IF_PYERRRUNTIME_RET(series->SetBreakPoints(Breaks) == false, "Invalid break points.");
 		}
@@ -325,26 +307,17 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 
 	TRYBLOCK();
 
-	CFrmPlot *frmPlot = nullptr;
-
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-		{
-			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-			s_CurPlotWnd = frmPlot;
-		}
-		else
-			frmPlot = s_CurPlotWnd;
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
 
-		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		auto Scatter = std::make_unique<CScatterChart>(frmPlot, Rect);
-		frmPlot->AddChart(std::move(Scatter));
+		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
+		auto Scatter = std::make_unique<CScatterChart>(s_CurPlotWnd, Rect);
+		s_CurPlotWnd->AddChart(std::move(Scatter));
 	}
-	else
-		frmPlot = s_CurPlotWnd;
 
-	auto Chart = (CScatterChart*)frmPlot->GetActiveChart();
+	auto Chart = (CScatterChart*)s_CurPlotWnd->GetActiveChart();
 				
 	auto YData = std::make_shared<charts::CRealColData>(ydata);
 	auto XData = std::make_shared<charts::CRealColData>(xdata);
@@ -438,26 +411,17 @@ PyObject* c_plot_canvas(
 	
 	TRYBLOCK();
 
-	CFrmPlot *frmPlot = nullptr;
-
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-		{
-			frmPlot = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
-			s_CurPlotWnd = frmPlot;
-		}
-		else
-			frmPlot = s_CurPlotWnd;
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
 
-		auto Rect = frmPlot->GetRect(s_SubPlotInfo);
-		auto Canvas = std::make_unique<CCanvasChart>(frmPlot, Rect);
-		frmPlot->AddChart(std::move(Canvas));
+		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
+		auto Canvas = std::make_unique<CCanvasChart>(s_CurPlotWnd, Rect);
+		s_CurPlotWnd->AddChart(std::move(Canvas));
 	}
-	else
-		frmPlot = s_CurPlotWnd;
 
-	auto Chart = (CCanvasChart*)frmPlot->GetActiveChart();
+	auto Chart = (CCanvasChart*)s_CurPlotWnd->GetActiveChart();
 				
 	auto YData = std::make_shared<charts::CRealColData>(ydata);
 	auto XData = std::make_shared<charts::CRealColData>(xdata);
