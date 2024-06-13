@@ -62,27 +62,32 @@ def subplot(
 
 
 def figure():
-	"""Start a new plot window"""
+	"""Starts a new plot window"""
 	_pydll.c_plot_figure()
+
+
+def savefig(fullpath:str):
+	"""Save the current figure"""
+	_pydll.c_plot_savefig(_ct.c_char_p(fullpath.encode()))
 
 
 
 def title(label:str):
-	"""Create chart title"""
+	"""Creates chart title"""
 	assert isinstance(label, str), "label must be of type string."
 	_pydll.c_plot_title(_ct.c_char_p(label.encode()))
 
 
 
 def xlabel(label:str):
-	"""Create x-axis label"""
+	"""Creates x-axis label"""
 	assert isinstance(label, str), "label must be of type string."
 	_pydll.c_plot_xlabel(_ct.c_char_p(label.encode()))
 
 
 
 def ylabel(label:str):
-	"""Create y-axis label"""
+	"""Creates y-axis label"""
 	assert isinstance(label, str), "label must be of type string."
 	_pydll.c_plot_ylabel(_ct.c_char_p(label.encode()))
 

@@ -1,4 +1,5 @@
-from ._chartfuncs import layout, subplot, figure, legend, show, title, \
+from ._chartfuncs import layout, subplot, legend, show, title, \
+					figure, savefig, \
 	 				xlabel, ylabel, xlim, ylim, set_xticks, set_yticks, set_xposition, set_yposition, \
 					xscale, yscale
 

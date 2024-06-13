@@ -1,7 +1,10 @@
 #include "plot.h"
 
 #include <list>
+#include <map>
 #include <numeric>
+#include <filesystem>
+#include <iostream>
 
 #include <wx/wx.h>
 
@@ -829,28 +832,61 @@ void c_plot_figure()
 
 
 
-void c_plot_savefig(
-	const char *fullpath,
-	const char *format,
-	size_t width,
-	size_t height)
+
+
+void c_plot_savefig(const char *fullpath)
 {
-	if(s_CurPlotWnd == nullptr)
-		return;
 
 	TRYBLOCK();
 
-	wxBitmap bmp(width, height);
+	std::filesystem::path pt = fullpath;
+	if(!pt.has_extension())
+		throw std::runtime_error("fullpath does not have an extension");
 
-	wxMemoryDC memDC;
-	memDC.SelectObject(bmp);
-	memDC.SetBackground(wxColor(255,255,255));
-	memDC.Clear();
+	if(s_CurPlotWnd == nullptr)
+		throw std::runtime_error("Current plot window is empty");
 
-	for(auto chart: s_CurPlotWnd->GetChartList())
-		chart->Draw(&memDC);
-	
-	memDC.SelectObject(wxNullBitmap);
+	wxInitAllImageHandlers();
+
+	auto makebmp = [=]()
+	{
+		wxBitmap bmp(s_CurPlotWnd->GetSize());
+
+		wxMemoryDC memDC;
+		memDC.SelectObject(bmp);
+		memDC.SetBackground(wxColor(255,255,255));
+		memDC.Clear();
+
+		for(auto chart: s_CurPlotWnd->GetChartList())
+			chart->Draw(&memDC);
+
+		return bmp;
+	};
+
+	std::map<std::string, wxBitmapType> filetype
+	{
+		{".bmp", wxBITMAP_TYPE_BMP},
+		{".ico",wxBITMAP_TYPE_ICO},
+		{".gif", wxBITMAP_TYPE_GIF},
+		{".jpeg", wxBITMAP_TYPE_JPEG},
+		{".png", wxBITMAP_TYPE_PNG},
+		{".tga", wxBITMAP_TYPE_TGA},
+		{".tiff", wxBITMAP_TYPE_TIFF},
+		{".xpm", wxBITMAP_TYPE_XPM}
+	};
+
+	auto bmp = makebmp();
+
+	std::string extension = pt.extension().string();
+	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+	if(!filetype.contains(extension))
+		throw std::runtime_error("Invalid file extension.");
+
+	if(bmp.IsOk())
+		bmp.SaveFile(fullpath, filetype[extension]);
+	else
+		throw std::runtime_error("Image is corrupted");
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }

@@ -183,11 +183,8 @@ void c_plot_figure();
 
 
 EXTERN
-void c_plot_savefig(
-	const char *fullpath, 
-	const char *format,
-	size_t width,
-	size_t height);
+void c_plot_savefig(const char *fullpath);
+
 
 
 EXTERN 
