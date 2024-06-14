@@ -66,8 +66,17 @@ def figure():
 	_pydll.c_plot_figure()
 
 
+
+def set_figsize(width = 640, height = 480):
+	"""Adjusts current figure size in pixels"""
+	assert width>0, "width>0 expected."
+	assert height>0, "height>0 expected."
+	_pydll.c_plot_set_figsize(_ct.c_ulonglong(width), _ct.c_ulonglong(height))
+
+
+
 def savefig(fullpath:str):
-	"""Save the current figure"""
+	"""Saves the current figure"""
 	_pydll.c_plot_savefig(_ct.c_char_p(fullpath.encode()))
 
 

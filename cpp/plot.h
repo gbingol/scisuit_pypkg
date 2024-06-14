@@ -186,6 +186,9 @@ EXTERN
 void c_plot_savefig(const char *fullpath);
 
 
+EXTERN
+void c_plot_set_figsize(size_t width, size_t height);
+
 
 EXTERN 
 void c_plot_show(bool antialiasing);

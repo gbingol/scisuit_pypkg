@@ -1,5 +1,5 @@
 from ._chartfuncs import layout, subplot, legend, show, title, \
-					figure, savefig, \
+					figure, set_figsize, savefig, \
 	 				xlabel, ylabel, xlim, ylim, set_xticks, set_yticks, set_xposition, set_yposition, \
 					xscale, yscale
 

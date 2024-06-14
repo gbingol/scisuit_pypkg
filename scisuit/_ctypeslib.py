@@ -563,6 +563,9 @@ pydll.c_plot_subplot.restype=None
 pydll.c_plot_figure.argtypes = []
 pydll.c_plot_figure.restype=None
 
+pydll.c_plot_set_figsize.argtypes = [c_ulonglong, c_ulonglong]
+pydll.c_plot_set_figsize.restype=None
+
 pydll.c_plot_savefig.argtypes = [c_char_p]
 pydll.c_plot_savefig.restype=None
 

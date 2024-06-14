@@ -5,6 +5,7 @@
 #include <numeric>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 
 #include <wx/wx.h>
 
@@ -29,6 +30,7 @@ using namespace charts;
 
 static wxApp* s_APP = nullptr;
 static constinit CFrmPlot* s_CurPlotWnd = nullptr;
+static std::optional<size_t> s_FrmWidth = std::nullopt, s_FrmHeight = std::nullopt;
 static std::list< CFrmPlot*> s_PlotWndList;
 
 //Layout
@@ -76,7 +78,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS, s_FrmWidth, s_FrmHeight);
 
 		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
 		auto BW_Chrt = std::make_unique<CBoxWhiskerChart>(s_CurPlotWnd, Rect);
@@ -151,7 +153,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS, s_FrmWidth, s_FrmHeight);
 
 		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
 		auto Histogram = std::make_unique<CHistogramChart>(s_CurPlotWnd, Rect);
@@ -308,7 +310,7 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS, s_FrmWidth, s_FrmHeight);
 
 		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
 		auto Scatter = std::make_unique<CScatterChart>(s_CurPlotWnd, Rect);
@@ -412,7 +414,7 @@ PyObject* c_plot_canvas(
 	if (!s_CurPlotWnd || (s_SubPlotInfo.row >= 0 && s_SubPlotInfo.col >= 0))
 	{
 		if (!s_CurPlotWnd)
-			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS);
+			s_CurPlotWnd = new CFrmPlot(nullptr, s_NROWS, s_NCOLS, s_FrmWidth, s_FrmHeight);
 
 		auto Rect = s_CurPlotWnd->GetRect(s_SubPlotInfo);
 		auto Canvas = std::make_unique<CCanvasChart>(s_CurPlotWnd, Rect);
@@ -790,9 +792,18 @@ void c_plot_figure()
 
 	//reset static variables
 	s_NROWS = s_NCOLS = 1;
+
+	//reset size variables
+	s_FrmWidth = s_FrmHeight = std::nullopt;
 }
 
 
+
+void c_plot_set_figsize(size_t width, size_t height)
+{
+	s_FrmWidth = width;
+	s_FrmHeight = height;
+}
 
 
 
