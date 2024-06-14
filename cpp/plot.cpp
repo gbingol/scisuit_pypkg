@@ -57,8 +57,6 @@ static constinit SubPlotInfo s_SubPlotInfo = SubPlotInfo();
 
 PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 {
-	CBoxWhiskerChart* BW_Chrt = nullptr;
-
 	PyObject* DataObj = Py_None, * NameObj = Py_None;
 	PyObject* FillObj = Py_None, *LineObj = Py_None;
 
