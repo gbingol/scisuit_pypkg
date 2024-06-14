@@ -68,7 +68,15 @@ def figure():
 
 
 def set_figsize(width = 640, height = 480):
-	"""Adjusts current figure size in pixels"""
+	"""
+	Adjusts current figure size in pixels. \n
+	Must be called right before calling a function that 
+	draws a chart (scatter, canvas, ...)
+
+	### Example:
+	plt.set_figsize(640, 480) \n
+	plt.scatter()
+	"""
 	assert width>0, "width>0 expected."
 	assert height>0, "height>0 expected."
 	_pydll.c_plot_set_figsize(_ct.c_ulonglong(width), _ct.c_ulonglong(height))
