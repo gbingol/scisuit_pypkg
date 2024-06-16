@@ -6,12 +6,14 @@ sys.path.insert(0, os.getcwd())
 
 from scisuit.eng import psychrometry
 
+#linear combination
 result = psychrometry(P=101, Tdb=30, Twb=20)
+
+#testing new solver method
+result2 = psychrometry(V=result.V, W=result.W, RH=result.RH)
+
 
 #all of the properties
 print(result)
+print(result2)
 
-print("----------------------- \n")
-
-#an individual property (enthalpy)
-print("h=" + str(result.H))
