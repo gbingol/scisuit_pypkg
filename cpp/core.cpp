@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <unordered_map>
 
 #include <core/core_funcs.h>
 #include <core/math/fitting.h>
@@ -708,14 +709,13 @@ PyObject* c_optimize_brent(
 
 
 
-/******************************   ENGINEERING    **************************************/
 
+
+
+/******************************   ENGINEERING    **************************************/
 
 PyObject* c_eng_psychrometry(PyObject* kwargs)
 {
-	std::vector<std::string> Keys;
-	std::vector<double> Vals;
-
 	size_t argc = PyDict_GET_SIZE(kwargs);
 
 	IF_PYERR_RET(argc != 3, PyExc_TypeError, "3 out of (Tdb=, Twb=, Tdp=, RH=, H=, V=, W=, P=) expected");
@@ -725,39 +725,30 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 
 	TRYBLOCK();
 
+	auto psyKeys = {"tdb", "twb", "tdp", "rh", "h", "v", "w", "p"};
+
+	std::unordered_map<std::string, double> Values;
+
 	while (PyDict_Next(kwargs, &pos, &ObjKey, &ObjValue))
 	{
 		std::string key = _PyUnicode_AsString(ObjKey);
 		std::transform(key.begin(), key.end(), key.begin(), ::tolower);
+	
+		IF_PYERRVALUE_RET (std::ranges::find(psyKeys, key) == psyKeys.end(), "Keys: P, Tdb, Twb, Tdp, W, H, RH");
+
 		double val = PyFloat_AsDouble(ObjValue);
-
-		if (key == "tdb" || key == "twb" || key == "tdp" || key == "rh" || key == "h" || key == "v" || key == "w")
-		{
-		}
-
-		else if (key == "p")
-			val = val * 1000; // Take parameter as kPa and convert to Pa
-
-		else
-		{
-			PyErr_SetString(PyExc_TypeError, "Keys: P, Tdb, Twb, Tdp, W, H, RH");
-			return nullptr;
-		}
-
-		Keys.push_back(key);
-		Vals.push_back(val);
+		Values[key] = key == "p" ? val * 1000 : val;
 	}
 
 	::core::eng::Psychrometry psy;
-	psy.Compute(Keys, Vals);
+	psy.Compute(Values);
 
 	CHECKRANGE_RET(psy.getRH(), 0.0, 100.0, "RH is out of range");
 	CHECKPOSITIVE_RET(psy.getP(), "P <= 0.0");
 	CHECKNONNEGATIVE_RET(psy.getP(), "W < 0.0");
 
 	PyObject* Dict = PyDict_New();
-	auto SetItem = [Dict](const char* Prop, double Val) 
-	{
+	auto SetItem = [Dict](const char* Prop, double Val) {
 		PyDict_SetItemString(Dict, Prop, PyFloat_FromDouble(Val));
 	};
 
