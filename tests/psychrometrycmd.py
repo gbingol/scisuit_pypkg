@@ -7,10 +7,10 @@ sys.path.insert(0, os.getcwd())
 from scisuit.eng import psychrometry
 
 #linear combination
-result = psychrometry(P=101, Tdb=25, Twb=20)
+result = psychrometry(P=101, Tdb=35, Twb=20)
 
 #testing new solver method
-result2 = psychrometry(V=result.V, Twb=result.Twb, P=result.P)
+result2 = psychrometry(V=result.V, Twb=result.Twb, Tdp=result.Tdp)
 
 #all of the properties
 print(result)
