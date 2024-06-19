@@ -10,7 +10,7 @@ from scisuit.eng import psychrometry
 result = psychrometry(P=101, Tdb=60, Twb=25)
 
 #testing new solver method
-result2 = psychrometry(RH=result.RH, Twb=result.Twb, W=result.W)
+result2 = psychrometry(RH=result.RH, Twb=result.Twb, H=result.H)
 
 #all of the properties
 print(result)
