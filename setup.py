@@ -48,7 +48,7 @@ setup(
 		'Topic :: Scientific/Engineering'
 	],
 	python_requires='>=3.10',
-	install_requires=[], #no need to use limitation on numpy 'numpy<=2.0'
+	install_requires=['numpy'], #no need to use limitation on numpy 'numpy<=2.0'
 	packages=find_packages(),
 	package_data={'': ['README.md'], 'scisuit':['*.dll']},
 	setup_requires=['setuptools>=61.0'],
