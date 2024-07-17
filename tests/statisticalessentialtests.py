@@ -161,16 +161,26 @@ def test_normality(x=None):
 	print("Kolmogorov-Smirnov: ", result_ks)
 
 
-"""
-AOV()
-AOV2()
-ztest()
-ftest()
-signtest()
-ttest_2sample()
-norm_andersondarling()
 
-"""
+AOV()
+print("\n")
+
+AOV2()
+print("\n")
+
+ztest()
+print("\n")
+
+ftest()
+print("\n")
+
+signtest()
+print("\n")
+
+ttest_2sample()
+print("\n")
+
+
 
 
 _data = [2.39798, -0.16255, 0.54605, 0.68578, -0.78007, 

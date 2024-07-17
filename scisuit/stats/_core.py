@@ -19,7 +19,7 @@ def kurt(y:Iterable)->float:
 	assert n >= 4, "y must have at least 4 elements"
 	assert isinstance(y, Iterable), "Iterable object expected"
 	
-	Arr = _np.asfarray(y)
+	Arr = _np.asarray(y, dtype=_np.float64)
 
 	avg = _np.mean(Arr)
 	stdev = _np.std(Arr, ddof=1)
@@ -112,7 +112,7 @@ class rolling:
 		return sum(lst)/len(lst)
 
 	def __median(self, arg:Iterable):
-		arr = _np.asfarray(arg)
+		arr = _np.asarray(arg, dtype=_np.float64)
 		return float(_np.median(arr))
 
 

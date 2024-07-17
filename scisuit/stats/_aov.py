@@ -157,15 +157,15 @@ class aov:
 
 		ResultCls = aov_results(
 			Treat_DF=self.m_DFTreatment,
-			Treat_MS=MS_Treatment,
-			Treat_SS=SS_Treatment,
+			Treat_MS = float(MS_Treatment),
+			Treat_SS = float(SS_Treatment),
 			Error_DF=self.m_DFError,
-			Error_SS=SS_Error,
-			Error_MS=self.m_MSError,
+			Error_SS = float(SS_Error),
+			Error_MS = float(self.m_MSError),
 			Total_DF=DF_Total,
-			Total_SS=SS_Total,
-			Total_MS=SS_Total/DF_Total,
-			Fvalue=Fvalue)
+			Total_SS = float(SS_Total),
+			Total_MS = float(SS_Total/DF_Total),
+			Fvalue = float(Fvalue))
 
 		return self.m_pvalue, ResultCls
 
@@ -238,15 +238,15 @@ def aov2(
 	"""
 	X1 = x1
 	if isinstance(x1, list):
-		X1 = np.asfarray(x1)
+		X1 = np.asarray(x1, dtype=np.float64)
 	
 	X2 = x2
 	if isinstance(x2, list):
-		X2 = np.asfarray(x2)
+		X2 = np.asarray(x2, dtype=np.float64)
 	
 	YY = y
 	if isinstance(y, list):
-		YY = np.asfarray(y)
+		YY = np.asarray(y, dtype=np.float64)
 
 	assert len(X1)>= 3, "x1 must have at least 3 elements"
 	assert len(X2) == len(X1), "x1 and x2 must have same size"
@@ -269,11 +269,11 @@ def aov2(
 		for j in range(len(v1)):
 			sz = len(Tbl[i][j])
 			for k in range(sz):
-				Err = Tbl[i][j][k] - MatAverage[i][j]
+				Err = float(Tbl[i][j][k] - MatAverage[i][j])
 				SSerror += Err**2.0
 
 				Residuals.append(Err)
-				Fits.append(MatAverage[i][j])
+				Fits.append(float(MatAverage[i][j]))
 
 	MatAverage = np.array(MatAverage)
 	GrandMean = MatAverage.mean()
@@ -304,11 +304,24 @@ def aov2(
 	pvalinteract = 1.0 - pf(Fvalinteract, DFinteract, DFerror)
 
 	return aov2_results(
-		DFError=DFerror, DFFact1=DFFact1, DFFact2=DFFact2,DFinteract=DFinteract,
-		FvalFact1=FvalFact1, FvalFact2 =FvalFact2, Fvalinteract = Fvalinteract,
-		MSError = MSerror, MSFact1 = MSFact1, MSFact2 = MSFact2, MSinteract= MSinteract,
-		pvalFact1 = pvalFact1, pvalFact2 = pvalFact2, pvalinteract= pvalinteract,
-		SSError = SSerror, SSFact1 = SSFact1, SSFact2 = SSFact2, SSinteract=SSinteract,
+		DFError=DFerror, 
+		DFFact1=DFFact1, 
+		DFFact2=DFFact2,
+		DFinteract=DFinteract,
+		FvalFact1=FvalFact1, 
+		FvalFact2 =FvalFact2, 
+		Fvalinteract = Fvalinteract,
+		MSError = float(MSerror), 
+		MSFact1 = MSFact1, 
+		MSFact2 = MSFact2, 
+		MSinteract= float(MSinteract),
+		pvalFact1 = float(pvalFact1), 
+		pvalFact2 = float(pvalFact2), 
+		pvalinteract= float(pvalinteract),
+		SSError = float(SSerror), 
+		SSFact1 = float(SSFact1), 
+		SSFact2 = float(SSFact2), 
+		SSinteract = float(SSinteract),
 
 		Fits=Fits,
 		Residuals=Residuals

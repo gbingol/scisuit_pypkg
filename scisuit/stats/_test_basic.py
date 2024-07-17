@@ -51,10 +51,10 @@ def test_f(
 
 	XX, YY = x, y
 	if isinstance(x, list):
-		XX = _np.asfarray(x)
+		XX = _np.asarray(x, dtype=_np.float64)
 
 	if isinstance(y, list):
-		YY = _np.asfarray(y)
+		YY = _np.asarray(y, dtype=_np.float64)
 	
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
 	assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
@@ -102,13 +102,14 @@ def test_f(
 	elif alternative == "less":
 		CI_upper = varRatio * qf(1 - alpha, df1, df2)
 	
-	result = test_f_Result(Fcritical= Fcritical, 
+	result = test_f_Result(
+			Fcritical= Fcritical, 
 			df1=df1,
 			df2=df2,
-			var1=var1,
-			var2=var2,
-			CI_lower=CI_lower,
-			CI_upper=CI_upper)
+			var1 = float(var1),
+			var2 = float(var2),
+			CI_lower = float(CI_lower),
+			CI_upper = float(CI_upper))
 
 	return pvalue, result
 
@@ -180,9 +181,9 @@ def _FindCI(xvec, alternative, ConfLevel):
 
 	lowerRes = CI_Result(
 		pos = lower_pos,
-		prob=lower,
-		CILow = min(CI_a, CI_b),
-		CIHigh = max(CI_a, CI_b))
+		prob = float(lower),
+		CILow = float(min(CI_a, CI_b)),
+		CIHigh = float(max(CI_a, CI_b)))
 	
 
 	CI_a = xvec[upper_pos]
@@ -190,9 +191,9 @@ def _FindCI(xvec, alternative, ConfLevel):
 
 	upperRes = CI_Result(
 		pos = upper_pos,
-		prob = upper,
-		CILow = min(CI_a, CI_b),
-		CIHigh = max(CI_a, CI_b))
+		prob = float(upper),
+		CILow = float(min(CI_a, CI_b)),
+		CIHigh = float(max(CI_a, CI_b)))
 
 	return lowerRes, upperRes
 
@@ -221,7 +222,7 @@ def test_sign(
 	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = _np.asfarray(x)
+	XX = _np.asarray(x, dtype=_np.float64)
 	
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
 	
@@ -229,7 +230,7 @@ def test_sign(
 
 	if y != None:
 		assert isinstance(y, Iterable), "y must be Iterable"
-		YY = _np.asfarray(y)
+		YY = _np.asarray(y, dtype=_np.float64)
 
 		assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
 		xvec = XX - YY
@@ -282,16 +283,16 @@ def test_sign(
 	if alternative == "two.sided" or alternative == "notequal":
 		x1, x2 = Lower.prob, Upper.prob
 
-		interped.CILow = _np.interp(conflevel, [x1, x2], [Lower.CILow, Upper.CILow] )
-		interped.CIHigh = _np.interp(conflevel, [x1, x2], [Lower.CIHigh, Upper.CIHigh])
+		interped.CILow = float(_np.interp(conflevel, [x1, x2], [Lower.CILow, Upper.CILow] ))
+		interped.CIHigh = float(_np.interp(conflevel, [x1, x2], [Lower.CIHigh, Upper.CIHigh]))
 	
 	elif alternative == "greater":
-		interped.CILow = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CILow, Upper.CILow])
+		interped.CILow = float(_np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CILow, Upper.CILow]))
 		interped.CIHigh = math.inf
 	
 	elif alternative == "less":
 		interped.CILow = -math.inf
-		interped.CIHigh = _np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CIHigh, Upper.CIHigh])
+		interped.CIHigh = float(_np.interp(conflevel, [Lower.prob, Upper.prob], [Lower.CIHigh, Upper.CIHigh]))
 	
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
@@ -352,7 +353,7 @@ def _test_t1(
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = _np.asfarray(x)
+	XX = _np.asarray(x, dtype=_np.float64)
 
 	assert len(XX)>= 3, "container must have at least 3 elements"
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
@@ -413,8 +414,8 @@ def _test_t2(
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = _np.asfarray(x)
-	YY = _np.asfarray(y)
+	XX = _np.asarray(x, dtype=_np.float64)
+	YY = _np.asarray(y, dtype=_np.float64)
 
 	assert len(XX)>= 3, "x must have at least 3 elements"
 	assert len(YY)>= 3, "y must have at least 3 elements"
@@ -492,11 +493,11 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[flo
 
 	XX = x
 	if isinstance(x, list):
-		XX = _np.asfarray(x)
+		XX = _np.asarray(x, dtype=_np.float64)
 	
 	YY = y
 	if isinstance(y, list):
-		YY = _np.asfarray(y)
+		YY = _np.asarray(y, dtype=_np.float64)
 
 	assert len(XX)>= 3, "container must have at least 3 elements"
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
@@ -595,14 +596,14 @@ def test_z(
 
 	XX = x
 	if isinstance(x, list):
-		XX = _np.asfarray(x)
+		XX = _np.asarray(x, dtype=_np.float64)
 
 	assert len(XX)>= 3, "container must have at least 3 elements"
 	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
 
 	dim = len(XX)
-	xaver = _np.mean(XX)
-	SE = sd / math.sqrt(dim)
+	xaver = float(_np.mean(XX))
+	SE = sd / float(math.sqrt(dim))
 	stdeviation = _np.std(XX, ddof =1); #sample's standard deviation
 
 	alpha = 1 - conflevel
@@ -632,12 +633,12 @@ def test_z(
 	CI_upper = xaver - qnorm(alpha / 2.0, 0.0, 1.0) * SE
 	CI_lower = xaver + qnorm(alpha / 2.0, 0.0, 1.0) * SE
 
-	result = test_z_Result(SE = SE, 
-			stdev = stdeviation, 
+	result = test_z_Result(SE = float(SE), 
+			stdev = float(stdeviation), 
 			N = dim, 
-			mean = xaver, 
+			mean = float(xaver), 
 			zcritical = zcritical,
-			CI_lower = CI_lower,
-			CI_upper = CI_upper)
+			CI_lower = float(CI_lower),
+			CI_upper = float(CI_upper))
 
 	return pvalue, result

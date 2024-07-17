@@ -396,8 +396,8 @@ def linregress(
 	intercept: True if there is intercept
 	alpha: significance level
 	"""
-	Observed = np.asfarray(yobs)
-	Factor = np.asfarray(factor)
+	Observed = np.asarray(yobs, dtype=np.float64)
+	Factor = np.asarray(factor, dtype=np.float64)
 
 	IsMatrix = len(Factor.shape) == 2
 	IsVector = len(Factor.shape) == 1

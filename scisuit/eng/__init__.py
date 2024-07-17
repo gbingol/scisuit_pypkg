@@ -1,4 +1,3 @@
-from .fpe import *
 from ._humidair import psychrometry
 from ._dryair import Air
 from ._refrigerants import Refrigerant

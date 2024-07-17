@@ -359,7 +359,7 @@ def fsolve(
 
 
 	#solution vector as floating point
-	v = _np.asfarray(x0)
+	v = _np.asarray(x0, dtype=_np.float64)
       
 	#values of each function	
 	Fvals = _np.zeros(dim)
