@@ -1,7 +1,7 @@
 from ._core import kurt, mode, moveavg, rolling, skew
 
-from ._aov import aov, aov2, aov2_results
-from ._linregress import linregress
+from ._aov import aov, aov_results, aov2, aov2_results
+from ._linregress import linregress, linregressResult
 
 from ._test_basic import \
 	test_f, test_f_Result, \
