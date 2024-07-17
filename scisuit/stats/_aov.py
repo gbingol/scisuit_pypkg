@@ -8,7 +8,7 @@ import numpy as np
 from ..fitting import linearinterp
 from ._distributions import pf
 
-__all__ = ['aov', 'aov2_results', 'aov']
+__all__ = ['aov','aov_results','aov2', 'aov2_results']
 
 
 
