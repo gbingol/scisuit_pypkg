@@ -11,19 +11,9 @@ from ._ctypeslib import pydll as _pydll
 
 
 
-def trapz(
-		x:list|_np.ndarray, 
-		y:list|_np.ndarray)->float:
-    """Uses Numpy's trapz method."""
-    return _np.trapz(x=x, y=y)
-
-
-
-#------------------------------------------------
-
 def cumtrapz(
-		x:list|_np.ndarray, 
-		y:list|_np.ndarray)->list:
+		x:Iterable, 
+		y:Iterable)->list:
 	"""Computes the left-tailed cumulative area"""
 	val = 0.0
 	retList =[0.0]
