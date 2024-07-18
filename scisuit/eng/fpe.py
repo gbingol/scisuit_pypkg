@@ -231,7 +231,16 @@ class Food:
 		return retStr
 
 
-
+	def __iter__(self): 
+		return iter([
+			("water", self._water),
+			("cho", self._cho),
+			("protein", self._protein),
+			("lipid", self._lipid),
+			("ash", self._ash),
+			("salt", self._salt)
+			])
+	
 
 	def cp(self, T:float = None)->float:
 		"""

@@ -13,3 +13,8 @@ print(f"cp={milk.cp()}")
 print(f"rho={milk.rho()}")
 print(f"k={milk.k()}")
 print(f"aw={milk.aw()}")
+
+for k, v in milk:
+    print(k, v)
+
+print(list(milk))
