@@ -12,8 +12,8 @@ from ._ctypeslib import pydll as _pydll
 
 
 def cumtrapz(
-		x:Iterable, 
-		y:Iterable)->list:
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->list[_numbers.Real]:
 	"""Computes the left-tailed cumulative area"""
 	val = 0.0
 	retList =[0.0]
@@ -27,7 +27,7 @@ def cumtrapz(
 		temp = (y[i] + y[i + 1])/2.0
 		val += (b - a) * temp
 
-		retList.append(val)
+		retList.append(float(val))
 	
 	return retList
 
@@ -36,8 +36,8 @@ def cumtrapz(
 #------------------------------------------------
 
 def simpson(
-		x:Iterable, 
-		y:Iterable)->float:
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->float:
 	"""Uses simpson's method (1/3 and 3/8)"""
 
 	return _pydll.c_integ_simpson(x, y)
