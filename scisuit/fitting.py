@@ -11,20 +11,6 @@ from .util import minmax
 
 
 
-__all__ = [
-	'approx',
-	'linearinterp', 
-	'lagrange', 
-	'spline', 
-	'expfit', 
-	'logfit', 
-	'logistfit', 
-	'polyfit', 
-	'powfit', 
-	'SplineResult']
-
-
-
 
 def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 	"""
@@ -52,19 +38,21 @@ def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 
 
 
-def lagrange(
-		x:Iterable, 
-		y:Iterable, 
-		value:float)->float:
-	"""
-	Constructs lagrange polynomial from x,y to compute the given value.
-	"""
-	assert issubclass(value, _numbers.Real)
+#-------------------------------------------------
 
+def lagrange(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real], 
+		value:float)->float:
+	"""Constructs lagrange polynomial from x,y to compute the given value."""
+	assert isinstance(value, _numbers.Real)
 	return _pydll.c_fit_lagrange(x, y, _ct.c_double(value))
 
 
-########################################################################################
+
+
+
+#-------------------------------------
 
 
 @_dc.dataclass
@@ -78,22 +66,31 @@ class SplineResult:
 	upper: float = None
 
 
-def spline(x:Iterable, y:Iterable)->list[SplineResult]:
-	"""
-	Constructs natural cubic spline polynomials from x, y
-	"""
-	lst = _pydll.c_fit_spline(x, y)
-	
+def spline(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->list[SplineResult]:
+	"""Constructs natural cubic spline polynomials from x, y"""
+	lst = _pydll.c_fit_spline(x, y)	
 	return  [SplineResult(_Polynomial.Polynomial(l[0]), l[1], l[2]) for l in lst]
 
 
-########################################################################################
 
 
+
+#------------------------------------------
+
+@_dc.dataclass
+class expfitResult:
+	a:float = None
+	b:float = None
+
+	def __str__(self):
+		return "y = " + str(self.a) + "*exp(" + str(self.b) + "*x"
+	
 def expfit(
-		x:Iterable, 
-		y:Iterable, 
-		intercept:None|float=None)->list:
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real], 
+		intercept:None|float=None)->expfitResult:
 	"""
 	Fits x,y to the equation y = a*exp(b*x) \n
 	Returns [a, b]
@@ -103,21 +100,55 @@ def expfit(
 	If intercept is given then a=intercept and b is computed accordingly.
 	"""
 	if(intercept!=None):
-		assert issubclass(intercept, _numbers.Real)
+		assert isinstance(intercept, _numbers.Real)
 
-	return _pydll.c_fit_expfit(x, y, intercept)
+	lst = _pydll.c_fit_expfit(x, y, intercept)
+
+	return expfitResult(a=lst[0], b=lst[-1])
 
 
-def logfit(x:Iterable, y:Iterable)->list:
+
+#------------------------------------------------
+
+
+@_dc.dataclass
+class logfitResult:
+	a:float = None
+	b: float = None
+
+	def __str__(self):
+		return "y = " + str(self.a) + "*ln(x) + " + str(self.b)
+
+def logfit(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->logfitResult:
 	"""
 	Fits x,y to the equation y = a*ln(x) + b \n
 	Returns [a, b]
 	"""
+	lst = _pydll.c_fit_logfit(x, y)
+	return logfitResult(a=lst[0], b=lst[-1])
 
-	return _pydll.c_fit_logfit(x, y)
 
 
-def logistfit(x:Iterable, y:Iterable, limit = None)->list:
+
+#---------------------------------------------------
+
+@_dc.dataclass
+class logistfitResult:
+	L:float = None
+	b0:float = None
+	b1:float = None
+
+	def __str__(self):
+		return "y = " + str(self.L) + "/" + \
+				"(1 + exp(" + \
+				str(self.b0) + " + " + str(self.b1) + "x" + "))"
+
+def logistfit(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real], 
+		limit:_numbers.Real = None)->logistfitResult:
 	"""
 	Fits to the equation y = L / (1 + exp(b0 + b1*x)) \n
 	Returns either [L, b0, b1] or [b0, b1]
@@ -126,12 +157,24 @@ def logistfit(x:Iterable, y:Iterable, limit = None)->list:
 	limit: None or float
 	"""
 	if(limit!=None):
-		assert issubclass(limit, _numbers.Real)
+		assert isinstance(limit, _numbers.Real)
 
-	return _pydll.c_fit_logistfit(x, y, limit)
+	lst =  _pydll.c_fit_logistfit(x, y, limit)
+
+	return logistfitResult(
+			L= limit if limit!=None else lst[0],
+			b0= lst[0] if limit!=None else lst[1],
+			b1= lst[-1])
 
 
-def polyfit(x:Iterable, y:Iterable, deg)->tuple:
+
+
+#--------------------------------------
+
+def polyfit(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real], 
+		deg)->tuple:
 	"""
 	Uses numpy.polynomial.polynomial.polyfit
 	returns (coefficients, residuals)
@@ -140,15 +183,32 @@ def polyfit(x:Iterable, y:Iterable, deg)->tuple:
 	return coeffs, stats[0]
 
 
-def powfit(x:Iterable, y:Iterable)->list[float]:
+
+
+#----------------------------------------------
+
+@_dc.dataclass
+class powfitResult:
+	a:float = None
+	n:float = None
+
+	def __str__(self):
+		return "y = " + str(self.a) + "*x^" + str(self.n)
+
+def powfit(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->powfitResult:
 	"""
 	Fits to the equation y = a*x^n \n
 	Returns [a, n]
 	"""
-	return _pydll.c_fit_powfit(x,y)
+	lst = _pydll.c_fit_powfit(x,y)
+	return powfitResult(a=lst[0], n=lst[-1])
 
 
 
+
+#-------------------------------------------
 
 def approx(
 		x:_np.ndarray, 
