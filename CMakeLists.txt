@@ -5,23 +5,23 @@ if(NOT WIN32)
 	message(FATAL_ERROR "Works only under Win32")
 endif()
 
-#set(VARPY scisuit_pybind310)
-set(VARPY scisuit_pybind311)
-#set(VARPY scisuit_pybind312)
+#set(VARPY pybind310)
+set(VARPY pybind311)
+#set(VARPY pybind312)
 
 project(${VARPY})
 
 
 
-if(${VARPY} STREQUAL "scisuit_pybind310")
+if(${VARPY} STREQUAL "pybind310")
 	set(PYLIB "python310")
 	set(PYHOME "C:/Python/Python3106/")
 
-elseif(${VARPY} STREQUAL "scisuit_pybind311")
+elseif(${VARPY} STREQUAL "pybind311")
 	set(PYLIB "python311")
 	set(PYHOME "C:/Python/Python311/")
 
-elseif(${VARPY} STREQUAL "scisuit_pybind312")
+elseif(${VARPY} STREQUAL "pybind312")
 	set(PYLIB "python312")
 	set(PYHOME "C:/Python/Python312/")
 endif()

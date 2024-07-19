@@ -27,7 +27,7 @@ def get_python_abi_tag():
 	return py_version
 
 
-
+pybindfile = f"pybind{sys.version_info.major}{sys.version_info.minor}.dll"
 
 setup(
 	name = 'scisuit',
@@ -52,7 +52,10 @@ setup(
 	python_requires = '>=3.10',
 	install_requires = ['numpy'], #no need to use limitation on numpy 'numpy<=2.0'
 	packages = find_packages(),
-	package_data = {'': ['README.md'], 'scisuit':['*.dll']}, #key is folder name
+	package_data = {
+		'': ['README.md'], 
+		'scisuit':['boost*.dll', 'wx*.dll', 'scisuit*.dll', pybindfile]
+		},
 	setup_requires = ['setuptools>=61.0'],
 	options={
 		'bdist_wheel': {

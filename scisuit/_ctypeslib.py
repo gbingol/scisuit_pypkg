@@ -5,7 +5,7 @@ from pathlib import Path as _Path
 """
 Tested with: 3.10.6, 3.11.6, 3.12.0
 """
-_DLLname = "scisuit_pybind" + str(sys.version_info.major) + str(sys.version_info.minor)
+_DLLname = "pybind" + str(sys.version_info.major) + str(sys.version_info.minor)
 
 
 #__file__ is guaranteed to be an absolute path in Python 3.9+
