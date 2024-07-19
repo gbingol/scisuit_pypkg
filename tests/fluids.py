@@ -7,10 +7,6 @@ sys.path.insert(0, os.getcwd())
 
 from scisuit.eng import Refrigerant
 
-r = Refrigerant().SR12()
-rng = np.where(np.logical_and(r.hf>20, r.hf<50))
-print(list(map(lambda i: r.hf[i], rng)))
-
 
 def water():
 	from scisuit.eng import Water
@@ -31,3 +27,11 @@ def dryair():
 	print(f"Density (kg/m3): {air.density()}")
 	print(f"Viscosity (Pa*s): {air.viscosity()}")
 
+
+r = Refrigerant().SR12()
+rng = np.where(np.logical_and(r.hf>20, r.hf<50))
+print(list(map(lambda i: r.hf[i], rng)))
+
+
+water()
+dryair()
