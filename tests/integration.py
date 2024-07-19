@@ -4,14 +4,15 @@ import numpy as np
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
 sys.path.insert(0, os.getcwd()) 
 
-from scisuit.integ import simpson, romberg, fixed_quad, cumtrapz
+from scisuit.integ import simpson, romberg, fixed_quad, cumtrapz, trapz
 from numpy import trapezoid
 
 #Discrete data
 x=np.linspace(0, 3, num=20)
 y = x**2
 
-print(f"Trapz: {trapezoid(x,y)}")
+print(f"Trapz (numpy): {trapezoid(x=x,y=y)}")
+print(f"Trapz: {trapz(x=x,y=y)}")
 print(f"Cumtrapz: {cumtrapz(x,y)}")
 print(f"Simpson: {simpson(x, y)}")
 

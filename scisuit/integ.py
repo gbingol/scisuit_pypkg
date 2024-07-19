@@ -1,12 +1,33 @@
 import ctypes as _ct
-import math as _math
 import numbers as _numbers
 import types as _types
 from typing import Iterable
 
-import numpy as _np
 
 from ._ctypeslib import pydll as _pydll
+
+
+
+
+
+def trapz(
+		x:Iterable[_numbers.Real], 
+		y:Iterable[_numbers.Real])->_numbers.Real:
+	"""Computes the area using trapezoidal algorithm"""
+	len_x, len_y = len(x), len(y)
+	assert len_x == len_y, "x and y must be of same size."
+
+	retval = 0.0
+	for i in range(len_x-1):
+		a, b = x[i], x[i + 1]
+		f_a, f_b = y[i], y[i + 1]
+
+		if b < a:
+			raise ValueError("|X(i+1)-X(i)|>1E-5 expected.")
+
+		retval += float(b - a) * float(f_a + f_b) / 2.0
+
+	return retval
 
 
 
@@ -21,13 +42,13 @@ def cumtrapz(
 	for i in range(len(x)-1):
 		a, b = x[i], x[i + 1]
 
-		if _math.isclose(b, a, abs_tol = 1E-5) or b < a:
+		if b < a:
 			raise ValueError("|X(i+1)-X(i)|>1E-5 expected.")
 
 		temp = (y[i] + y[i + 1])/2.0
-		val += (b - a) * temp
+		val += float(b - a) * float(temp)
 
-		retList.append(float(val))
+		retList.append(val)
 	
 	return retList
 
