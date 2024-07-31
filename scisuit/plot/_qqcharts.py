@@ -7,7 +7,7 @@ from ..stats import qnorm
 from ..util import minmax
 from ._chartelems import Marker
 from ._charts import scatter
-
+from ..stats import qnorm
 
 
 def _ComputeQuantiles(X:_Iterable)->_Iterable:
@@ -56,15 +56,18 @@ def qqnorm(
 
 	Quantiles = _ComputeQuantiles(data)
 
-	if show:		
-		MinQ, MaxQ = minmax(Quantiles)
+	if show:
+		#Following R's qqline style
+		xmin, xmax = qnorm(0.25), qnorm(0.75)
+		ymin, ymax = _np.quantile(list(data), q=0.25), _np.quantile(list(data), q=0.75)
 
-		#Extend the line by 10% in both directions
-		MinQ = MinQ*1.1
-		MaxQ = MaxQ*1.1
+		slope = (ymax-ymin)/(xmax-xmin)
+		f = lambda x: slope*(x-xmin) + ymin
 
-		lwidth = (kwargs.get("lw") or kwargs.get("linewidth")) or 2
-		scatter(x=(MinQ, MaxQ), y=(MinQ, MaxQ), marker=None, **kwargs)
+		xdatamin, xdatamax = minmax(Quantiles)
+
+		kwargs["lw"] = (kwargs.get("lw") or kwargs.get("linewidth")) or 2
+		scatter(x=(xdatamin, xdatamax), y=(f(xdatamin), f(xdatamax)), marker=None, **kwargs)
 
 	scatter(x=Quantiles, y=_np.sort(data), label=label, marker=marker)
 

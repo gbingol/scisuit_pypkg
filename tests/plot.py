@@ -97,7 +97,7 @@ def histogram():
 
 def qqcharts():
 	import scisuit.stats as stat
-	x=stat.rnorm(100)
+	x= [24, 43, 58, 71, 43, 49, 61, 44, 67, 49, 53, 56, 59, 52, 62, 54, 57, 33, 46, 43, 57]
 
 	#full control on marker
 	plt.layout(1,2)
@@ -214,7 +214,7 @@ scatter()
 
 plt.figure()
 
-histogram()
+qqcharts()
 
 #plt.savefig("C:\\Users\\gbing\\Documents\\Visual Studio 2022\\Projects\\scisuit_pypkg\\scisuit\\abc.xpm")
 
