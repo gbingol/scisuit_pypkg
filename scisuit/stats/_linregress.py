@@ -42,10 +42,6 @@ def _FitZeroIntercept(yobs:np.ndarray, factor:np.ndarray):
 
 
 class linregressResult:
-	"""
-	Do NOT create an instance of this class directly \n
-	An instance is returned by simple_linregress or multiple_linregress classes' summary methods
-	"""
 	def __init__(self, Dict) -> None:
 		self.m_Dict = Dict
       
