@@ -83,7 +83,7 @@ class linregressResult:
 		return self.m_Dict["ANOVA"]
 
 	@property
-	def coeffstat(self)->dict:
+	def coeffstat(self)->list[dict]:
 		"""
 		{coeff, pvalue, tvalue, SE, CILow, CIHigh}
 		"""
