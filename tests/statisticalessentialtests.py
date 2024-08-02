@@ -83,6 +83,9 @@ def linregression():
 	summary = slm.summary()
 	print("p-value:", summary.pvalue)
 
+	for i in summary.coeffstat:
+		print(i)
+
 
 def ttest_2sample():
 	from scisuit.stats import test_t
@@ -166,6 +169,9 @@ AOV()
 print("\n")
 
 AOV2()
+print("\n")
+
+linregression()
 print("\n")
 
 ztest()

@@ -331,14 +331,14 @@ class multiple_linregress:
 		for i in range(len(self.m_coeffs)):
 			tbl = {}
 
-			tbl["coeff"] = self.m_coeffs[i]
-			tbl["SE"] = SE[i]
+			tbl["coeff"] = float(self.m_coeffs[i])
+			tbl["SE"] = float(SE[i])
 			
 			Tvalue = self.m_coeffs[i]/SE[i]
-			tbl["tvalue"] = Tvalue
+			tbl["tvalue"] = float(Tvalue)
 
 			_pt = pt(q=float(Tvalue), df = nrows-1)
-			tbl["pvalue"] = 2*(1 - _pt) if Tvalue>=0 else 2*_pt
+			tbl["pvalue"] = float(2*(1 - _pt) if Tvalue>=0 else 2*_pt)
 			
 			
 			invTval = qt(self.m_alpha/2.0, DF_Residual)
@@ -346,8 +346,8 @@ class multiple_linregress:
 			val1 = self.m_coeffs[i] - SE[i]*invTval
 			val2 = self.m_coeffs[i] + SE[i]*invTval
 
-			tbl["CILow"] = min(val1,val2)
-			tbl["CIHigh"] = max(val1,val2)
+			tbl["CILow"] = float(min(val1,val2))
+			tbl["CIHigh"] = float(max(val1,val2))
 
 			CoefStats.append(tbl)
 
