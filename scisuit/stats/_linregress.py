@@ -126,8 +126,8 @@ class simple_linregress:
 		N = self.m_yobs.size
 		assert N >= 3, "At least 3 entries must be provided"
 		
-		mean_x, mean_y = np.mean(self.m_factor), np.mean(self.m_yobs)
-		sum_xy, sum_x2, sum_y2, sum_y, sum_x, sum_mean_x, SS_Total = 0, 0, 0, 0, 0, 0, 0
+		mean_x, mean_y = float(np.mean(self.m_factor)), float(np.mean(self.m_yobs))
+		sum_xy, sum_x2, sum_y2, sum_y, sum_x, sum_mean_x, SS_Total = 0, 0, 0, 0, 0, 0, 0.0
 
 		for i in range(N):
 			xi, yi = float(self.m_factor[i]), float(self.m_yobs[i])
@@ -141,7 +141,7 @@ class simple_linregress:
 
 
 		df = N-2
-		if self.m_intercept == False:
+		if not self.m_intercept:
 			df = N-1
 			SS_Total=sum_y2
             
@@ -164,8 +164,8 @@ class simple_linregress:
 
 
 
-		def CoeffStat(beta, SE_beta, t_beta):
-			pvalue=0
+		def CoeffStat(beta:float, SE_beta:float, t_beta:float):
+			pvalue = 0.0
 
 			#area on the left of tcrit + area on the right of positive
 			if t_beta<=0:
@@ -178,7 +178,7 @@ class simple_linregress:
 
 			tbl = {"coeff":beta, "pvalue":pvalue, "tvalue":t_beta, "SE":SE_beta }
 
-			invTval = qt(self.m_alpha/2.0, ANOVA["DF_Residual"])
+			invTval:float = qt(self.m_alpha/2.0, ANOVA["DF_Residual"])
 
 			val1 = beta - SE_beta*invTval
 			val2 = beta + SE_beta*invTval
@@ -192,9 +192,9 @@ class simple_linregress:
 		#std error of population
 		s = math.sqrt(MS_Residual)
 
-		SE_beta1=s/math.sqrt(sum_mean_x)
+		SE_beta1 = s/math.sqrt(sum_mean_x)
 
-		if(not self.m_intercept):
+		if not self.m_intercept:
 			SE_beta1 = s/math.sqrt(sum_x2)
 		
 		beta1, beta0 = float(self.m_coeffs[0]), float(self.m_coeffs[1])
@@ -204,7 +204,7 @@ class simple_linregress:
 
 		CoefStats=[]
 
-		if(self.m_intercept):
+		if self.m_intercept:
 			SE_beta0 = s*math.sqrt(sum_x2)/(math.sqrt(N)*math.sqrt(sum_mean_x))
 			t_beta0 = beta0/SE_beta0		
 			tbl0 = CoeffStat(beta0, SE_beta0, t_beta0)
@@ -257,7 +257,7 @@ class multiple_linregress:
 		assert isinstance(factor, np.ndarray), "factor must be of type numpy 2D array"
 
 		NRows = factor.shape[0]
-		assert NRows == yobs.size, "N rows of matrix must be equal to the size of the observed variables."
+		assert NRows == yobs.size, "Rows of matrix == size of observed variables expected."
 
 		self.m_yobs = yobs
 		self.m_factor = factor
