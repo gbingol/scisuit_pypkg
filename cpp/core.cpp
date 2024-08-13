@@ -27,15 +27,10 @@ namespace
 		std::complex<double>* CompNum, 
 		std::string& ErrMsg)
 	{
-		if (IsSubTypeRealNumber(Obj))
+		if (IsRealNumber(Obj))
 		{
 			if (auto Elem = GetAsRealNumber(Obj))
-				*CompNum = Elem.value();
-			else
-			{
-				ErrMsg = "Invalid real number.";
-				return false;
-			}
+				*CompNum = *Elem;
 		}
 		else if (PyComplex_CheckExact(Obj))
 		{

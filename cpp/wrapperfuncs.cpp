@@ -4,35 +4,15 @@
 #include <core/dtypes.h>
 
 
-bool IsNumpyInt(PyObject* obj)
-{
-	auto TpNm = obj->ob_type->tp_name;
-	bool Int32 = std::strcmp(TpNm, "numpy.int32") == 0 ? true : false;
-	bool Int64 = std::strcmp(TpNm, "numpy.int64") == 0 ? true : false;
-
-	return Int32 || Int64;
-}
-
-
-bool IsNumpyFloat(PyObject* obj)
-{
-	auto TpNm = obj->ob_type->tp_name;
-	bool Float32 = std::strcmp(TpNm, "numpy.float32") == 0 ? true : false;
-	bool Float64 = std::strcmp(TpNm, "numpy.float64") == 0 ? true : false;
-
-	return Float32 || Float64;
-}
-
-
 std::optional<double> GetAsRealNumber(PyObject* obj)
 {
     if (!obj)
         return std::nullopt;
 
-    if (IsSubTypeFloat(obj) || IsNumpyFloat(obj))
+    if (IsFloat(obj))
         return PyFloat_AsDouble(obj);
 
-    else if (IsSubTypeLong(obj) || IsNumpyInt(obj))
+    else if (IsLong(obj))
         return (double)PyLong_AsLong(obj);
 
     return std::nullopt;
