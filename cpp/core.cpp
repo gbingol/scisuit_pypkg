@@ -29,7 +29,7 @@ namespace
 	{
 		if (IsSubTypeRealNumber(Obj))
 		{
-			if (auto Elem = ExtractRealNumber(Obj))
+			if (auto Elem = GetAsRealNumber(Obj))
 				*CompNum = Elem.value();
 			else
 			{
@@ -392,7 +392,7 @@ PyObject* c_fit_expfit(
 	std::optional<double> Intercept;
 
 	if (InterceptObj != Py_None)
-		Intercept = ExtractRealNumber(InterceptObj);
+		Intercept = GetAsRealNumber(InterceptObj);
 
 	auto Coefficients = fitting::expfit(core::CVector(x), core::CVector(y), Intercept);
 
@@ -455,7 +455,7 @@ PyObject* c_fit_logistfit(
 	std::optional<double> Limit;
 
 	if (LimitObj != Py_None)
-		Limit = ExtractRealNumber(LimitObj);
+		Limit = GetAsRealNumber(LimitObj);
 
 	auto Coefficients = fitting::logistfit(core::CVector(x), core::CVector(y), Limit);
 

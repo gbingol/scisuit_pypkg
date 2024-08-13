@@ -20,7 +20,7 @@ static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 	if (!IsExactTypeRealNumber(Obj))
 		throw std::exception(ErrMsg);
 
-	return ExtractRealNumber(Obj).value();
+	return GetAsRealNumber(Obj).value();
 }
 
 

@@ -26,7 +26,7 @@ DLLPYBIND bool IsNumpyInt(PyObject* obj);
 DLLPYBIND bool IsNumpyFloat(PyObject* obj);
 
 //extract real number (float or integer) from obj
-DLLPYBIND std::optional<double> ExtractRealNumber(PyObject* obj);
+DLLPYBIND std::optional<double> GetAsRealNumber(PyObject* obj);
 
 
 PyObject* List_FromCVector(const core::CVector& Vec);
@@ -97,8 +97,23 @@ template <typename T=double>
 std::vector<T> Iterable_As1DVector(PyObject* Obj)
 {
     std::vector<T> Vec;
+    PyObject* iterator{nullptr};
+    PyObject* ResultObj{nullptr};
 
-    PyObject* iterator = PyObject_GetIter(Obj);
+    //if it is a numpy array (or an obje), call tolist function and work with list and numpy data types
+    auto ToList = PyObject_HasAttrString(Obj, "tolist");
+    if(ToList)
+    {
+        auto Func = PyObject_GetAttrString(Obj, "tolist");
+        ResultObj = PyObject_CallNoArgs(Func);
+        Py_DECREF(Func);
+
+        iterator = PyObject_GetIter(ResultObj);
+    }
+
+    if(!iterator)
+        iterator = PyObject_GetIter(Obj);
+
     if (!iterator)
         throw std::exception("An iterable object expected");
 
@@ -107,8 +122,8 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
     {
         if constexpr (std::is_floating_point_v<T>)
         {
-            if (auto Num = ExtractRealNumber(item))
-                Vec.push_back(Num.value());
+            if (auto Num = GetAsRealNumber(item))
+                Vec.push_back(*Num);
         }
 
         else if constexpr (std::is_integral_v<T>)
@@ -120,13 +135,16 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 		else if constexpr(std::is_same_v<T, std::string>)
 		{
 			auto UnicodeObj = PyObject_Str(item);
-			Vec.push_back(std::string(PyUnicode_AsUTF8(UnicodeObj)));
+			Vec.push_back(PyUnicode_AsUTF8(UnicodeObj));
+            
+            Py_DECREF(UnicodeObj);
 		}
 
         Py_DECREF(item);
     }
 
     Py_DECREF(iterator);
+    Py_XDECREF(ResultObj);
 
     return Vec;
 }
