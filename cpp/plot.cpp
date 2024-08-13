@@ -1209,6 +1209,8 @@ bool c_plot_exitmainloop()
 
 	s_APP->ExitMainLoop();
 
+	wxUninitialize();
+
 	return true;
 }
 
