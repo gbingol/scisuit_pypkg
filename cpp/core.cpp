@@ -389,9 +389,9 @@ PyObject* c_fit_expfit(
 	if (InterceptObj != Py_None)
 		Intercept = GetAsRealNumber(InterceptObj);
 
-	auto Coefficients = fitting::expfit(core::CVector(x), core::CVector(y), Intercept);
+	auto Coeffs = fitting::expfit(core::CVector(x), core::CVector(y), Intercept);
 
-	return List_FromCVector(Coefficients);
+	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -427,8 +427,8 @@ PyObject* c_fit_logfit(
 	auto x = Iterable_As1DVector(X);
 	auto y = Iterable_As1DVector(Y);
 
-	auto Coefficients = fitting::logfit(core::CVector(x), core::CVector(y));
-	return List_FromCVector(Coefficients);
+	auto Coeffs = fitting::logfit(core::CVector(x), core::CVector(y));
+	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -452,9 +452,9 @@ PyObject* c_fit_logistfit(
 	if (LimitObj != Py_None)
 		Limit = GetAsRealNumber(LimitObj);
 
-	auto Coefficients = fitting::logistfit(core::CVector(x), core::CVector(y), Limit);
+	auto Coeffs = fitting::logistfit(core::CVector(x), core::CVector(y), Limit);
 
-	return List_FromCVector(Coefficients);
+	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -475,7 +475,7 @@ PyObject* c_fit_powfit(
 	auto y = Iterable_As1DVector(Y);
 
 	auto Coeffs = fitting::powfit(core::CVector(x), core::CVector(y));
-	return List_FromCVector(Coeffs);
+	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -504,7 +504,7 @@ PyObject* c_fit_spline(
 		std::reverse(Coeffs.begin(), Coeffs.end());
 
 		PyObject *SubList = PyList_New(3);
-		PyList_SetItem(SubList, 0, List_FromCVector(Coeffs));
+		PyList_SetItem(SubList, 0, List_FromVector(Coeffs));
 		PyList_SetItem(SubList, 1, PyFloat_FromDouble(x[i]));
 		PyList_SetItem(SubList, 2, PyFloat_FromDouble(x[i + 1]));
 

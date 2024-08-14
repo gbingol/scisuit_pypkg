@@ -27,7 +27,7 @@ PyObject* c_stat_dbeta(PyObject* X, double shape1, double shape2)
 	}
 
 	auto Vec = Iterable_As1DVector(X);
-	return List_FromCVector(dist::dbeta(Vec, shape1, shape2));
+	return List_FromVector(dist::dbeta(Vec, shape1, shape2));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -46,7 +46,7 @@ PyObject* c_stat_pbeta(PyObject* qvalObj, double shape1, double shape2)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pbeta(Vec, shape1, shape2));
+	return List_FromVector(dist::pbeta(Vec, shape1, shape2));
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -65,7 +65,7 @@ PyObject* c_stat_qbeta(PyObject* pvalObj, double shape1, double shape2)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qbeta(Vec, shape1, shape2));
+	return List_FromVector(dist::qbeta(Vec, shape1, shape2));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -86,7 +86,7 @@ PyObject* c_stat_dbinom(PyObject* X, int size_, double prob)
 	}
 		
 	auto Vec = Iterable_As1DVector(X);
-	return List_FromCVector(dist::dbinom(Vec, size_, prob));
+	return List_FromVector(dist::dbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -105,7 +105,7 @@ PyObject* c_stat_pbinom(PyObject* qvalObj, int size_, double prob)
 	}
 		
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pbinom(Vec, size_, prob));
+	return List_FromVector(dist::pbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -124,7 +124,7 @@ PyObject* c_stat_qbinom(PyObject* pvalObj, int size_, double prob)
 	}
 		
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qbinom(Vec, size_, prob));
+	return List_FromVector(dist::qbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -145,7 +145,7 @@ PyObject* c_stat_dnbinom(PyObject* X, int size_, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(X);
-	return List_FromCVector(dist::dnbinom(Vec, size_, prob));
+	return List_FromVector(dist::dnbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -164,7 +164,7 @@ PyObject* c_stat_pnbinom(PyObject* qvalObj, int size_, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pnbinom(Vec, size_, prob));
+	return List_FromVector(dist::pnbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -183,7 +183,7 @@ PyObject* c_stat_qnbinom(PyObject* pvalObj, int size_, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qnbinom(Vec, size_, prob));
+	return List_FromVector(dist::qnbinom(Vec, size_, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -226,7 +226,7 @@ PyObject* c_stat_dchisq(PyObject* xvalObj, int df)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dchisq(Vec, df));
+	return List_FromVector(dist::dchisq(Vec, df));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -244,7 +244,7 @@ PyObject* c_stat_pchisq(PyObject* qvalObj, int df)
 	}
 	
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pchisq(Vec, df));
+	return List_FromVector(dist::pchisq(Vec, df));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -262,7 +262,7 @@ PyObject* c_stat_qchisq(PyObject* pvalObj, int df)
 	}
 		
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qchisq(Vec, df));
+	return List_FromVector(dist::qchisq(Vec, df));
 		
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -284,7 +284,7 @@ PyObject* c_stat_dexp(PyObject* xvalObj, double rate)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dexp(Vec, rate));
+	return List_FromVector(dist::dexp(Vec, rate));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -303,7 +303,7 @@ PyObject* c_stat_pexp(PyObject* qvalObj, double rate)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pexp(Vec, rate));
+	return List_FromVector(dist::pexp(Vec, rate));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -322,7 +322,7 @@ PyObject* c_stat_qexp(PyObject* pvalObj, double rate)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qexp(Vec, rate));
+	return List_FromVector(dist::qexp(Vec, rate));
 
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -345,7 +345,7 @@ PyObject* c_stat_df(PyObject* xvalObj, int df1, int df2)
 	}
 	
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::df(Vec, df1, df2));
+	return List_FromVector(dist::df(Vec, df1, df2));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -364,7 +364,7 @@ PyObject* c_stat_pf(PyObject* qvalObj, int df1, int df2)
 	}
 	
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pf(Vec, df1, df2));
+	return List_FromVector(dist::pf(Vec, df1, df2));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -383,7 +383,7 @@ PyObject* c_stat_qf(PyObject* pvalObj, int df1, int df2)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qf(Vec, df1, df2));
+	return List_FromVector(dist::qf(Vec, df1, df2));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -405,7 +405,7 @@ PyObject* c_stat_dgamma(PyObject* xvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dgamma(Vec, shape, scale));
+	return List_FromVector(dist::dgamma(Vec, shape, scale));
 	
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -425,7 +425,7 @@ PyObject* c_stat_pgamma(PyObject* qvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pgamma(Vec, shape, scale));
+	return List_FromVector(dist::pgamma(Vec, shape, scale));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -444,7 +444,7 @@ PyObject* c_stat_qgamma(PyObject* pvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qgamma(Vec, shape, scale));
+	return List_FromVector(dist::qgamma(Vec, shape, scale));
 	
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -466,7 +466,7 @@ PyObject* c_stat_dgeom(PyObject* X, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(X);
-	return List_FromCVector(dist::dgeom(Vec, prob));
+	return List_FromVector(dist::dgeom(Vec, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -485,7 +485,7 @@ PyObject* c_stat_pgeom(PyObject* qvalObj, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pgeom(Vec, prob));
+	return List_FromVector(dist::pgeom(Vec, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -504,7 +504,7 @@ PyObject* c_stat_qgeom(PyObject* pvalObj, double prob)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qgeom(Vec, prob));
+	return List_FromVector(dist::qgeom(Vec, prob));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -527,7 +527,7 @@ PyObject* c_stat_dhyper(PyObject* X, int m, int n, int k)
 	}
 
 	auto Vec = Iterable_As1DVector(X);
-	return List_FromCVector(dist::dhyper(Vec, m, n, k));
+	return List_FromVector(dist::dhyper(Vec, m, n, k));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -546,7 +546,7 @@ PyObject* c_stat_phyper(PyObject* qvalObj, int m, int n, int k)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::phyper(Vec, m, n, k));
+	return List_FromVector(dist::phyper(Vec, m, n, k));
 	
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -566,7 +566,7 @@ PyObject* c_stat_qhyper(PyObject* pvalObj, int m, int n, int k)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qhyper(Vec, m, n, k));
+	return List_FromVector(dist::qhyper(Vec, m, n, k));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -588,7 +588,7 @@ PyObject* c_stat_dnorm(PyObject* xvalObj, double mean, double sd)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dnorm(Vec, mean, sd));
+	return List_FromVector(dist::dnorm(Vec, mean, sd));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -607,7 +607,7 @@ PyObject* c_stat_pnorm(PyObject* qvalObj, double mean, double sd)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pnorm(Vec, mean, sd));
+	return List_FromVector(dist::pnorm(Vec, mean, sd));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -626,7 +626,7 @@ PyObject* c_stat_qnorm(PyObject* pvalObj, double mean, double sd)
 	}
 	
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qnorm(Vec, mean, sd));
+	return List_FromVector(dist::qnorm(Vec, mean, sd));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -649,7 +649,7 @@ PyObject* c_stat_dlnorm(PyObject* xvalObj, double meanlog, double sdlog)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dlnorm(Vec, meanlog, sdlog));
+	return List_FromVector(dist::dlnorm(Vec, meanlog, sdlog));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -668,7 +668,7 @@ PyObject* c_stat_plnorm(PyObject* qvalObj, double meanlog, double sdlog)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::plnorm(Vec, meanlog, sdlog));
+	return List_FromVector(dist::plnorm(Vec, meanlog, sdlog));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -687,7 +687,7 @@ PyObject* c_stat_qlnorm(PyObject* pvalObj, double meanlog, double sdlog)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qlnorm(Vec, meanlog, sdlog));
+	return List_FromVector(dist::qlnorm(Vec, meanlog, sdlog));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -710,7 +710,7 @@ PyObject* c_stat_dpareto(PyObject* xvalObj, double location, double shape)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dpareto(Vec, location, shape));
+	return List_FromVector(dist::dpareto(Vec, location, shape));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -729,7 +729,7 @@ PyObject* c_stat_ppareto(PyObject* qvalObj, double location, double shape)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::ppareto(Vec, location, shape));
+	return List_FromVector(dist::ppareto(Vec, location, shape));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -748,7 +748,7 @@ PyObject* c_stat_qpareto(PyObject* pvalObj, double location, double shape)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qpareto(Vec, location, shape));
+	return List_FromVector(dist::qpareto(Vec, location, shape));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -770,7 +770,7 @@ PyObject* c_stat_dpois(PyObject* xvalObj, double mu)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dpois(Vec, mu));
+	return List_FromVector(dist::dpois(Vec, mu));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -789,7 +789,7 @@ PyObject* c_stat_ppois(PyObject* qvalObj, double mu)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::ppois(Vec, mu));
+	return List_FromVector(dist::ppois(Vec, mu));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -808,7 +808,7 @@ PyObject* c_stat_qpois(PyObject* pvalObj, double mu)
 	}
 	
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qpois(Vec, mu));
+	return List_FromVector(dist::qpois(Vec, mu));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -831,7 +831,7 @@ PyObject* c_stat_dt(PyObject* xvalObj, int df)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dt(Vec, df));
+	return List_FromVector(dist::dt(Vec, df));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -850,7 +850,7 @@ PyObject* c_stat_pt(PyObject* qvalObj, int df)
 	}
 	
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pt(Vec, df));
+	return List_FromVector(dist::pt(Vec, df));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -869,7 +869,7 @@ PyObject* c_stat_qt(PyObject* pvalObj, int df)
 	}
 	
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qt(Vec, df));
+	return List_FromVector(dist::qt(Vec, df));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -890,7 +890,7 @@ PyObject * c_stat_psmirnov(PyObject * qvalObj, int n)
 	}
 	
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::psmirnov(Vec, n));
+	return List_FromVector(dist::psmirnov(Vec, n));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -911,7 +911,7 @@ PyObject* c_stat_dunif(PyObject* xvalObj, double min, double max)
 	}
 	
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dunif(Vec, min, max));
+	return List_FromVector(dist::dunif(Vec, min, max));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -930,7 +930,7 @@ PyObject* c_stat_punif(PyObject* qvalObj, double min, double max)
 	}
 	
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::punif(Vec, min, max));	
+	return List_FromVector(dist::punif(Vec, min, max));	
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -949,7 +949,7 @@ PyObject* c_stat_qunif(PyObject* pvalObj, double min, double max)
 	}
 	
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qunif(Vec, min, max));
+	return List_FromVector(dist::qunif(Vec, min, max));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -971,7 +971,7 @@ PyObject* c_stat_dweibull(PyObject* xvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(xvalObj);
-	return List_FromCVector(dist::dweibull(Vec, shape, scale));
+	return List_FromVector(dist::dweibull(Vec, shape, scale));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -991,7 +991,7 @@ PyObject* c_stat_pweibull(PyObject* qvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(qvalObj);
-	return List_FromCVector(dist::pweibull(Vec, shape, scale));
+	return List_FromVector(dist::pweibull(Vec, shape, scale));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1011,7 +1011,7 @@ PyObject* c_stat_qweibull(PyObject* pvalObj, double shape, double scale)
 	}
 
 	auto Vec = Iterable_As1DVector(pvalObj);
-	return List_FromCVector(dist::qweibull(Vec, shape, scale));
+	return List_FromVector(dist::qweibull(Vec, shape, scale));
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1041,7 +1041,7 @@ PyObject* c_stat_dsignrank(PyObject* xvalObj, int n)
 	for (const auto& xv : Vec)
 		retVec.push_back(dist::dsignrank(static_cast<int>(xv), n));
 
-	return List_FromCVector(retVec);
+	return List_FromVector(retVec.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1067,7 +1067,7 @@ PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 	for (const auto& qv : Vec)
 		retVec.push_back(dist::psignrank(qv, n));
 
-	return List_FromCVector(retVec);
+	return List_FromVector(retVec.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1098,7 +1098,7 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 		retVec.push_back(dist::qsignrank(pv, n));
 	}
 
-	return List_FromCVector(retVec);
+	return List_FromVector(retVec.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
@@ -1129,12 +1129,12 @@ PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 	auto DataList = PyList_New(Rolling.m_Data.size());
 	for (size_t i = 0; const auto & V : Rolling.m_Data)
 	{
-		auto Item = List_FromCVector(V);
+		auto Item = List_FromVector(V.data());
 		PyList_SetItem(DataList, i++, Item);
 	}
 
 	PyObject* Tuple = PyTuple_New(2);
-	PyTuple_SetItem(Tuple, 0, List_FromCVector(Rolling.m_X));
+	PyTuple_SetItem(Tuple, 0, List_FromVector(Rolling.m_X));
 	PyTuple_SetItem(Tuple, 1, DataList);
 
 	return Tuple;

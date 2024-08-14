@@ -11,7 +11,6 @@
 #include <complex>
 #include <functional>
 
-#include <core/dtypes.h>
 
 #include "dllimpexp.h"
 
@@ -57,7 +56,7 @@ static bool IsRealNum(PyObject* obj)
 }
 
 
-static PyObject* List_FromCVector(const core::CVector& Vec)
+static PyObject* List_FromVector(const std::vector<double>& Vec)
 {
 	if (Vec.size() == 0)
 		return nullptr;
