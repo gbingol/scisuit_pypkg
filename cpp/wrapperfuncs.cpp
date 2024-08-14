@@ -4,35 +4,6 @@
 #include <core/dtypes.h>
 
 
-std::optional<double> GetAsRealNumber(PyObject* obj)
-{
-    if (!obj)
-        return std::nullopt;
-
-    if (PyFloat_Check(obj))
-        return PyFloat_AsDouble(obj);
-
-    else if (PyLong_Check(obj))
-        return (double)PyLong_AsLong(obj);
-
-    return std::nullopt;
-}
-
-
-
-PyObject* List_FromCVector(const core::CVector& Vec)
-{
-    if (Vec.size() == 0)
-        return nullptr;
-
-    auto RetList = PyList_New(Vec.size());
-
-    for (size_t i = 0; i < Vec.size(); ++i)
-        PyList_SetItem(RetList, i, Py_BuildValue("d", Vec[i]));
-
-    return RetList;
-}
-
 
 
 std::function<double(double)> Make1DFunction(PyObject* funcObj)

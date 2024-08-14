@@ -11,21 +11,13 @@
 #include <complex>
 #include <functional>
 
+#include <core/dtypes.h>
+
 #include "dllimpexp.h"
 
 
 
-namespace core
-{
-	class CVector;
-}
 
-
-//extract real number (float or integer) from obj
-DLLPYBIND std::optional<double> GetAsRealNumber(PyObject* obj);
-
-
-PyObject* List_FromCVector(const core::CVector& Vec);
 
 /*
     callableObj: Python callable object.
@@ -44,12 +36,39 @@ std::function<std::complex<double>(std::complex<double>)>
 
 
 
-//is obj a real number (Python float or Python integer or bool)
+static std::optional<double> GetAsRealNumber(PyObject* obj)
+{
+	if (!obj)
+		return std::nullopt;
+
+	if (PyFloat_Check(obj))
+		return PyFloat_AsDouble(obj);
+
+	else if (PyLong_Check(obj))
+		return (double)PyLong_AsLong(obj);
+
+	return std::nullopt;
+}
+
+
 static bool IsRealNum(PyObject* obj)
 {
     return PyLong_Check(obj) || PyFloat_Check(obj);
 }
 
+
+static PyObject* List_FromCVector(const core::CVector& Vec)
+{
+	if (Vec.size() == 0)
+		return nullptr;
+
+	auto List = PyList_New(Vec.size());
+
+	for (size_t i = 0; i < Vec.size(); ++i)
+		PyList_SetItem(List, i, Py_BuildValue("d", Vec[i]));
+
+	return List;
+}
 
 
 
