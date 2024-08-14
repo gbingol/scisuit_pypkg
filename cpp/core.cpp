@@ -63,7 +63,6 @@ PyObject* c_root_bisect(
 	const char* method, 
 	bool modified)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "First parameter must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	std::string METHOD(method);
@@ -147,7 +146,6 @@ PyObject* c_root_brentq(
 	double tol, 
 	int maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "First parameter must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -186,7 +184,6 @@ PyObject* c_root_muller(
 
 	std::string ErrMsg;
 
-	ASSERT_CALLABLE_RET(FuncObj, "First parameter must be callable.");
 	auto func = MakeComplexFunction(FuncObj);
 
 	IF_PYERRVALUE_RET(X0Obj == nullptr, "A value must be assigned to x0");
@@ -263,7 +260,6 @@ PyObject* c_root_newton(
 	double tol, 
 	int maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -313,7 +309,6 @@ PyObject* c_root_ridder(
 	double tol, 
 	int maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be a function.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -345,7 +340,6 @@ PyObject* c_root_toms748(
 	double tol, 
 	int maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "First parameter must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	try
@@ -548,7 +542,6 @@ PyObject* c_integ_romberg(
 	double tol,
 	int maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -567,7 +560,6 @@ PyObject* c_integ_fixed_quad(
 	double b, 
 	int n)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -592,7 +584,6 @@ PyObject* c_optimize_bracket(
 	double growlimit,
 	std::uint32_t maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -623,7 +614,6 @@ PyObject* c_optimize_golden(
 	double tol,
 	std::uint32_t maxiter)
 {
-	ASSERT_CALLABLE_RET(FuncObj, "f must be callable.");
 	auto func = Make1DFunction(FuncObj);
 
 	TRYBLOCK();
@@ -739,8 +729,8 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 	psy.Compute(Values);
 
 	CHECKRANGE_RET(psy.getRH(), 0.0, 100.0, "RH is out of range");
-	CHECKPOSITIVE_RET(psy.getP(), "P <= 0.0");
-	CHECKNONNEGATIVE_RET(psy.getP(), "W < 0.0");
+	IF_PYERR_RET(psy.getP()<=0, PyExc_ValueError, "P <= 0.0");
+	IF_PYERR_RET(psy.getW() < 0.0, PyExc_ValueError, "W < 0.0")
 
 	PyObject* Dict = PyDict_New();
 	auto SetItem = [Dict](const char* Prop, double Val) {

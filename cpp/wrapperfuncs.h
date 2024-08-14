@@ -176,16 +176,6 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 #endif // !ASSERTEXPRESSION
 
 
-#ifndef CHECKPOSITIVE_RET
-#define CHECKPOSITIVE_RET(OBJ, ERRMSG)		\
-	IF_PYERR_RET(OBJ <= 0, PyExc_ValueError, ERRMSG)	
-#endif
-
-#ifndef CHECKNONNEGATIVE_RET
-#define CHECKNONNEGATIVE_RET(OBJ, ERRMSG)								\
-	IF_PYERR_RET(OBJ < 0.0, PyExc_ValueError, ERRMSG)
-#endif
-
 
 #ifndef CHECKRANGE_RET
 #define CHECKRANGE_RET(OBJ, MIN, MAX, ERRMSG)										\
@@ -195,14 +185,6 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 	}
 #endif
 
-
-#ifndef ASSERT_CALLABLE_RET
-#define ASSERT_CALLABLE_RET(OBJ, ERRMSG) \
-    if (PyCallable_Check((OBJ)) == false){ \
-        PyErr_SetString(PyExc_TypeError, (ERRMSG));     \
-        return nullptr;                                  \
-    }
-#endif
 
 
 #ifndef NOTHING

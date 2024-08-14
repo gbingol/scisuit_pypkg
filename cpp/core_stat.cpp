@@ -1025,7 +1025,7 @@ PyObject* c_stat_qweibull(PyObject* pvalObj, double shape, double scale)
 
 PyObject* c_stat_dsignrank(PyObject* xvalObj, int n)
 {
-	CHECKPOSITIVE_RET(n, "n must be >0");
+	IF_PYERR_RET(n<=0, PyExc_ValueError, "n must be >0");
 
 	TRYBLOCK();
 	
@@ -1051,7 +1051,7 @@ PyObject* c_stat_dsignrank(PyObject* xvalObj, int n)
 
 PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 {
-	CHECKPOSITIVE_RET(n, "n must be >0");
+	IF_PYERR_RET(n<=0, PyExc_ValueError, "n must be >0");
 
 	TRYBLOCK();
 	
@@ -1077,7 +1077,7 @@ PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 
 PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 {
-	CHECKPOSITIVE_RET(n, "n must be >0");
+	IF_PYERR_RET(n<=0, PyExc_ValueError, "n must be >0");
 
 	TRYBLOCK();
 	
@@ -1116,7 +1116,7 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 
 PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 {
-	CHECKPOSITIVE_RET(Period, "period must be >0");
+	IF_PYERR_RET(Period <= 0, PyExc_ValueError, "period must be >0");
 	IF_PYERRVALUE_RET(Period < 2, "period must be >=2");
 
 	auto xvec = Iterable_As1DVector(X);
