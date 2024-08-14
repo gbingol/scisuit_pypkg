@@ -70,7 +70,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	}
 
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "Data does not contain any numeric element.");
+	IF_PYERR(Data.size() == 0, PyExc_ValueError, "Data does not contain any numeric element.");
 
 
 	TRYBLOCK();
@@ -146,7 +146,7 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 
 
 	auto Data = Iterable_As1DVector(DataObj);
-	IF_PYERRVALUE_RET(Data.size() == 0, "data does not have any numeric element.");
+	IF_PYERR(Data.size() == 0, PyExc_ValueError, "data does not have any numeric element.");
 
 	TRYBLOCK();
 
@@ -209,12 +209,12 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 			int Breaks = (int)PyLong_AsLong(BreaksObj);
 			int NBins = Breaks + 1;
 
-			IF_PYERRRUNTIME_RET(series->SetNumberOfBins(NBins) == false, "Invalid number of breaks.");
+			IF_PYERR(!series->SetNumberOfBins(NBins), PyExc_RuntimeError, "Invalid number of breaks.");
 		}
 		else
 		{
 			auto Breaks = std::move(Iterable_As1DVector(BreaksObj));
-			IF_PYERRRUNTIME_RET(series->SetBreakPoints(Breaks) == false, "Invalid break points.");
+			IF_PYERR(!series->SetBreakPoints(Breaks), PyExc_RuntimeError, "Invalid break points.");
 		}
 	}
 
@@ -256,7 +256,7 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 	if (TdbObj && TdbObj != Py_None)
 	{
 		auto Tdb_ = Iterable_As1DVector(TdbObj);
-		IF_PYERRVALUE_RET(Tdb_.size() != 2, "Tdb must contain exactly 2 real numbers.");
+		IF_PYERR(Tdb_.size() != 2, PyExc_ValueError, "Tdb must contain exactly 2 real numbers.");
 
 		auto MinMax = std::ranges::minmax(Tdb_);
 		Tdb = {MinMax.min, MinMax.max};
@@ -265,7 +265,7 @@ PyObject* c_plot_psychrometry(PyObject* args, PyObject* kwargs)
 	if (RHObj && RHObj != Py_None)
 	{
 		RH = Iterable_As1DVector(RHObj);
-		IF_PYERRVALUE_RET(RH.size() < 2, "RH must contain at least 2 numeric values.");
+		IF_PYERR(RH.size() < 2, PyExc_ValueError, "RH must contain at least 2 numeric values.");
 	}
 
 	auto frmPlot = new CFrmPlot(nullptr);
@@ -300,10 +300,11 @@ PyObject* c_plot_scatter(PyObject* args, PyObject* kwargs)
 	auto xdata = Iterable_As1DVector(XObj);
 	auto ydata = Iterable_As1DVector(YObj);
 
-	IF_PYERRRUNTIME_RET(xdata.size() == 0, "'x' has no valid numeric data.");
-	IF_PYERRRUNTIME_RET(ydata.size() == 0, "'y' has no valid numeric data.");
+	//TODO: Check if these checks are really necessary (Python side should handle this)
+	IF_PYERR(xdata.size() == 0, PyExc_RuntimeError, "'x' has no valid numeric data.");
+	IF_PYERR(ydata.size() == 0, PyExc_RuntimeError, "'y' has no valid numeric data.");
 
-	IF_PYERRRUNTIME_RET(xdata.size() != ydata.size(), "'x' and 'y' must have same number of numeric data.");
+	IF_PYERR(xdata.size() != ydata.size(), PyExc_RuntimeError, "'x' and 'y' must have same number of numeric data.");
 
 	TRYBLOCK();
 
@@ -405,9 +406,10 @@ PyObject* c_plot_canvas(
 		ydata = Iterable_As1DVector(Y);
 	else
 		ydata = {std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest()};
-		
-	IF_PYERRRUNTIME_RET(xdata.size() != 2, "'x' must have exactly 2 points.");
-	IF_PYERRRUNTIME_RET(ydata.size() != 2, "'y' must have exactly 2 points.");
+	
+	//TODO: CHeck if these are necessary (Python side should be doing it already)
+	IF_PYERR(xdata.size() != 2, PyExc_RuntimeError, "'x' must have exactly 2 points.");
+	IF_PYERR(ydata.size() != 2, PyExc_RuntimeError, "'y' must have exactly 2 points.");
 	
 	TRYBLOCK();
 

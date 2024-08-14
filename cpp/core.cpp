@@ -186,37 +186,37 @@ PyObject* c_root_muller(
 
 	auto func = MakeComplexFunction(FuncObj);
 
-	IF_PYERRVALUE_RET(X0Obj == nullptr, "A value must be assigned to x0");
+	IF_PYERR(X0Obj == nullptr, PyExc_ValueError, "A value must be assigned to x0");
 
 	bool res = AssignComplexValue(X0Obj, &X0, ErrMsg);
-	IF_PYERRRUNTIME_RET(res == false, ErrMsg.c_str());
+	IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 
 
 	if (hObj != Py_None)
 	{
-		IF_PYERRVALUE_RET(X1Obj != Py_None, "if h defined, x1 cannot be defined");
-		IF_PYERRVALUE_RET(X2Obj != Py_None, "if h defined, x2 cannot be defined");
+		IF_PYERR(X1Obj != Py_None, PyExc_ValueError, "if h defined, x1 cannot be defined");
+		IF_PYERR(X2Obj != Py_None, PyExc_ValueError, "if h defined, x2 cannot be defined");
 
 		bool res = AssignComplexValue(hObj, &h, ErrMsg);
-		IF_PYERRRUNTIME_RET(res == false, ErrMsg.c_str());
+		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
 	else
 		h = 0.5;
 
 	if (X1Obj != Py_None)
 	{
-		IF_PYERRVALUE_RET(X2Obj == Py_None, "if x1 defined, x2 must also be defined");
+		IF_PYERR(X2Obj == Py_None, PyExc_ValueError, "if x1 defined, x2 must also be defined");
 
 		bool res = AssignComplexValue(X1Obj, &X1, ErrMsg);
-		IF_PYERRRUNTIME_RET(res == false, ErrMsg.c_str());
+		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
 
 	if (X2Obj != Py_None)
 	{
-		IF_PYERRVALUE_RET(X1Obj == Py_None, "if x2 defined, x1 must also be defined");
+		IF_PYERR(X1Obj == Py_None, PyExc_ValueError, "if x2 defined, x1 must also be defined");
 
 		bool res = AssignComplexValue(X2Obj, &X2, ErrMsg);
-		IF_PYERRRUNTIME_RET(res == false, ErrMsg.c_str());
+		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
 
 	TRYBLOCK();
@@ -280,7 +280,7 @@ PyObject* c_root_newton(
 	}
 	else
 	{
-		IF_PYERRVALUE_RET(X1 == Py_None, "if fprime is not provided, x1 must be defined");
+		IF_PYERR(X1 == Py_None, PyExc_ValueError, "if fprime is not provided, x1 must be defined");
 		res = roots::secant(func, X0, PyFloat_AsDouble(X1), tol, maxiter);
 	}
 
@@ -487,7 +487,7 @@ PyObject* c_fit_spline(
 	auto x = Iterable_As1DVector(X);
 	auto y = Iterable_As1DVector(Y);
 
-	IF_PYERR_RET(x.size() != y.size(), PyExc_RuntimeError, "x and y must have same lengths");
+	IF_PYERR(x.size() != y.size(), PyExc_RuntimeError, "x and y must have same lengths");
 
 	auto Polynomials = fitting::spline_polynomials(x, y);
 
@@ -525,7 +525,7 @@ PyObject* c_integ_simpson(PyObject* X, PyObject* Y)
 	auto x = Iterable_As1DVector(X);
 	auto y = Iterable_As1DVector(Y);
 
-	IF_PYERR_RET(x.size() != y.size(), PyExc_RuntimeError, "x and y must have same lengths");
+	IF_PYERR(x.size() != y.size(), PyExc_RuntimeError, "x and y must have same lengths");
 
 	return Py_BuildValue("d", integrate::simpson(x, y));
 	
@@ -703,7 +703,7 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 {
 	size_t argc = PyDict_GET_SIZE(kwargs);
 
-	IF_PYERR_RET(argc != 3, PyExc_TypeError, "3 out of (Tdb=, Twb=, Tdp=, RH=, H=, V=, W=, P=) expected");
+	IF_PYERR(argc != 3, PyExc_TypeError, "3 out of (Tdb=, Twb=, Tdp=, RH=, H=, V=, W=, P=) expected");
 
 	PyObject* ObjKey, * ObjValue;
 	Py_ssize_t pos = 0;
@@ -718,8 +718,9 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 	{
 		std::string key = _PyUnicode_AsString(ObjKey);
 		std::transform(key.begin(), key.end(), key.begin(), ::tolower);
-	
-		IF_PYERRVALUE_RET (std::ranges::find(psyKeys, key) == psyKeys.end(), "Keys: P, Tdb, Twb, Tdp, W, H, RH");
+
+		//TODO: Check if this is necessary (Python side must be doing it)
+		IF_PYERR (std::ranges::find(psyKeys, key) == psyKeys.end(), PyExc_ValueError, "Keys: P, Tdb, Twb, Tdp, W, H, RH");
 
 		double val = PyFloat_AsDouble(ObjValue);
 		Values[key] = key == "p" ? val * 1000 : val;
@@ -729,8 +730,8 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 	psy.Compute(Values);
 
 	CHECKRANGE_RET(psy.getRH(), 0.0, 100.0, "RH is out of range");
-	IF_PYERR_RET(psy.getP()<=0, PyExc_ValueError, "P <= 0.0");
-	IF_PYERR_RET(psy.getW() < 0.0, PyExc_ValueError, "W < 0.0")
+	IF_PYERR(psy.getP()<=0, PyExc_ValueError, "P <= 0.0");
+	IF_PYERR(psy.getW() < 0.0, PyExc_ValueError, "W < 0.0")
 
 	PyObject* Dict = PyDict_New();
 	auto SetItem = [Dict](const char* Prop, double Val) {

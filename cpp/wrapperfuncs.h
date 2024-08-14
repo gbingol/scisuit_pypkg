@@ -154,26 +154,13 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 
 
 
-#ifndef IF_PYERR_RET
-#define IF_PYERR_RET(EXPRESSION, ERROR, ERRMSG)	\
+#ifndef IF_PYERR
+#define IF_PYERR(EXPRESSION, ERROR, ERRMSG)	\
 	if((EXPRESSION)){							\
 		PyErr_SetString(ERROR, ERRMSG);	\
 		return nullptr;									\
 	}
 #endif
-
-
-
-#ifndef IF_PYERRRUNTIME_RET
-#define IF_PYERRRUNTIME_RET(EXPRESSION, ERRMSG)	\
-	IF_PYERR_RET(EXPRESSION, PyExc_RuntimeError, ERRMSG)
-#endif 
-
-
-#ifndef IF_PYERRVALUE_RET
-#define IF_PYERRVALUE_RET(EXPRESSION, ERRMSG)	\
-	IF_PYERR_RET(EXPRESSION, PyExc_ValueError, ERRMSG)
-#endif // !ASSERTEXPRESSION
 
 
 
