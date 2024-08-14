@@ -56,15 +56,26 @@ static bool IsRealNum(PyObject* obj)
 }
 
 
-static PyObject* List_FromVector(const std::vector<double>& Vec)
+template <typename T=double>
+PyObject* List_FromVector(const std::vector<T>& Vec)
 {
 	if (Vec.size() == 0)
 		return nullptr;
 
 	auto List = PyList_New(Vec.size());
 
-	for (size_t i = 0; i < Vec.size(); ++i)
-		PyList_SetItem(List, i, Py_BuildValue("d", Vec[i]));
+	for (size_t i = 0; const auto& v: Vec)
+	{
+		if constexpr (std::is_floating_point_v<T>)
+		 	PyList_SetItem(List, i, Py_BuildValue("d", v));
+		else if constexpr (std::is_integral_v<T>)
+			PyList_SetItem(List, i, Py_BuildValue("i", v));
+		else if constexpr(std::is_same_v<T, std::string>)
+			PyList_SetItem(List, i, Py_BuildValue("s", v.c_str()));
+		else
+			PyList_SetItem(List, i, Py_None);
+		i++;
+	}
 
 	return List;
 }
