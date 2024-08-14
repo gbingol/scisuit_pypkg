@@ -17,7 +17,7 @@
 
 static double CheckNumber(PyObject* Obj, const char* ErrMsg)
 {
-	if (!IsRealNumber(Obj))
+	if (!IsRealNum(Obj))
 		throw std::exception(ErrMsg);
 
 	return GetAsRealNumber(Obj).value();

@@ -44,25 +44,10 @@ std::function<std::complex<double>(std::complex<double>)>
 
 
 
-
-static bool IsLong(PyObject* obj)
-{
-    return PyLong_Check(obj);
-}
-
-
-static bool IsFloat(PyObject* obj)
-{
-    return PyFloat_Check(obj);
-}
-
-
-
-
 //is obj a real number (Python float or Python integer or bool)
-static bool IsRealNumber(PyObject* obj)
+static bool IsRealNum(PyObject* obj)
 {
-    return IsLong(obj) || IsFloat(obj);
+    return PyLong_Check(obj) || PyFloat_Check(obj);
 }
 
 
@@ -104,7 +89,7 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
 
         else if constexpr (std::is_integral_v<T>)
         {
-            if (IsLong(item))
+            if (PyLong_Check(item))
                 Vec.push_back(PyLong_AsLong(item));
         }
 

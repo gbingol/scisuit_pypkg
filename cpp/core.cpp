@@ -27,7 +27,7 @@ namespace
 		std::complex<double>* CompNum, 
 		std::string& ErrMsg)
 	{
-		if (IsRealNumber(Obj))
+		if (IsRealNum(Obj))
 		{
 			if (auto Elem = GetAsRealNumber(Obj))
 				*CompNum = *Elem;

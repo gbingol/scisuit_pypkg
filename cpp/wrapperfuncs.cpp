@@ -9,10 +9,10 @@ std::optional<double> GetAsRealNumber(PyObject* obj)
     if (!obj)
         return std::nullopt;
 
-    if (IsFloat(obj))
+    if (PyFloat_Check(obj))
         return PyFloat_AsDouble(obj);
 
-    else if (IsLong(obj))
+    else if (PyLong_Check(obj))
         return (double)PyLong_AsLong(obj);
 
     return std::nullopt;
