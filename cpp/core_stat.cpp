@@ -22,7 +22,7 @@ PyObject* c_stat_dbeta(PyObject* X, double shape1, double shape2)
 
 	if (IsRealNum(X))
 	{
-		double dval = dist::dbeta(GetAsRealNumber(X).value(), shape1, shape2);
+		double dval = dist::dbeta(*GetAsRealNumber(X), shape1, shape2);
 		return Py_BuildValue("d", dval);
 	}
 
@@ -41,7 +41,7 @@ PyObject* c_stat_pbeta(PyObject* qvalObj, double shape1, double shape2)
 
 	if (IsRealNum(qvalObj))
 	{
-		double dval = dist::pbeta(GetAsRealNumber(qvalObj).value(), shape1, shape2);
+		double dval = dist::pbeta(*GetAsRealNumber(qvalObj), shape1, shape2);
 		return Py_BuildValue("d", dval);
 	}
 
@@ -60,7 +60,7 @@ PyObject* c_stat_qbeta(PyObject* pvalObj, double shape1, double shape2)
 
 	if (IsRealNum(pvalObj))
 	{
-		double dval = dist::qbeta(GetAsRealNumber(pvalObj).value(), shape1, shape2);
+		double dval = dist::qbeta(*GetAsRealNumber(pvalObj), shape1, shape2);
 		return Py_BuildValue("d", dval);
 	}
 
@@ -81,7 +81,7 @@ PyObject* c_stat_dbinom(PyObject* X, int size_, double prob)
 
 	if (IsRealNum(X))
 	{
-		double dval = dist::dbinom(GetAsRealNumber(X).value(), size_, prob);
+		double dval = dist::dbinom(*GetAsRealNumber(X), size_, prob);
 		return Py_BuildValue("d", dval);
 	}
 		
@@ -100,7 +100,7 @@ PyObject* c_stat_pbinom(PyObject* qvalObj, int size_, double prob)
 
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pbinom(qval, size_, prob));
 	}
 		
@@ -119,7 +119,7 @@ PyObject* c_stat_qbinom(PyObject* pvalObj, int size_, double prob)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qbinom(pval, size_, prob));
 	}
 		
@@ -140,7 +140,7 @@ PyObject* c_stat_dnbinom(PyObject* X, int size_, double prob)
 
 	if (IsRealNum(X))
 	{
-		double dval = dist::dnbinom(GetAsRealNumber(X).value(), size_, prob);
+		double dval = dist::dnbinom(*GetAsRealNumber(X), size_, prob);
 		return Py_BuildValue("d", dval);
 	}
 
@@ -159,7 +159,7 @@ PyObject* c_stat_pnbinom(PyObject* qvalObj, int size_, double prob)
 
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pnbinom(qval, size_, prob));
 	}
 
@@ -178,7 +178,7 @@ PyObject* c_stat_qnbinom(PyObject* pvalObj, int size_, double prob)
 
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qnbinom(pval, size_, prob));
 	}
 
@@ -239,7 +239,7 @@ PyObject* c_stat_pchisq(PyObject* qvalObj, int df)
 	TRYBLOCK();
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pchisq(qval, df));
 	}
 	
@@ -257,7 +257,7 @@ PyObject* c_stat_qchisq(PyObject* pvalObj, int df)
 	TRYBLOCK();
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qchisq(pval, df));
 	}
 		
@@ -298,7 +298,7 @@ PyObject* c_stat_pexp(PyObject* qvalObj, double rate)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pexp(qval, rate));
 	}
 
@@ -317,7 +317,7 @@ PyObject* c_stat_qexp(PyObject* pvalObj, double rate)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qexp(pval, rate));
 	}
 
@@ -359,7 +359,7 @@ PyObject* c_stat_pf(PyObject* qvalObj, int df1, int df2)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pf(qval, df1, df2));
 	}
 	
@@ -378,7 +378,7 @@ PyObject* c_stat_qf(PyObject* pvalObj, int df1, int df2)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qf(pval, df1, df2));
 	}
 
@@ -420,7 +420,7 @@ PyObject* c_stat_pgamma(PyObject* qvalObj, double shape, double scale)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pgamma(qval, shape, scale));
 	}
 
@@ -439,7 +439,7 @@ PyObject* c_stat_qgamma(PyObject* pvalObj, double shape, double scale)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qgamma(pval, shape, scale));
 	}
 
@@ -461,7 +461,7 @@ PyObject* c_stat_dgeom(PyObject* X, double prob)
 	
 	if (IsRealNum(X))
 	{
-		double dval = dist::dgeom(GetAsRealNumber(X).value(), prob);
+		double dval = dist::dgeom(*GetAsRealNumber(X), prob);
 		return Py_BuildValue("d", dval);
 	}
 
@@ -480,7 +480,7 @@ PyObject* c_stat_pgeom(PyObject* qvalObj, double prob)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pgeom(qval, prob));
 	}
 
@@ -499,7 +499,7 @@ PyObject* c_stat_qgeom(PyObject* pvalObj, double prob)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qgeom(pval, prob));
 	}
 
@@ -522,7 +522,7 @@ PyObject* c_stat_dhyper(PyObject* X, int m, int n, int k)
 	
 	if (IsRealNum(X))
 	{
-		double xval = GetAsRealNumber(X).value();
+		double xval = *GetAsRealNumber(X);
 		return Py_BuildValue("d", dist::dhyper(xval, m, n, k));
 	}
 
@@ -541,7 +541,7 @@ PyObject* c_stat_phyper(PyObject* qvalObj, int m, int n, int k)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::phyper(qval, m, n, k));
 	}
 
@@ -561,7 +561,7 @@ PyObject* c_stat_qhyper(PyObject* pvalObj, int m, int n, int k)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qhyper(pval, m, n, k));
 	}
 
@@ -602,7 +602,7 @@ PyObject* c_stat_pnorm(PyObject* qvalObj, double mean, double sd)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pnorm(qval, mean, sd));
 	}
 
@@ -621,7 +621,7 @@ PyObject* c_stat_qnorm(PyObject* pvalObj, double mean, double sd)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qnorm(pval, mean, sd));
 	}
 	
@@ -663,7 +663,7 @@ PyObject* c_stat_plnorm(PyObject* qvalObj, double meanlog, double sdlog)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::plnorm(qval, meanlog, sdlog));
 	}
 
@@ -682,7 +682,7 @@ PyObject* c_stat_qlnorm(PyObject* pvalObj, double meanlog, double sdlog)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qlnorm(pval, meanlog, sdlog));
 	}
 
@@ -724,7 +724,7 @@ PyObject* c_stat_ppareto(PyObject* qvalObj, double location, double shape)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::ppareto(qval, location, shape));
 	}
 
@@ -743,7 +743,7 @@ PyObject* c_stat_qpareto(PyObject* pvalObj, double location, double shape)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qpareto(pval, location, shape));
 	}
 
@@ -784,7 +784,7 @@ PyObject* c_stat_ppois(PyObject* qvalObj, double mu)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::ppois(qval, mu));
 	}
 
@@ -803,7 +803,7 @@ PyObject* c_stat_qpois(PyObject* pvalObj, double mu)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qpois(pval, mu));
 	}
 	
@@ -845,7 +845,7 @@ PyObject* c_stat_pt(PyObject* qvalObj, int df)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pt(qval, df));
 	}
 	
@@ -864,7 +864,7 @@ PyObject* c_stat_qt(PyObject* pvalObj, int df)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qt(pval, df));
 	}
 	
@@ -885,7 +885,7 @@ PyObject * c_stat_psmirnov(PyObject * qvalObj, int n)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double pval = GetAsRealNumber(qvalObj).value();
+		double pval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::psmirnov(pval, n));
 	}
 	
@@ -925,7 +925,7 @@ PyObject* c_stat_punif(PyObject* qvalObj, double min, double max)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::punif(qval, min, max));
 	}
 	
@@ -944,7 +944,7 @@ PyObject* c_stat_qunif(PyObject* pvalObj, double min, double max)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qunif(pval, min, max));
 	}
 	
@@ -986,7 +986,7 @@ PyObject* c_stat_pweibull(PyObject* qvalObj, double shape, double scale)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::pweibull(qval, shape, scale));
 	}
 
@@ -1006,7 +1006,7 @@ PyObject* c_stat_qweibull(PyObject* pvalObj, double shape, double scale)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		return Py_BuildValue("d", dist::qweibull(pval, shape, scale));
 	}
 
@@ -1057,7 +1057,7 @@ PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 	
 	if (IsRealNum(qvalObj))
 	{
-		double qval = GetAsRealNumber(qvalObj).value();
+		double qval = *GetAsRealNumber(qvalObj);
 		return Py_BuildValue("d", dist::psignrank(qval, n));
 	}
 
@@ -1083,7 +1083,7 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 	
 	if (IsRealNum(pvalObj))
 	{
-		double pval = GetAsRealNumber(pvalObj).value();
+		double pval = *GetAsRealNumber(pvalObj);
 		CHECKRANGE_RET(pval, 0.0, 1.0, "p value must be in the range of (0,1).");
 
 		return Py_BuildValue("d", dist::qsignrank(pval, n));

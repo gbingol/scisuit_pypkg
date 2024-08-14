@@ -35,16 +35,28 @@ std::function<std::complex<double>(std::complex<double>)>
 
 
 
-static std::optional<double> GetAsRealNumber(PyObject* obj)
+template <typename T=double>
+std::optional<T> GetAsRealNumber(PyObject* obj)
 {
 	if (!obj)
 		return std::nullopt;
+	
+	if constexpr (std::is_floating_point_v<T>)
+	{
+		if (PyFloat_Check(obj))
+			return PyFloat_AsDouble(obj);
 
-	if (PyFloat_Check(obj))
-		return PyFloat_AsDouble(obj);
+		else if (PyLong_Check(obj))
+			return (double)PyLong_AsLong(obj);
+	}
+	else if constexpr (std::is_integral_v<T>)
+	{
+		if (PyFloat_Check(obj))
+			return static_cast<T>(PyFloat_AsDouble(obj));
 
-	else if (PyLong_Check(obj))
-		return (double)PyLong_AsLong(obj);
+		else if (PyLong_Check(obj))
+			return PyLong_AsLong(obj);
+	}
 
 	return std::nullopt;
 }
