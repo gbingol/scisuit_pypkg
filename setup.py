@@ -52,10 +52,13 @@ setup(
 	python_requires = '>=3.10',
 	install_requires = ['numpy'], #no need to use limitation on numpy 'numpy<=2.0'
 	packages = find_packages(),
-	package_data = {
+	package_data = 
+	{
 		'': ['README.md'], 
-		'scisuit':['boost*.dll', 'wx*.dll', 'scisuit*.dll', pybindfile]
-		},
+		'scisuit':['boost*.dll','jpeg*.dll','liblzma.dll', 'libpng*.dll',
+			 		'pcre*.dll', 'tiff.dll', 'zlib*.dll', 'wx*.dll', 
+					'scisuit*.dll', pybindfile]
+	},
 	setup_requires = ['setuptools>=61.0'],
 	options={
 		'bdist_wheel': {
