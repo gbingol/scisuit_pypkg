@@ -1,10 +1,3 @@
-import sys, os
-import pathlib
-
-#inserting to 0th position is very important so that search will FIRST match ../scisuit folder
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-
-
 from scisuit.eng import psychrometry
 
 #linear combination

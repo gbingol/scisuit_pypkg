@@ -1,12 +1,5 @@
-import sys, os
 import numpy as np
 import math
-import pathlib
-
-#inserting to 0th position is very important so that search will FIRST match ../scisuit folder
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-
-
 
 
 def scatter_errorbar():

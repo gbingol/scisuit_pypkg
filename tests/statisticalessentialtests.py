@@ -1,12 +1,4 @@
-import sys, os
 import pprint
-import pathlib
-
-#inserting to 0th position is very important so that search will FIRST match ../scisuit folder
-sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
-
-
-
 import scisuit.stats as st
 import numpy as np
 
