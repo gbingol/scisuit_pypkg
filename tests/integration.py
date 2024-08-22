@@ -3,7 +3,7 @@ import numpy as np
 import pathlib
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
-sys.path.insert(0, pathlib.Path(__file__).parent.parent) 
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent))
 
 from scisuit.integ import simpson, romberg, fixed_quad, cumtrapz, trapz
 from numpy import trapezoid

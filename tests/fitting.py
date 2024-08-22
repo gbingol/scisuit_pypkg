@@ -3,7 +3,8 @@ import numpy as np
 import pathlib
 
 #inserting to 0th position is very important so that search will FIRST match ../scisuit folder
-sys.path.insert(0, pathlib.Path(__file__).parent.parent) 
+sys.path.insert(0, str(pathlib.Path(__file__).parent.parent)) 
+
 
 import scisuit.fitting as fit
 x = [0, 1, 2, 3]
