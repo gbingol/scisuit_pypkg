@@ -1,13 +1,16 @@
 
-import os
 import sys
+import pathlib
 
 import numpy as np
+
+sys.path.insert(0, pathlib.Path(__file__).parent.parent) 
+
 
 import scisuit.plot as plt
 import scisuit.plot.gdi as gdi
 
-sys.path.insert(0, os.getcwd()) 
+
 
 
 
