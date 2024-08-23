@@ -1,7 +1,5 @@
 build/
 dist/
-.venv/
-scisuit.egg-info/
 
 **/x64/**
 **/Debug/**
