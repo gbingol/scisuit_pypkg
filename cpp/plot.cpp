@@ -1211,7 +1211,7 @@ bool c_plot_exitmainloop()
 
 	s_APP->ExitMainLoop();
 
-	wxUninitialize();
+	//wxUninitialize();
 
 	return true;
 }
