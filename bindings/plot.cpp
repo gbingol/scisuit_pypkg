@@ -70,6 +70,7 @@ PyObject* c_plot_boxplot(PyObject* args, PyObject* kwargs)
 	}
 
 	auto Data = Iterable_As1DVector(DataObj);
+	//TODO: Check if this check is necessary
 	IF_PYERR(Data.size() == 0, PyExc_ValueError, "Data does not contain any numeric element.");
 
 
@@ -816,10 +817,10 @@ void c_plot_savefig(const char *fullpath)
 
 	std::filesystem::path pt = fullpath;
 	if(!pt.has_extension())
-		throw std::runtime_error("fullpath does not have an extension");
+		throw std::runtime_error("fullpath does not have an extension.");
 
-	if(s_CurPlotWnd == nullptr)
-		throw std::runtime_error("Current plot window is empty");
+	if(!s_CurPlotWnd)
+		throw std::runtime_error("Current plot window is empty.");
 
 	wxInitAllImageHandlers();
 
@@ -872,7 +873,7 @@ void c_plot_show(bool antialiasing)
 	TRYBLOCK();
 
 	if (!s_CurPlotWnd)
-		throw std::exception("Have you called any plotting functions yet (again)?");
+		throw std::exception("Have you called any functions to plot a chart yet (again)?");
 
 	s_PlotWndList.push_back(s_CurPlotWnd);
 
@@ -894,10 +895,13 @@ void c_plot_show(bool antialiasing)
 
 void c_plot_title(const char* Label)
 {
-	if (Label == nullptr || s_CurPlotWnd == nullptr)
-		return;
-
 	TRYBLOCK();
+
+	if (!s_CurPlotWnd)
+		throw std::exception("Have you called any functions to plot a chart yet?");
+
+	if (!Label)
+		throw std::exception("Empty label provided.");
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 
@@ -916,10 +920,13 @@ void c_plot_title(const char* Label)
 
 void c_plot_xlabel(const char* Label)
 {
-	if (Label == nullptr || s_CurPlotWnd == nullptr)
-		return;
-
 	TRYBLOCK();
+
+	if (!s_CurPlotWnd)
+		throw std::exception("Have you called any functions to plot a chart yet?");
+
+	if (!Label)
+		throw std::exception("Empty label provided.");
 
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
@@ -939,10 +946,13 @@ void c_plot_xlabel(const char* Label)
 
 void c_plot_ylabel(const char* Label)
 {
-	if (Label == nullptr || s_CurPlotWnd == nullptr)
-		return;
-
 	TRYBLOCK();
+
+	if (!s_CurPlotWnd)
+		throw std::exception("Have you called any functions to plot a chart yet?");
+
+	if (!Label)
+		throw std::exception("Empty label provided.");
 
 	auto Chart = s_CurPlotWnd->GetActiveChart();
 	auto TextBox = Chart->GetVertAxisTitle();
@@ -962,10 +972,10 @@ void c_plot_legend(
 	PyObject* nrows, 
 	PyObject* ncols)
 {
-	if(s_CurPlotWnd == nullptr)
-		return;
-
 	TRYBLOCK();
+
+	if (!s_CurPlotWnd)
+		throw std::exception("Have you called any functions to plot a chart yet?");
 
 	std::optional<std::size_t> NRows, NCols;
 
