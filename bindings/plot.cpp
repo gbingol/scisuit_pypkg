@@ -872,7 +872,7 @@ void c_plot_show(bool antialiasing)
 	TRYBLOCK();
 
 	if (!s_CurPlotWnd)
-		return;
+		throw std::exception("Have you called any plotting functions yet (again)?");
 
 	s_PlotWndList.push_back(s_CurPlotWnd);
 
