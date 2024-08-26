@@ -12,31 +12,15 @@ std::function<double(double)> Make1DFunction(PyObject* funcObj)
     {
         PyObject* ObjX = PyFloat_FromDouble(x);
 
-        if (!ObjX)
-		{
-            auto StrObj = PyObject_Str(ObjX);
-			auto err = std::string("Attempted to convert to real number: ") + PyUnicode_AsUTF8(StrObj);
-            Py_DECREF(StrObj);
-
-			throw std::exception(err.c_str());
-		}
-
         PyObject* pArgs = PyTuple_Pack(1, ObjX);
         Py_DECREF(ObjX);
 
         PyObject* ResultObj = PyObject_CallObject(funcObj, pArgs);
         Py_DECREF(pArgs);
 
+		//If the function can not be evaluated (for example a function not returning a real number)
         if (!ResultObj)
-		{
-            auto StrObj = PyObject_Str(funcObj);
-			auto err = std::string("Could not evaluate ") + PyUnicode_AsUTF8(StrObj);
-			err += " at : " + std::to_string(x);
-
-             Py_DECREF(StrObj);
-						
-			throw std::exception(err.c_str());
-		}
+			throw std::exception(("f(" + std::to_string(x) + ") is invalid.").c_str());
 
         double retVal = PyFloat_AsDouble(ResultObj);
         Py_DECREF(ResultObj);
