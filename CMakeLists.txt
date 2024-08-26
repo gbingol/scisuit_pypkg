@@ -1,5 +1,5 @@
-#set(VARPY pybind310)
-set(VARPY pybind311)
+set(VARPY pybind310)
+#set(VARPY pybind311)
 #set(VARPY pybind312)
 
 project(${VARPY})
