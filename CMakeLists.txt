@@ -27,8 +27,8 @@ include_directories(${PYHOME}/include)
 include_directories(${CMAKE_SOURCE_DIR}/core_plot)
 
 file(GLOB cppfiles
-     "cpp/*.h"
-     "cpp/*.cpp")
+     "bindings/*.h"
+     "bindings/*.cpp")
 
 
 add_library(${PROJECT_NAME} SHARED ${cppfiles})
