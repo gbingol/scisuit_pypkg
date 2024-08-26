@@ -4,10 +4,11 @@ from typing import Iterable as _Iterable
 
 from .._ctypeslib import pydll as _pydll
 from ..app import App as _App
+from ..settings import START_APP_MAINLOOP
 
 
-
-_app = _App()
+if START_APP_MAINLOOP:
+	_app = _App()
 
 
 def layout(nrows:numbers.Integral, ncols:numbers.Integral)->None:
@@ -246,7 +247,10 @@ def legend(
 
 def show(antialiasing=False)->None:
 	"""
-	Starts main loop and shows the chart(s) \n
+	If configured starts the main loop.  
+	Shows the chart(s)
 	"""
 	_pydll.c_plot_show(_ct.c_bool(antialiasing))
-	_app.mainloop()
+
+	if START_APP_MAINLOOP:
+		_app.mainloop()
