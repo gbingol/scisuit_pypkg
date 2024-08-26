@@ -19,19 +19,62 @@
 
 
 /*
-    callableObj: Python callable object.
+    funcObj: Python callable object.
     return value is passed to another function which takes a functional.
     Ex: double result = math::simpson(func, a, b, iter);
 */
-std::function<double(double)> Make1DFunction(PyObject* callableObj);
+auto Make1DFunction(PyObject* funcObj)
+{
+	    auto func = [=](double x)
+    {
+        PyObject* ObjX = PyFloat_FromDouble(x);
+
+        PyObject* pArgs = PyTuple_Pack(1, ObjX);
+        Py_DECREF(ObjX);
+
+        PyObject* ResultObj = PyObject_CallObject(funcObj, pArgs);
+        Py_DECREF(pArgs);
+
+		//If the function can not be evaluated (for example a function not returning a real number)
+        if (!ResultObj)
+			throw std::exception(("f(" + std::to_string(x) + ") is invalid.").c_str());
+
+        double retVal = PyFloat_AsDouble(ResultObj);
+        Py_DECREF(ResultObj);
+
+        return retVal;
+    };
+
+    return func;
+}
 
 
 /*
     callableObj: Python callable object.
     return value is passed to another function which takes a functional.
 */
-std::function<std::complex<double>(std::complex<double>)>
-    MakeComplexFunction(PyObject* callableObj);
+auto MakeComplexFunction(PyObject* callableObj)
+{
+	auto func = [=](std::complex<double> x) 
+	{
+        PyObject* ObjX = PyComplex_FromDoubles(x.real(), x.imag());
+
+        PyObject* ResultObj = PyObject_CallFunction(callableObj, "O", ObjX);
+        Py_DECREF(ObjX);
+
+        if (!ResultObj) {
+			auto args = std::to_string(x.real()) + " + " + std::to_string(x.imag()) + "j";
+			throw std::exception(("f(" + args + ") is invalid.").c_str());
+		}
+
+        auto CompRet = PyComplex_AsCComplex(ResultObj);
+        Py_DECREF(ResultObj);
+
+        return std::complex(CompRet.real, CompRet.imag);
+    };
+
+    return func;
+}
 
 
 
