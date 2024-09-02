@@ -1,6 +1,8 @@
 
 """
-Apps using scisuit must set this to False as they have their own mainloop.
+Apps embedding Python have their own mainloop.
+When using scisuit plotting functions there is no need to start another mainloop.
+
 Tested on apps built with wxWidgets.
 """
 START_APP_MAINLOOP = True
