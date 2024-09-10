@@ -166,6 +166,17 @@ def scatter(
 
 
 
+def plot(x:_Iterable,
+		y:_Iterable,  
+		label:str = None, 
+		smooth:bool = False,
+		lw:int = 2,
+		ls:str = "-", 
+		**kwargs):
+	"""A convenience function to plot scatter charts without markers"""
+	return scatter(x=x, y=y, label=label, smooth=smooth, marker=None, lw=lw, ls=ls, **kwargs)
+
+
 
 def canvas(
 		x:_Iterable|None, 

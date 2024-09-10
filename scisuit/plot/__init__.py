@@ -3,7 +3,7 @@ from ._chartfuncs import layout, subplot, legend, show, title, \
 	 				xlabel, ylabel, xlim, ylim, set_xticks, set_yticks, set_xposition, set_yposition, \
 					xscale, yscale
 
-from ._charts import canvas, boxplot, hist, psychrometry, scatter 
+from ._charts import canvas, boxplot, hist, psychrometry, scatter, plot
 
 from ._quiverchart import quiver, dirfield
 from ._qqcharts import qqnorm, qqplot
