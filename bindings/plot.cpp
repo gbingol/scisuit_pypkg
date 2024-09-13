@@ -834,7 +834,7 @@ void c_plot_savefig(const char *fullpath)
 		memDC.Clear();
 
 		for(auto chart: s_CurPlotWnd->GetChartList())
-			chart->Draw(&memDC);
+			chart->Draw(memDC.GetGraphicsContext());
 
 		return bmp;
 	};
