@@ -833,8 +833,9 @@ void c_plot_savefig(const char *fullpath)
 		memDC.SetBackground(wxColor(255,255,255));
 		memDC.Clear();
 
+		auto gc = wxGraphicsContext::Create(memDC);
 		for(auto chart: s_CurPlotWnd->GetChartList())
-			chart->Draw(memDC.GetGraphicsContext());
+			chart->Draw(gc);
 
 		return bmp;
 	};
