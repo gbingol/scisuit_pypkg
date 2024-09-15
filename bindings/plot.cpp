@@ -18,6 +18,7 @@
 #include <plotter/elems/trendline.h>
 #include <plotter/elems/plotareabase.h>
 #include <plotter/elems/legend.h>
+#include <plotter/util_graphcntxt.h>
 
 
 #include "wrapperfuncs.h"
@@ -990,7 +991,10 @@ void c_plot_legend(
 
 		auto xy = s->GetPlotArea()->GetTopRight();
 		auto Legend = s->CreateLegend(xy, NRows, NCols);
-		s->RefreshRect(Legend->GetBoundRect().Inflate(5, 5));
+
+		auto Rect = Legend->GetBoundRect();
+		charts::InflateRect(Rect, 5, 5);
+		s->RefreshRect(Rect);
 	}
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
