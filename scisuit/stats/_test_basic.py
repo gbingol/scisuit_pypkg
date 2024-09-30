@@ -565,11 +565,22 @@ def test_t (
 
 @dataclass
 class test_z_Result:
-	SE:float ; stdev:float 
+	pvalue:float
+	SE:float 
+	stdev:float 
 	mean: float 
 	zcritical:float 
-	CI_upper: float ; CI_lower: float
+	CI_upper: float
+	CI_lower: float
 	N:int
+	alternative:str
+
+	def __str__(self)->str:
+		s = f"N={self.N}, mean={self.mean}, Z={self.zcritical} \n"
+		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
+		s += f"Confidence interval ({self.CI_lower}, {self.CI_upper}) \n"
+
+		return s
 
 
 def test_z(
@@ -577,7 +588,7 @@ def test_z(
 		sd:numbers.Real, 
 		mu:numbers.Real, 
 		alternative="two.sided", 
-		conflevel=0.95)->tuple[float, test_z_Result]:
+		conflevel=0.95)->test_z_Result:
 	"""
 	
 	## Return
@@ -633,12 +644,12 @@ def test_z(
 	CI_upper = xaver - qnorm(alpha / 2.0, 0.0, 1.0) * SE
 	CI_lower = xaver + qnorm(alpha / 2.0, 0.0, 1.0) * SE
 
-	result = test_z_Result(SE = float(SE), 
+	return test_z_Result(pvalue=float(pvalue),
+			SE = float(SE), 
 			stdev = float(stdeviation), 
 			N = dim, 
 			mean = float(xaver), 
 			zcritical = zcritical,
 			CI_lower = float(CI_lower),
-			CI_upper = float(CI_upper))
-
-	return pvalue, result
+			CI_upper = float(CI_upper),
+			alternative= alternative)
