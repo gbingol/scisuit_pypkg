@@ -640,9 +640,17 @@ def test_z(
 	else:
 		raise ValueError("'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
 	
+	if alternative == "two.sided" or alternative == "notequal":
+		CI_upper = xaver - qnorm(alpha / 2.0, 0.0, 1.0) * SE
+		CI_lower = xaver + qnorm(alpha / 2.0, 0.0, 1.0) * SE
 	
-	CI_upper = xaver - qnorm(alpha / 2.0, 0.0, 1.0) * SE
-	CI_lower = xaver + qnorm(alpha / 2.0, 0.0, 1.0) * SE
+	elif alternative == "greater":
+		CI_upper = math.inf
+		CI_lower = xaver + qnorm(alpha, 0.0, 1.0) * SE
+	
+	elif alternative == "less":
+		CI_upper = xaver - qnorm(alpha, 0.0, 1.0) * SE
+		CI_lower = -math.inf
 
 	return test_z_Result(pvalue=float(pvalue),
 			SE = float(SE), 
