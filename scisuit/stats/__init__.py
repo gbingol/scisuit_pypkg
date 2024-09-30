@@ -6,8 +6,9 @@ from ._linregress import linregress, linregressResult
 from ._test_basic import \
 	test_f, test_f_Result, \
 	test_sign, test_sign_Result,\
-	test_t, test_t1_result, test_t2_result, test_tpaired_result, \
-	test_z, test_z_Result
+	test_t, test_t1_result, test_t2_result, test_tpaired_result
+
+from ._test_z import test_z, test_z_Result
 
 
 from ._test_normality import \
