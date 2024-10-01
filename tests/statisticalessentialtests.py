@@ -95,7 +95,7 @@ def ttest_2sample():
 
 def ttest_1sample():
 	v = [5, 6, 0, 4, 11, 9, 2, 3]
-	pval, tbl=st.test_t(x=v, mu=8.6)
+	pval, tbl=st._test_t(x=v, mu=8.6)
 	print(pval)
 	print(tbl)
 
@@ -104,7 +104,7 @@ def ttest_1sample():
 def ttest_paired():
 	pre=[18, 21, 16, 22, 19, 24, 17, 21, 23, 18, 14, 16, 16, 19, 18, 20, 12, 22, 15, 17]
 	post=[22, 25, 17, 24, 16, 29, 20, 23, 19, 20, 15, 15, 18, 26, 18, 24, 18, 25, 19, 16]
-	pvalue, tbl=st.test_t(x=pre, y=post, paired=True)
+	pvalue, tbl=st._test_t(x=pre, y=post, paired=True)
 	print(pvalue)
 	print(tbl)
 
