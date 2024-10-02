@@ -1,5 +1,5 @@
 import math
-import numbers
+from numbers import Real
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -11,56 +11,45 @@ from ._distributions import pt, qt
 
 @dataclass
 class test_t1_result:
-	CI_lower:float; CI_upper:float
+	pvalue:float
+	CI_lower:float 
+	CI_upper:float
 	SE:float
 	N:int
 	stdev:float
 	mean: float
 	tcritical:float
+	alternative:str="two.sided"
+
+	def __str__(self):
+		s = "    One-sample t-test for " + self.alternative + "\n"
+		s += f"N={self.N}, mean={self.mean} \n"
+		s += f"SE={self.SE}, t-value={self.tcritical} \n"
+		s += f"p-value ={self.pvalue} \n"
+		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
+
+		return s
 
 
-@dataclass
-class test_t2_result:
-	CI_lower:float; CI_upper:float
-	tcritical:float
-	n1:int; n2:int
-	df:int
-	xaver:float; yaver:float
-	s1:float; s2:float; sp:float
 
-
-@dataclass
-class test_tpaired_result:
-	CI_lower:float; CI_upper:float
-	tcritical:float
-	xaver:float; yaver:float
-	s1:float; s2:float; SE:float
-	N:int
-	mean:float #mean of difference
-	stdev:float #stdev of difference
-
-
-def _test_t1(
-		x:Iterable, 
-		mu:numbers.Real, 
-		alternative="two.sided", 
-		conflevel=0.95)->tuple[float, test_t1_result]:
+def _test_t1(x:Iterable, mu:Real, alternative="two.sided", conflevel=0.95)->test_t1_result:
+	
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = _np.asarray(x, dtype=_np.float64)
+	xx = _np.asarray(x, dtype=_np.float64)
 
-	assert len(XX)>= 3, "container must have at least 3 elements"
-	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
+	assert len(xx)>= 3, "container must have at least 3 elements"
+	assert _np.issubdtype(xx.dtype, _np.number), "x must contain only numbers"
 
-	N = len(XX)
-	df = N -1
+	nn = len(xx)
+	df = nn -1
 	
-	stdev = _np.std(XX, ddof =1) #sample's standard deviation
-	SE = stdev / math.sqrt(N) #Standard Error of Mean
+	stdev = _np.std(xx, ddof =1) #sample's standard deviation
+	stderr = stdev / math.sqrt(nn) #Standard Error of Mean
 	
-	xaver = _np.mean(XX)
-	tcritical = float((xaver - mu) / SE)
+	xaver = float(_np.mean(xx))
+	tcritical = float((xaver - mu) / stderr)
 
 	pvalue = 0.0
 	if alternative == "two.sided" or alternative == "notequal":
@@ -83,26 +72,50 @@ def _test_t1(
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
 	
 	alpha = 1.0 - conflevel
-	CI_upper = xaver - qt(alpha / 2.0, df) * SE
-	CI_lower = xaver + qt(alpha / 2.0, df) * SE
-
-	Result = test_t1_result(
-		CI_lower=CI_lower,
-		CI_upper=CI_upper,
-		SE = SE,
-		N = N,
-		stdev = stdev,
-		mean = xaver,
-		tcritical = tcritical)
+	if alternative == "two.sided" or alternative == "notequal":
+		CI_upper = xaver - qt(alpha / 2.0, df) * stderr
+		CI_lower = xaver + qt(alpha / 2.0, df) * stderr
+	elif alternative == "greater":
+		CI_upper = math.inf
+		CI_lower = xaver + qt(alpha, df) * stderr
 	
-	return pvalue, Result
+	elif alternative == "less":
+		CI_lower = -math.inf
+		CI_upper = xaver - qt(alpha, df) * stderr
+	
 
+	return test_t1_result(
+		pvalue=float(pvalue),
+		CI_lower=float(CI_lower),
+		CI_upper=float(CI_upper),
+		SE = float(stderr),
+		N = nn,
+		stdev = float(stdev),
+		mean = float(xaver),
+		tcritical = float(tcritical),
+		alternative=alternative)
+	
+
+
+#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+
+
+@dataclass
+class test_t2_result:
+	CI_lower:float 
+	CI_upper:float
+	tcritical:float
+	n1:int; n2:int
+	df:int
+	xaver:float; yaver:float
+	s1:float; s2:float; sp:float
 
 
 def _test_t2(
 		x:Iterable, 
 		y:Iterable, 
-		mu:numbers.Real, 
+		mu:Real, 
 		varequal = True, 
 		alternative="two.sided", 
 		conflevel=0.95)->tuple[float, test_t2_result]:
@@ -182,6 +195,22 @@ def _test_t2(
 	return pvalue, Result
 
 
+
+#-----------------------------------------------------------------------
+#-----------------------------------------------------------------------
+
+@dataclass
+class test_tpaired_result:
+	CI_lower:float 
+	CI_upper:float
+	tcritical:float
+	xaver:float; yaver:float
+	s1:float; s2:float; SE:float
+	N:int
+	mean:float #mean of difference
+	stdev:float #stdev of difference
+
+
 def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_tpaired_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
@@ -222,13 +251,17 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[flo
 
 
 
+#---------------------------------------------------------------
+#---------------------------------------------------------------
+
+
 def test_t (
 		x:Iterable, 
 		y:Iterable|None = None, 
 		varequal=True, 
 		alternative="two.sided", 
-		mu:numbers.Real=0.0, 
-		conflevel:numbers.Real=0.95, 
+		mu:Real=0.0, 
+		conflevel:Real=0.95, 
 		paired=False ):
 	"""
 	Performs paired, 1-sample and 2-sample t-test
