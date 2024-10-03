@@ -103,6 +103,7 @@ def _test_t1(x:Iterable, mu:Real, alternative="two.sided", conflevel=0.95)->test
 
 @dataclass
 class test_t2_result:
+	pvalue:float
 	CI_lower:float 
 	CI_upper:float
 	tcritical:float
@@ -110,6 +111,22 @@ class test_t2_result:
 	df:int
 	xaver:float; yaver:float
 	s1:float; s2:float; sp:float
+	varequal:bool
+	alternative:str
+
+	def __str__(self):
+		s = "    Two-sample t-test assuming " + ("equal" if self.varequal else "unequal") + " variances \n"
+		s += f"n1={self.n1}, n2={self.n2}, df={self.df} \n"
+		s += f"s1={self.s1}, s2={self.s2} \n"
+		if self.varequal:
+			s += f"Pooled std = {self.sp} \n"
+		
+		s += f"t-critical = {self.tcritical} \n"
+		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
+		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
+
+		return s
+
 
 
 def _test_t2(
@@ -118,25 +135,26 @@ def _test_t2(
 		mu:Real, 
 		varequal = True, 
 		alternative="two.sided", 
-		conflevel=0.95)->tuple[float, test_t2_result]:
+		conflevel=0.95)->test_t2_result:
+	
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = _np.asarray(x, dtype=_np.float64)
-	YY = _np.asarray(y, dtype=_np.float64)
+	xx = _np.asarray(x, dtype=_np.float64)
+	yy = _np.asarray(y, dtype=_np.float64)
 
-	assert len(XX)>= 3, "x must have at least 3 elements"
-	assert len(YY)>= 3, "y must have at least 3 elements"
-	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
-	assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
+	assert len(xx)>= 3, "x must have at least 3 elements"
+	assert len(yy)>= 3, "y must have at least 3 elements"
+	assert _np.issubdtype(xx.dtype, _np.number), "x must contain only numbers"
+	assert _np.issubdtype(yy.dtype, _np.number), "y must contain only numbers"
 
-	n1, n2 = len(XX), len(YY)
-	xaver, yaver = float(_np.mean(XX)), float(_np.mean(YY))
-	s1, s2 = float(_np.std(XX, ddof = 1)), float(_np.std(YY, ddof = 1))
+	n1, n2 = len(xx), len(yy)
+	xaver, yaver = float(_np.mean(xx)), float(_np.mean(yy))
+	s1, s2 = float(_np.std(xx, ddof = 1)), float(_np.std(yy, ddof = 1))
 	var1, var2 = s1**2, s2**2
 	alpha = 1 - conflevel
 
-	tcritical, SE = None, None
+	tcritical, stderr = None, None
 	sp = -1 #pooled
 
 	if varequal == False:
@@ -145,7 +163,7 @@ def _test_t2(
 		df = math.floor(df_num / df_denom)
 
 		tcritical = float((xaver - yaver) - mu) / math.sqrt(var1 / n1 + var2 / n2)
-		SE = math.sqrt(var1 / n1 + var2 / n2)
+		stderr = math.sqrt(var1 / n1 + var2 / n2)
 	
 	else:
 		df = n1 + n2 - 2
@@ -154,7 +172,7 @@ def _test_t2(
 		sp = math.sqrt(sp_num / df)
 
 		tcritical = float((xaver - yaver) - mu) / (sp * math.sqrt(1 / n1 + 1 / n2))
-		SE = sp * math.sqrt(1 / n1 + 1 / n2)
+		stderr = sp * math.sqrt(1 / n1 + 1 / n2)
 	
 	pvalue = 0
 	if alternative == "two.sided" or alternative == "notequal":
@@ -176,23 +194,38 @@ def _test_t2(
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
 	
-	quantile = qt(alpha / 2, df)
-
-	CI1 = (xaver - yaver) - quantile * SE
-	CI2 = (xaver - yaver) + quantile * SE
-
-	CI_lower = min(CI1, CI2)
-	CI_upper = max(CI1, CI2)
-
-	Result = test_t2_result(
-		CI_lower=CI_lower, CI_upper=CI_upper,
-		tcritical=tcritical,
-		n1 = n1, n2= n2,
-		df=df,
-		s1 = s1, s2=s2, sp=sp,
-		xaver = xaver, yaver = yaver)
+	if alternative == "two.sided" or alternative == "notequal":
+		quantile = qt(alpha / 2, df)
+		conf1 = (xaver - yaver) - quantile * stderr
+		conf2 = (xaver - yaver) + quantile * stderr
 	
-	return pvalue, Result
+	elif alternative == "greater":
+		conf1 = math.inf
+		conf2 = (xaver - yaver) + qt(alpha, df) * stderr
+	
+	elif alternative == "less":
+		conf1 = -math.inf
+		conf2 = (xaver - yaver) - qt(alpha, df) * stderr
+	
+	CI_lower = min(conf1, conf2)
+	CI_upper = max(conf1, conf2)
+
+	return test_t2_result(
+		pvalue=float(pvalue),
+		CI_lower=float(CI_lower), 
+		CI_upper=float(CI_upper),
+		tcritical=tcritical,
+		n1 = n1, 
+		n2= n2,
+		df=df,
+		s1 = s1, 
+		s2=s2, 
+		sp=sp,
+		xaver = xaver, 
+		yaver = yaver,
+		varequal=varequal,
+		alternative=alternative)
+	
 
 
 
