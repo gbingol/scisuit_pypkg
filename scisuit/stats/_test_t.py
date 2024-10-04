@@ -24,7 +24,7 @@ class test_t1_result:
 	def __str__(self):
 		s = "    One-sample t-test for " + self.alternative + "\n"
 		s += f"N={self.N}, mean={self.mean} \n"
-		s += f"SE={self.SE}, t-value={self.tcritical} \n"
+		s += f"SE={self.SE}, t-critical={self.tcritical} \n"
 		s += f"p-value ={self.pvalue} \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
@@ -234,6 +234,7 @@ def _test_t2(
 
 @dataclass
 class test_tpaired_result:
+	pvalue:float
 	CI_lower:float 
 	CI_upper:float
 	tcritical:float
@@ -242,32 +243,43 @@ class test_tpaired_result:
 	N:int
 	mean:float #mean of difference
 	stdev:float #stdev of difference
+	alternative:str
+
+	def __str__(self):
+		s = "    Paired t-test for " + self.alternative + "\n"
+		s += f"N={self.N}, mean1={self.xaver}, mean2={self.yaver}, mean diff={self.mean} \n"
+		s += f"t-critical={self.tcritical} \n"
+		s += f"p-value ={self.pvalue} \n"
+		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
+
+		return s
 
 
 def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_tpaired_result]:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
-	XX = x
+	xx = x
 	if isinstance(x, list):
-		XX = _np.asarray(x, dtype=_np.float64)
+		xx = _np.asarray(x, dtype=_np.float64)
 	
-	YY = y
+	yy = y
 	if isinstance(y, list):
-		YY = _np.asarray(y, dtype=_np.float64)
+		yy = _np.asarray(y, dtype=_np.float64)
 
-	assert len(XX)>= 3, "container must have at least 3 elements"
-	assert _np.issubdtype(XX.dtype, _np.number), "x must contain only numbers"
-	assert _np.issubdtype(YY.dtype, _np.number), "y must contain only numbers"
-	assert len(XX) == len(YY), "x and y must have same size"
+	assert len(xx)>= 3, "container must have at least 3 elements"
+	assert _np.issubdtype(xx.dtype, _np.number), "x must contain only numbers"
+	assert _np.issubdtype(yy.dtype, _np.number), "y must contain only numbers"
+	assert len(xx) == len(yy), "x and y must have same size"
 
-	xaver, yaver = _np.mean(XX), _np.mean(YY)
-	s1, s2 = _np.std(XX, ddof = 1), _np.std(YY, ddof = 1)
+	xaver, yaver = _np.mean(xx), _np.mean(yy)
+	s1, s2 = _np.std(xx, ddof = 1), _np.std(yy, ddof = 1)
 	
-	Diff = XX- YY
-	pvalue, Res1 = _test_t1(x =Diff, mu = mu, alternative = alternative, conflevel = conflevel)
+	Diff = xx- yy
+	Res1 = _test_t1(x =Diff, mu = mu, alternative = alternative, conflevel = conflevel)
 
-	Result = test_tpaired_result(
+	return test_tpaired_result(
+		pvalue=Res1.pvalue,
 		CI_lower=Res1.CI_lower,
 		CI_upper = Res1.CI_upper,
 		tcritical= Res1.tcritical,
@@ -278,9 +290,8 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[flo
 		SE = Res1.SE,
 		mean=Res1.mean,
 		N = Res1.N,
-		stdev=Res1.stdev)
-	
-	return pvalue, Result
+		stdev=Res1.stdev,
+		alternative=Res1.alternative)
 
 
 
@@ -299,11 +310,11 @@ def test_t (
 	"""
 	Performs paired, 1-sample and 2-sample t-test
 
-	x, y: First and second samples
-	varequal: assuming equal variances
-	alternative: 'two.sided', 'less' or 'greater'
-	mu: Assumed difference between samples or assumed mean
-	conflevel: Confidence level, [0,1]
+	x, y: First and second samples   
+	varequal: assuming equal variances   
+	alternative: 'two.sided', 'less' or 'greater'   
+	mu: Assumed difference between samples or assumed mean   
+	conflevel: Confidence level, [0,1]   
 	paired: For paired t-test
 	"""
 	if y == None:
