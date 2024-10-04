@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 import numpy as _np
-from ._distributions import pnorm, qnorm
+from .._distributions import pnorm, qnorm
 
 
 

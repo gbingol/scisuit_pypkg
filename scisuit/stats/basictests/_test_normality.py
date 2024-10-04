@@ -5,8 +5,8 @@ from types import FunctionType
 
 import numpy as _np
 
-from .._ctypeslib import pydll as _pydll
-from ._distributions import pnorm, psmirnov
+from ..._ctypeslib import pydll as _pydll
+from .._distributions import pnorm, psmirnov
 
 
 
