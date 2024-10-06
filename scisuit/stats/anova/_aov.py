@@ -108,12 +108,15 @@ class aov:
 			Treat_DF=self.m_DFTreatment,
 			Treat_MS = float(MS_Treatment),
 			Treat_SS = float(SS_Treatment),
+
 			Error_DF=self.m_DFError,
 			Error_SS = float(SS_Error),
 			Error_MS = float(self.m_MSError),
 			Total_DF=DF_Total,
+
 			Total_SS = float(SS_Total),
 			Total_MS = float(SS_Total/DF_Total),
+			
 			Fvalue = float(Fvalue))
 
 		return self.m_pvalue, ResultCls
