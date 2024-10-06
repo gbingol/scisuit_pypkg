@@ -14,7 +14,7 @@ from .._distributions import pf, qf
 @dataclass
 class test_f_Result:
 	pvalue:float
-	Fcritical:float
+	Fvalue:float #computed value
 	df1:int
 	df2:int
 	var1:float
@@ -26,7 +26,7 @@ class test_f_Result:
 	def __str__(self):
 		s = "    F test for " + self.alternative + "\n"
 		s += f"df1={self.df1}, df2={self.df2}, var1={self.var1}, var2={self.var2} \n"
-		s += f"F-critical={self.Fcritical} \n"
+		s += f"F-value={self.Fvalue} \n"
 		s += f"p-value ={self.pvalue} \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
@@ -72,24 +72,24 @@ def test_f(
 	var1, var2 = _np.var(xx, ddof = 1), _np.var(yy, ddof = 1)
 	varRatio = float(var1) / float(var2)
 
-	Fcritical = varRatio / ratio
+	Fvalue = varRatio / ratio
 
 	pvalue = 0.0
 	if alternative == "two.sided" or alternative == "notequal":
 		#F distribution is non - symmetric
-		a = pf(Fcritical, df1, df2)
-		b = 1 - pf(Fcritical, df1, df2)
+		a = pf(Fvalue, df1, df2)
+		b = 1 - pf(Fvalue, df1, df2)
 
-		c = pf(1 / Fcritical, df1, df2)
-		d = 1 - pf(1 / Fcritical, df1, df2)
+		c = pf(1 / Fvalue, df1, df2)
+		d = 1 - pf(1 / Fvalue, df1, df2)
 
 		pvalue = min(a, b) + min(c, d)
 
 	elif alternative == "greater":
-		pvalue = (1 - pf(Fcritical, df1, df2)) #area on the right
+		pvalue = (1 - pf(Fvalue, df1, df2)) #area on the right
 
 	elif alternative == "less":
-		pvalue = pf(Fcritical, df1, df2) #area on the left
+		pvalue = pf(Fvalue, df1, df2) #area on the left
 
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"");
@@ -113,7 +113,7 @@ def test_f(
 	
 	return test_f_Result(
 			pvalue=float(pvalue),
-			Fcritical= Fcritical, 
+			Fvalue= Fvalue, 
 			df1=df1,
 			df2=df2,
 			var1 = float(var1),
