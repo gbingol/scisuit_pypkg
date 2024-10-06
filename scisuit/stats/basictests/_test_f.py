@@ -26,7 +26,7 @@ class test_f_Result:
 	def __str__(self):
 		s = "    F test for " + self.alternative + "\n"
 		s += f"df1={self.df1}, df2={self.df2}, var1={self.var1}, var2={self.var2} \n"
-		s += f"F-value={self.Fvalue} \n"
+		s += f"F={self.Fvalue} \n"
 		s += f"p-value ={self.pvalue} \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 

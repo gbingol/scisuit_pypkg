@@ -18,13 +18,13 @@ class test_t1_result:
 	N:int
 	stdev:float
 	mean: float
-	tcritical:float
+	tvalue:float
 	alternative:str="two.sided"
 
 	def __str__(self):
 		s = "    One-sample t-test for " + self.alternative + "\n"
 		s += f"N={self.N}, mean={self.mean} \n"
-		s += f"SE={self.SE}, t-critical={self.tcritical} \n"
+		s += f"SE={self.SE}, t={self.tvalue} \n"
 		s += f"p-value ={self.pvalue} \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
@@ -49,24 +49,24 @@ def _test_t1(x:Iterable, mu:Real, alternative="two.sided", conflevel=0.95)->test
 	stderr = stdev / math.sqrt(nn) #Standard Error of Mean
 	
 	xaver = float(_np.mean(xx))
-	tcritical = float((xaver - mu) / stderr)
+	tvalue = float((xaver - mu) / stderr)
 
 	pvalue = 0.0
 	if alternative == "two.sided" or alternative == "notequal":
-		if (tcritical <= 0.0):
+		if (tvalue <= 0.0):
 			#area on the left of tcrit + area on the right of positive
-			pvalue = pt(tcritical, df) + (1.0 - pt(abs(tcritical), df))
+			pvalue = pt(tvalue, df) + (1.0 - pt(abs(tvalue), df))
 		else:
-			#area on the right of positive tcritical + area on the left of negative tcritical
-			pvalue = (1.0 - pt(tcritical, df)) + pt(-tcritical, df)
+			#area on the right of positive tvalue + area on the left of negative tvalue
+			pvalue = (1.0 - pt(tvalue, df)) + pt(-tvalue, df)
 	
 	#area on the right
 	elif alternative == "greater":
-		pvalue = (1.0 - pt(tcritical, df))
+		pvalue = (1.0 - pt(tvalue, df))
 	
 	#area on the left
 	elif alternative == "less":
-		pvalue = pt(tcritical, df); 
+		pvalue = pt(tvalue, df); 
 
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
@@ -92,7 +92,7 @@ def _test_t1(x:Iterable, mu:Real, alternative="two.sided", conflevel=0.95)->test
 		N = nn,
 		stdev = float(stdev),
 		mean = float(xaver),
-		tcritical = float(tcritical),
+		tvalue = float(tvalue),
 		alternative=alternative)
 	
 
@@ -106,7 +106,7 @@ class test_t2_result:
 	pvalue:float
 	CI_lower:float 
 	CI_upper:float
-	tcritical:float
+	tvalue:float
 	n1:int; n2:int
 	df:int
 	xaver:float; yaver:float
@@ -121,7 +121,7 @@ class test_t2_result:
 		if self.varequal:
 			s += f"Pooled std = {self.sp} \n"
 		
-		s += f"t-critical = {self.tcritical} \n"
+		s += f"t = {self.tvalue} \n"
 		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
@@ -154,7 +154,7 @@ def _test_t2(
 	var1, var2 = s1**2, s2**2
 	alpha = 1 - conflevel
 
-	tcritical, stderr = None, None
+	tvalue, stderr = None, None
 	sp = -1 #pooled
 
 	if varequal == False:
@@ -162,7 +162,7 @@ def _test_t2(
 		df_denom = 1 / (n1 - 1) * (var1 / n1)**2 + 1 / (n2 - 1) * (var2 / n2)**2
 		df = math.floor(df_num / df_denom)
 
-		tcritical = float((xaver - yaver) - mu) / math.sqrt(var1 / n1 + var2 / n2)
+		tvalue = float((xaver - yaver) - mu) / math.sqrt(var1 / n1 + var2 / n2)
 		stderr = math.sqrt(var1 / n1 + var2 / n2)
 	
 	else:
@@ -171,25 +171,25 @@ def _test_t2(
 		sp_num = (n1 - 1) * var1 + (n2 - 1) * var2
 		sp = math.sqrt(sp_num / df)
 
-		tcritical = float((xaver - yaver) - mu) / (sp * math.sqrt(1 / n1 + 1 / n2))
+		tvalue = float((xaver - yaver) - mu) / (sp * math.sqrt(1 / n1 + 1 / n2))
 		stderr = sp * math.sqrt(1 / n1 + 1 / n2)
 	
 	pvalue = 0
 	if alternative == "two.sided" or alternative == "notequal":
-		if tcritical <= 0:
+		if tvalue <= 0:
 			#area on the left of tcrit + area on the right of positive
-			pvalue = pt(tcritical, df) + (1 - pt(abs(tcritical), df))
+			pvalue = pt(tvalue, df) + (1 - pt(abs(tvalue), df))
 		else:
-			#area on the right of positive tcritical + area on the left of negative tcritical
-			pvalue = (1 - pt(tcritical, df)) + pt(-tcritical, df)
+			#area on the right of positive tvalue + area on the left of negative tvalue
+			pvalue = (1 - pt(tvalue, df)) + pt(-tvalue, df)
 	
 	# area on the right
 	elif alternative == "greater":	
-		pvalue = 1.0 - pt(tcritical, df)
+		pvalue = 1.0 - pt(tvalue, df)
 	
 	# area on the left
 	elif alternative == "less":	
-		pvalue = pt(tcritical, df)
+		pvalue = pt(tvalue, df)
 	
 	else:
 		raise ValueError("Values for 'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
@@ -214,7 +214,7 @@ def _test_t2(
 		pvalue=float(pvalue),
 		CI_lower=float(CI_lower), 
 		CI_upper=float(CI_upper),
-		tcritical=tcritical,
+		tvalue=tvalue,
 		n1 = n1, 
 		n2= n2,
 		df=df,
@@ -237,7 +237,7 @@ class test_tpaired_result:
 	pvalue:float
 	CI_lower:float 
 	CI_upper:float
-	tcritical:float
+	tvalue:float
 	xaver:float; yaver:float
 	s1:float; s2:float; SE:float
 	N:int
@@ -248,7 +248,7 @@ class test_tpaired_result:
 	def __str__(self):
 		s = "    Paired t-test for " + self.alternative + "\n"
 		s += f"N={self.N}, mean1={self.xaver}, mean2={self.yaver}, mean diff={self.mean} \n"
-		s += f"t-critical={self.tcritical} \n"
+		s += f"t={self.tvalue} \n"
 		s += f"p-value ={self.pvalue} \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
@@ -282,7 +282,7 @@ def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[flo
 		pvalue=Res1.pvalue,
 		CI_lower=Res1.CI_lower,
 		CI_upper = Res1.CI_upper,
-		tcritical= Res1.tcritical,
+		tvalue= Res1.tvalue,
 		xaver=xaver,
 		yaver=yaver,
 		s1=s1,

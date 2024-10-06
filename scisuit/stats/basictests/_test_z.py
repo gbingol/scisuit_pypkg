@@ -15,14 +15,14 @@ class test_z1_Result:
 	SE:float 
 	stdev:float 
 	mean: float 
-	zcritical:float 
+	zvalue:float 
 	CI_upper: float
 	CI_lower: float
 	N:int
 	alternative:str
 
 	def __str__(self)->str:
-		s = f"N={self.N}, mean={self.mean}, Z={self.zcritical} \n"
+		s = f"N={self.N}, mean={self.mean}, Z={self.zvalue} \n"
 		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
 		s += f"Confidence interval ({self.CI_lower}, {self.CI_upper}) \n"
 
@@ -65,21 +65,21 @@ def test_z1(
 	stdeviation = _np.std(XX, ddof =1); #sample's standard deviation
 
 	alpha = 1 - conflevel
-	zcritical = float((xaver - mu) / stderr)
+	zvalue = float((xaver - mu) / stderr)
 
 	pvalue = 0.0
 
 	if alternative == "two.sided" or alternative == "notequal":
-		if zcritical <= 0:
+		if zvalue <= 0:
 			#area on the left of zcrit + area on the right of positive
-			pvalue = pnorm(zcritical, 0.0, 1.0) + (1.0 - pnorm(abs(zcritical), 0.0, 1.0))
+			pvalue = pnorm(zvalue, 0.0, 1.0) + (1.0 - pnorm(abs(zvalue), 0.0, 1.0))
 
-		elif zcritical > 0:
+		elif zvalue > 0:
 			#area on the right of positive zcriticial + area on the left of negative zcriticial
-			pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) + pnorm(-zcritical, 0.0, 1.0)
+			pvalue = (1.0 - pnorm(zvalue, 0.0, 1.0)) + pnorm(-zvalue, 0.0, 1.0)
 
 	elif alternative == "greater":
-		pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) #area on the right
+		pvalue = (1.0 - pnorm(zvalue, 0.0, 1.0)) #area on the right
 
 	elif alternative == "less":
 		pvalue = pnorm(zcritical, 0.0, 1.0) #area on the left
@@ -104,7 +104,7 @@ def test_z1(
 			stdev = float(stdeviation), 
 			N = dim, 
 			mean = float(xaver), 
-			zcritical = zcritical,
+			zvalue = zvalue,
 			CI_lower = float(CI_lower),
 			CI_upper = float(CI_upper),
 			alternative= alternative)
@@ -124,7 +124,7 @@ class test_z2_Result:
 	stdev2:float 
 	mean1: float 
 	mean2: float
-	zcritical:float 
+	zvalue:float 
 	CI_upper: float
 	CI_lower: float
 	n1:int
@@ -134,7 +134,7 @@ class test_z2_Result:
 	def __str__(self)->str:
 		s = "    Two sample z-test    \n"
 		s += f"n1={self.n1}, n2={self.n2}, mean1={self.mean1}, mean2={self.mean2} \n"
-		s += f"Z={self.zcritical} \n"
+		s += f"Z={self.zvalue} \n"
 		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
 		s += f"Confidence interval ({self.CI_lower}, {self.CI_upper}) \n"
 
@@ -185,24 +185,24 @@ def test_z2(
 	stderr = math.sqrt(sd1**2/n1 + sd2**2/n2)
 
 	alpha = 1 - conflevel
-	zcritical = (xaver - yaver - mu) / stderr
+	zvalue = (xaver - yaver - mu) / stderr
 
 	pvalue = 0.0
 
 	if alternative == "two.sided" or alternative == "notequal":
-		if zcritical <= 0:
+		if zvalue <= 0:
 			#area on the left of zcrit + area on the right of positive
-			pvalue = pnorm(zcritical, 0.0, 1.0) + (1.0 - pnorm(abs(zcritical), 0.0, 1.0))
+			pvalue = pnorm(zvalue, 0.0, 1.0) + (1.0 - pnorm(abs(zvalue), 0.0, 1.0))
 
-		elif zcritical > 0:
+		elif zvalue > 0:
 			#area on the right of positive zcriticial + area on the left of negative zcriticial
-			pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) + pnorm(-zcritical, 0.0, 1.0)
+			pvalue = (1.0 - pnorm(zvalue, 0.0, 1.0)) + pnorm(-zvalue, 0.0, 1.0)
 
 	elif alternative == "greater":
-		pvalue = (1.0 - pnorm(zcritical, 0.0, 1.0)) #area on the right
+		pvalue = (1.0 - pnorm(zvalue, 0.0, 1.0)) #area on the right
 
 	elif alternative == "less":
-		pvalue = pnorm(zcritical, 0.0, 1.0) #area on the left
+		pvalue = pnorm(zvalue, 0.0, 1.0) #area on the left
 
 	else:
 		raise ValueError("'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
@@ -229,7 +229,7 @@ def test_z2(
 			n2=n2,
 			mean1=xaver, 
 			mean2=yaver,
-			zcritical = zcritical,
+			zvalue = zvalue,
 			CI_lower = float(CI_lower),
 			CI_upper = float(CI_upper),
 			alternative= alternative)
