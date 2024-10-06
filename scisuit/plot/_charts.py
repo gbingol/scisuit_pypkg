@@ -24,7 +24,7 @@ def boxplot(
 	"""
 	Plots box-whisker chart.
 
-	`data:` Data to be plotted 
+	`data:` Data to be plotted  
 	`label:` Name of the series
 	"""
 	assert isinstance(data, _Iterable), "'data' must be iterable."
