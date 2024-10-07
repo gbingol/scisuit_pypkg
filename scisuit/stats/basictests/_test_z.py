@@ -82,7 +82,7 @@ def test_z1(
 		pvalue = (1.0 - pnorm(zvalue, 0.0, 1.0)) #area on the right
 
 	elif alternative == "less":
-		pvalue = pnorm(zcritical, 0.0, 1.0) #area on the left
+		pvalue = pnorm(zvalue, 0.0, 1.0) #area on the left
 
 	else:
 		raise ValueError("'alternative': \"two.sided\" or \"notequal\", \"greater\", \"less\"")
