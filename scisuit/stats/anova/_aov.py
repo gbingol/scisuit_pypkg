@@ -1,6 +1,7 @@
 import math
 import numbers
 from dataclasses import dataclass
+from typing import Iterable
 
 import numpy as np
 
@@ -24,134 +25,152 @@ class aov_results:
 	Total_SS:float
 	Total_MS:float
 	Fvalue:float
+	pvalue:float
 
+	#For tukey test
+	Averages:list
+	SampleSizes:list
 
-
-class aov: 
-
-	class TukeyComparison:
-		def __init__(self) -> None:
-			self.m_a=None
-			self.m_b=None
-			self.m_MeanValueDiff=None
-			self.m_CILow=None
-			self.m_CIHigh=None
-
-		def __str__(self) -> str: 
-			retStr = str(self.m_a) + "-" + str(self.m_b) + \
-				"\t \t" + \
-				str(round(self.m_MeanValueDiff, 2)) + \
-				"\t \t" + \
-				str(round(self.m_CILow, 2)) + \
-				"," \
-				+ str(round(self.m_CIHigh, 2))
-			return retStr
-
-
-	def __init__(self, *args) -> None:
-		self._args = args
-		self._Averages = []
-		self._SampleSizes = []
-
-		self.m_MSError=None
-		self.m_DFTreatment=None
-		self.m_DFError=None
-		self.m_TukeyTable=[]
-		self.m_pvalue = None
-
-
-
-	def compute(self)->tuple[float, aov_results]:
-		SS_Treatment, SS_Error, SS_Total=0, 0, 0
-		NEntries = 0
-
-		#C is a variable defined to speed up computations (see Larsen Marx Chapter 12 on ANOVA)
-		_c = 0.0
-
-		for elem in self._args:
-			TypeOK=isinstance(elem, list) or isinstance(elem, np.ndarray)
-			if(TypeOK == False):
-				raise TypeError("list/ndarray expected")
-
-			ElemSize = len(elem)
-			LocalSum = 0.0
-			
-			for entry in elem:
-				LocalSum += entry
-				SS_Total += entry**2
-			
-			#Required for Tukey test
-			self._Averages.append(LocalSum/ElemSize)
-			self._SampleSizes.append(ElemSize) 
-
-			_c += LocalSum
-			NEntries += ElemSize
-			SS_Treatment += LocalSum**2/ElemSize
-
-            
-		_c = _c**2 / NEntries
+	def __str__(self):
+		s = "    One-Way ANOVA Results \n"
+		s += "{:<10} {:>10} {:>15} {:>15} {:>15} {:>15}\n".format(
+			"Source", "df", "SS", "MS", "F", "p-value")
 		
-		SS_Total = SS_Total - _c
-		SS_Treatment = SS_Treatment - _c
-		SS_Error = SS_Total - SS_Treatment
-
-		self.m_DFError, self.m_DFTreatment = NEntries-len(self._args), len(self._args)-1 
-		DF_Total = self.m_DFError + self.m_DFTreatment
-
-		MS_Treatment, self.m_MSError = SS_Treatment/self.m_DFTreatment , SS_Error/self.m_DFError
-
-		Fvalue = MS_Treatment/self.m_MSError
-
-		self.m_pvalue = 1 - pf(q = float(Fvalue), df1 = self.m_DFTreatment, df2 = self.m_DFError)
-
-		ResultCls = aov_results(
-			Treat_DF=self.m_DFTreatment,
-			Treat_MS = float(MS_Treatment),
-			Treat_SS = float(SS_Treatment),
-
-			Error_DF=self.m_DFError,
-			Error_SS = float(SS_Error),
-			Error_MS = float(self.m_MSError),
-			Total_DF=DF_Total,
-
-			Total_SS = float(SS_Total),
-			Total_MS = float(SS_Total/DF_Total),
-			
-			Fvalue = float(Fvalue))
-
-		return self.m_pvalue, ResultCls
-
-
-
-	def tukey(self, alpha)->list:
-		"""
-		perform tukey test
-		"""
+		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
+			"Treatment", self.Treat_DF, self.Treat_SS, self.Treat_MS, self.Fvalue, self.pvalue)
 		
-		if(len(self._Averages) == 0):
-			raise RuntimeError("first compute must be called")
+		s += "{:<10} {:>10} {:>15.2f} {:>15.2f}\n".format(
+			"Error", self.Error_DF, self.Error_SS, self.Error_MS)
 		
-		if(isinstance(alpha, numbers.Number) == False):
-			raise TypeError("Alpha must be of type number")
+		s += "{:<10} {:>10} {:>15.2f}\n".format("Total", self.Total_DF, self.Total_SS)
 
-		D = qdist(1-alpha, self.m_DFTreatment-1, self.m_DFError-1) / math.sqrt(self._SampleSizes[0])
-		ConfIntervalLength = D*math.sqrt(self.m_MSError)
+		return s
 
-		self.m_TukeyTable=[]
-		for i in range(len(self._Averages)):
-			for j in range(i+1, len(self._Averages)):
-				MeanValueDiff = self._Averages[i]-self._Averages[j]
-				ConfInterval1 = MeanValueDiff-ConfIntervalLength
-				ConfInterval2 = MeanValueDiff+ConfIntervalLength
 
-				com = self.TukeyComparison()
 
-				com.m_a=i
-				com.m_b=j
-				com.m_MeanValueDiff=MeanValueDiff
-				com.m_CILow = min(ConfInterval1,ConfInterval2)
-				com.m_CIHigh = max(ConfInterval1,ConfInterval2)
 
-				self.m_TukeyTable.append(com)
 
-		return self.m_TukeyTable
+def aov(*args)->aov_results:
+	Averages, SampleSizes = [], []
+	MSError, DFTreatment, DFError = None, None, None
+	SS_Treatment, SS_Error, SS_Total=0, 0, 0
+	NEntries = 0
+
+	#C is a variable defined to speed up computations (see Larsen Marx Chapter 12 on ANOVA)
+	_c = 0.0
+
+	for elem in args:
+		if(not isinstance(elem, Iterable)):
+			raise TypeError("Iterable's expected")
+
+		ElemSize = len(elem)
+		LocalSum = 0.0
+		
+		for entry in elem:
+			LocalSum += entry
+			SS_Total += entry**2
+		
+		#Required for Tukey test
+		Averages.append(LocalSum/ElemSize)
+		SampleSizes.append(ElemSize) 
+
+		_c += LocalSum
+		NEntries += ElemSize
+		SS_Treatment += LocalSum**2/ElemSize
+
+		
+	_c = _c**2 / NEntries
+	
+	SS_Total = SS_Total - _c
+	SS_Treatment = SS_Treatment - _c
+	SS_Error = SS_Total - SS_Treatment
+
+	DFError, DFTreatment = NEntries-len(args), len(args)-1 
+	DF_Total = DFError + DFTreatment
+
+	MS_Treatment, MSError = SS_Treatment/DFTreatment , SS_Error/DFError
+
+	Fvalue = MS_Treatment/MSError
+	pvalue = 1 - pf(q = float(Fvalue), df1 = DFTreatment, df2 = DFError)
+
+	return aov_results(
+		Treat_DF=DFTreatment,
+		Treat_MS = float(MS_Treatment),
+		Treat_SS = float(SS_Treatment),
+
+		Error_DF=DFError,
+		Error_SS = float(SS_Error),
+		Error_MS = float(MSError),
+		Total_DF=DF_Total,
+
+		Total_SS = float(SS_Total),
+		Total_MS = float(SS_Total/DF_Total),
+		
+		Fvalue = float(Fvalue),
+		pvalue=pvalue,
+
+		#For tukey test
+		Averages=Averages,
+		SampleSizes=SampleSizes	)
+
+
+
+@dataclass
+class TukeyComparison:
+	a:int
+	b:int
+	Diff:float #differences in mean values
+	CILow:float
+	CIHigh:float
+
+	def __str__(self) -> str: 
+		s1 = f"{self.a+1} - {self.b+1}"
+		s2 = f"({round(self.CILow, 2)}, {round(self.CIHigh, 2)})"
+		return "{:<10} {:>15.2f} {:>25}".format(s1, self.Diff, s2)
+
+
+@dataclass
+class TukeyResults:
+	r:list[TukeyComparison]
+	alpha:float
+
+	def __str__(self):
+		s = f"   Tukey Test Results (alpha={self.alpha}) \n\n"
+		s += "{:<10} {:>15} {:>20} \n".format("Pairwise Diff", "i-j" ,"Interval")
+		for l in self.r:
+			s += str(l) + "\n"
+		return s
+
+
+	
+
+def tukey(alpha:float, aovresult:aov_results)->TukeyResults:
+	"""perform tukey test"""	
+	assert isinstance(alpha, float), "alpha must be float."
+	assert isinstance(aovresult, aov_results), "aovresult must be aov_results."
+
+	Averages, SampleSizes = aovresult.Averages, aovresult.SampleSizes
+	Treat_DF, Error_DF = aovresult.Treat_DF, aovresult.Error_DF
+	Error_MS = aovresult.Error_MS
+
+	Dvalue = qdist(1-alpha, Treat_DF-1, Error_DF-1) / math.sqrt(SampleSizes[0])
+	L_Conf = Dvalue*math.sqrt(Error_MS) #length of confidence interval
+
+	TukeyTable = []
+	nn = len(Averages)
+	for i in range(nn):
+		for j in range(i+1, nn):
+			Diff = Averages[i]-Averages[j]
+			Conf1 = Diff - L_Conf
+			Conf2 = Diff + L_Conf
+
+			comp = TukeyComparison(
+			a=i, 
+			b = j,
+			Diff=Diff,
+			CILow = min(Conf1, Conf2),
+			CIHigh = max(Conf1,Conf2))
+
+			TukeyTable.append(comp)
+
+	return TukeyResults(r=TukeyTable, alpha=alpha)
