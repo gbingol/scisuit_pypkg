@@ -121,7 +121,7 @@ class test_t2_result:
 		if self.varequal:
 			s += f"Pooled std = {self.sp} \n"
 		
-		s += f"t = {self.tvalue} \n"
+		s += f"t={self.tvalue} \n"
 		s += f"p-value = {self.pvalue} ({self.alternative}) \n"
 		s += f"Confidence interval: ({self.CI_lower}, {self.CI_upper})"
 
