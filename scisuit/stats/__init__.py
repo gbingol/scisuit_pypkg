@@ -2,7 +2,8 @@ from ._core import kurt, mode, moveavg, rolling, skew
 
 from .anova import aov, aov_results, tukey, TukeyResults, TukeyComparison 
 from .anova import aov2, aov2_results
-from ._linregress import linregress, linregressResult
+
+from .regression import linregress
 
 from .basictests import test_f, test_f_Result, test_sign, test_sign_Result
 from .basictests import test_t, test_t1_result, test_t2_result, test_tpaired_result
