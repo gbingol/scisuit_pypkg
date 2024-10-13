@@ -5,10 +5,6 @@ import numpy as np
 
 from .._distributions import pf
 
-__all__ = ['aov2', 'aov2_results']
-
-
-
 
 def _parsedata(y, x1, x2, v1, v2):
 	"""
@@ -41,9 +37,7 @@ def _parsedata(y, x1, x2, v1, v2):
 
 
 def _averageMatrix(Tbl, v2):
-	"""
-	contains average value of each cell's data list
-	"""
+	"""contains average value of each cell's data list"""
 	MatAverage = []
 	for i in range(len(v2)):
 		arr = np.array(Tbl[i]).transpose()
@@ -57,11 +51,24 @@ def _averageMatrix(Tbl, v2):
 
 @dataclass
 class aov2_results():
-	DFError:int; DFFact1:int; DFFact2:int; DFinteract:int
-	FvalFact1:float; FvalFact2:float; Fvalinteract:float
-	MSError:float; MSFact1:float; MSFact2:float; MSinteract:float
-	pvalFact1:float; pvalFact2:float; pvalinteract:float
-	SSError:float; SSFact1:float; SSFact2:float; SSinteract:float
+	DFError:int 
+	DFFact1:int 
+	DFFact2:int 
+	DFinteract:int
+	FvalFact1:float 
+	FvalFact2:float 
+	Fvalinteract:float
+	MSError:float 
+	MSFact1:float 
+	MSFact2:float
+	MSinteract:float
+	pvalFact1:float 
+	pvalFact2:float
+	pvalinteract:float
+	SSError:float
+	SSFact1:float
+	SSFact2:float
+	SSinteract:float
 
 	Residuals:list
 	Fits:list
@@ -77,30 +84,30 @@ def aov2(
 	y: Responses
 	x1, x2: factors
 	"""
-	X1 = x1
+	xx1 = x1
 	if isinstance(x1, list):
-		X1 = np.asarray(x1, dtype=np.float64)
+		xx1 = np.asarray(x1, dtype=np.float64)
 	
-	X2 = x2
+	xx2 = x2
 	if isinstance(x2, list):
-		X2 = np.asarray(x2, dtype=np.float64)
+		xx2 = np.asarray(x2, dtype=np.float64)
 	
-	YY = y
+	yy = y
 	if isinstance(y, list):
-		YY = np.asarray(y, dtype=np.float64)
+		yy = np.asarray(y, dtype=np.float64)
 
-	assert len(X1)>= 3, "x1 must have at least 3 elements"
-	assert len(X2) == len(X1), "x1 and x2 must have same size"
-	assert len(X1) == len(YY), "x1 and y must have same size"
+	assert len(xx1)>= 3, "x1 must have at least 3 elements"
+	assert len(xx2) == len(xx1), "x1 and x2 must have same size"
+	assert len(xx1) == len(yy), "x1 and y must have same size"
 
-	assert np.issubdtype(X1.dtype, np.number), "x1 must contain only numbers"
-	assert np.issubdtype(X2.dtype, np.number), "x2 must contain only numbers"
-	assert np.issubdtype(YY.dtype, np.number), "y must contain only numbers"
+	assert np.issubdtype(xx1.dtype, np.number), "x1 must contain only numbers"
+	assert np.issubdtype(xx2.dtype, np.number), "x2 must contain only numbers"
+	assert np.issubdtype(yy.dtype, np.number), "y must contain only numbers"
 
-	v1 = np.unique(X1)
-	v2 = np.unique(X2)
+	v1 = np.unique(xx1)
+	v2 = np.unique(xx2)
 
-	Tbl = _parsedata(YY, X1, X2, v1, v2)
+	Tbl = _parsedata(yy, xx1, xx2, v1, v2)
 	MatAverage = _averageMatrix(Tbl, v2)
 
 	SSerror = 0
