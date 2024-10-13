@@ -151,25 +151,25 @@ class MultipleLinRegressResult:
 	
 		
 	def __str__(self):
-		intercept = str(round(self.Coefficients[0], 3)) + " + " if self.intercept else ""
-
 		anova = self.anova
+		pvalue_format = "{:.4e}".format(anova.pvalue)
+
 		s = "   Multiple Linear Regression  \n"
-		s += f"F={round(anova.Fvalue,2)}, p-value={round(anova.pvalue, 4)}, R2={round(anova.R2,2)} \n \n"
-		#s += f"The regression equation: Y = {intercept} {slope}·X  \n \n"
+		s += f"F={round(anova.Fvalue,2)}, p-value={pvalue_format}, R2={round(anova.R2,2)} \n \n"
+		
 		s += "{:<10} {:>15} {:>15} {:>15} {:>15}\n".format(
 			"Predictor", "Coeff", "StdError", "T", "p-value")
 		
 		if self.intercept:
 			Stat = self.CoefficientStats[0]
-			s += "{:<10} {:>15.3f} {:>15.2f} {:>15.2f} {:>15.4f} \n".format(
+			s += "{:<10} {:>15.3f} {:>15.2f} {:>15.2f} {:>15.3e} \n".format(
 				"X0", Stat.value, Stat.stderr, Stat.tvalue, Stat.pvalue)
 		
 		index = 1 if self.intercept else 0
 		j=1
 		for i in range(index, len(self.CoefficientStats)):
 			Stat = self.CoefficientStats[i]
-			s += "{:<10} {:>15.3f} {:>15.2f} {:>15.2f} {:>15.4f} \n".format(
+			s += "{:<10} {:>15.3f} {:>15.2f} {:>15.2f} {:>15.3e} \n".format(
 				f"X{j}", Stat.value, Stat.stderr, Stat.tvalue, Stat.pvalue)
 			j += 1
 
