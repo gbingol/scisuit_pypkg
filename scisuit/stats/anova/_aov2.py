@@ -46,8 +46,8 @@ def _averageMatrix(Tbl, v2):
 	return MatAverage
 
 
-
-
+#----------------------------------------------------------------
+#----------------------------------------------------------------
 
 @dataclass
 class aov2_results():
@@ -116,8 +116,8 @@ def aov2(
 	v1 = np.unique(xx1)
 	v2 = np.unique(xx2)
 
-	assert len(v1)>1, "At least two-levels of factor 1 is required."
-	assert len(v2)>1, "At least two-levels of factor 2 is required."
+	assert len(v1)>1, "Factor #1 must have at least two-levels."
+	assert len(v2)>1, "Factor #2 must have at least two-levels."
 
 	Tbl = _parsedata(yy, xx1, xx2, v1, v2)
 	MatAverage = _averageMatrix(Tbl, v2)
