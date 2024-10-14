@@ -74,6 +74,23 @@ class aov2_results():
 	Fits:list
 
 
+	def __str__(self):
+		s = "    Two-way ANOVA Results    \n"
+		s += "{:<10} {:>10} {:>15} {:>15} {:>15} {:>15}\n".format(
+			"Source", "df", "SS", "MS", "F", "p-value")
+		
+		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
+			"x1", self.DFFact1, self.SSFact1, self.MSFact1, self.FvalFact1, self.pvalFact1)
+		
+		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
+			"x1", self.DFFact2, self.SSFact2, self.MSFact2, self.FvalFact2, self.pvalFact2)
+		
+		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
+			"x1*x2", self.DFinteract, self.SSinteract, self.MSinteract, self.Fvalinteract, self.pvalinteract)
+		
+		return s
+
+
 def aov2(
 		y:Iterable, 
 		x1:Iterable, 
@@ -84,17 +101,9 @@ def aov2(
 	y: Responses
 	x1, x2: factors
 	"""
-	xx1 = x1
-	if isinstance(x1, list):
-		xx1 = np.asarray(x1, dtype=np.float64)
-	
-	xx2 = x2
-	if isinstance(x2, list):
-		xx2 = np.asarray(x2, dtype=np.float64)
-	
-	yy = y
-	if isinstance(y, list):
-		yy = np.asarray(y, dtype=np.float64)
+	xx1 = np.asarray(x1)
+	xx2 = np.asarray(x2)
+	yy = np.asarray(y)
 
 	assert len(xx1)>= 3, "x1 must have at least 3 elements"
 	assert len(xx2) == len(xx1), "x1 and x2 must have same size"
@@ -106,6 +115,9 @@ def aov2(
 
 	v1 = np.unique(xx1)
 	v2 = np.unique(xx2)
+
+	assert len(v1)>1, "At least two-levels of factor 1 is required."
+	assert len(v2)>1, "At least two-levels of factor 2 is required."
 
 	Tbl = _parsedata(yy, xx1, xx2, v1, v2)
 	MatAverage = _averageMatrix(Tbl, v2)
