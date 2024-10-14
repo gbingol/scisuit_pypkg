@@ -83,7 +83,7 @@ class aov2_results():
 			"x1", self.DFFact1, self.SSFact1, self.MSFact1, self.FvalFact1, self.pvalFact1)
 		
 		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
-			"x1", self.DFFact2, self.SSFact2, self.MSFact2, self.FvalFact2, self.pvalFact2)
+			"x2", self.DFFact2, self.SSFact2, self.MSFact2, self.FvalFact2, self.pvalFact2)
 		
 		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
 			"x1*x2", self.DFinteract, self.SSinteract, self.MSinteract, self.Fvalinteract, self.pvalinteract)
