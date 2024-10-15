@@ -30,7 +30,7 @@ def _parsedata(y, x1, x2, v1, v2):
 			j +=1
 			if x1[k] == v1[j]: break
 		
-		Tbl[i][j].append(y[k])
+		Tbl[i][j].append(float(y[k]))
 	
 	return Tbl
 
@@ -48,6 +48,8 @@ def _averageMatrix(Tbl, v2):
 
 #----------------------------------------------------------------
 #----------------------------------------------------------------
+
+
 
 @dataclass
 class aov2_results():
@@ -85,39 +87,24 @@ class aov2_results():
 		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
 			"x2", self.DFFact2, self.SSFact2, self.MSFact2, self.FvalFact2, self.pvalFact2)
 		
-		s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
-			"x1*x2", self.DFinteract, self.SSinteract, self.MSinteract, self.Fvalinteract, self.pvalinteract)
+		if self.DFinteract != None:
+			s += "{:<10} {:>10} {:>15.2f} {:>15.2f} {:>15.2f} {:>15.4e}\n".format(
+				"x1*x2", self.DFinteract, self.SSinteract, self.MSinteract, self.Fvalinteract, self.pvalinteract)
 		
 		return s
 
 
-def aov2(
-		y:Iterable, 
-		x1:Iterable, 
-		x2:Iterable)->aov2_results:
-	"""
-	Performs 2-way ANOVA
 
-	y: Responses
-	x1, x2: factors
-	"""
-	xx1 = np.asarray(x1)
-	xx2 = np.asarray(x2)
-	yy = np.asarray(y)
 
-	assert len(xx1)>= 3, "x1 must have at least 3 elements"
-	assert len(xx2) == len(xx1), "x1 and x2 must have same size"
-	assert len(xx1) == len(yy), "x1 and y must have same size"
 
-	assert np.issubdtype(xx1.dtype, np.number), "x1 must contain only numbers"
-	assert np.issubdtype(xx2.dtype, np.number), "x2 must contain only numbers"
-	assert np.issubdtype(yy.dtype, np.number), "y must contain only numbers"
-
-	v1 = np.unique(xx1)
-	v2 = np.unique(xx2)
-
-	assert len(v1)>1, "Factor #1 must have at least two-levels."
-	assert len(v2)>1, "Factor #2 must have at least two-levels."
+def aov2_replicate(
+		yy:np.ndarray, 
+		xx1:np.ndarray, 
+		xx2:np.ndarray,
+		v1:np.ndarray, #unique factor #1
+		v2:np.ndarray #unique factor #2
+		)->aov2_results:
+	"""Data has replicates"""
 
 	Tbl = _parsedata(yy, xx1, xx2, v1, v2)
 	MatAverage = _averageMatrix(Tbl, v2)
@@ -186,3 +173,96 @@ def aov2(
 		Fits=Fits,
 		Residuals=Residuals
 	)
+
+
+
+def aov2_noreps(
+		yy:np.ndarray, 
+		xx1:np.ndarray, 
+		xx2:np.ndarray,
+		v1:np.ndarray, #unique factor #1
+		v2:np.ndarray #unique factor #2
+		)->aov2_results:
+	"""Data has NO replicates"""
+
+	grand_mean = np.mean(yy)
+
+	x1_means = [float(np.mean(yy[xx1 == b])) for b in v1]
+	x2_means = [float(np.mean(yy[xx2 == t])) for t in v2]
+
+	SSFact1 = len(v2)*sum([(v - grand_mean)**2 for v in x1_means])
+	SSFact2 = len(v1)*sum([(v - grand_mean)**2 for v in x2_means])
+
+	SS_total = sum((yy[i] - grand_mean)**2 for i in range(len(yy)))
+	SS_error = SS_total - SSFact1 - SSFact2
+
+	DFFact1, DFFact2 = len(v1) - 1, len(v2) - 1
+	MSFact1, MSFact2 = float(SSFact1) / DFFact1, float(SSFact2) / DFFact2
+
+	DFerror = DFFact1* DFFact2
+	MSerror = SS_error/DFerror	
+
+	FvalFact1, FvalFact2 = float(MSFact1 / MSerror), float(MSFact2 / MSerror)
+	pvalFact1 = 1.0 - pf(FvalFact1, DFFact1, DFerror)
+	pvalFact2 = 1.0 - pf(FvalFact2, DFFact2, DFerror)
+
+	return aov2_results(
+		DFError=DFerror, 
+		DFFact1=DFFact1, 
+		DFFact2=DFFact2,
+		DFinteract=None,
+		FvalFact1=FvalFact1, 
+		FvalFact2 =FvalFact2, 
+		Fvalinteract = None,
+		MSError = float(MSerror), 
+		MSFact1 = MSFact1, 
+		MSFact2 = MSFact2, 
+		MSinteract= None,
+		pvalFact1 = float(pvalFact1), 
+		pvalFact2 = float(pvalFact2), 
+		pvalinteract= None,
+		SSError = float(SS_error), 
+		SSFact1 = float(SSFact1), 
+		SSFact2 = float(SSFact2), 
+		SSinteract = None,
+
+		Residuals=None,
+		Fits=None
+	)
+
+
+
+
+def aov2(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
+	"""
+	Performs 2-way ANOVA
+
+	y: Responses   
+	x1, x2: factors
+	"""
+	xx1 = np.asarray(x1)
+	xx2 = np.asarray(x2)
+	yy = np.asarray(y)
+
+	assert len(xx1)>= 3, "x1 must have at least 3 elements"
+	assert len(xx2) == len(xx1), "x1 and x2 must have same size"
+	assert len(xx1) == len(yy), "x1 and y must have same size"
+
+	assert np.issubdtype(yy.dtype, np.number), "y must contain only numbers"
+
+	v1 = np.unique(xx1)
+	v2 = np.unique(xx2)
+
+	assert len(v1)>1, "Factor #1 must have at least two-levels."
+	assert len(v2)>1, "Factor #2 must have at least two-levels."
+
+	Tbl = _parsedata(yy, xx1, xx2, v1, v2)
+	NReplicate = len(Tbl[0][0])
+
+	if NReplicate>1:
+		return aov2_replicate(yy=yy, xx1=xx1, xx2=xx2, v1=v1, v2=v2)
+	
+	return aov2_noreps(yy=yy, xx1=xx1, xx2=xx2, v1=v1, v2=v2)
+
+
+	
