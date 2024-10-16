@@ -12,17 +12,8 @@ def AOV():
 	D = np.array([45, 59, 48, 46, 38, 47])
 
 	#perform 1-way ANOVA
-	cls = aov(A, B, C, D)
-
-	#p-value and extra info
-	pval, info = cls.compute()
-
-	print("p-value=" + str(pval))
-	print(info)
-
-	TukeyList = cls.tukey(0.05)
-	for c in TukeyList:
-		print(c)
+	result = aov(A, B, C, D)
+	print(result)
 
 
 def AOV2():
@@ -69,15 +60,8 @@ def linregression():
     59.7, 126.9, 43.9, 136.3] 
 
     
-	slm = st.linregress(response, factor) 
-	slp_inter = slm.compute()
-	print("Coefficients:", slp_inter)
-
-	summary = slm.summary()
-	print("p-value:", summary.pvalue)
-
-	for i in summary.coeffstat:
-		print(i)
+	result = st.linregress(response, factor) 
+	print(result)
 
 
 def ttest_2sample():
@@ -86,17 +70,14 @@ def ttest_2sample():
 	treat = [24, 43, 58, 71, 43, 49, 61, 44, 67, 49, 53, 56, 59, 52, 62, 54, 57, 33, 46, 43, 57]
 	cont = [42, 43, 55, 54, 20, 85, 33, 41, 19, 60, 53, 42, 46, 10, 17, 28, 48, 37, 42, 55, 26, 62, 37]
 
-	pval, tbl=test_t(x=treat, y=cont, varequal=False)
-
-	print("p-value=" + str(pval))
-	pprint.pprint(tbl)
+	result=test_t(x=treat, y=cont, varequal=False)
+	print(result)
 
 
 
 def ttest_1sample():
 	v = [5, 6, 0, 4, 11, 9, 2, 3]
-	pval, tbl=st._test_t(x=v, mu=8.6)
-	print(pval)
+	tbl=st.test_t(x=v, mu=8.6)
 	print(tbl)
 
 
@@ -104,8 +85,8 @@ def ttest_1sample():
 def ttest_paired():
 	pre=[18, 21, 16, 22, 19, 24, 17, 21, 23, 18, 14, 16, 16, 19, 18, 20, 12, 22, 15, 17]
 	post=[22, 25, 17, 24, 16, 29, 20, 23, 19, 20, 15, 15, 18, 26, 18, 24, 18, 25, 19, 16]
-	pvalue, tbl=st._test_t(x=pre, y=post, paired=True)
-	print(pvalue)
+	tbl=st.test_t(x=pre, y=post, paired=True)
+	
 	print(tbl)
 
 
@@ -116,8 +97,7 @@ def ztest():
 	142, 147, 148, 155, 150, 144, 140, 140, 139, 148, 143, 143, 149, 140, 132, 
 	158, 149, 144, 145, 146, 143, 135, 147, 153, 142, 142, 138, 150, 145, 126]
 
-	pval, tbl=st.test_z(x=x, mu=132.4, sd=6)
-	print(pval)
+	tbl=st.test_z(x=x, mu=132.4, sd1=6)
 	print(tbl)
 
 
@@ -125,8 +105,7 @@ def ztest():
 def ftest():
 	x = [10.7, 10.7, 10.4, 10.9, 10.5, 10.3, 9.6, 11.1, 11.2, 10.4]
 	y = [9.6, 10.4, 9.7, 10.3, 9.2, 9.3, 9.9, 9.5, 9.0, 10.9]
-	pval, res = st.test_f(x, y)
-	print(pval)
+	res = st.test_f(x, y)
 	print(res)
 
 
