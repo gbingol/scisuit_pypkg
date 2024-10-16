@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <cstdint>
 
 #include <Python.h>
 #include "dllimpexp.h"

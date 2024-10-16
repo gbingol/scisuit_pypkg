@@ -2,9 +2,7 @@
 
 #include <list>
 #include <map>
-#include <numeric>
 #include <filesystem>
-#include <iostream>
 #include <optional>
 
 #include <wx/wx.h>

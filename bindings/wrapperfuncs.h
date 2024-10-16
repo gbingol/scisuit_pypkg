@@ -4,15 +4,9 @@
 #include <Python.h>
 
 #include <vector>
-#include <list>
 #include <optional>
 #include <string>
-#include <memory>
 #include <complex>
-#include <functional>
-
-
-#include "dllimpexp.h"
 
 
 
@@ -23,7 +17,7 @@
     return value is passed to another function which takes a functional.
     Ex: double result = math::simpson(func, a, b, iter);
 */
-auto Make1DFunction(PyObject* funcObj)
+inline auto Make1DFunction(PyObject* funcObj)
 {
 	    auto func = [=](double x)
     {
@@ -53,7 +47,7 @@ auto Make1DFunction(PyObject* funcObj)
     callableObj: Python callable object.
     return value is passed to another function which takes a functional.
 */
-auto MakeComplexFunction(PyObject* callableObj)
+inline auto MakeComplexFunction(PyObject* callableObj)
 {
 	auto func = [=](std::complex<double> x) 
 	{
@@ -165,17 +159,17 @@ std::vector<T> Iterable_As1DVector(PyObject* Obj)
     PyObject* item{ nullptr };
     while ((item = PyIter_Next(iterator)) != nullptr)
     {
-        if constexpr (std::is_floating_point_v<T>)
-        {
-            if (auto Num = GetAsRealNumber(item))
-                Vec.push_back(*Num);
-        }
+		if constexpr (std::is_floating_point_v<T>)
+		{
+			if (auto Num = GetAsRealNumber(item))
+				Vec.push_back(*Num);
+		}
 
-        else if constexpr (std::is_integral_v<T>)
-        {
-            if (PyLong_Check(item))
-                Vec.push_back(PyLong_AsLong(item));
-        }
+		else if constexpr (std::is_integral_v<T>)
+		{
+			if (PyLong_Check(item))
+				Vec.push_back(PyLong_AsLong(item));
+		}
 
 		else if constexpr(std::is_same_v<T, std::string>)
 		{
