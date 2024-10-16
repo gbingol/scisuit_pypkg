@@ -158,5 +158,6 @@ plt.canvas(x=[-5,5], y=[-5,5])
 
 gdi.ellipse(xy=(0,-2), width=2, height=2, lw=2)
 gdi.ellipse(xy=(0,2.2), width=3, height=2, ec="#FF0000", lw=2)
+print(plt.xlim())
 
 plt.show()

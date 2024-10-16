@@ -170,6 +170,7 @@ def scatter():
 	#show line and marker with default pen and brush
 	plt.subplot(0,0)
 	plt.scatter(x=x, y=y, lw=3, ls=":", marker="s", markersize=10)
+	print(plt.xlim())
 
 	#customize marker properties
 	plt.subplot(1,0)

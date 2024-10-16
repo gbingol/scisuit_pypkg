@@ -95,6 +95,7 @@ class aov2_results():
 
 
 
+#--------------------------------------------------------------------
 
 
 def aov2_replicate(
@@ -176,6 +177,9 @@ def aov2_replicate(
 
 
 
+#--------------------------------------------------------------------
+
+
 def aov2_noreps(
 		yy:np.ndarray, 
 		xx1:np.ndarray, 
@@ -233,10 +237,15 @@ def aov2_noreps(
 
 
 
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
+
 def aov2(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
 	"""
-	Performs 2-way ANOVA
+	Performs 2-way ANOVA for balanced designs.
 
+	---
 	y: Responses   
 	x1, x2: factors
 	"""
