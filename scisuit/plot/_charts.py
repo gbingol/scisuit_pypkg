@@ -54,13 +54,14 @@ def hist(
 	"""
 	Plots histogram
 
+	---
 	`data:`	Numeric data
-	`density:` density histogram if true otherwise frequency.
-	`cumulative:` True, cumulative distribution 
-	`binmethod:` freedmandiaconis, rice, sqrt, sturges or scott
-	`breaks:` Number of breaks or the break points, int/iterable
+	`density:` density histogram if true otherwise frequency.   
+	`cumulative:` True, cumulative distribution  
+	`binmethod:` freedmandiaconis, rice, sqrt, sturges or scott   
+	`breaks:` Number of breaks or the break points, int/iterable   
 
-	## Note
+	---
 	- If density=True and cumulative=True, then the histogram is 
 	  normalized so that the cumulative end-value is 1.0
 	
@@ -106,8 +107,9 @@ def psychrometry(
 	"""
 	Plots psychromety chart.
 
-	`Tdb:` [min, max], minimum and maximum dry-bulb temperatures (Celcius) 
-	`RH:` A list in increasing order containing the requested relative humidity (%) lines 
+	---
+	`Tdb:` [min, max], minimum and maximum dry-bulb temperatures (Celcius)  
+	`RH:` A list in increasing order containing the requested relative humidity (%) lines  
 	`P:` Absolute pressure (Pa)
 	"""
 	return _pydll.c_plot_psychrometry((),{'Tdb':Tdb, 'RH':RH, 'P':P})
@@ -127,12 +129,12 @@ def scatter(
 	"""
 	Plot scatter charts
 
-	`x, y:`	x- and y-data 
-	`label:` Label of the series 
-	`smooth:` Uses smoothing algorith to smooth lines (instead of broken)
-	`marker:` Marker class to specify marker properties
+	`x, y:`	x- and y-data  
+	`label:` Label of the series  
+	`smooth:` Uses smoothing algorith to smooth lines (instead of broken)   
+	`marker:` Marker class to specify marker properties   
 
-	## Note:
+	---
 	- To plot lines set `lw` to an int > 0.
 	- If marker is None and lw is not set, by default markers will be shown.
 	- Customize line with (lw, ls and edgecolor properties)
@@ -189,10 +191,11 @@ def canvas(
 	"""
 	Shows a canvas (an empty chart with axes and gridlines)
 
-	`x:` horizontal axis bounds 
-	`y:` vertical axis bounds
-	`haxis, vaxis:` Show horizontal and vertical axes
-	`hgrid, vgrid:` Show horizontal and vertical gridlines
+	----
+	`x:` horizontal axis bounds  
+	`y:` vertical axis bounds   
+	`haxis, vaxis:` Show horizontal and vertical axes   
+	`hgrid, vgrid:` Show horizontal and vertical gridlines   
 	`scale:` Should the chart automatically scale its limits
 	"""
 

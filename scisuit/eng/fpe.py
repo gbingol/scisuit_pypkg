@@ -24,7 +24,6 @@ class Food:
 	
 	def __init__(self, water=0.0, cho=0.0, protein=0.0, lipid=0.0, ash=0.0, salt=0.0):
 		"""
-		## Input: 
 		water, cho, protein, lipid, ash, salt: % or fractions (must be consistent)
 
 		## Example:
@@ -244,9 +243,10 @@ class Food:
 
 	def cp(self, T:float = None)->float:
 		"""
-		If T (in °C) is not specified then Food's current temperature will be used.\n
+		If T (in °C) is not specified then Food's current temperature will be used.   
 		Returns specific heat capacity in kJ/kgK
 
+		---
 		Thermo-physical properties are valid in the range of -40<=T(C) <=150
 		2006, ASHRAE Handbook Chapter 9, Table 1 (source: Choi and Okos (1986))
 		"""
@@ -266,7 +266,7 @@ class Food:
 
 	def k(self, T:float=None)->float:
 		"""
-		If T (in °C) is not specified then Food's current temperature will be used.\n
+		If T (in °C) is not specified then Food's current temperature will be used.   
 		Returns conductivity in W/mK
 		"""
 		w = lambda x: 0.457109 + x*(0.0017625 - 6.7036e-06*x)
@@ -294,7 +294,7 @@ class Food:
 	
 	def rho(self, T:float = None)->float:
 		"""
-		If T (in °C) is not specified then Food's current temperature will be used.\n
+		If T (in °C) is not specified then Food's current temperature will be used.   
 		Returns density in kg/m3
 		"""
 		w = lambda x: 997.18 + x*(0.0031439 - 0.0037574*x) #water
@@ -317,10 +317,10 @@ class Food:
 
 	def aw(self)->float|None:
 		"""
-		Returns value of water activity or None \n
+		Returns value of water activity or None   
 		
 		## Warning:
-		At T>25 C, built-in computation might return None. \n
+		At T>25 C, built-in computation might return None.   
 		Therefore, must be used with caution at T>25.
 		"""
 		aw1 = 0.92
@@ -373,8 +373,7 @@ class Food:
 
 	def molecularweight(self)->float:
 		"""
-		Average molecular weight of the food item
-
+		Average molecular weight of the food item   
 		returns g/mol
 		"""
 		water, cho, lipid, protein = self._water, self._cho, self._lipid, self._protein
@@ -388,13 +387,13 @@ class Food:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
 
-		## Input:
+		---
 		T: Initial freezing temperature
 
 		## Reference:
 		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
 
-		## Notes:
+		## Note:
 		If foods current temperature smaller than Tfreezing it will 
 		compute the enthalpy for frozen foods.
 		"""	 			
@@ -450,7 +449,7 @@ class Food:
 
 	def freezing_T(self)->None:
 		"""
-		Estimates the initial freezing temperature of a food item \n
+		Estimates the initial freezing temperature of a food item   
 		returns in Celcius (None if estimation fails)
 
 		## Warning:
@@ -463,7 +462,7 @@ class Food:
 
 	def x_ice(self, T:float)->float | None:
 		"""
-		Computes the fraction of ice \n
+		Computes the fraction of ice   
 		T: Initial freezing temperature
 		"""
 		
@@ -480,10 +479,10 @@ class Food:
 
 	def dielectric(self, f:int=2450)->Dielectric:
 		"""
-		Computes dielectric properties
+		Computes dielectric properties   
 		f: frequency in MHz
 
-		## Reference:
+		---
 		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
 		"""
@@ -510,8 +509,7 @@ class Food:
 	def makefrom(self, inputs:list[Food])->list[float]:
 		"""
 		Given a list of food items, computes the amount of each to be mixed to 
-		make the current food item \n
-		Material Balance
+		make the current food item
 		"""
 		N = len(inputs)
 
@@ -644,7 +642,7 @@ class Beverage(Food):
 	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
-		Estimates the initial freezing temperature of a food item \n
+		Estimates the initial freezing temperature of a food item   
 		returns in Celcius
 		"""
 		water = self._water 
@@ -653,7 +651,7 @@ class Beverage(Food):
 	@override(Food)
 	def enthalpy(self, T=-0.4)->float:
 		"""
-		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
+		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg  
 
 		## Input:
 		T: Initial freezing temperature
@@ -678,7 +676,7 @@ class Juice(Food):
 	@override(Food)
 	def freezing_T(self)->float|None:
 		"""
-		Estimates the initial freezing temperature of a food item \n
+		Estimates the initial freezing temperature of a food item   
 		returns in Celcius
 		"""
 		water = self._water 

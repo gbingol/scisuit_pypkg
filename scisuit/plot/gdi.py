@@ -14,11 +14,11 @@ def text(
 		vanchor:str = "t",
 		**kwargs)->int:
 	"""
-	xy: (x, y), top-left,
-	label: text to be drawn,
-	rotation: rotation in degrees (>0 is counter-clockwise)
-	hanchor: horizontal anchor, "l", "c" "r" for left, center, right.
-	vanchor: vertical anchor, "t", "c", "b" for top, center and bottom
+	xy: (x, y), top-left,   
+	label: text to be drawn,   
+	rotation: rotation in degrees (>0 is counter-clockwise)   
+	hanchor: horizontal anchor, "l", "c" "r" for left, center, right.   
+	vanchor: vertical anchor, "t", "c", "b" for top, center and bottom   
 	labelcolor: label color
 	"""
 	assert isinstance(xy, tuple|list), "xy must be tuple|list."
@@ -56,8 +56,8 @@ def marker(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	`xy:`	(x, y), centroid,
-	`type:`	type of the marker, "c", "t", "r", "x",
+	`xy:`	(x, y), centroid,   
+	`type:`	type of the marker, "c", "t", "r", "x",   
 	`size:`	size of the marker in pixels
 	"""
 
@@ -89,11 +89,11 @@ def arc(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	`center:` (x, y) -> center point of arc
-	`p1:` (x1, y1) -> start of arc
-	`p2:` (x2, y2) -> end of arc
+	`center:` (x, y) -> center point of arc   
+	`p1:` (x1, y1) -> start of arc   
+	`p2:` (x2, y2) -> end of arc   
 
-	## Note:
+	---
 	- The arc is drawn in a counter-clockwise direction between the start and the end points.
 	- To plot a circular arc, the plot area must be a square.
 	"""
@@ -134,8 +134,8 @@ def arrow(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line
-	`angle:` angle between the two head-lines
+	`p1, p2:` (x1, y1), (x2, y2) coordinate of the main-line   
+	`angle:` angle between the two head-lines   
 	`length:` ratio of the length of the head-line to the main-line
 	"""
 
@@ -175,7 +175,8 @@ def curve(
 	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
 	The curve is only guaranteed to pass from (x1, y1) and (xn, yn).
 
-	`x:` x values
+	---
+	`x:` x values   
 	`y:` y values
 	"""
 
@@ -210,8 +211,8 @@ def ellipse(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	xy:	 	(x, y), center,
-	width: 	half width (>0),
+	xy:	 	(x, y), center,   
+	width: 	half width (>0),   
 	height: half height (>0),
 	"""
 
@@ -246,8 +247,8 @@ def line(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	`p1:` (x1, y1)
-	`p2:` (x2, y2)
+	`p1:` (x1, y1)   
+	`p2:` (x2, y2)   
 	`label:` After stripping, if len(label)>0, it is shown in legend
 	"""
 	assert isinstance(p1, tuple|list), "p1 must be tuple|list."
@@ -310,8 +311,8 @@ def rect(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	xy:	(x, y), bottom-left corner of the rectangle,
-	width: 	width of rectangle (>0),
+	xy:	(x, y), bottom-left corner of the rectangle,   
+	width: 	width of rectangle (>0),   
 	height: height of rectangle (>0), 
 	"""	
 
@@ -345,11 +346,11 @@ def makegroup(
 	"""
 	sets the properties of members based on owner's properties
 	
-	## Inputs:
-	`owner:` A gdi object whose properties will affect members' properties,
+	---
+	`owner:` A gdi object whose properties will affect members' properties,   
 	`members:` gdi object(s) whose properties will be synched with owner
 
-	## Note: 
+	---
 	- This function is rather useful (meaningful) if properties will be manipulated at runtime.
 	- GDI objects only have unique ID's for each chart (in a multiple chart environment care should be taken).
 	"""
