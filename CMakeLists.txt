@@ -59,10 +59,7 @@ target_link_libraries(${PROJECT_NAME}
 						scisuit_plotter)
 
 
-set( REQUIREDDLLS
-	${CMAKE_SOURCE_DIR}/libs/scisuit_core.dll
-	${CMAKE_SOURCE_DIR}/libs/scisuit_plotter.dll
-	${CMAKE_SOURCE_DIR}/libs/${VARPY}.dll)
+set( REQUIREDDLLS ${CMAKE_SOURCE_DIR}/libs/${VARPY}.dll)
 
 foreach( file_i ${REQUIREDDLLS})
 	add_custom_command(
