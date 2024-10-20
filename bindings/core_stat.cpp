@@ -1,6 +1,5 @@
 #include "core_stat.h"
 
-#include <algorithm>
 #include <cmath>
 
 #include <core/core_funcs.h>
