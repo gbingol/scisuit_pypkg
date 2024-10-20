@@ -1,5 +1,6 @@
 #include "plot.h"
 
+#include <exception>
 #include <list>
 #include <map>
 #include <filesystem>
@@ -860,7 +861,7 @@ void c_plot_savefig(const char *fullpath)
 	if(bmp.IsOk())
 		bmp.SaveFile(fullpath, filetype[extension]);
 	else
-		throw std::runtime_error("Image is corrupted");
+		throw std::runtime_error("Image is corrupted.");
 
 	CATCHRUNTIMEEXCEPTION(NOTHING);
 }
@@ -1010,22 +1011,29 @@ PyObject* c_plot_axislim(PyObject* min, PyObject* max, char SelAxis)
 
 	if(auto chart= s_CurPlotWnd->GetActiveChart())
 	{
+		if(auto NumChart = dynamic_cast<CNumericChart*>(chart))
+		{
+			auto Bounds = SelAxis == 'y' ? NumChart->GetYBounds(): NumChart->GetXBounds();
+
+			if(Py_IsNone(min) && Py_IsNone(max))
+			{
+				PyObject *Tuple = PyTuple_New(2);
+				PyTuple_SetItem(Tuple, 0, Py_BuildValue("d", Bounds.first));
+				PyTuple_SetItem(Tuple, 1, Py_BuildValue("d", Bounds.second));
+				return Tuple;
+			}
+		}
+		else
+			throw std::exception("Only the limits of numeric charts are available.");
+
 		auto Axis = SelAxis == 'y' ? chart->GetVertAxis() : chart->GetHorizAxis();
 		auto Bounds = Axis->GetBounds();
 
-		if(Py_IsNone(min) && Py_IsNone(max))
-		{
-			PyObject *Tuple = PyTuple_New(2);
-			PyTuple_SetItem(Tuple, 0, Py_BuildValue("d", Bounds.first));
-			PyTuple_SetItem(Tuple, 1, Py_BuildValue("d", Bounds.second));
-			return Tuple;
-		}
-
 		if(!Py_IsNone(min))
-			Axis->SetBounds(std::make_pair(PyFloat_AsDouble(min), Bounds.second), true);
+			Axis->SetBounds({PyFloat_AsDouble(min), Bounds.second}, true);
 
 		if(!Py_IsNone(max))
-			Axis->SetBounds(std::make_pair(Bounds.first, PyFloat_AsDouble(max)), true);
+			Axis->SetBounds({Bounds.first, PyFloat_AsDouble(max)}, true);
 	}
 
 	CATCHRUNTIMEEXCEPTION(nullptr);
