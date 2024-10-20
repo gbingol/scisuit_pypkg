@@ -202,13 +202,12 @@ import scisuit.plot.gdi as gdi
 import scisuit.plot as plt
 import numpy as np
 
-plt.set_figsize(640, 480)
-scatter()
 
-plt.figure()
 
-qqcharts()
+plt.psychrometry()
 
 #plt.savefig("C:\\Users\\gbing\\Documents\\Visual Studio 2022\\Projects\\scisuit_pypkg\\scisuit\\abc.xpm")
+
+
 
 plt.show()
