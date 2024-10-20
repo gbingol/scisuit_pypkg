@@ -1,6 +1,7 @@
 set(VARPY pybind310)
 #set(VARPY pybind311)
 #set(VARPY pybind312)
+#set(VARPY pybind313)
 
 project(${VARPY})
 
@@ -16,6 +17,10 @@ elseif(${VARPY} STREQUAL "pybind311")
 elseif(${VARPY} STREQUAL "pybind312")
 	set(PYLIB "python312")
 	set(PYHOME "C:/Python/Python312/")
+
+elseif(${VARPY} STREQUAL "pybind313")
+	set(PYLIB "python313")
+	set(PYHOME "C:/Python/Python313/")
 endif()
 
 
@@ -60,7 +65,8 @@ set( REQUIREDDLLS
 	${CMAKE_SOURCE_DIR}/libs/${VARPY}.dll)
 
 foreach( file_i ${REQUIREDDLLS})
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy 
-	${file_i} ${CMAKE_SOURCE_DIR}/pythonpkg/scisuit/)
+	add_custom_command(
+		TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy 
+		${file_i} ${CMAKE_SOURCE_DIR}/pythonpkg/scisuit/)
 endforeach(file_i)
