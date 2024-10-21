@@ -3,14 +3,14 @@
 #include <cmath>
 
 #include <core/core_funcs.h>
-#include <core/math/stat_dist.h>
-#include <core/math/stat_tests.h>
+#include <core/stats/stat_dist.h>
+#include <core/stats/stat_tests.h>
 #include <core/math/fitting.h>
 
 #include "wrapperfuncs.h"
 
 
-using namespace core::math;
+using namespace core::stats;
 
 
 
@@ -1123,7 +1123,7 @@ PyObject* c_stat_rolling(PyObject* X, PyObject* Y, int Period)
 
 	TRYBLOCK();
 	
-	auto Rolling = fitting::rolling(xvec, yvec, Period);
+	auto Rolling = core::math::fitting::rolling(xvec, yvec, Period);
 
 	auto DataList = PyList_New(Rolling.m_Data.size());
 	for (size_t i = 0; const auto & V : Rolling.m_Data)
