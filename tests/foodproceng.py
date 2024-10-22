@@ -1,6 +1,6 @@
-import scisuit.eng.fpe as fpe
+import scisuit.eng as eng
 
-milk = fpe.Food(water=88.13, protein=3.15, cho=4.80, lipid=3.25, ash=0.67)
+milk = eng.Food(water=88.13, protein=3.15, cho=4.80, lipid=3.25, ash=0.67)
 
 milk.T = 30
 print(f"cp={milk.cp()}")
