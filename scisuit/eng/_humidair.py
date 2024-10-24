@@ -1,7 +1,14 @@
 
 from numbers import Real as _Real
+from ctypes import py_object
 
 from .._ctypeslib import pydll as _pydll
+
+
+
+_pydll.c_eng_psychrometry.argtypes = [py_object]
+_pydll.c_eng_psychrometry.restype = py_object
+
 
 
 class PsychrometryResult:

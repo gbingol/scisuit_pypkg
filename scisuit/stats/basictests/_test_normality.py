@@ -5,9 +5,20 @@ from types import FunctionType
 
 import numpy as _np
 
+from ctypes import py_object
 from ..._ctypeslib import pydll as _pydll
 from .._distributions import pnorm, psmirnov
 
+
+
+
+
+_pydll.c_stat_test_norm_ad.argtypes = [py_object]
+_pydll.c_stat_test_norm_ad.restype=py_object
+
+
+_pydll.c_stat_test_shapirowilkinson.argtypes = [py_object]
+_pydll.c_stat_test_shapirowilkinson.restype=py_object
 
 
 

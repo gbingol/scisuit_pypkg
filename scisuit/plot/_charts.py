@@ -1,6 +1,7 @@
 import ctypes as _ct
 import numbers
 from typing import Iterable as _Iterable
+from ctypes import py_object, c_bool
 
 from .._ctypeslib import pydll as _pydll
 
@@ -8,8 +9,31 @@ from ._chartelems import Marker
 from ._gdiobj import Brush, Pen
 
 
+_pydll.c_plot_boxplot.argtypes = [py_object, py_object]
+_pydll.c_plot_boxplot.restype=py_object
 
 
+_pydll.c_plot_histogram.argtypes = [py_object, py_object]
+_pydll.c_plot_histogram.restype=py_object
+
+
+_pydll.c_plot_psychrometry.argtypes = [py_object, py_object]
+_pydll.c_plot_psychrometry.restype=py_object
+
+
+_pydll.c_plot_scatter.argtypes = [py_object, py_object]
+_pydll.c_plot_scatter.restype=py_object
+
+
+_pydll.c_plot_canvas.argtypes = [
+						py_object, #x-bounds
+						py_object, #y-bounds
+						c_bool, # Show Horiz Axis
+						c_bool, # Show Vert Axis
+						c_bool, # Show Horiz Gridlines
+						c_bool, # Show Vert Gridlines
+						c_bool] # Allow Rescale
+_pydll.c_plot_canvas.restype=py_object
 
 
 

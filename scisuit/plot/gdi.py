@@ -2,8 +2,119 @@ import ctypes as _ct
 from numbers import Real as _Real
 from typing import Iterable as _Iterable
 
+from ctypes import c_char, c_char_p, c_double, py_object, c_uint8, c_ulonglong
+
 from .._ctypeslib import pydll as _pydll
 from ._gdiobj import Brush, Font, Pen
+
+
+
+_pydll.c_plot_gdi_arc.argtypes = [
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					c_double, #xcenter
+					c_double, #ycenter
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush				
+_pydll.c_plot_gdi_arc.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_arrow.argtypes = [
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					c_double, #angle
+					c_double, #length
+					c_char_p, # label
+					py_object] #dictionary for Pen				
+_pydll.c_plot_gdi_arrow.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_line.argtypes = [
+					c_double, #x1
+					c_double, #y1
+					c_double, #x2
+					c_double, #y2
+					c_char_p, # label
+					py_object] #dictionary for Pen				
+_pydll.c_plot_gdi_line.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_rect.argtypes = [
+					c_double, #x of top-left
+					c_double, #y of top-left
+					c_double, #width
+					c_double, #height
+					c_char_p, # label
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush
+_pydll.c_plot_gdi_rect.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_ellipse.argtypes = [
+					c_double, # x of center
+					c_double, # y of center
+					c_double, # half width
+					c_double, # half height
+					c_char_p, # label
+					py_object, #dictionary for Pen
+					py_object] #dictionary for Brush
+_pydll.c_plot_gdi_ellipse.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_text.argtypes = [
+					c_double, # x of top-left
+					c_double, # y of top-left
+					c_char_p, # text
+					c_double, # rotation
+					c_char, #halign
+					c_char, #valign
+					c_char_p, # color
+					py_object] #dictionary for Font
+_pydll.c_plot_gdi_text.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_curve.argtypes = [
+					py_object, #x-values (iterable)
+					py_object,#y-values (iterable)
+					c_char_p, # label
+					py_object] #dictionary for Pen
+_pydll.c_plot_gdi_curve.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_polygon.argtypes = [
+					py_object, #x-values (iterable)
+					py_object,#y-values (iterable)
+					c_char_p, # label
+					py_object, #dictionary for Pen
+					py_object] #dictionary for brush
+_pydll.c_plot_gdi_polygon.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_marker.argtypes = [
+					c_double, # x of centroid
+					c_double, # y of centroid
+					c_char_p, # type
+					c_uint8, # size
+					c_char_p, # label
+					py_object, # dictionary for Pen
+					py_object] #dictionary for Brush
+_pydll.c_plot_gdi_marker.restype=c_ulonglong
+
+
+_pydll.c_plot_gdi_makegroup.argtypes = [
+					c_ulonglong, #owner id
+					py_object] #member ids
+_pydll.c_plot_gdi_makegroup.restype=None
+
+
+
+
+#-----------------------------------------------------------------------------------
+
 
 
 def text(

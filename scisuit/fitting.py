@@ -1,4 +1,3 @@
-import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
 from typing import Iterable
@@ -6,10 +5,40 @@ from typing import Iterable
 import numpy as _np
 from numpy.polynomial import polynomial as _Polynomial
 
+from ctypes import py_object, c_double
 from ._ctypeslib import pydll as _pydll
 from .util import minmax
 
 
+
+
+_pydll.c_fit_expfit.argtypes = [py_object, py_object, py_object]
+_pydll.c_fit_expfit.restype = py_object
+
+
+_pydll.c_fit_lagrange.argtypes = [py_object, py_object,c_double]
+_pydll.c_fit_lagrange.restype = py_object
+
+
+_pydll.c_fit_logfit.argtypes = [py_object, py_object]
+_pydll.c_fit_logfit.restype = py_object
+
+
+_pydll.c_fit_logistfit.argtypes = [py_object, py_object, py_object]
+_pydll.c_fit_logistfit.restype = py_object
+
+
+_pydll.c_fit_powfit.argtypes = [py_object, py_object]
+_pydll.c_fit_powfit.restype = py_object
+
+
+_pydll.c_fit_spline.argtypes = [py_object, py_object]
+_pydll.c_fit_spline.restype = py_object
+
+
+
+
+#-----------------------------------------------------
 
 
 def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
@@ -46,7 +75,7 @@ def lagrange(
 		value:float)->float:
 	"""Constructs lagrange polynomial from x,y to compute the given value."""
 	assert isinstance(value, _numbers.Real)
-	return _pydll.c_fit_lagrange(x, y, _ct.c_double(value))
+	return _pydll.c_fit_lagrange(x, y, c_double(value))
 
 
 

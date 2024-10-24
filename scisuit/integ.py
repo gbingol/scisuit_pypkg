@@ -1,13 +1,27 @@
-import ctypes as _ct
 import numbers as _numbers
 import types as _types
 from typing import Iterable
 
-
+from ctypes import py_object, c_double, c_int
 from ._ctypeslib import pydll as _pydll
 
 
 
+
+_pydll.c_integ_simpson.argtypes = [py_object, py_object]
+_pydll.c_integ_simpson.restype = py_object
+
+_pydll.c_integ_romberg.argtypes = [py_object, c_double, c_double, c_double, c_int]
+_pydll.c_integ_romberg.restype = py_object
+
+_pydll.c_integ_fixed_quad.argtypes = [py_object, c_double, c_double, c_int]
+_pydll.c_integ_fixed_quad.restype = py_object
+
+
+
+
+
+#--------------------------------------------------
 
 
 def trapz(
@@ -89,10 +103,10 @@ def romberg(f:_types.FunctionType,
 
 	return _pydll.c_integ_romberg(
 		f, 
-		_ct.c_double(a), 
-		_ct.c_double(b), 
-		_ct.c_double(tol), 
-		_ct.c_int(maxiter))
+		c_double(a), 
+		c_double(b), 
+		c_double(tol), 
+		c_int(maxiter))
 
 
 
@@ -117,6 +131,6 @@ def fixed_quad(f:_types.FunctionType,
 
 	return _pydll.c_integ_fixed_quad(
 		f, 
-		_ct.c_double(a), 
-		_ct.c_double(b),  
-		_ct.c_int(n))
+		c_double(a), 
+		c_double(b),  
+		c_int(n))

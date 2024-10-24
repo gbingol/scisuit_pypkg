@@ -2,9 +2,92 @@ import ctypes as _ct
 import numbers
 from typing import Iterable as _Iterable
 
+from ctypes import py_object, c_int, c_ulonglong, c_char_p, c_char, c_double, c_bool
 from .._ctypeslib import pydll as _pydll
+
+
 from ..app import App as _App
 from ..settings import START_APP_MAINLOOP
+
+
+
+
+_pydll.c_plot_layout.argtypes = [c_int, c_int]
+_pydll.c_plot_layout.restype=None
+
+
+_pydll.c_plot_subplot.argtypes = [
+						c_int, 
+						c_int, 
+						c_int, 
+						c_int]
+_pydll.c_plot_subplot.restype=None
+
+
+_pydll.c_plot_figure.argtypes = []
+_pydll.c_plot_figure.restype=None
+
+_pydll.c_plot_set_figsize.argtypes = [c_ulonglong, c_ulonglong]
+_pydll.c_plot_set_figsize.restype=None
+
+_pydll.c_plot_savefig.argtypes = [c_char_p]
+_pydll.c_plot_savefig.restype=None
+
+
+_pydll.c_plot_title.argtypes = [c_char_p]
+_pydll.c_plot_title.restype=None
+
+
+_pydll.c_plot_xlabel.argtypes = [c_char_p]
+_pydll.c_plot_xlabel.restype=None
+
+
+_pydll.c_plot_ylabel.argtypes = [c_char_p]
+_pydll.c_plot_ylabel.restype=None
+
+
+_pydll.c_plot_axislim.argtypes = [
+						py_object, 
+						py_object, 
+						c_char]
+_pydll.c_plot_axislim.restype=py_object
+
+
+_pydll.c_plot_set_xticks.argtypes = [
+						py_object, 
+						py_object,
+						c_char_p, #Alignment
+						c_char_p] #Position
+_pydll.c_plot_set_xticks.restype=py_object
+
+
+_pydll.c_plot_set_yticks.argtypes = [
+						py_object, 
+						py_object,
+						c_char_p, #Alignment
+						c_char_p] #Position
+_pydll.c_plot_set_yticks.restype=py_object
+
+#param2: x, y
+_pydll.c_plot_set_axispos.argtypes = [c_double, c_char]
+_pydll.c_plot_set_axispos.restype=py_object
+
+#param1: linear, log | param2: x, y
+_pydll.c_plot_axisscale.argtypes = [c_char_p, c_char]
+_pydll.c_plot_axisscale.restype=py_object
+
+
+_pydll.c_plot_legend.argtypes = [py_object, py_object]
+_pydll.c_plot_legend.restype=None
+
+
+_pydll.c_plot_show.argtypes = [c_bool] #antialiasing
+_pydll.c_plot_show.restype=None
+
+
+
+
+#---------------------------------------------------------------
 
 
 if START_APP_MAINLOOP:

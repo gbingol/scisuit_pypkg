@@ -1,4 +1,3 @@
-import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
 import sys as _sys
@@ -6,11 +5,85 @@ import types as _types
 
 import numpy as _np
 
+from ctypes import py_object, c_double, c_int, c_char_p, c_bool
+
 from ._ctypeslib import pydll as _pydll
 
 
 
 __all__ = ['bisect','itp', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "Info", "toms748"]
+
+
+
+_pydll.c_root_bisect.argtypes = [py_object, c_double, c_double, c_double, c_int, c_char_p, c_bool]
+_pydll.c_root_bisect.restype = py_object
+
+
+_pydll.c_root_itp.argtypes = [
+					py_object, #f
+					c_double, #a
+					c_double, #b
+					c_double, #k1
+					c_double, #k2
+					c_double, #TOL
+					c_int] #maxiter
+_pydll.c_root_itp.restype = py_object
+
+
+_pydll.c_root_brentq.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
+_pydll.c_root_brentq.restype = py_object
+
+
+_pydll.c_root_muller.argtypes = [
+					py_object, 
+					py_object, 
+					py_object, 
+					py_object, 
+					py_object, 
+					c_double, 
+					c_int]
+_pydll.c_root_muller.restype = py_object
+
+
+_pydll.c_root_newton.argtypes = [
+					py_object, #f
+					c_double, #X0
+					py_object, #X1
+					py_object, #fprime
+					py_object, #fprime2
+					c_double, #tol
+					c_int #maxiter
+				]
+_pydll.c_root_newton.restype = py_object
+
+
+_pydll.c_root_ridder.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
+_pydll.c_root_ridder.restype = py_object
+
+
+_pydll.c_root_toms748.argtypes = [
+					py_object, 
+					c_double, 
+					c_double, 
+					c_double, 
+					c_int]
+_pydll.c_root_toms748.restype = py_object
+
+
+
+
+
+#--------------------------------------------------------------------
 
 
 @_dc.dataclass
@@ -52,11 +125,11 @@ def bisect(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	root, lst =_pydll.c_root_bisect(f, _ct.c_double(a), _ct.c_double(b), 
-			_ct.c_double(tol), 
-			_ct.c_int(maxiter), 
-			_ct.c_char_p(method.encode('utf-8')),
-			_ct.c_bool(modified))
+	root, lst =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
+			c_double(tol), 
+			c_int(maxiter), 
+			c_char_p(method.encode('utf-8')),
+			c_bool(modified))
 	
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
@@ -99,13 +172,13 @@ def itp(
 	assert maxiter>0, "maxiter>0 expected"
 
 	root, lst =_pydll.c_root_itp(
-			_ct.py_object(f), 
-			_ct.c_double(a), 
-			_ct.c_double(b),
-			_ct.c_double(k1),
-			_ct.c_double(k2), 
-			_ct.c_double(tol), 
-			_ct.c_int(maxiter))
+			py_object(f), 
+			c_double(a), 
+			c_double(b),
+			c_double(k1),
+			c_double(k2), 
+			c_double(tol), 
+			c_int(maxiter))
 	
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
@@ -139,7 +212,7 @@ def brentq(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 
-	root, lst = _pydll.c_root_brentq(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_brentq(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
@@ -174,7 +247,7 @@ def muller(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 	
-	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
@@ -221,13 +294,13 @@ def newton(
 		assert isinstance(fprime2, _types.FunctionType), "If not None, fprime2 must be function."
 
 	root, lst = _pydll.c_root_newton(
-								_ct.py_object(f), 
-								_ct.c_double(x0), 
-								_ct.py_object(x1), 
-								_ct.py_object(fprime), 
-								_ct.py_object(fprime2),
-								_ct.c_double(tol), 
-								_ct.c_int(maxiter))
+								py_object(f), 
+								c_double(x0), 
+								py_object(x1), 
+								py_object(fprime), 
+								py_object(fprime2),
+								c_double(tol), 
+								c_int(maxiter))
 
 	return root, Info(lst[0], lst[1], lst[2], lst[3])
 
@@ -260,7 +333,7 @@ def ridder(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 	
-	root, lst = _pydll.c_root_ridder(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	root, lst = _pydll.c_root_ridder(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
 	return root, Info(None, lst[0], lst[1], lst[2])
 
@@ -297,7 +370,7 @@ def toms748(
 	assert maxiter>0, "maxiter>0 expected"
 	
 
-	result = _pydll.c_root_toms748(f, _ct.c_double(a), _ct.c_double(b), _ct.c_double(tol), _ct.c_int(maxiter))
+	result = _pydll.c_root_toms748(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 	r1, r2 = result[0], result[1]
 
 	if isinstance(result, tuple):

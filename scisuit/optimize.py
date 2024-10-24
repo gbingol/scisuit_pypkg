@@ -1,9 +1,51 @@
-import ctypes as _ct
 import dataclasses as _dc
 import numbers as _numbers
 import types as _types
 
+from ctypes import py_object, c_double, c_uint32, c_longlong
 from ._ctypeslib import pydll as _pydll
+
+
+
+_pydll.c_optimize_bracket.argtypes = [
+					py_object, #function
+					c_double, #a
+					c_double, #b
+					c_double, #growlimit
+					c_uint32] #maxiter
+_pydll.c_optimize_bracket.restype = py_object 
+
+
+_pydll.c_optimize_golden.argtypes = [
+					py_object, #function
+					c_double, #xlow
+					c_double, #xhigh
+					c_double, #tol
+					c_uint32] #maxiter
+_pydll.c_optimize_golden.restype = py_object 
+
+
+_pydll.c_optimize_parabolic.argtypes = [
+					py_object, #function
+					c_double, #xa
+					c_double, #xb
+					py_object, #xc
+					c_double, #tol
+					c_uint32] #maxiter
+_pydll.c_optimize_parabolic.restype = py_object 
+
+
+_pydll.c_optimize_brent.argtypes = [
+					py_object, #function
+					c_double, #xlow
+					c_double, #xhigh
+					c_longlong] #maxiter
+_pydll.c_optimize_brent.restype = py_object 
+
+
+
+
+#-----------------------------------------------------------
 
 
 @_dc.dataclass
@@ -44,11 +86,11 @@ def bracket(
 
 	assert maxiter>0, "maxiter>0 expected"
 
-	d:dict =_pydll.c_optimize_bracket(_ct.py_object(f), 
-						_ct.c_double(xa), 
-						_ct.c_double(xb),
-						_ct.c_double(grow_limit),
-						_ct.c_uint32(maxiter))
+	d:dict =_pydll.c_optimize_bracket(py_object(f), 
+						c_double(xa), 
+						c_double(xb),
+						c_double(grow_limit),
+						c_uint32(maxiter))
 	
 	return BracketResult(a=d["a"], b=d["b"], c=d["c"], fa=d["fa"], fb=d["fb"], fc=d["fc"])
 
@@ -91,11 +133,11 @@ def golden(
 
 	assert maxiter>0, "maxiter>0 expected"
 
-	xopt, err, iter =_pydll.c_optimize_golden(_ct.py_object(f), 
-						_ct.c_double(xlow), 
-						_ct.c_double(xhigh),
-						_ct.c_double(tol),
-						_ct.c_uint32(maxiter))
+	xopt, err, iter =_pydll.c_optimize_golden(py_object(f), 
+						c_double(xlow), 
+						c_double(xhigh),
+						c_double(tol),
+						c_uint32(maxiter))
 	
 	return GoldenResult(xopt=xopt, err=err, iter=iter)
 
@@ -134,10 +176,10 @@ def brent(
 
 	assert maxiter>0, "maxiter>0 expected"
 
-	xopt, fxopt, iter =_pydll.c_optimize_brent(_ct.py_object(f), 
-						_ct.c_double(xlow), 
-						_ct.c_double(xhigh),
-						_ct.c_longlong(maxiter))
+	xopt, fxopt, iter =_pydll.c_optimize_brent(py_object(f), 
+						c_double(xlow), 
+						c_double(xhigh),
+						c_longlong(maxiter))
 	
 	return BrentResult(xopt=xopt, fval=fxopt, iter=iter)
 
@@ -185,11 +227,11 @@ def parabolic(
 	if isinstance(xc, _numbers.Real):
 		assert abs(xc-xb), "xa != xb != xc expected"
 
-	xopt, err, iter =_pydll.c_optimize_parabolic(_ct.py_object(f), 
-						_ct.c_double(xa), 
-						_ct.c_double(xb),
-						_ct.py_object(xc),
-						_ct.c_double(tol),
-						_ct.c_uint32(maxiter))
+	xopt, err, iter =_pydll.c_optimize_parabolic(py_object(f), 
+						c_double(xa), 
+						c_double(xb),
+						py_object(xc),
+						c_double(tol),
+						c_uint32(maxiter))
 	
 	return ParabolicResult(xopt=xopt, err=err, iter=iter)

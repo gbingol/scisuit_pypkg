@@ -1,12 +1,17 @@
-import ctypes as _ct
 import math as _math
 
 import numpy as _np
 from typing import Iterable 
 from numbers import Real
 
+from ctypes import py_object, c_int
 from .._ctypeslib import pydll as _pydll
 
+
+
+
+_pydll.c_stat_rolling.argtypes = [py_object, py_object, c_int]
+_pydll.c_stat_rolling.restype=py_object
 
 
 
@@ -80,7 +85,7 @@ class rolling:
 		assert isinstance(y, Iterable), "y must be of type Iterable"
 		assert isinstance(period, int), "period must be of type int"
 
-		self._m_X, self._m_Windows = _pydll.c_stat_rolling(_ct.py_object(x), _ct.py_object(y), _ct.c_int(period))
+		self._m_X, self._m_Windows = _pydll.c_stat_rolling(py_object(x), py_object(y), c_int(period))
 		
 
 	def mean(self)->list[Real]:

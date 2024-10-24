@@ -203,6 +203,9 @@ import scisuit.plot as plt
 import numpy as np
 
 
+scatter()
+
+plt.figure()
 
 plt.psychrometry()
 
