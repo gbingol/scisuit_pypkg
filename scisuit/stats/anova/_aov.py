@@ -1,10 +1,5 @@
-import math
-from dataclasses import dataclass, fields, asdict
+from dataclasses import dataclass, asdict
 from typing import Iterable
-
-
-from ._qdist import qdist
-from .._distributions import pf
 
 from ctypes import py_object, c_double
 from ..._ctypeslib import pydll as _pydll
@@ -57,6 +52,8 @@ class aov_results:
 
 
 def aov(*args)->aov_results:
+	for v in args:
+		assert isinstance(v, Iterable), "Iterable objects expected."
 	
 	res:dict = _pydll.c_stat_test_aov(args)
 

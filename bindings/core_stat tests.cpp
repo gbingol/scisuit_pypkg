@@ -129,13 +129,11 @@ PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
 {
 	TRYBLOCK()
 
-	IF_PYERR(!PyDict_CheckExact(Obj), PyExc_TypeError, "Dictionary expected.");
-
 	tests::anova::aov_Result aovresult;
 	aovresult.Averages = Iterable_As1DVector(PyDict_GetItemString(Obj, "Averages"));
 	aovresult.SampleSizes = Iterable_As1DVector(PyDict_GetItemString(Obj, "SampleSizes"));
 	aovresult.Treat_DF = PyLong_AsLong(PyDict_GetItemString(Obj, "Treat_DF"));
-	aovresult.Error_DF = PyFloat_AS_DOUBLE(PyDict_GetItemString(Obj, "Error_DF"));
+	aovresult.Error_DF = PyLong_AsLong(PyDict_GetItemString(Obj, "Error_DF"));
 	aovresult.Error_MS = PyFloat_AS_DOUBLE(PyDict_GetItemString(Obj, "Error_MS"));
 
 	IF_PYERR(aovresult.Averages.size()==0, PyExc_RuntimeError, "Averages size is 0.")
@@ -145,7 +143,6 @@ PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
 	IF_PYERR(Comparisons.size()==0, PyExc_RuntimeError, "No comparisons obtained.");
 
 	auto lst = PyList_New(Comparisons.size());
-	
 	for(size_t i=0; const auto& comp:Comparisons)
 	{
 		auto dct = PyDict_New();
