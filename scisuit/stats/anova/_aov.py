@@ -1,16 +1,23 @@
 import math
-import numbers
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, asdict
 from typing import Iterable
 
-import numpy as np
 
 from ._qdist import qdist
 from .._distributions import pf
 
-__all__ = ['aov','aov_results']
+from ctypes import py_object, c_double
+from ..._ctypeslib import pydll as _pydll
 
 
+
+
+_pydll.c_stat_test_aov.argtypes = [py_object]
+_pydll.c_stat_test_aov.restype=py_object
+
+
+_pydll.c_stat_test_anova_tukey.argtypes = [c_double, py_object] #alpha and aovresults
+_pydll.c_stat_test_anova_tukey.restype=py_object
 
 
 @dataclass
@@ -49,69 +56,28 @@ class aov_results:
 
 
 
-
 def aov(*args)->aov_results:
-	Averages, SampleSizes = [], []
-	MSError, DFTreatment, DFError = None, None, None
-	SS_Treatment, SS_Error, SS_Total=0, 0, 0
-	NEntries = 0
-
-	#C is a variable defined to speed up computations (see Larsen Marx Chapter 12 on ANOVA)
-	_c = 0.0
-
-	for elem in args:
-		if(not isinstance(elem, Iterable)):
-			raise TypeError("Iterable's expected")
-
-		ElemSize = len(elem)
-		LocalSum = 0.0
-		
-		for entry in elem:
-			LocalSum += entry
-			SS_Total += entry**2
-		
-		#Required for Tukey test
-		Averages.append(LocalSum/ElemSize)
-		SampleSizes.append(ElemSize) 
-
-		_c += LocalSum
-		NEntries += ElemSize
-		SS_Treatment += LocalSum**2/ElemSize
-
-		
-	_c = _c**2 / NEntries
 	
-	SS_Total = SS_Total - _c
-	SS_Treatment = SS_Treatment - _c
-	SS_Error = SS_Total - SS_Treatment
-
-	DFError, DFTreatment = NEntries-len(args), len(args)-1 
-	DF_Total = DFError + DFTreatment
-
-	MS_Treatment, MSError = SS_Treatment/DFTreatment , SS_Error/DFError
-
-	Fvalue = MS_Treatment/MSError
-	pvalue = 1 - pf(q = float(Fvalue), df1 = DFTreatment, df2 = DFError)
+	res:dict = _pydll.c_stat_test_aov(args)
 
 	return aov_results(
-		Treat_DF=DFTreatment,
-		Treat_MS = float(MS_Treatment),
-		Treat_SS = float(SS_Treatment),
+		Treat_DF= res["Treat_DF"],
+		Treat_MS = res["Treat_MS"],
+		Treat_SS = res["Treat_SS"],
 
-		Error_DF=DFError,
-		Error_SS = float(SS_Error),
-		Error_MS = float(MSError),
-		Total_DF=DF_Total,
+		Error_DF= res["Error_DF"],
+		Error_SS = res["Error_SS"],
+		Error_MS = res["Error_MS"],
+		Total_DF=res["Total_DF"],
 
-		Total_SS = float(SS_Total),
-		Total_MS = float(SS_Total/DF_Total),
-		
-		Fvalue = float(Fvalue),
-		pvalue=pvalue,
+		Total_SS = res["Total_SS"],
+		Total_MS = res["Total_SS"]/res["Total_DF"],
+		Fvalue = res["Fvalue"],
+		pvalue=res["pvalue"],
 
 		#For tukey test
-		Averages=Averages,
-		SampleSizes=SampleSizes	)
+		Averages=res["Averages"],
+		SampleSizes=res["SampleSizes"])
 
 
 
@@ -149,28 +115,17 @@ def tukey(alpha:float, aovresult:aov_results)->TukeyResults:
 	assert isinstance(alpha, float), "alpha must be float."
 	assert isinstance(aovresult, aov_results), "aovresult must be aov_results."
 
-	Averages, SampleSizes = aovresult.Averages, aovresult.SampleSizes
-	Treat_DF, Error_DF = aovresult.Treat_DF, aovresult.Error_DF
-	Error_MS = aovresult.Error_MS
-
-	Dvalue = qdist(1-alpha, Treat_DF-1, Error_DF-1) / math.sqrt(SampleSizes[0])
-	L_Conf = Dvalue*math.sqrt(Error_MS) #length of confidence interval
+	lst = _pydll.c_stat_test_anova_tukey(c_double(alpha), asdict(aovresult))
 
 	TukeyTable = []
-	nn = len(Averages)
-	for i in range(nn):
-		for j in range(i+1, nn):
-			Diff = Averages[i]-Averages[j]
-			Conf1 = Diff - L_Conf
-			Conf2 = Diff + L_Conf
+	for v in lst:
+		comp = TukeyComparison(
+		a=v["a"], 
+		b = v["b"],
+		Diff=v["diff"],
+		CILow = min(v["CILow"], v["CIHigh"]),
+		CIHigh = max(v["CILow"], v["CIHigh"]))
 
-			comp = TukeyComparison(
-			a=i, 
-			b = j,
-			Diff=Diff,
-			CILow = min(Conf1, Conf2),
-			CIHigh = max(Conf1,Conf2))
-
-			TukeyTable.append(comp)
+		TukeyTable.append(comp)
 
 	return TukeyResults(r=TukeyTable, alpha=alpha)

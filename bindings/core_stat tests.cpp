@@ -1,11 +1,14 @@
 #include "core_stat tests.h"
 
-
+#include <iostream>
 #include <core/core_funcs.h>
 #include <core/stats/basictests/normality.h>
 #include <core/stats/anova/aov.h>
 #include <core/math/fitting.h>
 
+
+#include "dictobject.h"
+#include "pyerrors.h"
 #include "wrapperfuncs.h"
 
 
@@ -119,4 +122,45 @@ PyObject* c_stat_test_aov(PyObject* Obj)
 	PyDict_SetItemString(Dict, "pvalue", Py_BuildValue("d", R.pvalue));
 
 	return Dict;
+}
+
+
+PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
+{
+	TRYBLOCK()
+
+	IF_PYERR(!PyDict_CheckExact(Obj), PyExc_TypeError, "Dictionary expected.");
+
+	tests::anova::aov_Result aovresult;
+	aovresult.Averages = Iterable_As1DVector(PyDict_GetItemString(Obj, "Averages"));
+	aovresult.SampleSizes = Iterable_As1DVector(PyDict_GetItemString(Obj, "SampleSizes"));
+	aovresult.Treat_DF = PyLong_AsLong(PyDict_GetItemString(Obj, "Treat_DF"));
+	aovresult.Error_DF = PyFloat_AS_DOUBLE(PyDict_GetItemString(Obj, "Error_DF"));
+	aovresult.Error_MS = PyFloat_AS_DOUBLE(PyDict_GetItemString(Obj, "Error_MS"));
+
+	IF_PYERR(aovresult.Averages.size()==0, PyExc_RuntimeError, "Averages size is 0.")
+
+	auto Comparisons = tests::anova::tukey(alpha, aovresult);
+
+	IF_PYERR(Comparisons.size()==0, PyExc_RuntimeError, "No comparisons obtained.");
+
+	auto lst = PyList_New(Comparisons.size());
+	
+	for(size_t i=0; const auto& comp:Comparisons)
+	{
+		auto dct = PyDict_New();
+		PyDict_SetItemString(dct, "a", Py_BuildValue("i", comp.a));
+		PyDict_SetItemString(dct, "b", Py_BuildValue("i", comp.b));
+		PyDict_SetItemString(dct, "diff", Py_BuildValue("d", comp.Diff));
+		PyDict_SetItemString(dct, "CILow", Py_BuildValue("d", comp.CILow));
+		PyDict_SetItemString(dct, "CIHigh", Py_BuildValue("d", comp.CIHigh));
+
+		PyList_SetItem(lst, i++, dct);
+	}
+
+	return lst;
+
+	CATCHRUNTIMEEXCEPTION(nullptr)
+
+	Py_RETURN_NONE;
 }
