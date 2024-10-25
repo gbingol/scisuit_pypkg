@@ -85,17 +85,14 @@ PyObject* c_root_bisect(
 	}
 
 
-	PyObject* List = PyList_New(4);
-	PyList_SetItem(List, 0, Py_BuildValue("d", res.Error));
-	PyList_SetItem(List, 1, Py_BuildValue("i", res.NIter));
-	PyList_SetItem(List, 2, Py_BuildValue("O", res.Converged ? Py_True : Py_False));
-	PyList_SetItem(List, 3, Py_BuildValue("s", res.Msg.c_str()));
+	PyObject* Dict = PyDict_New();
+	PyDict_SetItemString(Dict, "root", Py_BuildValue("d", res.Root));
+	PyDict_SetItemString(Dict, "error", Py_BuildValue("d", res.Error));
+	PyDict_SetItemString(Dict, "iter", Py_BuildValue("i", res.NIter));
+	PyDict_SetItemString(Dict, "conv", Py_BuildValue("O", res.Converged ? Py_True : Py_False));
+	PyDict_SetItemString(Dict, "msg", Py_BuildValue("s", res.Msg.c_str()));
 
-	PyObject* TupleObj = PyTuple_New(2);
-	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", res.Root));
-	PyTuple_SetItem(TupleObj, 1, List);
-
-	return TupleObj;
+	return Dict;
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 

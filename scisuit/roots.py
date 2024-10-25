@@ -1,4 +1,4 @@
-import dataclasses as _dc
+from dataclasses import dataclass
 import numbers as _numbers
 import sys as _sys
 import types as _types
@@ -6,7 +6,6 @@ import types as _types
 import numpy as _np
 
 from ctypes import py_object, c_double, c_int, c_char_p, c_bool
-
 from ._ctypeslib import pydll as _pydll
 
 
@@ -86,18 +85,22 @@ _pydll.c_root_toms748.restype = py_object
 #--------------------------------------------------------------------
 
 
-@_dc.dataclass
-class Info:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	iter:int = -1
-	conv:bool = False
-	msg:str =""
+@dataclass
+class bisect_result:
+	root:float
+	iter:int
+	conv:bool
+	msg:str
+	err:float
+
+	def __str__(self):
+		s = "Bisection Method \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Found root={self.root} after {self.iter} iterations.\n"
+		s += f"Error={self.err}"
 
 
 
@@ -108,7 +111,7 @@ def bisect(
 	tol=1E-5, 
 	maxiter=100, 
 	method="bf", 
-	modified=False)->tuple[float, Info]:
+	modified=False)->bisect_result:
 	"""
 	Finds the root using bisection method, returns (root, Info)
 
@@ -125,16 +128,35 @@ def bisect(
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
-	root, lst =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
+	dct:dict =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
 			c_double(tol), 
 			c_int(maxiter), 
 			c_char_p(method.encode('utf-8')),
 			c_bool(modified))
 	
-	return root, Info(lst[0], lst[1], lst[2], lst[3])
+	return bisect_result(root = dct["root"],
+						conv=dct["conv"],
+						iter=dct["iter"],
+						msg=dct["msg"],
+						err=dct["error"] )
+
+
 
 
 #-----------------------------------------
+
+@dataclass
+class itp_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	msg:str =""
 
 def itp(
 	f:_types.FunctionType, 
@@ -143,7 +165,7 @@ def itp(
 	k1:_numbers.Real = 0.1,
 	k2:_numbers.Real = 2.5656733089749,
 	tol:_numbers.Real=1E-5, 
-	maxiter:int=100)->tuple[float, Info]:
+	maxiter:int=100)->tuple[float, itp_result]:
 	"""
 	Finds the root using itp (interpolation, truncation, projection) method
 
@@ -180,18 +202,33 @@ def itp(
 			c_double(tol), 
 			c_int(maxiter))
 	
-	return root, Info(lst[0], lst[1], lst[2], lst[3])
+	return root, itp_result(lst[0], lst[1], lst[2], lst[3])
 
 
 
 #-----------------------------------------
+
+@dataclass
+class brentq_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	msg:str =""
+
+
 
 def brentq(
 	f:_types.FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, Info]:
+	maxiter=100)->tuple[float, brentq_result]:
 	"""
 	Uses the Brent's method (1973) to find the root of the function 
 	using inverse quadratic interpolation, returns (root, Info)
@@ -214,12 +251,25 @@ def brentq(
 
 	root, lst = _pydll.c_root_brentq(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
-	return root, Info(None, lst[0], lst[1], lst[2])
+	return root, brentq_result(None, lst[0], lst[1], lst[2])
 
 
 
 
 #-----------------------------------------
+@dataclass
+class muller_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	msg:str =""
+
 
 def muller(
 	f:_types.FunctionType, 
@@ -228,7 +278,7 @@ def muller(
 	x1=None, 
 	x2=None, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, Info]:
+	maxiter=100)->tuple[float, muller_result]:
 	"""
 	Finds root of an equation using Muller method, returns (root, Info)
 	## Inputs:
@@ -249,11 +299,24 @@ def muller(
 	
 	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 
-	return root, Info(None, lst[0], lst[1], lst[2])
+	return root, muller_result(None, lst[0], lst[1], lst[2])
 
 
 
 #-----------------------------------------
+@dataclass
+class newton_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	msg:str =""
+
 
 def newton(
 	f:_types.FunctionType, 
@@ -262,7 +325,7 @@ def newton(
 	fprime=None, 
 	fprime2=None,
 	tol=1E-5, 
-	maxiter=100)->tuple[float, Info]:
+	maxiter=100)->tuple[float, newton_result]:
 	"""
 	- fprime != None, Newton-Raphson is used,
 	- fprime2 != None, Halley's method is used,
@@ -302,18 +365,31 @@ def newton(
 								c_double(tol), 
 								c_int(maxiter))
 
-	return root, Info(lst[0], lst[1], lst[2], lst[3])
+	return root, newton_result(lst[0], lst[1], lst[2], lst[3])
 
 
 
 #-----------------------------------------
+@dataclass
+class riider_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	iter:int = -1
+	conv:bool = False
+	msg:str =""
+
 
 def ridder(
 	f:_types.FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, Info]:
+	maxiter=100)->tuple[float, riider_result]:
 	"""
 	Uses Ridder's method.
 
@@ -335,18 +411,29 @@ def ridder(
 	
 	root, lst = _pydll.c_root_ridder(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
-	return root, Info(None, lst[0], lst[1], lst[2])
+	return root, riider_result(None, lst[0], lst[1], lst[2])
 
 
 
 #-----------------------------------------
+@dataclass
+class toms748_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	err:float = None
+	conv:bool = False
+
 
 def toms748(
 	f:_types.FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, Info]:
+	maxiter=100)->tuple[float, toms748_result]:
 	"""
 	Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions
 
@@ -374,20 +461,31 @@ def toms748(
 	r1, r2 = result[0], result[1]
 
 	if isinstance(result, tuple):
-		return float(r1 + r2)/2.0, Info(err=abs(r1-r2), iter=-1, conv=True, msg="")
+		return float(r1 + r2)/2.0, toms748_result(err=abs(r1-r2), conv=True)
 	
 	# did not converge
-	return 0.0, Info(err=_sys.float_info.max, iter=-1, conv=False, msg="")
+	return 0.0, toms748_result(err=_sys.float_info.max, conv=False)
 
 
 
 #-----------------------------------------
+@dataclass
+class fsolve_result:
+	"""
+	err: error (if available)
+	iter: number of iterations to reach the root
+	conv: whether converged to a root or not
+	msg: if convergence is False, a reason is given
+	"""
+	roots:list[float]
+	iter:int
+
 
 def fsolve(
 		F:list[_types.FunctionType], 
 		x0:list[float], 
 		tol=1E-5, 
-		maxiter=100 )->tuple:
+		maxiter=100 )->fsolve_result:
 	"""
 	Solves a system of non-linear equations using Newton's approach. \n
 	Functions are in the format of f(x1,x2,...)=0
@@ -473,12 +571,12 @@ def fsolve(
 
 		#return solution vector and number of iterations
 		if(abs(maxfuncval) < tol): 
-			return v.tolist(),  iter
+			return fsolve_result(roots=v.tolist(),  iter=iter)
 
 		DetJacobi = abs(_np.linalg.det(Jacobi))
 
 		if(DetJacobi <= tol):
-			raise RuntimeError("At iter="+ str(iter) + " Jacobian Det=" + str(DetJacobi) + ", try different initial values") 
+			raise RuntimeError(f"Initial values yielded at iter={iter} Jacobi Det={DetJacobi}.") 
 			
 		v = v - _np.linalg.solve(Jacobi, Fvals)
 
