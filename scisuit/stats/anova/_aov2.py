@@ -5,6 +5,12 @@ import numpy as np
 
 from .._distributions import pf
 
+from ctypes import py_object
+from ..._ctypeslib import pydll as _pydll
+
+_pydll.c_stat_test_anova_aov2.argtypes = [py_object, py_object, py_object]
+_pydll.c_stat_test_anova_aov2.restype=py_object
+
 
 def _parsedata(y, x1, x2, v1, v2):
 	"""
@@ -241,7 +247,7 @@ def aov2_noreps(
 #--------------------------------------------------------------------
 
 
-def aov2(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
+def aov2_temp(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
 	"""
 	Performs 2-way ANOVA for balanced designs.
 
@@ -272,6 +278,51 @@ def aov2(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
 		return aov2_replicate(yy=yy, xx1=xx1, xx2=xx2, v1=v1, v2=v2)
 	
 	return aov2_noreps(yy=yy, xx1=xx1, xx2=xx2, v1=v1, v2=v2)
+
+
+
+def aov2(y:Iterable, x1:Iterable, x2:Iterable)->aov2_results:
+	"""
+	Performs 2-way ANOVA for balanced designs.
+
+	---
+	y: Responses   
+	x1, x2: factors
+	"""
+
+	assert len(x1)>= 3, "x1 must have at least 3 elements"
+	assert len(x2) == len(x1), "x1 and x2 must have same size"
+	assert len(x1) == len(y), "x1 and y must have same size"
+
+	for v in y:
+		assert isinstance(v, float|int), "y must contain only numbers"
+
+
+	dct:dict = _pydll.c_stat_test_anova_aov2(y, x1, x2)
+
+	return aov2_results(
+		DFError = dct["DFError"], 
+		DFFact1 = dct["DFFact1"], 
+		DFFact2 = dct["DFFact2"],
+		DFinteract = dct.get("DFinteract"),
+		FvalFact1 = dct["FvalFact1"], 
+		FvalFact2 = dct["FvalFact2"], 
+		Fvalinteract = dct.get("Fvalinteract"),
+		MSError = dct["MSError"], 
+		MSFact1 = dct["MSFact1"], 
+		MSFact2 = dct["MSFact2"], 
+		MSinteract= dct.get("MSinteract"),
+		pvalFact1 = dct["pvalFact1"], 
+		pvalFact2 = dct["pvalFact2"], 
+		pvalinteract= dct.get("pvalinteract"),
+		SSError = dct["SSError"], 
+		SSFact1 = dct["SSFact1"], 
+		SSFact2 = dct["SSFact2"], 
+		SSinteract = dct.get("SSinteract"),
+
+		Residuals = dct.get("Residuals"),
+		Fits=dct.get("Fits")
+	)
 
 
 	

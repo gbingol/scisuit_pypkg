@@ -3,6 +3,7 @@
 #include <core/core_funcs.h>
 #include <core/stats/basictests/normality.h>
 #include <core/stats/anova/aov.h>
+#include <core/stats/anova/aov2.h>
 #include <core/math/fitting.h>
 
 
@@ -157,4 +158,52 @@ PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
 	CATCHRUNTIMEEXCEPTION(nullptr)
 
 	Py_RETURN_NONE;
+}
+
+
+PyObject* c_stat_test_anova_aov2(PyObject* YObsObj, PyObject* X1Obj, PyObject* X2Obj)
+{
+	auto YObs = Iterable_As1DVector(YObsObj);
+	auto X1 = Iterable_As1DVector<std::string>(X1Obj);
+	auto X2 = Iterable_As1DVector<std::string>(X2Obj);
+		
+	auto R = tests::anova::aov2(YObs, X1, X2);
+
+	auto Dict = PyDict_New();
+
+	PyDict_SetItemString(Dict, "DFError", Py_BuildValue("i", R.DFError));
+	PyDict_SetItemString(Dict, "DFFact1", Py_BuildValue("i", R.DFFact1));
+	PyDict_SetItemString(Dict, "DFFact2", Py_BuildValue("i", R.DFFact2));
+
+	PyDict_SetItemString(Dict, "FvalFact1", Py_BuildValue("d", R.FvalFact1));
+	PyDict_SetItemString(Dict, "FvalFact2", Py_BuildValue("d", R.FvalFact2));
+
+	PyDict_SetItemString(Dict, "MSError", Py_BuildValue("i", R.MSError));
+	PyDict_SetItemString(Dict, "MSFact1", Py_BuildValue("d", R.MSFact1));
+	PyDict_SetItemString(Dict, "MSFact2", Py_BuildValue("d", R.MSFact2));
+	
+	PyDict_SetItemString(Dict, "pvalFact1", Py_BuildValue("d", R.pvalFact1));
+	PyDict_SetItemString(Dict, "pvalFact2", Py_BuildValue("d", R.pvalFact2));
+	
+	PyDict_SetItemString(Dict, "SSError", Py_BuildValue("d", R.SSError));
+	PyDict_SetItemString(Dict, "SSFact1", Py_BuildValue("d", R.SSFact1));
+	PyDict_SetItemString(Dict, "SSFact2", Py_BuildValue("d", R.SSFact2));
+	
+	//when repetitions involved, there is interaction terms (if one has value the others must have)
+	if(R.DFinteract.has_value())
+	{
+		PyDict_SetItemString(Dict, "DFinteract", Py_BuildValue("i", *R.DFinteract));
+		PyDict_SetItemString(Dict, "Fvalinteract", Py_BuildValue("d", *R.Fvalinteract));
+		PyDict_SetItemString(Dict, "MSinteract", Py_BuildValue("d", *R.MSinteract));
+		PyDict_SetItemString(Dict, "pvalinteract", Py_BuildValue("d", *R.pvalinteract));
+		PyDict_SetItemString(Dict, "SSinteract", Py_BuildValue("d", *R.SSinteract));
+	}
+
+	if(R.Residuals.size()>0)
+	{
+		PyDict_SetItemString(Dict, "Residuals", List_FromVector(R.Residuals));
+		PyDict_SetItemString(Dict, "Fits", List_FromVector(R.Fits));
+	}
+
+	return Dict;
 }
