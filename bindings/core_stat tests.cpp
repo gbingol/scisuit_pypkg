@@ -1,14 +1,11 @@
 #include "core_stat tests.h"
 
-#include <iostream>
 #include <core/core_funcs.h>
 #include <core/stats/basictests/normality.h>
 #include <core/stats/anova/aov.h>
 #include <core/math/fitting.h>
 
 
-#include "dictobject.h"
-#include "pyerrors.h"
 #include "wrapperfuncs.h"
 
 
@@ -87,7 +84,7 @@ PyObject* c_stat_test_shapirowilkinson(PyObject* Obj)
 }
 
 
-PyObject* c_stat_test_aov(PyObject* Obj)
+PyObject* c_stat_test_anova_aov(PyObject* Obj)
 {
 	auto N = PyTuple_Size(Obj);
 	IF_PYERR(N<3, PyExc_ValueError, "At least 3 levels expected.");

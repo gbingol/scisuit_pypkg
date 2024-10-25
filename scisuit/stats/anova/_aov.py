@@ -7,8 +7,8 @@ from ..._ctypeslib import pydll as _pydll
 
 
 
-_pydll.c_stat_test_aov.argtypes = [py_object]
-_pydll.c_stat_test_aov.restype=py_object
+_pydll.c_stat_test_anova_aov.argtypes = [py_object]
+_pydll.c_stat_test_anova_aov.restype=py_object
 
 
 _pydll.c_stat_test_anova_tukey.argtypes = [c_double, py_object] #alpha and aovresults
@@ -55,7 +55,7 @@ def aov(*args)->aov_results:
 	for v in args:
 		assert isinstance(v, Iterable), "Iterable objects expected."
 	
-	res:dict = _pydll.c_stat_test_aov(args)
+	res:dict = _pydll.c_stat_test_anova_aov(args)
 
 	return aov_results(
 		Treat_DF= res["Treat_DF"],
