@@ -57,7 +57,7 @@ class bisect_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		s += f"Root={self.root:.5f}, Error={self.err:.2e} ({self.iter} iterations)."
 		return s
 
 
@@ -117,7 +117,7 @@ class itp_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		s += f"Root={self.root:.5f}, Error={self.err:.2e} ({self.iter} iterations)."
 		return s
 
 
@@ -189,7 +189,7 @@ class brentq_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root:.4f}, ({self.iter} iterations)."
+		s += f"Root={self.root:.5f}, ({self.iter} iterations)."
 		return s
 
 
@@ -305,7 +305,7 @@ class newton_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		s += f"Root={self.root:.5f}, Error={self.err:.2e} ({self.iter} iterations)."
 		return s
 
 
@@ -387,7 +387,7 @@ class ridder_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root:.4f}, ({self.iter} iterations)."
+		s += f"Root={self.root:.5f}, ({self.iter} iterations)."
 		return s
 
 
@@ -441,7 +441,7 @@ class toms748_result:
 		if not self.conv:
 			s += "Could not converge to a root."
 			return s
-		s += f"Root={self.root:.4f}, Error={self.err:.2e} ."
+		s += f"Root={self.root:.5f}, Error={self.err:.2e} ."
 		return s
 
 
