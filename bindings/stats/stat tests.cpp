@@ -1,4 +1,4 @@
-#include "core_stat tests.h"
+#include "stat tests.h"
 
 #include <core/core_funcs.h>
 #include <core/stats/basictests/normality.h>
@@ -7,7 +7,7 @@
 #include <core/math/fitting.h>
 
 
-#include "wrapperfuncs.h"
+#include "../wrapperfuncs.h"
 
 
 using namespace core::stats;

@@ -1,11 +1,11 @@
-#include "core_stat.h"
+#include "stat_distributions.h"
 
 #include <cmath>
 
 #include <core/core_funcs.h>
 #include <core/stats/distributions.h>
 
-#include "wrapperfuncs.h"
+#include "../wrapperfuncs.h"
 
 
 using namespace core::stats;

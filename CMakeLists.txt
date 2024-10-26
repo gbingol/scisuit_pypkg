@@ -31,7 +31,7 @@ include_directories(${PYHOME}/include)
 # core and plot
 include_directories(${CMAKE_SOURCE_DIR}/core_plot)
 
-file(GLOB cppfiles
+file(GLOB_RECURSE cppfiles
      "bindings/*.h"
      "bindings/*.cpp")
 
