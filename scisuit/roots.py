@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-import numbers as _numbers
-import sys as _sys
+from numbers import Real, Complex
 from types import FunctionType
 
 import numpy as _np
@@ -17,65 +16,22 @@ __all__ = ['bisect','itp', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "In
 _pydll.c_root_bisect.argtypes = [py_object, c_double, c_double, c_double, c_int, c_char_p, c_bool]
 _pydll.c_root_bisect.restype = py_object
 
-
-_pydll.c_root_itp.argtypes = [
-					py_object, #f
-					c_double, #a
-					c_double, #b
-					c_double, #k1
-					c_double, #k2
-					c_double, #TOL
-					c_int] #maxiter
+_pydll.c_root_itp.argtypes = [py_object, c_double, c_double, c_double, c_double, c_double, c_int]
 _pydll.c_root_itp.restype = py_object
 
-
-_pydll.c_root_brentq.argtypes = [
-					py_object, 
-					c_double, 
-					c_double, 
-					c_double, 
-					c_int]
+_pydll.c_root_brentq.argtypes = [py_object, c_double, c_double, c_double, c_int]
 _pydll.c_root_brentq.restype = py_object
 
-
-_pydll.c_root_muller.argtypes = [
-					py_object, 
-					py_object, 
-					py_object, 
-					py_object, 
-					py_object, 
-					c_double, 
-					c_int]
+_pydll.c_root_muller.argtypes = [py_object, py_object, py_object, py_object, py_object, c_double, c_int]
 _pydll.c_root_muller.restype = py_object
 
-
-_pydll.c_root_newton.argtypes = [
-					py_object, #f
-					c_double, #X0
-					py_object, #X1
-					py_object, #fprime
-					py_object, #fprime2
-					c_double, #tol
-					c_int #maxiter
-				]
+_pydll.c_root_newton.argtypes = [ py_object, c_double, py_object, py_object, py_object, c_double, c_int ]
 _pydll.c_root_newton.restype = py_object
 
-
-_pydll.c_root_ridder.argtypes = [
-					py_object, 
-					c_double, 
-					c_double, 
-					c_double, 
-					c_int]
+_pydll.c_root_ridder.argtypes = [py_object, c_double, c_double, c_double, c_int]
 _pydll.c_root_ridder.restype = py_object
 
-
-_pydll.c_root_toms748.argtypes = [
-					py_object, 
-					c_double, 
-					c_double, 
-					c_double, 
-					c_int]
+_pydll.c_root_toms748.argtypes = [py_object, c_double, c_double, c_double, c_int]
 _pydll.c_root_toms748.restype = py_object
 
 
@@ -83,7 +39,7 @@ _pydll.c_root_toms748.restype = py_object
 
 
 #--------------------------------------------------------------------
-
+#--------------------------------------------------------------------
 
 @dataclass
 class bisect_result:
@@ -92,16 +48,17 @@ class bisect_result:
 	conv:bool
 	msg:str
 	err:float
+	method:tuple
 
 	def __str__(self):
-		s = "Bisection Method \n"
+		s = "Bisection using " + ("brute-force" if self.method[0]=="bf" else "regula falsi") + " method \n"
+		s += "Using Modified regula-falsi \n" if self.method[1] else ""
 		if not self.conv:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Found root={self.root} after {self.iter} iterations.\n"
-		s += f"Error={self.err}"
-
+		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		return s
 
 
 def bisect(
@@ -110,8 +67,8 @@ def bisect(
 	b:float, 
 	tol=1E-5, 
 	maxiter=100, 
-	method="bf", 
-	modified=False)->bisect_result:
+	method:tuple[str, bool]=("bf", False)
+	)->bisect_result:
 	"""
 	Finds the root using bisection method
 
@@ -119,30 +76,32 @@ def bisect(
 	a, b: The interval where the root lies in  
 	tol: tolerance for error  
 	maxiter: Maximum number of iterations  
-	method: "bf" or "rf", for brute-force (halving) or regula falsi  
-	modified: True for modified regula falsi method.
+	method: ("bf" or "rf", for brute-force/regula falsi , True modified rf).
 	"""
 	assert callable(f), "f must be function"
-	assert isinstance(a, _numbers.Real), "a must be real number"
-	assert isinstance(b, _numbers.Real), "b must be real number"
-	assert method in ["bf", "rf"], "method must be 'bf' or 'rf'"
+	assert isinstance(a, Real), "a must be real number."
+	assert isinstance(b, Real), "b must be real number."
+	assert method[0] in ["bf", "rf"], "method must be 'bf' or 'rf' ."
 
 	dct:dict =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
 			c_double(tol), 
 			c_int(maxiter), 
-			c_char_p(method.lower().encode('utf-8')),
-			c_bool(modified))
+			c_char_p(method[0].lower().encode('utf-8')),
+			c_bool(method[1]))
 	
 	return bisect_result(root = dct["root"],
 						conv=dct["conv"],
 						iter=dct["iter"],
 						msg=dct["msg"],
-						err=dct["err"] )
+						err=dct["err"],
+						method=method)
 
 
 
 
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 
 @dataclass
 class itp_result:
@@ -152,14 +111,23 @@ class itp_result:
 	conv:bool
 	msg:str
 
+	def __str__(self):
+		s = "ITP method \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		return s
+
 
 def itp(
 	f:FunctionType, 
-	a:_numbers.Real, 
-	b:_numbers.Real, 
-	k1:_numbers.Real = 0.1,
-	k2:_numbers.Real = 2.5656733089749,
-	tol:_numbers.Real=1E-5, 
+	a:Real, 
+	b:Real, 
+	k1:Real = 0.1,
+	k2:Real = 2.5656733089749,
+	tol:Real=1E-5, 
 	maxiter:int=100)->itp_result:
 	"""
 	Finds the root using itp (interpolation, truncation, projection) method
@@ -175,16 +143,16 @@ def itp(
 	  Performance Preserving Minmax Optimality, ACM Transactions on Mathematical Software, 47:1
 	"""
 	assert isinstance(f, FunctionType), "f must be function."
-	assert isinstance(a, _numbers.Real), "a must be real number"
-	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert isinstance(a, Real), "a must be real number."
+	assert isinstance(b, Real), "b must be real number"
 
-	assert isinstance(k1, _numbers.Real), "k1 must be real number"
-	assert isinstance(k2, _numbers.Real), "k2 must be real number"
+	assert isinstance(k1, Real), "k1 must be real number."
+	assert isinstance(k2, Real), "k2 must be real number."
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
+	assert isinstance(maxiter, int), "maxiter must be int."
 	assert maxiter>0, "maxiter>0 expected"
 
 	dct:dict =_pydll.c_root_itp(py_object(f), 
@@ -203,7 +171,10 @@ def itp(
 
 
 
+
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 
 @dataclass
 class brentq_result:
@@ -211,6 +182,15 @@ class brentq_result:
 	iter:int
 	conv:bool
 	msg:str
+
+	def __str__(self):
+		s = "Brent's method (inverse quadratic interpolation) \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Root={self.root:.4f}, ({self.iter} iterations)."
+		return s
 
 
 
@@ -229,14 +209,14 @@ def brentq(
 	tol: tolerance for error  
 	maxiter: Maximum number of iterations during the search for the root
 	"""
-	assert callable(f), "f must be function"
-	assert isinstance(a, _numbers.Real), "a must be real number"
-	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert callable(f), "f must be function."
+	assert isinstance(a, Real), "a must be real number."
+	assert isinstance(b, Real), "b must be real number."
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
+	assert isinstance(maxiter, int), "maxiter must be int."
 	assert maxiter>0, "maxiter>0 expected"
 
 	dct:dict = _pydll.c_root_brentq(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
@@ -249,7 +229,10 @@ def brentq(
 
 
 
+
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 @dataclass
 class muller_result:
 	root:float
@@ -257,10 +240,19 @@ class muller_result:
 	conv:bool
 	msg:str
 
+	def __str__(self):
+		s = "Muller method \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Root={self.root}, ({self.iter} iterations)."
+		return s
+
 
 def muller(
 	f:FunctionType, 
-	x0:_numbers.Complex, 
+	x0:Complex, 
 	h=None, 
 	x1=None, 
 	x2=None, 
@@ -275,14 +267,14 @@ def muller(
 	tol: tolerance for error  
 	maxiter: Max number of iterations
 	"""
-	assert callable(f), "f must be function"
-	assert isinstance(x0, _numbers.Complex), "x0 must be a Complex/Real number"
+	assert callable(f), "f must be function."
+	assert isinstance(x0, Complex), "x0 must be a Complex/Real number."
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
-	assert maxiter>0, "maxiter>0 expected"
+	assert isinstance(maxiter, int), "maxiter must be int."
+	assert maxiter>0, "maxiter>0 expected."
 	
 	dct:dict = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 
@@ -293,7 +285,11 @@ def muller(
 
 
 
+
+
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 @dataclass
 class newton_result:
 	root:float
@@ -301,6 +297,16 @@ class newton_result:
 	iter:int
 	conv:bool
 	msg:str
+	method:str
+
+	def __str__(self):
+		s = "Newton method using (" + self.method + ") \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Root={self.root:.4f}, Error={self.err:.2e} ({self.iter} iterations)."
+		return s
 
 
 def newton(
@@ -325,21 +331,25 @@ def newton(
 	maxiter: Max number of iterations
 	"""
 	assert isinstance(f, FunctionType), "f must be function."
-	assert isinstance(x0, _numbers.Real), "x0 must be Real number"
+	assert isinstance(x0, Real), "x0 must be Real number."
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
-	assert maxiter>0, "maxiter>0 expected"
+	assert isinstance(maxiter, int), "maxiter must be int."
+	assert maxiter>0, "maxiter>0 expected."
+
+	methodName = "Newton-Raphson"
 
 	if(fprime == None):
-		assert isinstance(x1, _numbers.Real), "If fprime not provided, x1 must be a real number"
+		assert isinstance(x1, Real), "If fprime not provided, x1 must be a real number."
+		methodName="Secant"
 	else:
 		assert isinstance(fprime, FunctionType), "If not None, fprime must be function."
 
 	if fprime2 != None:
 		assert isinstance(fprime2, FunctionType), "If not None, fprime2 must be function."
+		methodName="Halley"
 
 	dct:dict = _pydll.c_root_newton(
 								py_object(f), 
@@ -354,17 +364,31 @@ def newton(
 						conv=dct["conv"],
 						iter=dct["iter"],
 						msg=dct["msg"],
-						err=dct["err"] )
+						err=dct["err"],
+						method=methodName )
+
+
 
 
 
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 @dataclass
 class ridder_result:
 	root:float
 	iter:int = -1
 	conv:bool = False
 	msg:str =""
+
+	def __str__(self):
+		s = "Ridder's method \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			s += self.msg
+			return s
+		s += f"Root={self.root:.4f}, ({self.iter} iterations)."
+		return s
 
 
 def ridder(
@@ -382,14 +406,14 @@ def ridder(
 	maxiter: Maximum number of iterations
 	"""
 	assert isinstance(f, FunctionType), "f must be function."
-	assert isinstance(a, _numbers.Real), "a must be real number"
-	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert isinstance(a, Real), "a must be real number."
+	assert isinstance(b, Real), "b must be real number."
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
-	assert maxiter>0, "maxiter>0 expected"
+	assert isinstance(maxiter, int), "maxiter must be int."
+	assert maxiter>0, "maxiter>0 expected."
 	
 	dct:dict = _pydll.c_root_ridder(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
@@ -400,13 +424,25 @@ def ridder(
 
 
 
+
+
 #-----------------------------------------
+#--------------------------------------------------------------------
+
 @dataclass
 class toms748_result:
 	root:float
 	err:float
 	conv:bool
 	root:float
+
+	def __str__(self):
+		s = "Algorithm TOMS 748 \n"
+		if not self.conv:
+			s += "Could not converge to a root."
+			return s
+		s += f"Root={self.root:.4f}, Error={self.err:.2e} ."
+		return s
 
 
 def toms748(
@@ -427,14 +463,14 @@ def toms748(
 	https://beta.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/roots_noderiv/TOMS748.html
 	"""
 	assert isinstance(f, FunctionType), "f must be function."
-	assert isinstance(a, _numbers.Real), "a must be real number"
-	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert isinstance(a, Real), "a must be real number."
+	assert isinstance(b, Real), "b must be real number."
 	assert a<b, "a<b expected"
 
-	assert isinstance(tol, _numbers.Real), "tol must be Real number"
+	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
 
-	assert isinstance(maxiter, int), "maxiter must be int"
+	assert isinstance(maxiter, int), "maxiter must be int."
 	assert maxiter>0, "maxiter>0 expected"
 	
 
@@ -445,11 +481,26 @@ def toms748(
 
 
 
+
+
 #-----------------------------------------
+#--------------------------------------------------------------------
+
+
 @dataclass
 class fsolve_result:
 	roots:list[float]
 	iter:int
+
+	def __str__(self):
+		s = "Solving Set of Equations \n"
+		if len(self.roots)>1:
+			s += f"Converged to roots after {self.iter} iterations. \n"
+			for i, root in enumerate(self.roots):
+				s += f"Root #{i}={root:.4f} \n"
+		else:
+			s += f"Could not converge after {self.iter} iterations."
+		return s
 
 
 def fsolve(
@@ -486,10 +537,10 @@ def fsolve(
 	9.428e-09    9.377e-09 
 	
 	"""
-	assert isinstance(F, list), "F must be a list of functions"
-	assert isinstance(x0, list), "x0 must be a list of numbers"
+	assert isinstance(F, list), "F must be a list of functions."
+	assert isinstance(x0, list), "x0 must be a list of numbers."
 
-	assert isinstance(tol, _numbers.Number) and tol>0, "tol>0 expected."
+	assert isinstance(tol, Real) and tol>0, "tol must be Real and tol>0 expected."
 	assert isinstance(maxiter, int) and maxiter>0, "maxiter>0 expected."
 
 	dim = len(F)

@@ -52,9 +52,9 @@ from scisuit.roots import brentq, bisect, itp, fsolve
 kwargs = {"f": lambda x: x**2-5, "a":0.01, "b":5}
 
 print(
-	"bisect: ", bisect(**kwargs), "\n",
-	"brentq: ", brentq(**kwargs), "\n",
-	"itp: ", itp(**kwargs))
+	bisect(**kwargs), "\n",
+	brentq(**kwargs), "\n",
+	itp(**kwargs))
 
 
 
@@ -65,7 +65,5 @@ def f1(t):
 def f2(t): 
 	return t[0]**2 - t[1]**2 - 1 
 
-roots, iter=fsolve( [f1,f2], [1,1] ) 
-	
-print(roots, "  iter:", iter) 
-print(f1(roots), " ", f2(roots))
+result=fsolve( [f1,f2], [1,1] ) 
+print(result)
