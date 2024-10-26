@@ -116,17 +116,17 @@ def bisect(
 	Finds the root using bisection method, returns (root, Info)
 
 	## Inputs:
-	f: A unary function
-	a, b: The interval where the root lies in
-	tol: tolerance for error
-	maxiter: Maximum number of iterations
-	method: "bf" for brute-force (halving) 
-	"rf" for regula falsi (false position) 
+	f: A unary function  
+	a, b: The interval where the root lies in  
+	tol: tolerance for error  
+	maxiter: Maximum number of iterations  
+	method: "bf" or "rf", for brute-force (halving) or regula falsi  
 	modified: True for modified regula falsi method.
 	"""
 	assert callable(f), "f must be function"
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
+	assert method in ["bf", "rf"], "method must be 'bf' or 'rf'"
 
 	dct:dict =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
 			c_double(tol), 
@@ -138,7 +138,7 @@ def bisect(
 						conv=dct["conv"],
 						iter=dct["iter"],
 						msg=dct["msg"],
-						err=dct["error"] )
+						err=dct["err"] )
 
 
 
@@ -158,6 +158,7 @@ class itp_result:
 	conv:bool = False
 	msg:str =""
 
+
 def itp(
 	f:_types.FunctionType, 
 	a:_numbers.Real, 
@@ -170,11 +171,11 @@ def itp(
 	Finds the root using itp (interpolation, truncation, projection) method
 
 	## Inputs:
-	f: A unary function
-	a, b: The interval where the root lies in
-	k1, k2: parameters to control interpolation phase
-	tol: tolerance for error
-	maxiter: Maximum number of iterations
+	f: A unary function  
+	a, b: The interval where the root lies in  
+	k1, k2: parameters to control interpolation phase  
+	tol: tolerance for error  
+	maxiter: Maximum number of iterations  
 
 	## Reference:
 	- Oliveira IFD & Takahashi RHC (2020). An Enhancement of the Bisection Method Average 
@@ -426,6 +427,7 @@ class toms748_result:
 	"""
 	err:float = None
 	conv:bool = False
+	root:float
 
 
 def toms748(
@@ -457,14 +459,10 @@ def toms748(
 	assert maxiter>0, "maxiter>0 expected"
 	
 
-	result = _pydll.c_root_toms748(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
-	r1, r2 = result[0], result[1]
+	res:dict = _pydll.c_root_toms748(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
-	if isinstance(result, tuple):
-		return float(r1 + r2)/2.0, toms748_result(err=abs(r1-r2), conv=True)
+	return toms748_result(root=res["root"], err=res["err"], conv=res["conv"])
 	
-	# did not converge
-	return 0.0, toms748_result(err=_sys.float_info.max, conv=False)
 
 
 
