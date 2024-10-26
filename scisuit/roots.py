@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numbers as _numbers
 import sys as _sys
-import types as _types
+from types import FunctionType
 
 import numpy as _np
 
@@ -105,7 +105,7 @@ class bisect_result:
 
 
 def bisect(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
@@ -113,9 +113,8 @@ def bisect(
 	method="bf", 
 	modified=False)->bisect_result:
 	"""
-	Finds the root using bisection method, returns (root, Info)
+	Finds the root using bisection method
 
-	## Inputs:
 	f: A unary function  
 	a, b: The interval where the root lies in  
 	tol: tolerance for error  
@@ -131,7 +130,7 @@ def bisect(
 	dct:dict =_pydll.c_root_bisect(f, c_double(a), c_double(b), 
 			c_double(tol), 
 			c_int(maxiter), 
-			c_char_p(method.encode('utf-8')),
+			c_char_p(method.lower().encode('utf-8')),
 			c_bool(modified))
 	
 	return bisect_result(root = dct["root"],
@@ -147,30 +146,24 @@ def bisect(
 
 @dataclass
 class itp_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	iter:int = -1
-	conv:bool = False
-	msg:str =""
+	root:float
+	err:float
+	iter:int
+	conv:bool
+	msg:str
 
 
 def itp(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	a:_numbers.Real, 
 	b:_numbers.Real, 
 	k1:_numbers.Real = 0.1,
 	k2:_numbers.Real = 2.5656733089749,
 	tol:_numbers.Real=1E-5, 
-	maxiter:int=100)->tuple[float, itp_result]:
+	maxiter:int=100)->itp_result:
 	"""
 	Finds the root using itp (interpolation, truncation, projection) method
 
-	## Inputs:
 	f: A unary function  
 	a, b: The interval where the root lies in  
 	k1, k2: parameters to control interpolation phase  
@@ -181,7 +174,7 @@ def itp(
 	- Oliveira IFD & Takahashi RHC (2020). An Enhancement of the Bisection Method Average 
 	  Performance Preserving Minmax Optimality, ACM Transactions on Mathematical Software, 47:1
 	"""
-	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
@@ -194,16 +187,19 @@ def itp(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 
-	root, lst =_pydll.c_root_itp(
-			py_object(f), 
-			c_double(a), 
-			c_double(b),
-			c_double(k1),
-			c_double(k2), 
-			c_double(tol), 
-			c_int(maxiter))
+	dct:dict =_pydll.c_root_itp(py_object(f), 
+						c_double(a), 
+						c_double(b),
+						c_double(k1),
+						c_double(k2), 
+						c_double(tol), 
+						c_int(maxiter))
 	
-	return root, itp_result(lst[0], lst[1], lst[2], lst[3])
+	return itp_result(root = dct["root"],
+					conv=dct["conv"],
+					iter=dct["iter"],
+					msg=dct["msg"],
+					err=dct["err"] )
 
 
 
@@ -211,33 +207,26 @@ def itp(
 
 @dataclass
 class brentq_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	iter:int = -1
-	conv:bool = False
-	msg:str =""
+	root:float
+	iter:int
+	conv:bool
+	msg:str
 
 
 
 def brentq(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, brentq_result]:
+	maxiter=100)->brentq_result:
 	"""
 	Uses the Brent's method (1973) to find the root of the function 
-	using inverse quadratic interpolation, returns (root, Info)
+	using inverse quadratic interpolation
 
-	## Inputs:
-	f: A unary function whose root is sought after \n
-	a, b: The interval where root lies in \n
-	tol: tolerance for error \n
+	f: A unary function whose root is sought after  
+	a, b: The interval where root lies in  
+	tol: tolerance for error  
 	maxiter: Maximum number of iterations during the search for the root
 	"""
 	assert callable(f), "f must be function"
@@ -250,9 +239,12 @@ def brentq(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 
-	root, lst = _pydll.c_root_brentq(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
+	dct:dict = _pydll.c_root_brentq(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
-	return root, brentq_result(None, lst[0], lst[1], lst[2])
+	return brentq_result(root = dct["root"],
+						conv=dct["conv"],
+						iter=dct["iter"],
+						msg=dct["msg"] )
 
 
 
@@ -260,33 +252,27 @@ def brentq(
 #-----------------------------------------
 @dataclass
 class muller_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	iter:int = -1
-	conv:bool = False
-	msg:str =""
+	root:float
+	iter:int
+	conv:bool
+	msg:str
 
 
 def muller(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	x0:_numbers.Complex, 
 	h=None, 
 	x1=None, 
 	x2=None, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, muller_result]:
+	maxiter=100)->muller_result:
 	"""
-	Finds root of an equation using Muller method, returns (root, Info)
-	## Inputs:
-	f: A unary function \n
-	x0, x1, x2:	Initial guesses \n
-	h: Step length \n
-	tol: tolerance for error \n
+	Finds root of an equation using Muller method
+	
+	f: A unary function  
+	x0, x1, x2:	Initial guesses  
+	h: Step length  
+	tol: tolerance for error  
 	maxiter: Max number of iterations
 	"""
 	assert callable(f), "f must be function"
@@ -298,49 +284,47 @@ def muller(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 	
-	root, lst = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
+	dct:dict = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 
-	return root, muller_result(None, lst[0], lst[1], lst[2])
+	return muller_result(root = dct["root"],
+					conv=dct["conv"],
+					iter=dct["iter"],
+					msg=dct["msg"] )
 
 
 
 #-----------------------------------------
 @dataclass
 class newton_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	iter:int = -1
-	conv:bool = False
-	msg:str =""
+	root:float
+	err:float
+	iter:int
+	conv:bool
+	msg:str
 
 
 def newton(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	x0:float, 
 	x1=None, 
 	fprime=None, 
 	fprime2=None,
 	tol=1E-5, 
-	maxiter=100)->tuple[float, newton_result]:
+	maxiter=100)->newton_result:
 	"""
 	- fprime != None, Newton-Raphson is used,
 	- fprime2 != None, Halley's method is used,
 	- fprime == None, x1 must be provided and Secant method is used.
 
 	## Inputs:
-	f: A unary function 
-	fprime: derivative of f 
-	fprime2: second derivative of f 
-	x0, x1: Initial guesses 
-	tol: tolerance for error 
+	f: A unary function  
+	fprime: derivative of f  
+	fprime2: second derivative of f   
+	x0, x1: Initial guesses  
+	tol: tolerance for error  
 	maxiter: Max number of iterations
 	"""
-	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(x0, _numbers.Real), "x0 must be Real number"
 
 	assert isinstance(tol, _numbers.Real), "tol must be Real number"
@@ -352,12 +336,12 @@ def newton(
 	if(fprime == None):
 		assert isinstance(x1, _numbers.Real), "If fprime not provided, x1 must be a real number"
 	else:
-		assert isinstance(fprime, _types.FunctionType), "If not None, fprime must be function."
+		assert isinstance(fprime, FunctionType), "If not None, fprime must be function."
 
 	if fprime2 != None:
-		assert isinstance(fprime2, _types.FunctionType), "If not None, fprime2 must be function."
+		assert isinstance(fprime2, FunctionType), "If not None, fprime2 must be function."
 
-	root, lst = _pydll.c_root_newton(
+	dct:dict = _pydll.c_root_newton(
 								py_object(f), 
 								c_double(x0), 
 								py_object(x1), 
@@ -366,41 +350,38 @@ def newton(
 								c_double(tol), 
 								c_int(maxiter))
 
-	return root, newton_result(lst[0], lst[1], lst[2], lst[3])
+	return newton_result(root = dct["root"],
+						conv=dct["conv"],
+						iter=dct["iter"],
+						msg=dct["msg"],
+						err=dct["err"] )
 
 
 
 #-----------------------------------------
 @dataclass
-class riider_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
+class ridder_result:
+	root:float
 	iter:int = -1
 	conv:bool = False
 	msg:str =""
 
 
 def ridder(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, riider_result]:
+	maxiter=100)->ridder_result:
 	"""
 	Uses Ridder's method.
 
-	## Inputs:
-	f: A unary function 
-	a, b: The interval where the root lies in 
-	tol: tolerance for error 
+	f: A unary function  
+	a, b: The interval where the root lies in  
+	tol: tolerance for error  
 	maxiter: Maximum number of iterations
 	"""
-	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 
@@ -410,44 +391,42 @@ def ridder(
 	assert isinstance(maxiter, int), "maxiter must be int"
 	assert maxiter>0, "maxiter>0 expected"
 	
-	root, lst = _pydll.c_root_ridder(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
+	dct:dict = _pydll.c_root_ridder(f, c_double(a), c_double(b), c_double(tol), c_int(maxiter))
 
-	return root, riider_result(None, lst[0], lst[1], lst[2])
+	return ridder_result(root = dct["root"],
+						conv=dct["conv"],
+						iter=dct["iter"],
+						msg=dct["msg"] )
 
 
 
 #-----------------------------------------
 @dataclass
 class toms748_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
-	err:float = None
-	conv:bool = False
+	root:float
+	err:float
+	conv:bool
 	root:float
 
 
 def toms748(
-	f:_types.FunctionType, 
+	f:FunctionType, 
 	a:float, 
 	b:float, 
 	tol=1E-5, 
-	maxiter=100)->tuple[float, toms748_result]:
+	maxiter=100)->toms748_result:
 	"""
 	Algorithm TOMS 748: Alefeld, Potra and Shi: Enclosing zeros of continuous functions
 
-	f: A unary function whose root is sought after
-	a, b: The interval where root lies in,
-	tol: tolerance for error
+	f: A unary function whose root is sought after  
+	a, b: The interval where root lies in  
+	tol: tolerance for error  
 	maxiter: Maximum number of iterations during the search for the root
 
 	## Reference:
 	https://beta.boost.org/doc/libs/1_82_0/libs/math/doc/html/math_toolkit/roots_noderiv/TOMS748.html
 	"""
-	assert isinstance(f, _types.FunctionType), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(a, _numbers.Real), "a must be real number"
 	assert isinstance(b, _numbers.Real), "b must be real number"
 	assert a<b, "a<b expected"
@@ -469,49 +448,41 @@ def toms748(
 #-----------------------------------------
 @dataclass
 class fsolve_result:
-	"""
-	err: error (if available)
-	iter: number of iterations to reach the root
-	conv: whether converged to a root or not
-	msg: if convergence is False, a reason is given
-	"""
 	roots:list[float]
 	iter:int
 
 
 def fsolve(
-		F:list[_types.FunctionType], 
+		F:list[FunctionType], 
 		x0:list[float], 
 		tol=1E-5, 
 		maxiter=100 )->fsolve_result:
 	"""
-	Solves a system of non-linear equations using Newton's approach. \n
+	Solves a system of non-linear equations using Newton's approach.  
 	Functions are in the format of f(x1,x2,...)=0
-	
 
 	## Inputs:
-	F: a list of functions \n
-	x0: a list of initial guesses \n
-
+	F: a list of functions  
+	x0: a list of initial guesses  
 
 	## EXAMPLE
-	x^2 + y^2 = 5 \n
-	x^2 - y^2 = 1 \n
+	x^2 + y^2 = 5  
+	x^2 - y^2 = 1  
 
-	First define the functions, F(x, y) = 0: \n
+	First define the functions, F(x, y) = 0:  
 
-	def f1(t): \n
-		return t[0]**2 + t[1]**2 - 5 \n
+	def f1(t):  
+		return t[0]**2 + t[1]**2 - 5  
 
-	def f2(t): \n
-		return t[0]**2 - t[1]**2 - 1 \n
-	\n
-	roots, iter=fsolve( [f1,f2], [1,1] ) \n
-	\n
-	print(roots, "  iter:", iter) \n
-	1.73205	1.41421	iter:5 \n
+	def f2(t):  
+		return t[0]**2 - t[1]**2 - 1  
+	
+	roots, iter=fsolve( [f1,f2], [1,1] )  
+	
+	print(roots, "  iter:", iter)  
+	1.73205	1.41421	iter:5  
 
-	print(f1(roots), " ", f2(roots)) \n
+	print(f1(roots), " ", f2(roots))  
 	9.428e-09    9.377e-09 
 	
 	"""
@@ -523,8 +494,8 @@ def fsolve(
 
 	dim = len(F)
 
-	assert dim>=2, "At least 2 functions are required"
-	assert dim == len(x0), "F and x0 must have same length"
+	assert dim>=2, "At least 2 functions are required."
+	assert dim == len(x0), "F and x0 must have same length."
 
 
 	#solution vector as floating point
@@ -532,7 +503,6 @@ def fsolve(
       
 	#values of each function	
 	Fvals = _np.zeros(dim)
-
 	Jacobi = _np.zeros((dim, dim)) 
 
 	for iter in range(maxiter):
@@ -540,8 +510,7 @@ def fsolve(
 	
 		for i in range(dim):
 			func = F[i]     #function
-
-			assert isinstance(func, _types.FunctionType), "Entries of F must be functions of form f(t) = 0"
+			assert isinstance(func, FunctionType), "F must have functions of form f(t)=0."
 			
 			Fvals[i] = func(v.tolist())
 		
@@ -560,7 +529,7 @@ def fsolve(
 				#evaluate function with (xi,...)
 				f_xi = func(v.tolist())  
 				
-				if(abs(maxfuncval) < abs(f_xi)): 
+				if abs(maxfuncval) < abs(f_xi): 
 					maxfuncval = abs(f_xi) 
 				
 				#register the derivative with respect to xi to Jacobian matrix
@@ -568,13 +537,13 @@ def fsolve(
 
 
 		#return solution vector and number of iterations
-		if(abs(maxfuncval) < tol): 
+		if abs(maxfuncval) < tol: 
 			return fsolve_result(roots=v.tolist(),  iter=iter)
 
-		DetJacobi = abs(_np.linalg.det(Jacobi))
-
-		if(DetJacobi <= tol):
-			raise RuntimeError(f"Initial values yielded at iter={iter} Jacobi Det={DetJacobi}.") 
+		#Jacobi Determinant
+		DetJ = abs(_np.linalg.det(Jacobi))
+		if DetJ <= tol:
+			raise RuntimeError(f"At iter={iter} Jacobi Det={DetJ}.") 
 			
 		v = v - _np.linalg.solve(Jacobi, Fvals)
 

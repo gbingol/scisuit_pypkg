@@ -1,6 +1,5 @@
 #include "roots.h"
 
-#include <algorithm>
 #include <cmath>
 
 #include <core/math/roots.h>
@@ -56,15 +55,12 @@ PyObject* c_root_bisect(
 {
 	auto func = Make1DFunction(FuncObj);
 
-	std::string METHOD(method);
-	std::transform(METHOD.begin(), METHOD.end(), METHOD.begin(), ::tolower);
-
 	TRYBLOCK();
 	
 	roots::bisect_res res;
 
-	//python side assures method is either bf or rf
-	if (METHOD == "bf") //brute force
+	//python side ensures lower case and that method is either bf or rf
+	if (strcmp(method, "bf") == 0) //brute force
 		res = roots::bisection_bf(func, a, b, tol, maxiter);
 
 	else //regula falsi 
@@ -211,16 +207,13 @@ PyObject* c_root_muller(
 	RetComp.imag = res.Root.imag();
 	PyObject* CompObj = PyComplex_FromCComplex(RetComp);
 
-	PyObject* List = PyList_New(3);
-	PyList_SetItem(List, 0, Py_BuildValue("i", res.NIter));
-	PyList_SetItem(List, 1, Py_BuildValue("O", res.Converged ? Py_True : Py_False));
-	PyList_SetItem(List, 2, Py_BuildValue("s", res.Msg.c_str()));
+	PyObject* Dict = PyDict_New();
+	PyDict_SetItemString(Dict, "root", CompObj);
+	PyDict_SetItemString(Dict, "iter", Py_BuildValue("i", res.NIter));
+	PyDict_SetItemString(Dict, "conv", Py_BuildValue("O", res.Converged ? Py_True : Py_False));
+	PyDict_SetItemString(Dict, "msg", Py_BuildValue("s", res.Msg.c_str()));
 
-	PyObject* TupleObj = PyTuple_New(2);
-	PyTuple_SetItem(TupleObj, 0, CompObj);
-	PyTuple_SetItem(TupleObj, 1, List);
-
-	return TupleObj;
+	return Dict;
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
 
