@@ -246,7 +246,7 @@ class muller_result:
 			s += "Could not converge to a root."
 			s += self.msg
 			return s
-		s += f"Root={self.root}, ({self.iter} iterations)."
+		s += f"Root={self.root} ({self.iter} iterations)."
 		return s
 
 
@@ -300,7 +300,7 @@ class newton_result:
 	method:str
 
 	def __str__(self):
-		s = "Newton method using (" + self.method + ") \n"
+		s = "Newton method (" + self.method + ") \n"
 		if not self.conv:
 			s += "Could not converge to a root."
 			s += self.msg
