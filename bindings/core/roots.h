@@ -28,8 +28,9 @@ EXTERN PyObject *c_root_itp(
 	PyObject * FuncObj,
 	double a,
 	double b,
-	double k1 = 0.1,
-	double k2 = 2.5656733089749,
+	double k1=0.1,
+	double k2=2.5656733089749,
+	size_t n0=1,
 	double TOLERANCE = 1E-5,
 	size_t MAXITERATIONS = 100);
 

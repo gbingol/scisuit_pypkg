@@ -16,7 +16,7 @@ __all__ = ['bisect','itp', 'brentq', 'muller', 'newton', 'ridder', 'fsolve', "In
 _pydll.c_root_bisect.argtypes = [py_object, c_double, c_double, c_double, c_int, c_char_p, c_bool]
 _pydll.c_root_bisect.restype = py_object
 
-_pydll.c_root_itp.argtypes = [py_object, c_double, c_double, c_double, c_double, c_double, c_int]
+_pydll.c_root_itp.argtypes = [py_object, c_double, c_double, c_double, c_double,c_int, c_double, c_int]
 _pydll.c_root_itp.restype = py_object
 
 _pydll.c_root_brentq.argtypes = [py_object, c_double, c_double, c_double, c_int]
@@ -125,8 +125,9 @@ def itp(
 	f:FunctionType, 
 	a:Real, 
 	b:Real, 
-	k1:Real = 0.1,
-	k2:Real = 2.5656733089749,
+	k1:Real = -1.0,
+	k2:Real = 2.0,
+	n0:int=1,
 	tol:Real=1E-5, 
 	maxiter:int=100)->itp_result:
 	"""
@@ -148,6 +149,8 @@ def itp(
 
 	assert isinstance(k1, Real), "k1 must be real number."
 	assert isinstance(k2, Real), "k2 must be real number."
+	SQRT_5 = 2.23606797749979
+	assert 1.0< k2 < (1 + (1 + SQRT_5) / 2), f"k2 must be in (1.0, {(1 + (1 + SQRT_5) / 2)})"
 
 	assert isinstance(tol, Real), "tol must be Real number."
 	assert tol>0, "tol>0 expected"
@@ -158,8 +161,9 @@ def itp(
 	dct:dict =_pydll.c_root_itp(py_object(f), 
 						c_double(a), 
 						c_double(b),
-						c_double(k1),
+						c_double(k1 if k1>0 else 0.1/(b-a)),
 						c_double(k2), 
+						c_int(n0),
 						c_double(tol), 
 						c_int(maxiter))
 	

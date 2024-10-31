@@ -89,6 +89,7 @@ PyObject* c_root_itp(
 	double b,
 	double k1,
 	double k2,
+	size_t n0,
 	double TOLERANCE,
 	size_t MAXITERATIONS)
 {
@@ -96,7 +97,7 @@ PyObject* c_root_itp(
 
 	TRYBLOCK();
 
-	auto res = roots::itp(func, a, b, k1, k2, TOLERANCE, MAXITERATIONS);
+	auto res = roots::itp(func, a, b, k1, k2, n0, TOLERANCE, MAXITERATIONS);
 
 	PyObject* Dict = PyDict_New();
 	PyDict_SetItemString(Dict, "root", Py_BuildValue("d", res.Root));
