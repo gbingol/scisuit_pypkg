@@ -86,7 +86,11 @@ def moody(
 		TurbulenceLine.append(_TurbulenceOnset(_e_d))
 		for _Re in Re_Turbulent:
 			_cb = lambda f: _Colebrook(f, _Re, _e_d)
-			friction, _ = brentq(_cb, a=0.001, b=0.08)
+			result = brentq(_cb, a=0.001, b=0.08)
+			if result.conv:
+				friction = result.root
+			else:
+				raise RuntimeError("Could not converge to a root.")
 			x.append(_Re)
 			y.append(friction)
 
