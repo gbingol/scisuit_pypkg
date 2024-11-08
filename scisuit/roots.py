@@ -78,7 +78,7 @@ def bisect(
 	maxiter: Maximum number of iterations  
 	method: ("bf" or "rf", for brute-force/regula falsi , True modified rf).
 	"""
-	assert callable(f), "f must be function"
+	assert isinstance(f, FunctionType), "f must be function"
 	assert isinstance(a, Real), "a must be real number."
 	assert isinstance(b, Real), "b must be real number."
 	assert method[0] in ["bf", "rf"], "method must be 'bf' or 'rf' ."
@@ -213,7 +213,7 @@ def brentq(
 	tol: tolerance for error  
 	maxiter: Maximum number of iterations during the search for the root
 	"""
-	assert callable(f), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(a, Real), "a must be real number."
 	assert isinstance(b, Real), "b must be real number."
 
@@ -271,7 +271,7 @@ def muller(
 	tol: tolerance for error  
 	maxiter: Max number of iterations
 	"""
-	assert callable(f), "f must be function."
+	assert isinstance(f, FunctionType), "f must be function."
 	assert isinstance(x0, Complex), "x0 must be a Complex/Real number."
 
 	assert isinstance(tol, Real), "tol must be Real number."
@@ -284,13 +284,9 @@ def muller(
 		assert x1 == None, "if h defined, x1 cannot be defined"
 		assert x2 == None, "if h defined, x2 cannot be defined"
 	
-	if x1 != None:
+	if x1 != None or x2 != None:
 		assert x2 != None, "if x1 defined, x2 must also be defined"
-	
-	if x2 != None:
 		assert x1 != None, "if x2 defined, x1 must also be defined"
-	
-
 	
 	dct:dict = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 
