@@ -279,6 +279,18 @@ def muller(
 
 	assert isinstance(maxiter, int), "maxiter must be int."
 	assert maxiter>0, "maxiter>0 expected."
+
+	if h != None:
+		assert x1 == None, "if h defined, x1 cannot be defined"
+		assert x2 == None, "if h defined, x2 cannot be defined"
+	
+	if x1 != None:
+		assert x2 != None, "if x1 defined, x2 must also be defined"
+	
+	if x2 != None:
+		assert x1 != None, "if x2 defined, x1 must also be defined"
+	
+
 	
 	dct:dict = _pydll.c_root_muller(f, x0, h, x1, x2, c_double(tol), c_int(maxiter))
 

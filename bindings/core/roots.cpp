@@ -169,9 +169,6 @@ PyObject* c_root_muller(
 
 	if (hObj != Py_None)
 	{
-		IF_PYERR(X1Obj != Py_None, PyExc_ValueError, "if h defined, x1 cannot be defined");
-		IF_PYERR(X2Obj != Py_None, PyExc_ValueError, "if h defined, x2 cannot be defined");
-
 		bool res = AssignComplexValue(hObj, &h, ErrMsg);
 		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
@@ -180,16 +177,12 @@ PyObject* c_root_muller(
 
 	if (X1Obj != Py_None)
 	{
-		IF_PYERR(X2Obj == Py_None, PyExc_ValueError, "if x1 defined, x2 must also be defined");
-
 		bool res = AssignComplexValue(X1Obj, &X1, ErrMsg);
 		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
 
 	if (X2Obj != Py_None)
 	{
-		IF_PYERR(X1Obj == Py_None, PyExc_ValueError, "if x2 defined, x1 must also be defined");
-
 		bool res = AssignComplexValue(X2Obj, &X2, ErrMsg);
 		IF_PYERR(res == false, PyExc_RuntimeError, ErrMsg.c_str());
 	}
