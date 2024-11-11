@@ -31,10 +31,10 @@ pybindfile = f"pybind{sys.version_info.major}{sys.version_info.minor}.dll"
 
 setup(
 	name = 'scisuit',
-	version = '1.4.1', 
+	version = '1.4.2', 
 	author = 'Gokhan Bingol, PhD',
 	author_email = 'gbingol@pebytes.com',
-	description = 'Scientific Computing Package',
+	description = 'All-in-One Scientific Computing Package',
 	long_description = open('README.md').read(),
 	long_description_content_type = 'text/markdown',
 	license = 'GPLv3',
