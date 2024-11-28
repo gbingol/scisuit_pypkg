@@ -1,15 +1,15 @@
-import dataclasses as _dc
-import numbers as _numbers
+from dataclasses import dataclass
+from numbers import Real
 from typing import Iterable
 
-import numpy as _np
+from numpy import ndarray, zeros
 from numpy.polynomial import polynomial as _Polynomial
-
-from ctypes import py_object, c_double
-from ._ctypeslib import pydll as _pydll
 from .util import minmax
 
 
+
+from ctypes import py_object, c_double
+from ._ctypeslib import pydll as _pydll
 
 
 _pydll.c_fit_expfit.argtypes = [py_object, py_object, py_object]
@@ -43,15 +43,11 @@ _pydll.c_fit_spline.restype = py_object
 
 def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 	"""
-	Linear interpolation
+	Linear interpolation returns y-value in [y1, y2] corresponding to xval.
 
-	## Inputs:
-	x1, y1: First point \n
-	x2, y2: Second point \n
+	x1, y1: First point  
+	x2, y2: Second point  
 	xval: x-value in [x1, x2] 
-
-	## Returns:
-	y-value in [y1, y2] corresponding to xval
 	"""
 
 	if(x1 == x2): 
@@ -70,11 +66,11 @@ def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
 #-------------------------------------------------
 
 def lagrange(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real], 
+		x:Iterable[Real], 
+		y:Iterable[Real], 
 		value:float)->float:
 	"""Constructs lagrange polynomial from x,y to compute the given value."""
-	assert isinstance(value, _numbers.Real)
+	assert isinstance(value, Real)
 	return _pydll.c_fit_lagrange(x, y, c_double(value))
 
 
@@ -84,7 +80,7 @@ def lagrange(
 #-------------------------------------
 
 
-@_dc.dataclass
+@dataclass
 class SplineResult:
 	"""
 	poly: Numpy polynomial
@@ -96,8 +92,8 @@ class SplineResult:
 
 
 def spline(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real])->list[SplineResult]:
+		x:Iterable[Real], 
+		y:Iterable[Real])->list[SplineResult]:
 	"""Constructs natural cubic spline polynomials from x, y"""
 	lst = _pydll.c_fit_spline(x, y)	
 	return  [SplineResult(_Polynomial.Polynomial(l[0]), l[1], l[2]) for l in lst]
@@ -108,7 +104,7 @@ def spline(
 
 #------------------------------------------
 
-@_dc.dataclass
+@dataclass
 class expfitResult:
 	a:float = None
 	b:float = None
@@ -117,19 +113,19 @@ class expfitResult:
 		return "y = " + str(self.a) + "*exp(" + str(self.b) + "*x"
 	
 def expfit(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real], 
+		x:Iterable[Real], 
+		y:Iterable[Real], 
 		intercept:None|float=None)->expfitResult:
 	"""
-	Fits x,y to the equation y = a*exp(b*x) \n
+	Fits x,y to the equation y = a*exp(b*x)  
 	Returns [a, b]
 
 	## Note:
-	If intercept is not provided both a, b are computed. \n
-	If intercept is given then a=intercept and b is computed accordingly.
+	- If intercept is not provided both a, b are computed.  
+	- If intercept is given then a=intercept and b is computed accordingly.
 	"""
 	if(intercept!=None):
-		assert isinstance(intercept, _numbers.Real)
+		assert isinstance(intercept, Real)
 
 	lst = _pydll.c_fit_expfit(x, y, intercept)
 
@@ -140,7 +136,7 @@ def expfit(
 #------------------------------------------------
 
 
-@_dc.dataclass
+@dataclass
 class logfitResult:
 	a:float = None
 	b: float = None
@@ -149,10 +145,10 @@ class logfitResult:
 		return "y = " + str(self.a) + "*ln(x) + " + str(self.b)
 
 def logfit(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real])->logfitResult:
+		x:Iterable[Real], 
+		y:Iterable[Real])->logfitResult:
 	"""
-	Fits x,y to the equation y = a*ln(x) + b \n
+	Fits x,y to the equation y = a*ln(x) + b  
 	Returns [a, b]
 	"""
 	lst = _pydll.c_fit_logfit(x, y)
@@ -163,7 +159,7 @@ def logfit(
 
 #---------------------------------------------------
 
-@_dc.dataclass
+@dataclass
 class logistfitResult:
 	L:float = None
 	b0:float = None
@@ -175,18 +171,17 @@ class logistfitResult:
 				str(self.b0) + " + " + str(self.b1) + "x" + "))"
 
 def logistfit(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real], 
-		limit:_numbers.Real = None)->logistfitResult:
+		x:Iterable[Real], 
+		y:Iterable[Real], 
+		limit:Real = None)->logistfitResult:
 	"""
-	Fits to the equation y = L / (1 + exp(b0 + b1*x)) \n
+	Fits to the equation y = L / (1 + exp(b0 + b1*x))  
 	Returns either [L, b0, b1] or [b0, b1]
 
-	## Inputs:
 	limit: None or float
 	"""
 	if(limit!=None):
-		assert isinstance(limit, _numbers.Real)
+		assert isinstance(limit, Real)
 
 	lst =  _pydll.c_fit_logistfit(x, y, limit)
 
@@ -201,11 +196,11 @@ def logistfit(
 #--------------------------------------
 
 def polyfit(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real], 
+		x:Iterable[Real], 
+		y:Iterable[Real], 
 		deg)->tuple:
 	"""
-	Uses numpy.polynomial.polynomial.polyfit
+	Uses numpy.polynomial.polynomial.polyfit  
 	returns (coefficients, residuals)
 	"""
 	coeffs, stats = _Polynomial.polyfit(x=x, y=y, deg=deg)
@@ -216,7 +211,7 @@ def polyfit(
 
 #----------------------------------------------
 
-@_dc.dataclass
+@dataclass
 class powfitResult:
 	a:float = None
 	n:float = None
@@ -225,10 +220,10 @@ class powfitResult:
 		return "y = " + str(self.a) + "*x^" + str(self.n)
 
 def powfit(
-		x:Iterable[_numbers.Real], 
-		y:Iterable[_numbers.Real])->powfitResult:
+		x:Iterable[Real], 
+		y:Iterable[Real])->powfitResult:
 	"""
-	Fits to the equation y = a*x^n \n
+	Fits to the equation y = a*x^n  
 	Returns [a, n]
 	"""
 	lst = _pydll.c_fit_powfit(x,y)
@@ -240,21 +235,21 @@ def powfit(
 #-------------------------------------------
 
 def approx(
-		x:_np.ndarray, 
-		y:_np.ndarray, 
-		n=50)->tuple[_np.ndarray, _np.ndarray]:
+		x:ndarray, 
+		y:ndarray, 
+		n=50)->tuple[ndarray, ndarray]:
 	"""
-	Returns points which linearly interpolate (
-	interpolation takes place at n equally spaced points 
+	Returns points which linearly interpolate (  
+	interpolation takes place at n equally spaced points   
 	spanning the interval [min(x), max(x)]).
 
 		
-	`x, y:` Numeric vectors giving the coordinates of the points to be interpolated. 
+	`x, y:` Numeric vectors giving the coordinates of the points to be interpolated.  
 	`n:` Number of equally spaced data points [min(x), min(y)]
 	"""
 	assert n>1, "n>1 expected"
 
-	v = _np.zeros(n)
+	v = zeros(n)
 	if type(y) == type(None):
 		Min, Max = minmax(x)
 		strideLen = (Max-Min)/(n-1)
@@ -267,7 +262,7 @@ def approx(
 	assert len(x)==len(y), "x and y must have same lengths"
 
 	"""
-	Generate n data points in the interval min(x) and max(x)
+	Generate n data points in the interval min(x) and max(x)  
 	Note that data points are sorted by nature.
 	"""
 	XX = approx(x, None, n)
