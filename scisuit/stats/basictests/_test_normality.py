@@ -28,7 +28,12 @@ _pydll.c_stat_test_shapirowilkinson.restype=py_object
 @dataclass
 class ADTestRes:
 	pvalue:float
-	A2:float #test statistics
+	A2:float 
+
+	def __str__(self):
+		s = f"p-value: {self.pvalue} \n"
+		s += f"Test statistic: {self.A2}"
+		return s
 
 
 def anderson(x:Iterable)->ADTestRes:
@@ -54,6 +59,12 @@ class Ks1SampletestResult:
 	D:float #test statistics
 	D_loc:float #location of max distance (D)
 	D_sign:int
+
+	def __str__(self):
+		s = f"p-value: {self.pvalue} \n"
+		s += f"Test statistic: {self.D} and its sign {self.D_sign} \n"
+		s += f"Max distance at: {self.D_loc}"
+		return s
 	
 
 
@@ -103,8 +114,14 @@ def ks_1samp(
 @dataclass
 class ShapiroTestResult:
 	pvalue:float
-	W:float #test statistics
+	W:float 
 	msg:str #warning message, if exists
+
+	def __str__(self):
+		s = f"p-value: {self.pvalue} \n"
+		s += f"Test statistic: {self.W}"
+		s += ("\n" + self.msg) if len(self.msg)>0 else ""
+		return s
 
 
 def shapiro(x:Iterable)->ShapiroTestResult:
@@ -113,7 +130,7 @@ def shapiro(x:Iterable)->ShapiroTestResult:
 
 	- x must be iterable containing only Real numbers
 	- x must have at least length 3.
-	- if len(x)>5000, W is accurate, but the p-value may not be.
+	- if len(x)>5000, W is accurate, but the p-value may not be.  
 
 	Reference:
 	- Royston P (1995). Remark AS R94: A Remark on Algorithm AS 181: The W-test for Normality
