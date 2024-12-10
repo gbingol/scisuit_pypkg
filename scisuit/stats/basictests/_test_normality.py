@@ -31,7 +31,8 @@ class ADTestRes:
 	A2:float 
 
 	def __str__(self):
-		s = f"p-value: {self.pvalue} \n"
+		s = "Anderson-Darling Test \n"
+		s += f"p-value: {self.pvalue} \n"
 		s += f"Test statistic: {self.A2}"
 		return s
 
@@ -61,7 +62,8 @@ class Ks1SampletestResult:
 	D_sign:int
 
 	def __str__(self):
-		s = f"p-value: {self.pvalue} \n"
+		s = "Kolmogorov-Smirnov test \n"
+		s += f"p-value: {self.pvalue} \n"
 		s += f"Test statistic: {self.D} and its sign {self.D_sign} \n"
 		s += f"Max distance at: {self.D_loc}"
 		return s
@@ -118,7 +120,8 @@ class ShapiroTestResult:
 	msg:str #warning message, if exists
 
 	def __str__(self):
-		s = f"p-value: {self.pvalue} \n"
+		s = "Shapiro-Wilkinson Test \n"
+		s += f"p-value: {self.pvalue} \n"
 		s += f"Test statistic: {self.W}"
 		s += ("\n" + self.msg) if len(self.msg)>0 else ""
 		return s
