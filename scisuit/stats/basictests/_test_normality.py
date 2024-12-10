@@ -32,8 +32,8 @@ class ADTestRes:
 
 	def __str__(self):
 		s = "Anderson-Darling Test \n"
-		s += f"p-value: {self.pvalue} \n"
-		s += f"Test statistic: {self.A2}"
+		s += f"p-value: {round(self.pvalue, 4)} \n"
+		s += f"Test statistic: {round(self.A2, 4)}"
 		return s
 
 
@@ -63,8 +63,8 @@ class Ks1SampletestResult:
 
 	def __str__(self):
 		s = "Kolmogorov-Smirnov test \n"
-		s += f"p-value: {self.pvalue} \n"
-		s += f"Test statistic: {self.D} and its sign {self.D_sign} \n"
+		s += f"p-value: {round(self.pvalue, 3)} \n"
+		s += f"Test statistic: {round(self.D, 4)} and its sign {self.D_sign} \n"
 		s += f"Max distance at: {self.D_loc}"
 		return s
 	
@@ -121,8 +121,8 @@ class ShapiroTestResult:
 
 	def __str__(self):
 		s = "Shapiro-Wilkinson Test \n"
-		s += f"p-value: {self.pvalue} \n"
-		s += f"Test statistic: {self.W}"
+		s += f"p-value: {round(self.pvalue, 4)} \n"
+		s += f"Test statistic: {round(self.W, 4)}"
 		s += ("\n" + self.msg) if len(self.msg)>0 else ""
 		return s
 
