@@ -1,6 +1,7 @@
-from setuptools import setup, find_packages, Distribution
-import platform
 import sys
+from platform import machine, system
+
+from setuptools import Distribution, find_packages, setup
 
 
 
@@ -10,13 +11,13 @@ Distribution.has_ext_modules = lambda *args: True
 
 def get_platform_tag():
 	"""Get platform tag for the current system."""
-	system = platform.system()
-	architecture = platform.machine()
+	_system = system()
+	_architecture = machine()
 
 	system_map = {'Windows': 'win', 'Linux': 'manylinux1', 'Darwin': 'macosx'}
 	arch_map = {'x86_64': 'amd64', 'aarch64': 'arm64', 'armv7l': 'armv7'}
-	system_tag = system_map.get(system, system.lower())
-	arch_tag = arch_map.get(architecture, architecture.lower())
+	system_tag = system_map.get(_system, _system.lower())
+	arch_tag = arch_map.get(_architecture, _architecture.lower())
 
 	return f'{system_tag}_{arch_tag}'
 
