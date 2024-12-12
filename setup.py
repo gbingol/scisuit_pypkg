@@ -4,7 +4,7 @@ import sys
 
 
 
-Distribution.has_ext_modules=lambda *args: True
+Distribution.has_ext_modules = lambda *args: True
 
 
 
@@ -31,10 +31,10 @@ pybindfile = f"pybind{sys.version_info.major}{sys.version_info.minor}.dll"
 
 setup(
 	name = 'scisuit',
-	version = '1.4.2', 
+	version = '1.4.3', 
 	author = 'Gokhan Bingol, PhD',
-	author_email = 'gbingol@pebytes.com',
-	description = 'All-in-One Scientific Computing Package',
+	author_email = 'gbingol@hotmail.com',
+	description = 'High performance, all-in-one scientific computing package.',
 	long_description = open('README.md').read(),
 	long_description_content_type = 'text/markdown',
 	license = 'GPLv3',
