@@ -120,7 +120,7 @@ class ShapiroTestResult:
 	msg:str #warning message, if exists
 
 	def __str__(self):
-		s = "Shapiro-Wilkinson Test \n"
+		s = "Shapiro-Wilk Test \n"
 		s += f"p-value: {round(self.pvalue, 4)} \n"
 		s += f"Test statistic: {round(self.W, 4)}"
 		s += ("\n" + self.msg) if len(self.msg)>0 else ""
@@ -129,7 +129,7 @@ class ShapiroTestResult:
 
 def shapiro(x:Iterable)->ShapiroTestResult:
 	"""
-	Performs Shapiro-Wilkinson test
+	Performs Shapiro-Wilk test
 
 	- x must be iterable containing only Real numbers
 	- x must have at least length 3.
