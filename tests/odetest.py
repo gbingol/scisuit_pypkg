@@ -2,7 +2,7 @@ import math
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from scisuit.ode import euler, heun
+from scisuit.ode import euler, heun, runge_kutta
 
 def f(x, y): 
 	return 4*math.exp(0.8*x)-0.5*y
@@ -23,3 +23,9 @@ print("--------------")
 
 sol_heun = heun(f, t_span=[0, 2], y0=2, t_eval=teval, repeat=15)
 print(sol_heun)
+
+
+print("--------------")
+
+sol_rk = runge_kutta(f, t_span=[0, 2], y0=2, t_eval=teval, order=5)
+print(sol_rk)

@@ -28,6 +28,12 @@ EXTERN PyObject * c_core_ode_heun(
 	size_t	Repeat = 1);
 
 
+EXTERN PyObject * c_core_ode_rungekutta(
+	PyObject * FuncObj,
+	PyObject* t_span,
+	double y0,
+	PyObject* t_eval,
+	uint8_t Order = 4);
 
 
 #undef EXTERN
