@@ -2,8 +2,10 @@ import math
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from scisuit.ode import euler, heun, runge_kutta, runge_kutta45
+from scisuit.ode import euler, heun, runge_kutta, runge_kutta45, euler_set
 
+
+"""
 def f(x, y): 
 	return 4*math.exp(0.8*x)-0.5*y
 
@@ -35,3 +37,13 @@ print("--------------")
 
 sol_adaprk = runge_kutta45(f, t_span=[0, 4], y0=2)
 print(sol_adaprk)
+
+"""
+
+def f(t, y):
+	y1, y2 = y
+	dydt = [-0.5*y1, 4-0.3*y2-0.1*y1]  # dy1/dt = -0.5*y1, dy2/dt =4-0.3*y2-0.1*y1
+	return dydt
+
+solution = euler_set(f, [0,2], [4,6], t_eval=0.5)
+print(solution)
