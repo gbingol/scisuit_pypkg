@@ -52,7 +52,7 @@ class ode_result:
 @dataclass
 class result_euler(ode_result):
 	def __str__(self):
-		s = "Euler's Method for Set of Equations \n"
+		s = "Euler's Method \n"
 		s += str(super().__str__())
 		return s
 
@@ -237,7 +237,7 @@ def runge_kutta45(
 @dataclass
 class result_euler_set(ode_result):
 	def __str__(self):
-		s = "Euler's Method \n"
+		s = "Euler's Method for Set of Equations \n"
 		s += str(super().__str__())
 		return s
 
