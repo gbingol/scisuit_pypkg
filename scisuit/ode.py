@@ -170,6 +170,56 @@ def heun(f:FunctionType,
 #----------------------------Runge-Kutta Different Orders -----------------------------------------------
 
 
+def __rungekutta2(fun, t, y, h):
+	k1 = np.array(fun(t, y), dtype=np.float64)
+	k2 = np.array(fun(t + 3.0 / 4.0 * h, y + 3.0 / 4.0 * h * k1), dtype=np.float64)
+
+	return (1.0 / 3.0 * k1 + 2.0 / 3.0 * k2) * h
+
+
+def __rungekutta3(fun, t, y, h):
+	k1 = np.array(fun(t, y), dtype=np.float64)
+	k2 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=np.float64)
+	k3 = np.array(fun(t + h, y - k1 * h + 2.0 * k2 * h), dtype=np.float64)
+
+	return h / 6.0 * (k1 + 4.0 * k2 + k3)
+
+def __rungekutta4(fun, t, y, h):
+	k1 = np.array(fun(t, y), dtype=np.float64)
+	k2 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=np.float64)
+	k3 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k2), dtype=np.float64)
+	k4 = np.array(fun(t + h, y + k3 * h), dtype=np.float64)
+
+	return 1/6*(k1 + 2*k2 + 2*k3 + k4)*h
+
+
+def __rungekutta5(fun, t, y, h):
+	k1 = np.array(fun(t, y), dtype=np.float64)
+	k2 = np.array(fun(
+		t + 1.0 / 4.0 * h, 
+		y + 1.0 / 4.0 * h * k1), 
+		dtype=np.float64)
+	k3 = np.array(fun(
+		t + 1.0 / 4.0 * h, 
+		y + 1.0 / 8.0 * h * k1 + 1.0 / 8.0 * h * k2), 
+		dtype=np.float64)
+	k4 = np.array(fun(
+		t + 1.0 / 2.0 * h, 
+		y - 1.0 / 2.0 * h * k2 + h * k3), 
+		dtype=np.float64)
+	k5 = np.array(fun(
+		t + 3.0 / 4.0 * h, 
+		y + 3.0 / 16.0 * h * k1 + 9.0 / 16.0 * h * k4), 
+		dtype=np.float64)
+	k6 = np.array(fun(
+		t + h, 
+		y - 3.0 / 7.0 * k1 * h + 2.0 / 7.0 * k2 * h + 12.0 / 7.0 * k3 * h - 12.0 / 7.0 * k4 * h + 8.0 / 7.0 * k5 * h), 
+		dtype=np.float64)
+		
+	return h / 90.0 * (7 * k1 + 32 * k3 + 12 * k4 + 32 * k5 + 7 * k6)
+
+
+
 @dataclass
 class result_rungekutta(ode_result):
 	order:int
@@ -179,22 +229,70 @@ class result_rungekutta(ode_result):
 		s += str(super().__str__())
 		return s
 
-def runge_kutta(f:FunctionType, 
+
+def __runge_kutta_single(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Real, 
 		  t_eval:Iterable[Real]|Real = None,
 		  order:int = 4)->result_rungekutta:
-	assert isinstance(f, FunctionType), "fun must be a function."
-	assert isinstance(y0, Real), "y0 must be Real."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real]|Real"
-	assert isinstance(order, int) and 2<=order<=5, "order must be an integer in [2, 5]."
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
 
 	result = _pydll.c_core_ode_rungekutta(f, t_span, c_double(y0), t_eval, c_uint8(order))
 	return result_rungekutta(t=result["t"], y=result["y"], y0=y0, order=order)
 
+
+
+def __runge_kutta_set(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0:Iterable[Real], 
+		  t_eval:Iterable[Real]|Real = None,
+		  order:int = 4)->result_rungekutta:
+
+	func = [__rungekutta2, __rungekutta3, __rungekutta4, __rungekutta5][order-2]
+
+	x = np.arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else np.array(t_eval)
+	y = np.array(y0, dtype=np.float64)
+
+	yvals = [y.tolist()]
+
+	k = f(x[0], y)
+	for i in range(1, len(x)):
+		h = float(x[i]-x[i-1])
+		y += func(f, x[i], np.array(y, dtype=np.float64), h)
+		
+		yvals.append(y.tolist())
+	
+	return result_rungekutta(t=x, y=yvals, y0=y0, order=4)
+
+
+
+def runge_kutta(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0:Iterable[Real] | Real, 
+		  t_eval:Iterable[Real]|Real,
+		  order:int = 4)->result_rungekutta:
+	"""
+	Solve ODE or set of ODEs using Runge-Kutta Method 
+
+	---
+	f: function of f(t,y).  
+	t_span: The interval wherein the solution is desired.  
+	y0: Initial condition(s).  
+	t_eval: Specific nodes at which the solution is desired or step size.
+	order: Order of Runge-Kutta method in [2, 5]
+	"""
+	assert isinstance(f, FunctionType), "f must be a function."
+	assert isinstance(y0, Iterable|Real), "y0 must be Iterable[Real] | Real."
+	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real] | Real"
+	assert isinstance(order, int) and 2<=order<=5, "order must be an integer in [2, 5]."
+
+	_tspan = [v for v in t_span if isinstance(v, Real)]
+	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
+	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
+
+	if isinstance(y0, Real):
+		return __runge_kutta_single(f, t_span, y0, t_eval, order=order)
+	
+	return __runge_kutta_set(f, t_span, y0, t_eval, order)
 
 
 
@@ -279,11 +377,3 @@ def runge_kutta45(
 		y_values.append(float(y))
 
 	return result_rungekutta45(t=t_values, y=y_values, y0=y0)
-	
-
-
-
-#------------------------------------------------------------------------
-#-----------------------------------------------------------------------
-
-
