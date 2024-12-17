@@ -34,8 +34,9 @@ class ode_result:
 	y0:list[Real]
 
 	def __str__(self):
+		_s0 = "s were" if isinstance(self.y0, list) else " was"
 		s = f"Initial value: {self.y0} \n"
-		s += f"Function was evaluated at {len(self.t)} nodes. \n"
+		s += f"Function{_s0} evaluated at {len(self.t)} nodes. \n"
 		s += "Nodes: " + str(self.t) + "\n"
 		s += "Values: " + str(self.y) 
 		return s
@@ -52,24 +53,69 @@ class ode_result:
 @dataclass
 class result_euler(ode_result):
 	def __str__(self):
-		s = "Euler's Method \n"
+		s = "Euler's Method " + ("for Set of Equations \n" if isinstance(self.y0, Iterable) else " \n")
 		s += str(super().__str__())
 		return s
 
-def euler(f:FunctionType, 
+
+
+def __euler_single(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Real, 
 		  t_eval:Iterable[Real]|Real = None)->result_euler:
-	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Real), "y0 must be Real."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real]|Real"
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
-
+	
 	result = _pydll.c_core_ode_euler(f, t_span, c_double(y0), t_eval)
 	return result_euler(t=result["t"], y=result["y"], y0=y0)
 
+
+
+
+def __euler_set(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0:Iterable[Real], 
+		  t_eval:Iterable[Real]|Real = None)->result_euler:
+	
+	Nodes = np.arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else np.array(t_eval)
+
+	y = np.array(y0, dtype=np.float64)
+	yvals = [y.tolist()]
+	for i in range(1, len(Nodes)):
+		h = float(Nodes[i]-Nodes[i-1])
+		slopes = np.array(f(float(Nodes[i]), y.tolist()), dtype=np.float64)
+		y += slopes*h
+		
+		yvals.append(y.tolist())
+	
+	return result_euler(t=Nodes, y=yvals, y0=y0)
+
+
+
+
+def euler(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0:Iterable[Real] | Real, 
+		  t_eval:Iterable[Real]|Real)->result_euler:
+	"""
+	Solve ODE or set of ODEs using Euler's Method 
+
+	---
+	f: function of f(t,y).  
+	t_span: The interval wherein the solution is desired.  
+	y0: Initial condition(s).  
+	t_eval: Specific nodes at which the solution is desired or step size.
+	"""
+	assert isinstance(f, FunctionType), "f must be a function."
+	assert isinstance(y0, Iterable|Real), "y0 must be Iterable[Real] | Real."
+	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real] | Real"
+
+	_tspan = [v for v in t_span if isinstance(v, Real)]
+	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
+	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
+
+	if isinstance(y0, Real):
+		return __euler_single(f, t_span, y0, t_eval)
+	
+	return __euler_set(f, t_span, y0, t_eval)
 
 
 
@@ -88,11 +134,22 @@ class result_heun(ode_result):
 		s += str(super().__str__())
 		return s
 
+
 def heun(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Real, 
-		  t_eval:Iterable[Real]|Real = None,
+		  t_eval:Iterable[Real]|Real,
 		  repeat:int = 1)->result_heun:
+	"""
+	Solve ODE or set of ODEs using Heun's Method 
+
+	---
+	f: function f(t,y).  
+	t_span: The interval wherein the solution is desired.  
+	y0: Initial condition.  
+	t_eval: Specific nodes at which the solution is desired or step size.  
+	repeat: The number times the prediction-correction cycle should be performed.
+	"""
 	assert isinstance(f, FunctionType), "f must be a function."
 	assert isinstance(y0, Real), "y0 must be Real."
 	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real]|Real"
@@ -103,6 +160,8 @@ def heun(f:FunctionType,
 
 	result = _pydll.c_core_ode_heun(f, t_span, c_double(y0), t_eval, c_size_t(repeat))
 	return result_heun(t=result["t"], y=result["y"], y0=y0, repeat=repeat )
+
+
 
 
 
@@ -228,39 +287,3 @@ def runge_kutta45(
 #-----------------------------------------------------------------------
 
 
-
-#--------------------------------------------------------------------------------
-#---------------------------   Euler's Method for Set of Eq --------------------------------------
-
-
-
-@dataclass
-class result_euler_set(ode_result):
-	def __str__(self):
-		s = "Euler's Method for Set of Equations \n"
-		s += str(super().__str__())
-		return s
-
-def euler_set(f:FunctionType, 
-		  t_span:Iterable[Real], 
-		  y0:list[Real], 
-		  t_eval:Iterable[Real]|Real = None)->result_euler_set:
-	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Iterable), "y0 must be Iterable."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real]|Real"
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
-
-	tEvalNodes = np.arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else np.array(t_eval)
-
-	y = np.array(y0, dtype=np.float64)
-	yvals = [y.tolist()]
-	for i in range(1, len(tEvalNodes)):
-		h = float(tEvalNodes[i]-tEvalNodes[i-1])
-		slopes = np.array(f(float(tEvalNodes[i]), y.tolist()), dtype=np.float64)
-		y += slopes*h
-		
-		yvals.append(y.tolist())
-	
-	return result_euler_set(t=tEvalNodes, y=yvals, y0=y0)
