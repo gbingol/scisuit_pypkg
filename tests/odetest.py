@@ -43,7 +43,7 @@ print(sol_euler)
 
 """
 
-solset_rk = runge_kutta(f_system, [0,2], [4,6], t_eval=0.5)
+solset_rk = runge_kutta(f_system, [0,2], [4,6], t_eval=0.5, order=5)
 print(solset_rk)
 
 

@@ -3,7 +3,7 @@ from numbers import Real
 from types import FunctionType
 from typing import Iterable
 
-import numpy as np
+from numpy import array, arange, float64
 
 
 from ctypes import c_double, c_size_t, c_uint8, py_object
@@ -75,13 +75,13 @@ def __euler_set(f:FunctionType,
 		  y0:Iterable[Real], 
 		  t_eval:Iterable[Real]|Real = None)->result_euler:
 	
-	Nodes = np.arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else np.array(t_eval)
+	Nodes = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
 
-	y = np.array(y0, dtype=np.float64)
+	y = array(y0, dtype=float64)
 	yvals = [y.tolist()]
 	for i in range(1, len(Nodes)):
 		h = float(Nodes[i]-Nodes[i-1])
-		slopes = np.array(f(float(Nodes[i]), y.tolist()), dtype=np.float64)
+		slopes = array(f(float(Nodes[i]), y.tolist()), dtype=float64)
 		y += slopes*h
 		
 		yvals.append(y.tolist())
@@ -171,50 +171,50 @@ def heun(f:FunctionType,
 
 
 def __rungekutta2(fun, t, y, h):
-	k1 = np.array(fun(t, y), dtype=np.float64)
-	k2 = np.array(fun(t + 3.0 / 4.0 * h, y + 3.0 / 4.0 * h * k1), dtype=np.float64)
+	k1 = array(fun(t, y), dtype=float64)
+	k2 = array(fun(t + 3.0 / 4.0 * h, y + 3.0 / 4.0 * h * k1), dtype=float64)
 
 	return (1.0 / 3.0 * k1 + 2.0 / 3.0 * k2) * h
 
 
 def __rungekutta3(fun, t, y, h):
-	k1 = np.array(fun(t, y), dtype=np.float64)
-	k2 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=np.float64)
-	k3 = np.array(fun(t + h, y - k1 * h + 2.0 * k2 * h), dtype=np.float64)
+	k1 = array(fun(t, y), dtype=float64)
+	k2 = array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=float64)
+	k3 = array(fun(t + h, y - k1 * h + 2.0 * k2 * h), dtype=float64)
 
 	return h / 6.0 * (k1 + 4.0 * k2 + k3)
 
 def __rungekutta4(fun, t, y, h):
-	k1 = np.array(fun(t, y), dtype=np.float64)
-	k2 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=np.float64)
-	k3 = np.array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k2), dtype=np.float64)
-	k4 = np.array(fun(t + h, y + k3 * h), dtype=np.float64)
+	k1 = array(fun(t, y), dtype=float64)
+	k2 = array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k1), dtype=float64)
+	k3 = array(fun(t + 1.0 / 2.0 * h, y + 1.0 / 2.0 * h * k2), dtype=float64)
+	k4 = array(fun(t + h, y + k3 * h), dtype=float64)
 
 	return 1/6*(k1 + 2*k2 + 2*k3 + k4)*h
 
 
 def __rungekutta5(fun, t, y, h):
-	k1 = np.array(fun(t, y), dtype=np.float64)
-	k2 = np.array(fun(
+	k1 = array(fun(t, y), dtype=float64)
+	k2 = array(fun(
 		t + 1.0 / 4.0 * h, 
 		y + 1.0 / 4.0 * h * k1), 
-		dtype=np.float64)
-	k3 = np.array(fun(
+		dtype=float64)
+	k3 = array(fun(
 		t + 1.0 / 4.0 * h, 
 		y + 1.0 / 8.0 * h * k1 + 1.0 / 8.0 * h * k2), 
-		dtype=np.float64)
-	k4 = np.array(fun(
+		dtype=float64)
+	k4 = array(fun(
 		t + 1.0 / 2.0 * h, 
 		y - 1.0 / 2.0 * h * k2 + h * k3), 
-		dtype=np.float64)
-	k5 = np.array(fun(
+		dtype=float64)
+	k5 = array(fun(
 		t + 3.0 / 4.0 * h, 
 		y + 3.0 / 16.0 * h * k1 + 9.0 / 16.0 * h * k4), 
-		dtype=np.float64)
-	k6 = np.array(fun(
+		dtype=float64)
+	k6 = array(fun(
 		t + h, 
 		y - 3.0 / 7.0 * k1 * h + 2.0 / 7.0 * k2 * h + 12.0 / 7.0 * k3 * h - 12.0 / 7.0 * k4 * h + 8.0 / 7.0 * k5 * h), 
-		dtype=np.float64)
+		dtype=float64)
 		
 	return h / 90.0 * (7 * k1 + 32 * k3 + 12 * k4 + 32 * k5 + 7 * k6)
 
@@ -249,15 +249,15 @@ def __runge_kutta_set(f:FunctionType,
 
 	func = [__rungekutta2, __rungekutta3, __rungekutta4, __rungekutta5][order-2]
 
-	x = np.arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else np.array(t_eval)
-	y = np.array(y0, dtype=np.float64)
+	x = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
+	y = array(y0, dtype=float64)
 
 	yvals = [y.tolist()]
 
 	k = f(x[0], y)
 	for i in range(1, len(x)):
 		h = float(x[i]-x[i-1])
-		y += func(f, x[i], np.array(y, dtype=np.float64), h)
+		y += func(f, x[i], array(y, dtype=float64), h)
 		
 		yvals.append(y.tolist())
 	
@@ -363,7 +363,7 @@ def runge_kutta45(
 	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
 
 	t, t_end = t_span
-	y = np.array([y0], dtype=float)
+	y = array([y0], dtype=float)
 	h = h0
 
 	t_values = [t]
