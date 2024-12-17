@@ -356,6 +356,14 @@ def runge_kutta45(
 		t_span:Iterable[Real], 
 		y0:Real, 
 		h0=0.1)->result_rungekutta45:
+	"""
+	Solve ODE using Adaptive Runge-Kutta Method 
+
+	---
+	f: function of f(t,y).  
+	t_span: The interval wherein the solution is desired.  
+	y0: Initial condition.
+	"""
 	assert isinstance(f, FunctionType), "f must be a function."
 	assert isinstance(y0, Real), "y0 must be Real."
 
