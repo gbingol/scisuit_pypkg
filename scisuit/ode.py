@@ -385,3 +385,19 @@ def runge_kutta45(
 		y_values.append(float(y))
 
 	return result_rungekutta45(t=t_values, y=y_values, y0=y0)
+
+
+
+
+
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+#-------------------------------------------------------------------------
+
+def solve_ivp(f:FunctionType, 
+		t_span:Iterable[Real], 
+		y0:Iterable[Real] | Real, 
+		t_eval:Iterable[Real]|Real = None,
+		method = "RK4",
+		**kwargs)->ode_result:
+	pass
