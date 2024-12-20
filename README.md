@@ -1,31 +1,18 @@
 ## scisuit
 
-A computing and visualization library designed with engineers
+All-in-one, high performance, scientific computing and visualization library designed with engineers
 in mind..
 
 
 &nbsp;
 
 
-## Available Libraries
-
-1. Plotting,
-2. Engineering,
-3. Statistics,
-4. Roots, 
-5. Integration, 
-6. Fitting, 
-7. Optimization
-
-
-&nbsp;
 
 
 ## Plot Library
 
 Interactive charts (Bar, Box-Whisker, Bubble, Direction Field, Histogram, Moody, Psychrometry, 
-QQnorm, QQplot, Quiver, Scatter). Using the `plot.gdi` library existing charts can be extended 
-or new visualizations can be created.
+QQnorm, QQplot, Quiver, Scatter). 
 
 
 A simple scatter chart example:
@@ -42,7 +29,7 @@ plt.scatter(x=x, y=y)
 plt.show()
 ```
 
-
+See in action on YouTube: [Scatter Chart](https://youtu.be/g3aJyNOOAn8), [Psychrometric Chart](https://youtu.be/Uv4npLsV1sY)
 
 &nbsp;
 &nbsp;
@@ -115,25 +102,28 @@ aw = 0.194
 
 ## Statistics Library
 
-Many statistical tests & distributions.
+Statistical tests & distributions.
 
 ```python
-import scisuit.stats as st
+from scisuit.stats import linregress
 
-#Normal distribution
-st.dnorm(0.1, mean=1, sd=2)
-st.pnorm(0.1, mean=1, sd=2)
+#input values
+temperature = [80, 93, 100, 82, 90, 99, 81, 96, 94, 93, 97, 95, 100, 85, 86, 87]
+feedrate = [8, 9, 10, 12, 11, 8, 8, 10, 12, 11, 13, 11, 8, 12, 9, 12]
+viscosity = [2256, 2340, 2426, 2293, 2330, 2368, 2250, 2409, 2364, 2379, 2440, 2364, 2404, 2317, 2309, 2328]
 
+#note the order of input to factor
+result = linregress(yobs=viscosity, factor=[temperature, feedrate])
+print(result)
 
-#Binomial distribution
-st.dbinom(x=[7, 8, 9], size=9, prob=0.94))
+#Output
+Multiple Linear Regression  
+F=82.5, p-value=4.0997e-08, R2=0.93
 
-#Weibull distribution
-st.dweibull(x=3, shape=2, scale=4)
-
-#log-normal distribution
-st.dlnorm(0.1, meanlog=1, sdlog=2)
-st.plnorm(0.1, meanlog=1, sdlog=2)
+Predictor        Coeff        StdError         T             p-value
+X0               1566.078         61.59       25.43       9.504e-14
+X1               7.621            0.62        12.32       3.002e-09
+X2               8.585            2.44        3.52        3.092e-03
 ```
 
 
@@ -143,29 +133,24 @@ st.plnorm(0.1, meanlog=1, sdlog=2)
 
 ## Numerics Library
 
-Procedures for root finding, fitting, integration...
+Libraries for solving ODE, root finding, fitting, integration...
 
 ```python
-from scisuit.roots import bisect, brentq, Info
+from scisuit.roots import bisect, brentq, itp
 
-def func(x):
-    return x**2-5
+args = {"f":lambda x: x**2-5, "a":0, "b": 4} 
 
-root, info = bisect(f=func, a=0, b=5)
-
-print("**** Bisection method ****")
-print(root," ", info)
-
-root, info = brentq(f=func, a=0, b=5)
-
-print("\n **** Brent's method ****")
-print(root," ", info)
+for func in [bisect, brentq, itp]:
+    print(func(**args))
 ```
 
 ```
-**** Bisection method ****
-2.2360706329345703   Info(err=9.5367431640625e-06, iter=19, conv=True, msg='')
+Bisection using brute-force method 
+Root=2.23607, Error=3.35e-06 (18 iterations).
 
- **** Brent's method ****
-2.2360684081902256   Info(err=None, iter=8, conv=True, msg='')
+Brent's method (inverse quadratic interpolation)
+Root=2.23607, (7 iterations).
+
+ITP method
+Root=2.23607, Error=3.43e-07 (7 iterations).
 ```
