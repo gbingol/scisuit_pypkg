@@ -23,7 +23,6 @@ _pydll.c_core_ode_rungekutta.restype=py_object
 
 
 
-
 #------------------------------------------------------------------------------
 #----------------------------- Base Ode Result  -----------------------------------
 
@@ -91,7 +90,7 @@ def __euler_set(f:FunctionType,
 
 
 
-def euler(f:FunctionType, 
+def __euler(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Iterable[Real] | Real, 
 		  t_eval:Iterable[Real]|Real)->result_euler:
@@ -135,7 +134,7 @@ class result_heun(ode_result):
 		return s
 
 
-def heun(f:FunctionType, 
+def __heun(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Real, 
 		  t_eval:Iterable[Real]|Real,
@@ -261,11 +260,11 @@ def __runge_kutta_set(f:FunctionType,
 		
 		yvals.append(y.tolist())
 	
-	return result_rungekutta(t=x, y=yvals, y0=y0, order=4)
+	return result_rungekutta(t=x, y=yvals, y0=y0, order=order)
 
 
 
-def runge_kutta(f:FunctionType, 
+def __runge_kutta(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0:Iterable[Real] | Real, 
 		  t_eval:Iterable[Real]|Real,
@@ -351,7 +350,7 @@ class result_rungekutta45(ode_result):
 		return s
 
 
-def runge_kutta45(
+def __runge_kutta45(
 		f:FunctionType, 
 		t_span:Iterable[Real], 
 		y0:Real, 
@@ -394,10 +393,59 @@ def runge_kutta45(
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
 
+
 def solve_ivp(f:FunctionType, 
 		t_span:Iterable[Real], 
 		y0:Iterable[Real] | Real, 
 		t_eval:Iterable[Real]|Real = None,
-		method = "RK4",
+		method:str = "rk4",
 		**kwargs)->ode_result:
-	pass
+	"""
+	Solve ODE or set of ODEs using specified method
+
+	---
+	f: function of f(t,y).  
+	t_span: The interval wherein the solution is desired.
+	y0: Initial condition(s).
+	t_eval: Specific nodes at which the solution is desired or step size.
+
+	method: Method to be used for solving the ODE.
+	 - euler (Euler's Method)
+	 - heun (Heun's Method)
+	 - rk2, rk3, rk4, rk5 (Runge-Kutta of order 2, 3, 4, 5)
+	 - rk45  (Adaptive Runge-Kutta)
+
+	kwargs: Additional arguments for the specified method
+	 - repeat: Number of repetitions for Heun's Method
+	 - h0: Initial step size for Adaptive Runge-Kutta
+	
+	"""
+	assert isinstance(f, FunctionType), "f must be a function."
+	assert isinstance(y0, Iterable|Real), "y0 must be Iterable[Real] | Real."
+	assert isinstance(t_eval, Iterable|Real) or t_eval == None, "t_eval must be Iterable[Real] | Real or None"
+	assert isinstance(method, str), "method must be a string."
+
+	if isinstance(t_eval, Real | Iterable):
+		if method == "euler":
+			return __euler(f, t_span, y0, t_eval)
+		elif method == "heun":
+			repeat = kwargs.get("repeat", 1)
+			return __heun(f, t_span, y0, t_eval,repeat=repeat)
+		elif method == "rk2":
+			return __runge_kutta(f, t_span, y0, t_eval, order=2)
+		elif method == "rk3":
+			return __runge_kutta(f, t_span, y0, t_eval, order=3)
+		elif method == "rk4":
+			return __runge_kutta(f, t_span, y0, t_eval, order=4)
+		elif method == "rk5":
+			return __runge_kutta(f, t_span, y0, t_eval, order=5)
+		else:
+			raise ValueError("Invalid method specified.")
+	
+	elif t_eval == None:
+		if method == "rk45" or t_eval == None:
+			h0 = kwargs.get("h0", 0.1)
+			return __runge_kutta45(f, t_span, y0, h0)
+	
+	raise ValueError("Invalid input for t_eval.")
+	
