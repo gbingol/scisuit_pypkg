@@ -1,8 +1,8 @@
 import math
 import numpy as np
-from scipy.integrate import solve_ivp
+from scipy.integrate import solve_ivp as scisolve
 
-from scisuit.ode import euler, heun, runge_kutta, runge_kutta45
+from scisuit.ode import solve_ivp
 
 
 """
@@ -43,17 +43,17 @@ print(sol_euler)
 
 """
 
-solset_rk = runge_kutta(f_system, [0,2], [4,6], t_eval=0.5, order=5)
+solset_rk = solve_ivp(f_system, [0,2], [4,6], t_eval=0.5, method="rk5")
 print(solset_rk)
 
 
 print("--------------")
 
-sol_rk = runge_kutta(f, t_span=[0, 2], y0=2, t_eval=teval, order=5)
+sol_rk = solve_ivp(f, t_span=[0, 2], y0=2, t_eval=teval, method="rk5")
 print(sol_rk)
 
 
 print("--------------")
 
-sol_adaprk = runge_kutta45(f, t_span=[0, 4], y0=2)
+sol_adaprk = solve_ivp(f, t_span=[0, 4], y0=2)
 print(sol_adaprk)
