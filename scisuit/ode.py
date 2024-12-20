@@ -94,22 +94,7 @@ def __euler(f:FunctionType,
 		  t_span:Iterable[Real], 
 		  y0:Iterable[Real] | Real, 
 		  t_eval:Iterable[Real]|Real)->result_euler:
-	"""
-	Solve ODE or set of ODEs using Euler's Method 
-
-	---
-	f: function of f(t,y).  
-	t_span: The interval wherein the solution is desired.  
-	y0: Initial condition(s).  
-	t_eval: Specific nodes at which the solution is desired or step size.
-	"""
-	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Iterable|Real), "y0 must be Iterable[Real] | Real."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real] | Real"
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
-	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
+	"""Solve ODE or set of ODEs using Euler's Method"""
 
 	if isinstance(y0, Real):
 		return __euler_single(f, t_span, y0, t_eval)
@@ -141,21 +126,8 @@ def __heun(f:FunctionType,
 		  repeat:int = 1)->result_heun:
 	"""
 	Solve ODE or set of ODEs using Heun's Method 
-
-	---
-	f: function f(t,y).  
-	t_span: The interval wherein the solution is desired.  
-	y0: Initial condition.  
-	t_eval: Specific nodes at which the solution is desired or step size.  
 	repeat: The number times the prediction-correction cycle should be performed.
 	"""
-	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Real), "y0 must be Real."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real]|Real"
-	assert isinstance(repeat, int) and repeat>=1, "repeat must be an integer >=1."
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
 
 	result = _pydll.c_core_ode_heun(f, t_span, c_double(y0), t_eval, c_size_t(repeat))
 	return result_heun(t=result["t"], y=result["y"], y0=y0, repeat=repeat )
@@ -272,21 +244,9 @@ def __runge_kutta(f:FunctionType,
 	"""
 	Solve ODE or set of ODEs using Runge-Kutta Method 
 
-	---
-	f: function of f(t,y).  
-	t_span: The interval wherein the solution is desired.  
-	y0: Initial condition(s).  
-	t_eval: Specific nodes at which the solution is desired or step size.
 	order: Order of Runge-Kutta method in [2, 5]
 	"""
-	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Iterable|Real), "y0 must be Iterable[Real] | Real."
-	assert isinstance(t_eval, Iterable|Real), "t_eval must be Iterable[Real] | Real"
 	assert isinstance(order, int) and 2<=order<=5, "order must be an integer in [2, 5]."
-
-	_tspan = [v for v in t_span if isinstance(v, Real)]
-	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
-	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
 
 	if isinstance(y0, Real):
 		return __runge_kutta_single(f, t_span, y0, t_eval, order=order)
@@ -355,16 +315,9 @@ def __runge_kutta45(
 		t_span:Iterable[Real], 
 		y0:Real, 
 		h0=0.1)->result_rungekutta45:
-	"""
-	Solve ODE using Adaptive Runge-Kutta Method 
-
-	---
-	f: function of f(t,y).  
-	t_span: The interval wherein the solution is desired.  
-	y0: Initial condition.
-	"""
+	"""Solve ODE using Adaptive Runge-Kutta Method (RK45)"""
 	assert isinstance(f, FunctionType), "f must be a function."
-	assert isinstance(y0, Real), "y0 must be Real."
+	assert isinstance(y0, Real), "y0 must be a real number."
 
 	_tspan = [v for v in t_span if isinstance(v, Real)]
 	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
@@ -425,18 +378,28 @@ def solve_ivp(f:FunctionType,
 	assert isinstance(t_eval, Iterable|Real) or t_eval == None, "t_eval must be Iterable[Real] | Real or None"
 	assert isinstance(method, str), "method must be a string."
 
+	_tspan = [v for v in t_span if isinstance(v, Real)]
+	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
+	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
+
 	if isinstance(t_eval, Real | Iterable):
 		if method == "euler":
 			return __euler(f, t_span, y0, t_eval)
+		
 		elif method == "heun":
 			repeat = kwargs.get("repeat", 1)
+			assert isinstance(repeat, int) and repeat>=1, "repeat must be an integer >=1."
 			return __heun(f, t_span, y0, t_eval,repeat=repeat)
+		
 		elif method == "rk2":
 			return __runge_kutta(f, t_span, y0, t_eval, order=2)
+		
 		elif method == "rk3":
 			return __runge_kutta(f, t_span, y0, t_eval, order=3)
+		
 		elif method == "rk4":
 			return __runge_kutta(f, t_span, y0, t_eval, order=4)
+		
 		elif method == "rk5":
 			return __runge_kutta(f, t_span, y0, t_eval, order=5)
 		else:
@@ -444,6 +407,8 @@ def solve_ivp(f:FunctionType,
 	
 	elif t_eval == None:
 		if method == "rk45" or t_eval == None:
+			#only single ODE can be solved using RK45
+			assert isinstance(y0, Real), "y0 must be Real." 
 			h0 = kwargs.get("h0", 0.1)
 			return __runge_kutta45(f, t_span, y0, h0)
 	
