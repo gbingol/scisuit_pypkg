@@ -32,7 +32,7 @@ pybindfile = f"pybind{sys.version_info.major}{sys.version_info.minor}.dll"
 
 setup(
 	name = 'scisuit',
-	version = '1.4.3', 
+	version = '1.5.0', 
 	author = 'Gokhan Bingol, PhD',
 	author_email = 'gbingol@hotmail.com',
 	description = 'High performance, all-in-one scientific computing package.',
