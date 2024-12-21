@@ -10,7 +10,7 @@
 
 
 #include <plotter/charts/numericcharts.h>
-#include <plotter/charts/psychrochart.h>
+#include <plotter/psychromety/psychrochart.h>
 
 #include <plotter/windows/frmplot.h>
 #include <plotter/elems/chartelement.h>
