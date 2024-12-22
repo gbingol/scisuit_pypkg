@@ -57,5 +57,10 @@ sol_adaprk = solve_ivp(f, t_span=[0, 4], y0=2)
 print(sol_adaprk)
 
 """
+
+"""
 sol_stiff = solve_ivp(f_stiff, [0,2], y0=0, t_eval=0.05, method="euler_s")
+print(sol_stiff)
+"""
+sol_stiff = solve_ivp(f_system, [0,2], y0=[4,6], t_eval=0.05, method="euler_s")
 print(sol_stiff)

@@ -5,7 +5,7 @@ from typing import Iterable
 
 from numpy import array, arange, float64
 
-from .roots import newton
+from .roots import newton, fsolve
 
 
 from ctypes import c_double, c_size_t, c_uint8, py_object
@@ -31,7 +31,7 @@ _pydll.c_core_ode_rungekutta.restype=py_object
 @dataclass
 class ode_result:
 	t:list[Real]
-	y:list[Real]
+	y:list[Real] | list[list[Real]]
 	y0:list[Real]
 
 	def __str__(self):
@@ -350,7 +350,7 @@ def __runge_kutta45(
 #------------------ STIFF ODEs  ---------------------------
 
 
-def __euler_stiff(f:FunctionType, 
+def __euler_single_stiff(f:FunctionType, 
 		  t_span:Iterable[Real], 
 		  y0: Real, 
 		  t_eval:Iterable[Real]|Real = None)->result_euler:
@@ -377,6 +377,48 @@ def __euler_stiff(f:FunctionType,
 	return result_euler(t=Nodes, y=yvals, y0=y0)
 
 
+
+
+def __euler_set_stiff(f:FunctionType, 
+			t_span:Iterable[Real], 
+			y0: Iterable[Real], 
+			t_eval:Iterable[Real]|Real = None)->result_euler:
+	
+	Nodes = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
+
+	y = array(y0, dtype=float64)
+	yvals = [y.tolist()]
+	for i in range(1, len(Nodes)):
+		ti_1, t_i = float(Nodes[i-1]), float(Nodes[i])
+		h = t_i - ti_1
+
+		#prepare the equation to solve for the next slope
+		funcs = []
+		results = f(t_i, y)
+		for i, v in enumerate(y):
+			g = lambda x: x[i] - v - results[i]*h
+			funcs.append(g)
+
+		#solve multiple equations simultaneously using fsolve
+		y = fsolve(funcs, x0=y.tolist())
+		
+		yvals.append(y)
+	
+	return result_euler(t=Nodes, y=yvals, y0=y0)
+
+
+
+
+def __euler_stiff(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0:Iterable[Real] | Real, 
+		  t_eval:Iterable[Real]|Real)->result_euler:
+	"""Solve stiff ODE or set of stiff ODEs using Euler's Method"""
+
+	if isinstance(y0, Real):
+		return __euler_single_stiff(f, t_span, y0, t_eval)
+	
+	return __euler_set_stiff(f, t_span, y0, t_eval)
 
 
 
