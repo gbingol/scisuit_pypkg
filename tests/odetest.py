@@ -28,18 +28,16 @@ teval = [0,1,2,3,4]
 def f(x, y): 
 	return 4*math.exp(0.8*x)-0.5*y
 
+
+def f_stiff(x, y):
+	#solution for y(0)=0, y(x) = -(997*e^(-1000*x))/999 - (2000*e^(-x))/999 + 3
+	return -1000*y + 3000 - 2000*math.exp(-x)
+
+
 def f_system(t, y):
 	y1, y2 = y
 	dydt = [-0.5*y1, 4-0.3*y2-0.1*y1]  # dy1/dt = -0.5*y1, dy2/dt =4-0.3*y2-0.1*y1
 	return dydt
-
-"""
-solset_euler = euler(f_system, [0,2], [4,6], t_eval=0.5)
-print(solset_euler)
-
-
-sol_euler = euler(f, t_span=[0, 2], y0=2, t_eval=teval)
-print(sol_euler)
 
 """
 
@@ -57,3 +55,7 @@ print("--------------")
 
 sol_adaprk = solve_ivp(f, t_span=[0, 4], y0=2)
 print(sol_adaprk)
+
+"""
+sol_stiff = solve_ivp(f_stiff, [0,2], y0=0, t_eval=0.05, method="euler_s")
+print(sol_stiff)

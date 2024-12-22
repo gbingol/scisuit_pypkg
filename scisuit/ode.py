@@ -5,6 +5,8 @@ from typing import Iterable
 
 from numpy import array, arange, float64
 
+from .roots import newton
+
 
 from ctypes import c_double, c_size_t, c_uint8, py_object
 from ._ctypeslib import pydll as _pydll
@@ -342,9 +344,45 @@ def __runge_kutta45(
 
 
 
+
+
+#---------------------------------------------------------
+#------------------ STIFF ODEs  ---------------------------
+
+
+def __euler_stiff(f:FunctionType, 
+		  t_span:Iterable[Real], 
+		  y0: Real, 
+		  t_eval:Iterable[Real]|Real = None)->result_euler:
+	
+	Nodes = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
+
+	y = y0
+	yvals = [y]
+	for i in range(1, len(Nodes)):
+		ti_1, t_i = float(Nodes[i-1]), float(Nodes[i])
+		h = t_i - ti_1
+
+		#make a guess for the next slope (notice small h)
+		y_i1 = __euler(f, [ti_1, t_i], y0=y, t_eval=h/10).y[-1]
+
+		#prepare the equation to solve for the next slope
+		g = lambda x: x - y  - f(t_i, x)*h #x is y_i1
+
+		#using secant method to solve the equation
+		y = newton(g, x0=y, x1=y_i1).root
+		
+		yvals.append(y)
+	
+	return result_euler(t=Nodes, y=yvals, y0=y0)
+
+
+
+
+
 #-------------------------------------------------------------------------
 #-------------------------------------------------------------------------
-#-------------------------------------------------------------------------
+#----------------------------   solve_ivp   ----------------------------------
 
 
 def solve_ivp(f:FunctionType, 
@@ -368,6 +406,8 @@ def solve_ivp(f:FunctionType,
 	 - rk2, rk3, rk4, rk5 (Runge-Kutta of order 2, 3, 4, 5)
 	 - rk45  (Adaptive Runge-Kutta)
 
+	 - euler_s (Euler's Method for Stiff ODEs)
+
 	kwargs: Additional arguments for the specified method
 	 - repeat: Number of repetitions for Heun's Method
 	 - h0: Initial step size for Adaptive Runge-Kutta
@@ -385,6 +425,9 @@ def solve_ivp(f:FunctionType,
 	if isinstance(t_eval, Real | Iterable):
 		if method == "euler":
 			return __euler(f, t_span, y0, t_eval)
+		
+		elif method == "euler_s":
+			return __euler_stiff(f, t_span, y0, t_eval)
 		
 		elif method == "heun":
 			repeat = kwargs.get("repeat", 1)
