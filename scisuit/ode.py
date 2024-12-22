@@ -394,15 +394,14 @@ def __euler_set_stiff(f:FunctionType,
 
 		#prepare the equation to solve for the next slope
 		funcs = []
-		results = f(t_i, y)
-		for i, v in enumerate(y):
-			g = lambda x: x[i] - v - results[i]*h
+		for j, v in enumerate(y):
+			g = lambda x, j=j: x[j] - v - f(t_i, x)[j] * h
 			funcs.append(g)
 
 		#solve multiple equations simultaneously using fsolve
-		y = fsolve(funcs, x0=y.tolist())
+		y = array(fsolve(funcs, x0=y.tolist()).roots, dtype=float64)
 		
-		yvals.append(y)
+		yvals.append(y.tolist())
 	
 	return result_euler(t=Nodes, y=yvals, y0=y0)
 

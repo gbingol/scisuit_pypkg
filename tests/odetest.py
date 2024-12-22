@@ -39,6 +39,16 @@ def f_system(t, y):
 	dydt = [-0.5*y1, 4-0.3*y2-0.1*y1]  # dy1/dt = -0.5*y1, dy2/dt =4-0.3*y2-0.1*y1
 	return dydt
 
+def f_system_stiff(t, y):
+	"""
+	Solution set:
+	y1 = 52.96*math.exp(3.9899*t) - 0.67*math.exp(-302.0101*t)
+	y2 = 17.83*math.exp(-3.9899*t) + 65.99*math.exp(-302.0101*t)
+	"""
+	y1, y2 = y
+	dydt = [-5*y1+3*y2, 100*y1-301*y2]  # dy1/dt = -5*y1+3*y2, dy2/dt =100*y1-301*y2
+	return dydt
+
 """
 
 solset_rk = solve_ivp(f_system, [0,2], [4,6], t_eval=0.5, method="rk5")
@@ -62,5 +72,9 @@ print(sol_adaprk)
 sol_stiff = solve_ivp(f_stiff, [0,2], y0=0, t_eval=0.05, method="euler_s")
 print(sol_stiff)
 """
-sol_stiff = solve_ivp(f_system, [0,2], y0=[4,6], t_eval=0.05, method="euler_s")
+
+#sol_stiff = scisolve(f_system_stiff, [0,2], y0=[52.29, 83.82], method="RK45")
+#print(sol_stiff)
+
+sol_stiff = solve_ivp(f_system_stiff, [0,2], y0=[52.29, 83.82], t_eval=0.05, method="euler_s")
 print(sol_stiff)
