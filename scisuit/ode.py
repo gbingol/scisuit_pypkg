@@ -79,13 +79,14 @@ def __euler_set(f:FunctionType,
 	Nodes = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
 
 	y = array(y0, dtype=float64)
-	yvals = [y.tolist()]
+	yvals = [[i] for i in y.tolist()]
 	for i in range(1, len(Nodes)):
 		h = float(Nodes[i]-Nodes[i-1])
 		slopes = array(f(float(Nodes[i]), y.tolist()), dtype=float64)
 		y += slopes*h
 		
-		yvals.append(y.tolist())
+		for i, v in enumerate(y):
+			yvals[i].append(float(v))
 	
 	return result_euler(t=Nodes, y=yvals, y0=y0)
 
@@ -225,14 +226,15 @@ def __runge_kutta_set(f:FunctionType,
 	x = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
 	y = array(y0, dtype=float64)
 
-	yvals = [y.tolist()]
+	yvals = [[i] for i in y.tolist()]
 
 	k = f(x[0], y)
 	for i in range(1, len(x)):
 		h = float(x[i]-x[i-1])
 		y += func(f, x[i], array(y, dtype=float64), h)
 		
-		yvals.append(y.tolist())
+		for i,v in enumerate(y):
+			yvals[i].append(float(v))
 	
 	return result_rungekutta(t=x, y=yvals, y0=y0, order=order)
 
@@ -464,34 +466,35 @@ def solve_ivp(f:FunctionType,
 	assert len(_tspan) == 2, "t_span must contain exactly two real numbers."
 	assert t_span[1]>t_span[0], "t_span=[a, b] where b>a expected."
 
+	_method = method.lower()
 	if isinstance(t_eval, Real | Iterable):
-		if method == "euler":
+		if _method == "euler":
 			return __euler(f, t_span, y0, t_eval)
 		
-		elif method == "euler_s":
+		elif _method == "euler_s":
 			return __euler_stiff(f, t_span, y0, t_eval)
 		
-		elif method == "heun":
+		elif _method == "heun":
 			repeat = kwargs.get("repeat", 1)
 			assert isinstance(repeat, int) and repeat>=1, "repeat must be an integer >=1."
 			return __heun(f, t_span, y0, t_eval,repeat=repeat)
 		
-		elif method == "rk2":
+		elif _method == "rk2":
 			return __runge_kutta(f, t_span, y0, t_eval, order=2)
 		
-		elif method == "rk3":
+		elif _method == "rk3":
 			return __runge_kutta(f, t_span, y0, t_eval, order=3)
 		
-		elif method == "rk4":
+		elif _method == "rk4":
 			return __runge_kutta(f, t_span, y0, t_eval, order=4)
 		
-		elif method == "rk5":
+		elif _method == "rk5":
 			return __runge_kutta(f, t_span, y0, t_eval, order=5)
 		else:
 			raise ValueError("Invalid method specified.")
 	
 	elif t_eval == None:
-		if method == "rk45" or t_eval == None:
+		if _method == "rk45" or t_eval == None:
 			#only single ODE can be solved using RK45
 			assert isinstance(y0, Real), "y0 must be Real." 
 			h0 = kwargs.get("h0", 0.1)
