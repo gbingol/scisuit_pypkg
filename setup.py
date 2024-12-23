@@ -35,7 +35,7 @@ setup(
 	version = '1.5.0', 
 	author = 'Gokhan Bingol, PhD',
 	author_email = 'gbingol@hotmail.com',
-	description = 'High performance, all-in-one scientific computing package.',
+	description = 'A high performance scientific computing and visualization package designed with engineers in mind..',
 	long_description = open('README.md').read(),
 	long_description_content_type = 'text/markdown',
 	license = 'GPLv3',
@@ -43,7 +43,7 @@ setup(
 	classifiers = [
 		'Programming Language :: Python :: 3',
 		'Programming Language :: C++',
-		'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+		'License :: OSI Approved :: MIT License',
 		'Operating System :: Microsoft :: Windows',
 		'Intended Audience :: Education',
 		'Intended Audience :: Manufacturing',
