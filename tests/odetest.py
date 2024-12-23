@@ -73,7 +73,7 @@ sol_stiff = solve_ivp(f_stiff, [0,2], y0=0, t_eval=0.05, method="euler_s")
 print(sol_stiff)
 """
 
-sol_stiff = scisolve(f_system_stiff, [0,2], y0=[52.29, 83.82], t_eval=[0, 0.05, 0.1], method="LSODA")
+sol_stiff = scisolve(f_system_stiff, [0,2], y0=[52.29, 83.82], t_eval=[0, 0.05, 0.1], method="RK45")
 print(sol_stiff)
 
 sol_stiff = solve_ivp(f_system_stiff, [0,2], y0=[52.29, 83.82], t_eval=[0, 0.05, 0.1], method="euler_s")
