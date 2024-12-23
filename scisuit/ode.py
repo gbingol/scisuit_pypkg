@@ -387,7 +387,7 @@ def __euler_set_stiff(f:FunctionType,
 	Nodes = arange(t_span[0], t_span[1] + t_eval, t_eval) if isinstance(t_eval, Real) else array(t_eval)
 
 	y = array(y0, dtype=float64)
-	yvals = [y.tolist()]
+	yvals = [[i] for i in y.tolist()]
 	for i in range(1, len(Nodes)):
 		ti_1, t_i = float(Nodes[i-1]), float(Nodes[i])
 		h = t_i - ti_1
@@ -401,7 +401,8 @@ def __euler_set_stiff(f:FunctionType,
 		#solve multiple equations simultaneously using fsolve
 		y = array(fsolve(funcs, x0=y.tolist()).roots, dtype=float64)
 		
-		yvals.append(y.tolist())
+		for i,v in enumerate(y):
+			yvals[i].append(float(v))
 	
 	return result_euler(t=Nodes, y=yvals, y0=y0)
 
