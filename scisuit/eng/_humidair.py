@@ -97,6 +97,20 @@ class PsychrometryResult:
 		return self._Results.get("Ws")
 
 
+	def __iter__(self):
+		return iter([
+			("P",self.P),
+			("Pw", self.Pw),
+			("Pws", self.Pws),
+			("W", self.W),
+			("Ws", self.Ws),
+			("Tdb", self.Tdb),
+			("Tdp", self.Tdp),
+			("Twb", self.Twb),
+			("H", self.H),
+			("V", self.V)
+		])
+
 
 def psychrometry(
 		P:_Real=None,
