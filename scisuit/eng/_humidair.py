@@ -108,6 +108,7 @@ class PsychrometryResult:
 			("Tdp", self.Tdp),
 			("Twb", self.Twb),
 			("H", self.H),
+			("RH", self.RH),
 			("V", self.V)
 		])
 
