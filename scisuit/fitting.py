@@ -110,7 +110,7 @@ class expfitResult:
 	b:float = None
 
 	def __str__(self):
-		return "y = " + str(self.a) + "*exp(" + str(self.b) + "*x"
+		return f"y = {self.a}*exp({self.b}*x)"
 	
 def expfit(
 		x:Iterable[Real], 
@@ -142,7 +142,8 @@ class logfitResult:
 	b: float = None
 
 	def __str__(self):
-		return "y = " + str(self.a) + "*ln(x) + " + str(self.b)
+		sign = "+ " if self.b>0 else "-"
+		return f"y = {self.a}*ln(x) {sign} {abs(self.b)}"
 
 def logfit(
 		x:Iterable[Real], 
