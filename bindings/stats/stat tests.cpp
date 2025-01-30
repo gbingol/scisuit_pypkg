@@ -1,6 +1,6 @@
 #include "stat tests.h"
 
-#include <core/core_funcs.h>
+#include <core/core_funcs.hpp>
 #include <core/stats/basictests/normality.h>
 #include <core/stats/anova/aov.h>
 #include <core/stats/anova/aov2.h>

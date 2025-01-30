@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include <core/core_funcs.h>
+#include <core/core_funcs.hpp>
 #include <core/eng/psychrometry.h>
 
 #include "../wrapperfuncs.h"
