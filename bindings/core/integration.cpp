@@ -1,7 +1,7 @@
 #include "integration.h"
 
 
-#include <core/math/integrate.h>
+#include <core/math/integrate.hpp>
 
 #include "../wrapperfuncs.h"
 
