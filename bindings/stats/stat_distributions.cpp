@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <core/core_funcs.hpp>
+#include <core/math/core_funcs.hpp>
 #include <core/stats/distributions.h>
 
 #include <core/cvector.hpp>
