@@ -166,16 +166,18 @@ PyObject* c_plot_histogram(PyObject* args, PyObject* kwargs)
 	auto DataTbl = std::make_unique<charts::CRealDataTable>();
 	DataTbl->append_col(NumData);
 
+	using core::stats::CHistogram;
+
 	std::string _Mtd = PyUnicode_AsUTF8(BinMethod);
-	core::math::CHistogram::BinMethod BinMtd = core::math::CHistogram::BinMethod::FREEDDIAC;
+	CHistogram::BinMethod BinMtd = CHistogram::BinMethod::FREEDDIAC;
 	if(_Mtd == "rice")
-		BinMtd = core::math::CHistogram::BinMethod::RICE;
+		BinMtd = CHistogram::BinMethod::RICE;
 	else if(_Mtd == "sqrt")
-		BinMtd = core::math::CHistogram::BinMethod::SQRT;
+		BinMtd = CHistogram::BinMethod::SQRT;
 	else if(_Mtd == "sturges")
-		BinMtd = core::math::CHistogram::BinMethod::STURGES;
+		BinMtd = CHistogram::BinMethod::STURGES;
 	else if(_Mtd == "scott")
-		BinMtd = core::math::CHistogram::BinMethod::SCOTT;
+		BinMtd = CHistogram::BinMethod::SCOTT;
 
 	auto series = std::make_unique<CHistogramSeries>(Chart, std::move(DataTbl), BinMtd);
 
