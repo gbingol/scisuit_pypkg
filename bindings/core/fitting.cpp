@@ -25,7 +25,9 @@ PyObject* c_fit_expfit(
 	if (InterceptObj != Py_None)
 		Intercept = GetAsRealNumber(InterceptObj);
 
-	auto Coeffs = core::math::fitting::expfit(core::CVector(x), core::CVector(y), Intercept);
+	using core::math::CVector;
+	using core::math::fitting::expfit;
+	auto Coeffs = expfit(CVector(x), CVector(y), Intercept);
 
 	return List_FromVector(Coeffs.data());
 	
@@ -63,7 +65,9 @@ PyObject* c_fit_logfit(
 	auto x = Iterable_As1DVector(X);
 	auto y = Iterable_As1DVector(Y);
 
-	auto Coeffs = core::math::fitting::logfit(core::CVector(x), core::CVector(y));
+	using core::math::CVector;
+	using core::math::fitting::logfit;
+	auto Coeffs = logfit(CVector(x), CVector(y));
 	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
@@ -88,7 +92,9 @@ PyObject* c_fit_logistfit(
 	if (LimitObj != Py_None)
 		Limit = GetAsRealNumber(LimitObj);
 
-	auto Coeffs = core::math::fitting::logistfit(core::CVector(x), core::CVector(y), Limit);
+	using core::math::CVector;
+	using core::math::fitting::logistfit;
+	auto Coeffs = logistfit(CVector(x), CVector(y), Limit);
 
 	return List_FromVector(Coeffs.data());
 	
@@ -110,7 +116,9 @@ PyObject* c_fit_powfit(
 	auto x = Iterable_As1DVector(X);
 	auto y = Iterable_As1DVector(Y);
 
-	auto Coeffs = core::math::fitting::powfit(core::CVector(x), core::CVector(y));
+	using core::math::CVector;
+	using core::math::fitting::powfit;
+	auto Coeffs = powfit(CVector(x), CVector(y));
 	return List_FromVector(Coeffs.data());
 	
 	CATCHRUNTIMEEXCEPTION(nullptr);
