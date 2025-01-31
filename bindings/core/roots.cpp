@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <core/math/roots.h>
+#include <core/math/roots.hpp>
 
 #include "../wrapperfuncs.h"
 
