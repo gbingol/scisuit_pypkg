@@ -189,9 +189,9 @@ PyObject* c_stat_test_anova_aov2(PyObject* YObsObj, PyObject* X1Obj, PyObject* X
 	PyDict_SetItemString(Dict, "SSFact2", Py_BuildValue("d", R.SSFact2));
 	
 	//when repetitions involved, there is interaction terms (if one has value the others must have)
-	if(R.DFinteract.has_value())
+	if(R.DFinteract>0)
 	{
-		PyDict_SetItemString(Dict, "DFinteract", Py_BuildValue("i", *R.DFinteract));
+		PyDict_SetItemString(Dict, "DFinteract", Py_BuildValue("i", R.DFinteract));
 		PyDict_SetItemString(Dict, "Fvalinteract", Py_BuildValue("d", *R.Fvalinteract));
 		PyDict_SetItemString(Dict, "MSinteract", Py_BuildValue("d", *R.MSinteract));
 		PyDict_SetItemString(Dict, "pvalinteract", Py_BuildValue("d", *R.pvalinteract));
