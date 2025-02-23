@@ -652,17 +652,6 @@ class Beverage(Food):
 	def enthalpy(self, T=-0.4)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg  
-
-		## Input:
-		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
-		
 		"""	
 		super().enthalpy(T) 			
 
@@ -686,16 +675,6 @@ class Juice(Food):
 	def enthalpy(self, T=-0.4)->float:
 		"""
 		Computes enthalpy for frozen and unfrozen foods, returns: kJ/kg 
-
-		## Input:
-		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
 		"""
 		super().enthalpy(T)
 
@@ -712,13 +691,6 @@ class Cereal(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		w = self._water*100
 		T = self.T
@@ -755,13 +727,6 @@ class Legume(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		w = self._water*100
 		T = self.T
@@ -798,13 +763,6 @@ class Nut(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		w = self._water*100
 		T = self.T
@@ -844,14 +802,6 @@ class Dairy(Food):
 
 		## Input:
 		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
-		
 		Milk: -0.6 (skim), -15.6 (evaporated, condensed)
 		"""	
 		super().enthalpy(T)
@@ -878,13 +828,6 @@ class Fruit(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		w, ash = self.water*100, self.ash*100
 		T = self.T
@@ -911,13 +854,6 @@ class Fruit(Food):
 
 		## Input:
 		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
 
@@ -943,13 +879,6 @@ class Vegetable(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		w, ash = self.water*100, self.ash*100
 		T = self.T
@@ -977,13 +906,6 @@ class Vegetable(Food):
 
 		## Input:
 		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
 
@@ -1012,13 +934,6 @@ class Meat(Food):
 		"""
 		Computes dielectric properties
 		f: frequency in MHz
-
-		## Reference:
-		Gulati T, Datta AK (2013). Enabling computer-aided food process engineering: Property estimation
-		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
-
-		Calay RK, Newborough M, Probert D, Calay PS (1995). Predictive equations for the dielectric properties of foods. 
-		International Journal of Food Science and Technology, 29, 699-713.
 		"""
 		water, ash, salt, fat = self.water*100, self.ash, self.salt*100, self.lipid*100
 		T = self.T
@@ -1058,13 +973,6 @@ class Meat(Food):
 
 		## Input:
 		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
 
@@ -1080,10 +988,10 @@ class Sweet(Food):
 	@override(Food)
 	def aw(self)->float|None:
 		"""
-		Returns value of water activity or None \n
+		Returns value of water activity or None  
 
 		## Warning:
-		At T>25 C, built-in computation might return None. \n
+		At T>25 C, built-in computation might return None.  
 		Therefore, must be used with caution.
 		"""
 		_aw = Aw(self)	
@@ -1097,13 +1005,6 @@ class Sweet(Food):
 
 		## Input:
 		T: Initial freezing temperature
-
-		## Reference:
-		2006 ASHRAE Handbook, thermal properties of foods (Eq #18)
-
-		## Notes:
-		If foods current temperature smaller than Tfreezing it will 
-		compute the enthalpy for frozen foods.
 		"""	
 		super().enthalpy(T)
 
