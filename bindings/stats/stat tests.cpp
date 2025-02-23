@@ -53,8 +53,8 @@ PyObject* c_stat_test_norm_ad(PyObject* Obj)
 	auto Result = tests::normality::AndersonDarling(Data);
 
 	auto TupleObj = PyTuple_New(2);
-	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", Result.first));
-	PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", Result.second));
+	PyTuple_SetItem(TupleObj, 0, Py_BuildValue("d", Result.pvalue));
+	PyTuple_SetItem(TupleObj, 1, Py_BuildValue("d", Result.AD));
 
 	return TupleObj;
 	
