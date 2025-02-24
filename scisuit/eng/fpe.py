@@ -487,20 +487,11 @@ class Food:
 		equations for transport phenomena-based models, Journal of Food Engineering, 116, 483-504
 		"""
 		water = self._water 
-		ash = self.ash
-		T = self.T
-
-		meat_dc = lambda w, ash: w*(1.0707-0.0018485*T) + ash*4.7947 + 8.5452
-		meat_dl = lambda w, ash:  w*(3.4472-0.01868*T + 0.000025*T**2) + ash*(-57.093+0.23109*T) - 3.5985
-		
-		fv_dc = lambda w, ash:  38.57 + 0.1255 + 0.456*w - 14.54*ash - 0.0037*T*w + 0.07327*ash*T
-		fv_dl = lambda w, ash: 17.72 - 0.4519*T + 0.001382*T**2 \
-						- 0.07448*w + 22.93*ash - 13.44*ash**2 \
-						+ 0.002206*w*T + 0.1505*ash*T
+		T:float = self.T
 
 		#No generalized equation, so a crude approximation
-		d_const = (meat_dc(water, ash) + fv_dc(water, ash)) / 2
-		d_loss = (meat_dl(water, ash) + fv_dl(water, ash)) / 2
+		d_const = 2.14 - 0.104*T + 0.808*water
+		d_loss = 3.09 - 0.0638*T + 0.213*water
 		
 		return Dielectric(d_const, d_loss)
 		
