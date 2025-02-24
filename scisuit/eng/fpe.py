@@ -696,7 +696,7 @@ class Cereal(Food):
 
 		elif 900<f<10000 and 10<T<30 and 3<w<30:
 			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
-			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + rho
 
 		else:
 			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
