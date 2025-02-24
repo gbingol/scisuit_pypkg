@@ -686,21 +686,14 @@ class Cereal(Food):
 		w = self._water*100
 		T = self.T
 		
-		#assuming it as bulk density
-		logf = _math.log10(f)
-		rho = self.rho()
 
 		if 2000<f<3000 and 10<T<30 and 3<w<30:
 			dc_ = 1.71 + 0.0701*w
 			dl_ = 0.12 + 0.00519*w
 
-		elif 900<f<10000 and 10<T<30 and 3<w<30:
-			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
-			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + rho
-
 		else:
-			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) 
 		
 		return Dielectric(dc_, dl_)
 
@@ -722,21 +715,13 @@ class Legume(Food):
 		w = self._water*100
 		T = self.T
 		
-		#assuming it as bulk density
-		logf = _math.log10(f)
-		rho = self.rho()
-
 		if 2000<f<3000 and 10<T<30 and 3<w<30:
 			dc_ = 1.71 + 0.0701*w
 			dl_ = 0.12 + 0.00519*w
 
-		elif 900<f<10000 and 10<T<30 and 3<w<30:
-			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
-			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
-
 		else:
-			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) 
 		
 		return Dielectric(dc_, dl_)
 
@@ -758,21 +743,13 @@ class Nut(Food):
 		w = self._water*100
 		T = self.T
 		
-		#assuming it as bulk density
-		logf = _math.log10(f)
-		rho = self.rho()
-
 		if 2000<f<3000 and 10<T<30 and 3<w<30:
 			dc_ = 1.71 + 0.0701*w
 			dl_ = 0.12 + 0.00519*w
 
-		elif 900<f<10000 and 10<T<30 and 3<w<30:
-			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
-			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) + self.rho()
-
 		else:
-			dc_ = (1 + 0.504*w*rho/(_math.sqrt(w) + logf))**2
-			dl_ = 0.146*rho**2 + 0.004615*w**2*rho**2*(0.32*logf + 1.74/logf - 1)
+			dc_ = 1.82 + 0.0621*w -0.0253*(f/1000)
+			dl_ = 1.72 + 0.066*w - 0.0254*(f/1000) 
 		
 		return Dielectric(dc_, dl_)
 
