@@ -2,12 +2,82 @@ from typing import Iterable as _Iterable
 
 import numpy as _np
 
-from ..fitting import approx
+
 from ..stats import qnorm
 from ..util import minmax
 from ._chartelems import Marker
 from ._charts import scatter
 from ..stats import qnorm
+
+
+def linearinterp(x1:float, y1:float, x2:float, y2:float, xval:float)->float:
+	"""
+	Linear interpolation returns y-value in [y1, y2] corresponding to xval.
+
+	x1, y1: First point  
+	x2, y2: Second point  
+	xval: x-value in [x1, x2] 
+	"""
+
+	if(x1 == x2): 
+		return y1 
+	
+	m,n = 0, 0
+	m = (y2 - y1) / (x2 - x1)
+	n = y2 - m * x2
+
+	return m * xval + n
+
+
+
+
+
+
+#-------------------------------------------
+
+def approx(
+		x:_np.ndarray, 
+		y:_np.ndarray, 
+		n=50)->tuple[_np.ndarray, _np.ndarray]:
+	"""
+	Returns points which linearly interpolate (  
+	interpolation takes place at n equally spaced points   
+	spanning the interval [min(x), max(x)]).
+
+		
+	`x, y:` Numeric vectors giving the coordinates of the points to be interpolated.  
+	`n:` Number of equally spaced data points [min(x), min(y)]
+	"""
+	assert n>1, "n>1 expected"
+
+	v = _np.zeros(n)
+	if type(y) == type(None):
+		Min, Max = minmax(x)
+		strideLen = (Max-Min)/(n-1)
+		v[0], v[n-1] = Min, Max
+		for i in range(1, len(v)-1):
+			v[i] = Min + i * strideLen
+		
+		return v
+	
+	assert len(x)==len(y), "x and y must have same lengths"
+
+	"""
+	Generate n data points in the interval min(x) and max(x)  
+	Note that data points are sorted by nature.
+	"""
+	XX = approx(x, None, n)
+
+	for i in range(len(x)-1):
+		for j in range(n):
+			if (x[i] <= XX[j] <= x[i + 1]):
+				x1, x2 = x[i], x[i + 1]
+				y1, y2 = y[i], y[i + 1]
+				v[j] = linearinterp(x1, y1, x2, y2, XX[j])
+
+	return XX, v
+
+
 
 
 def _ComputeQuantiles(X:_Iterable)->_Iterable:
