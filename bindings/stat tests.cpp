@@ -6,7 +6,7 @@
 #include <core/math/fitting.h>
 
 
-#include "../wrapperfuncs.h"
+#include "wrapperfuncs.h"
 
 
 using namespace core::stats;

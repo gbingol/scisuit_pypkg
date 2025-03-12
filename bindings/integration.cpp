@@ -3,7 +3,7 @@
 
 #include <core/math/integrate.hpp>
 
-#include "../wrapperfuncs.h"
+#include "wrapperfuncs.h"
 
 using namespace core::math;
 
