@@ -1,3 +1,16 @@
+cmake_minimum_required(VERSION 3.27.2)
+set(CMAKE_CXX_STANDARD 20)
+
+project(scisuit_package)
+
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_SOURCE_DIR}/scisuit)
+
+
+include(C:/vcpkg/scripts/buildsystems/vcpkg.cmake)
+
+set(USER_HOME_DIRECTORY $ENV{USERPROFILE})
+
+
 set(VARPY pybind310)
 #set(VARPY pybind311)
 #set(VARPY pybind312)
@@ -29,7 +42,7 @@ endif()
 include_directories(${PYHOME}/include)
 
 # core and plot
-include_directories(${CMAKE_SOURCE_DIR}/core_plot)
+include_directories(${USER_HOME_DIRECTORY}/soft_proj/scisuit/core_plot)
 
 file(GLOB_RECURSE cppfiles
      "bindings/*.h"
@@ -48,7 +61,7 @@ find_package(wxWidgets REQUIRED core base)
 target_include_directories(${PROJECT_NAME} PRIVATE ${wxWidgets_INCLUDE_DIRS})
 
 target_link_directories(${PROJECT_NAME} PRIVATE 
-						${CMAKE_SOURCE_DIR}/libs 
+						${USER_HOME_DIRECTORY}/soft_proj/scisuit/libs 
 						${PYHOME}/libs)
 
 target_link_libraries(${PROJECT_NAME}  
@@ -57,13 +70,3 @@ target_link_libraries(${PROJECT_NAME}
 						${PYLIB} 
 						scisuit_core 
 						scisuit_plotter)
-
-
-set( REQUIREDDLLS ${CMAKE_SOURCE_DIR}/libs/${VARPY}.dll)
-
-foreach( file_i ${REQUIREDDLLS})
-	add_custom_command(
-		TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy 
-		${file_i} ${CMAKE_SOURCE_DIR}/pythonpkg/scisuit/)
-endforeach(file_i)
