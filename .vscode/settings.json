@@ -1,0 +1,12 @@
+{
+    "clangd.path": "C:/Program Files/LLVM/bin/clangd.exe",
+	"clangd.arguments": ["--header-insertion=never"],
+    "cmake.exportCompileCommandsFile": true,
+    "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json",
+    "C_Cpp.intelliSenseEngine": "disabled",
+
+	"cmake.generator": "Ninja",
+
+	"editor.formatOnType": false,
+	"editor.inlayHints.enabled": "off"
+}

@@ -11,8 +11,8 @@ include(C:/vcpkg/scripts/buildsystems/vcpkg.cmake)
 set(USER_HOME_DIRECTORY $ENV{USERPROFILE})
 
 
-set(VARPY pybind310)
-#set(VARPY pybind311)
+#set(VARPY pybind310)
+set(VARPY pybind311)
 #set(VARPY pybind312)
 #set(VARPY pybind313)
 
@@ -42,7 +42,7 @@ endif()
 include_directories(${PYHOME}/include)
 
 # core and plot
-include_directories(${USER_HOME_DIRECTORY}/soft_proj/scisuit/core_plot)
+include_directories(${USER_HOME_DIRECTORY}/soft_proj/scisuit/)
 
 file(GLOB_RECURSE cppfiles
      "bindings/*.h"

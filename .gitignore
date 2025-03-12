@@ -1,6 +1,9 @@
 build/
 dist/
 
+.cache/
+compile_commands.json
+
 **/x64/**
 **/Debug/**
 **/Release/**
