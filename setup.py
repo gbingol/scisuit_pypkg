@@ -32,8 +32,8 @@ pybindfile = f"pybind{sys.version_info.major}{sys.version_info.minor}.dll"
 
 setup(
 	name = 'scisuit',
-	version = '1.5.1', 
-	author = 'Gokhan Bingol, PhD',
+	version = '1.6.0', 
+	author = 'Gokhan Bingol',
 	author_email = 'gbingol@hotmail.com',
 	description = 'A computing and visualization package designed with engineers in mind..',
 	long_description = open('README.md').read(),
