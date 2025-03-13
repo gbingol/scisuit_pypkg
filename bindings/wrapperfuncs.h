@@ -43,33 +43,6 @@ inline auto Make1DFunction(PyObject* funcObj)
 }
 
 
-inline auto Make2DFunction(PyObject* funcObj)
-{
-	    auto func = [=](double x, double y)
-    {
-        PyObject* ObjX = PyFloat_FromDouble(x);
-		PyObject* ObjY = PyFloat_FromDouble(y);
-
-        PyObject* pArgs = PyTuple_Pack(2, ObjX, ObjY);
-        Py_DECREF(ObjX);
-		Py_DECREF(ObjY);
-
-        PyObject* ResultObj = PyObject_CallObject(funcObj, pArgs);
-        Py_DECREF(pArgs);
-
-		//If the function can not be evaluated (for example a function not returning a real number)
-        if (!ResultObj)
-			throw std::exception(("f(" + std::to_string(x) + std::to_string(y) + ") is invalid.").c_str());
-
-        double retVal = PyFloat_AsDouble(ResultObj);
-        Py_DECREF(ResultObj);
-
-        return retVal;
-    };
-
-    return func;
-}
-
 
 /*
     callableObj: Python callable object.
