@@ -19,10 +19,6 @@
 #include <plotter/elems/legend.h>
 
 
-#include "wrapperfuncs.hpp"
-#include "plot_helper.h"
-
-
 
 
 using namespace charts;
