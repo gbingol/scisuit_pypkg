@@ -5,7 +5,7 @@
 
 #include <core/eng/psychrometry.h>
 
-#include "wrapperfuncs.h"
+#include "wrapperfuncs.hpp"
 
 
 

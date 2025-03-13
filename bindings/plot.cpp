@@ -19,7 +19,7 @@
 #include <plotter/elems/legend.h>
 
 
-#include "wrapperfuncs.h"
+#include "wrapperfuncs.hpp"
 #include "plot_helper.h"
 
 

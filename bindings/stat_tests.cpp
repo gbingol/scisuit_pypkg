@@ -1,4 +1,4 @@
-#include "stat tests.h"
+#include "stat_tests.h"
 
 #include <core/stats/basictests/normality.h>
 #include <core/stats/anova/aov.h>
@@ -6,7 +6,7 @@
 #include <core/math/fitting.h>
 
 
-#include "wrapperfuncs.h"
+#include "wrapperfuncs.hpp"
 
 
 using namespace core::stats;

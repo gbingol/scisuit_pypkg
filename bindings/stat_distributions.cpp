@@ -7,7 +7,7 @@
 
 #include <core/math/vector.hpp>
 
-#include "wrapperfuncs.h"
+#include "wrapperfuncs.hpp"
 
 
 using namespace core::stats;

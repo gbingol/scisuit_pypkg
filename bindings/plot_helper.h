@@ -3,7 +3,7 @@
 #include <Python.h>
 #include <string>
 
-#include "wrapperfuncs.h"
+#include "wrapperfuncs.hpp"
 
 #include <wx/wx.h>
 
