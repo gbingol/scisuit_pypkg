@@ -1,7 +1,7 @@
 #include "engineering.h"
 
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 
 #include <core/eng/psychrometry.h>
 
@@ -21,7 +21,7 @@ PyObject* c_eng_psychrometry(PyObject* kwargs)
 
 	TRYBLOCK();
 
-	std::unordered_map<std::string, double> Values;
+	std::map<std::string, double> Values;
 
 	while (PyDict_Next(kwargs, &pos, &ObjKey, &ObjValue))
 	{
