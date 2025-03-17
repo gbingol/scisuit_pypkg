@@ -1,4 +1,4 @@
-from scisuit.stats import test_sign, dbinom
+from scisuit.stats import test_sign
 
 
 
