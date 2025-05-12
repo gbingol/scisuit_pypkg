@@ -225,7 +225,7 @@ PyObject* c_stat_test_nonparam_signtest(PyObject* Obj, double md, double conflev
 		alter = ALTERNATIVE::GREATER;
 	
 
-	auto result = core::stats::tests::nonparametric::test_sign(Data, md, conflevel, alter);
+	auto result = core::stats::tests::nonparametric::test_sign(Data, md, true, conflevel, alter);
 
 	auto Dict = PyDict_New();
 	PyDict_SetItemString(Dict, "pvalue", Py_BuildValue("d", result.pval));

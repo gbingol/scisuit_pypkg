@@ -2,10 +2,8 @@
 
 #include <cmath>
 
-#include <core/math/core_funcs.hpp>
+#include <core/corelib.h>
 #include <core/stats/distributions.h>
-
-#include <core/math/vector.hpp>
 
 #include "wrapperfuncs.hpp"
 
@@ -1083,7 +1081,7 @@ PyObject* c_stat_dsignrank(PyObject* xvalObj, int n)
 
 	auto Vec = Iterable_As1DVector(xvalObj);
 
-	core::math::CVector retVec;
+	core::CVector retVec;
 	for (const auto& xv : Vec)
 		retVec.push_back(dist::dsignrank(static_cast<int>(xv), n));
 
@@ -1109,7 +1107,7 @@ PyObject* c_stat_psignrank(PyObject* qvalObj, int n)
 
 	auto Vec = Iterable_As1DVector(qvalObj);
 
-	core::math::CVector retVec;
+	core::CVector retVec;
 	for (const auto& qv : Vec)
 		retVec.push_back(dist::psignrank(qv, n));
 
@@ -1137,7 +1135,7 @@ PyObject* c_stat_qsignrank(PyObject* pvalObj, int n)
 
 	auto Vec = Iterable_As1DVector(pvalObj);
 
-	core::math::CVector retVec;
+	core::CVector retVec;
 	for (const auto& pv : Vec)
 	{
 		CHECKRANGE_RET(pv, 0.0, 1.0, "p value must be in the range of (0,1).");
