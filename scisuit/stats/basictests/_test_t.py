@@ -255,7 +255,7 @@ class test_tpaired_result:
 		return s
 
 
-def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)->tuple[float, test_tpaired_result]:
+def _test_t_paired(x, y, mu, alternative="two.sided", conflevel=0.95)-> test_tpaired_result:
 	assert conflevel>=0.0 or conflevel <= 1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(x, Iterable), "x must be Iterable"
 
