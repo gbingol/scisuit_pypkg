@@ -4,29 +4,28 @@ import scisuit.plot as plt
 
 
 Data = [ 
-[0.397,0.813,-0.247,0.072,-0.531,0.544,-1.184,-0.274,1.119,-0.149], 
-[0.57,1.632,0.227,-1.73,-1.051,-0.02,2.066,-1.006,1.784,0.962], 
-[-0.705,0.739,0.51,-1.634,-0.342,-2.022,1.8,1.729,-1.735,-0.2], 
+[-0.814,-1.339,0.584,1.521,0.094,1.684,-2.303,0.562,-0.545,0.338], 
+[-0.129,0.244,2.671,-1.283,1.375,2.111,1.67,0.505,0.077,-0.157], 
+[1.574,-2.135,0.662,1.351,-0.401,0.943,-1.158,-0.019,0.09,-0.383], 
 ]
 
 Data = np.array(Data, dtype=np.float64)
 
-AXIS = 1 # Column statistics (for Row Stats change to 1)
-DDOF = 1 # Sample std (for population change to 0)
+"""
+Multidimensional Array Note:
+Each array represents a column set AXIS variable for statistics of:
+Column = 1 , Row = 0
+"""
+AXIS = 1
 
-print('Sum=', np.sum(Data, axis=AXIS))
+# Sample std (for population change to 0)
+DDOF = 1 
 
-print('Mean=', np.mean(Data, axis=AXIS))
-
-print('SD=', np.std(Data, axis=AXIS, ddof=DDOF))
-
-print('Min=', np.min(Data, axis=AXIS))
-
-print('Max=', np.max(Data, axis=AXIS))
-
-print('Range=', np.max(Data, axis=AXIS) - np.min(Data, axis=AXIS))
-
-print('Sum of Squares=', np.sum(Data*Data, axis=AXIS))
+print('Sum=', np.sum(Data, axis=AXIS)) 
+print('Mean=', np.mean(Data, axis=AXIS)) 
+print('Min=', np.min(Data, axis=AXIS)) 
+print('Max=', np.max(Data, axis=AXIS)) 
+print('Sum of Squares=', np.sum(Data*Data, axis=AXIS)) 
 
 #Visualize Data
 if isinstance(Data[0], numbers.Real):
