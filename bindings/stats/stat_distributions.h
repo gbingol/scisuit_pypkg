@@ -1,7 +1,7 @@
 #pragma once
 #include <Python.h>
 
-#include "dllimpexp.h"
+#include "../dllimpexp.h"
 
 
 #define EXTERN \

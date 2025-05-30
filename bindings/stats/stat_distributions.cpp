@@ -5,7 +5,7 @@
 #include <core/corelib.h>
 #include <core/stats/distributions.h>
 
-#include "wrapperfuncs.hpp"
+#include "../wrapperfuncs.hpp"
 
 
 using namespace core::stats;
