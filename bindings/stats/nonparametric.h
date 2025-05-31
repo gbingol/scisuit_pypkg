@@ -16,4 +16,12 @@ EXTERN PyObject* c_stat_nonparam_signtest(
 	double conflevel, 
 	const char* alternative);
 
+
+EXTERN PyObject* c_stat_nonparam_wilcox_signedrank(
+	PyObject* Obj, 
+	double md, 
+	bool confint,
+	double conflevel, 
+	const char* alternative);
+
 #undef EXTERN
