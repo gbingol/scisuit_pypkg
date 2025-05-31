@@ -10,6 +10,8 @@ from ._test_normality import \
 	ks_1samp, Ks1SampletestResult, \
 	shapiro, ShapiroTestResult
 
+from ._test_cor import cor_test
+
 
 
 
