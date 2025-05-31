@@ -13,12 +13,12 @@ from .._distributions import pnorm, psmirnov
 
 
 
-_pydll.c_stat_test_norm_ad.argtypes = [py_object]
-_pydll.c_stat_test_norm_ad.restype=py_object
+_pydll.c_stat_normality_ad.argtypes = [py_object]
+_pydll.c_stat_normality_ad.restype=py_object
 
 
-_pydll.c_stat_test_shapirowilkinson.argtypes = [py_object]
-_pydll.c_stat_test_shapirowilkinson.restype=py_object
+_pydll.c_stat_normality_shapirowilk.argtypes = [py_object]
+_pydll.c_stat_normality_shapirowilk.restype=py_object
 
 
 
@@ -46,7 +46,7 @@ def anderson(x:Iterable)->ADTestRes:
 	_xx = [v for v in x if isinstance(v, numbers.Real)]
 	assert len(x) == len(_xx), "x must contain only Real numbers"
 	
-	pval, A2 = _pydll.c_stat_test_norm_ad(x)
+	pval, A2 = _pydll.c_stat_normality_ad(x)
 	return ADTestRes(pvalue=pval, A2=A2)
 
 
@@ -150,5 +150,5 @@ def shapiro(x:Iterable)->ShapiroTestResult:
 	_xx = [v for v in x if isinstance(v, numbers.Real)]
 	assert N == len(_xx), "x must contain only Real numbers."
 	
-	result = _pydll.c_stat_test_shapirowilkinson(x)
+	result = _pydll.c_stat_normality_shapirowilk(x)
 	return ShapiroTestResult(W=result[0], pvalue=result[1], msg=result[2])

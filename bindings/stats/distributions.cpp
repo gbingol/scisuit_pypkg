@@ -1,4 +1,4 @@
-#include "stat_distributions.h"
+#include "distributions.h"
 
 #include <cmath>
 

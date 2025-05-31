@@ -1,7 +1,7 @@
 #include "ode.h"
 
 #include <core/math/ode.h>
-#include "wrapperfuncs.hpp"
+#include "../wrapperfuncs.hpp"
 
 
 using namespace core::math;

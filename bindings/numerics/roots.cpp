@@ -4,7 +4,7 @@
 
 #include <core/math/roots.hpp>
 
-#include "wrapperfuncs.hpp"
+#include "../wrapperfuncs.hpp"
 
 using namespace core::math;
 
