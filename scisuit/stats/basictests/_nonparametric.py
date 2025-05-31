@@ -18,17 +18,18 @@ _pydll.c_stat_nonparam_signtest.restype = py_object
 
 @dataclass
 class test_sign_Result:
-	lower:tuple[float, float, float]
-	interpolated:tuple[float, float]
-	upper:tuple[float, float, float]
+	lower:None|tuple[float, float, float]
+	interpolated:None|tuple[float, float]
+	upper:None|tuple[float, float, float]
 	pvalue:float
 
 	def __str__(self):
 		s = "Sign Test \n"
 		s += f"p-value = {self.pvalue} \n"
-		s += f"CI for {self.lower[0]*100}% = ({self.lower[1]}, {self.lower[2]}) \n"
-		s += f"CI for interpolated = ({self.interpolated[0]}, {self.interpolated[1]}) \n"
-		s += f"CI for {self.upper[0]*100}% = ({self.upper[1]}, {self.upper[2]})"
+		if self.lower != None:
+			s += f"CI for {self.lower[0]*100}% = ({self.lower[1]}, {self.lower[2]}) \n"
+			s += f"CI for interpolated = ({self.interpolated[0]}, {self.interpolated[1]}) \n"
+			s += f"CI for {self.upper[0]*100}% = ({self.upper[1]}, {self.upper[2]})"
 		return s
 
 
@@ -65,5 +66,5 @@ def test_sign(
 			interpolated=(dct["ici_first"], dct["ici_second"]),
 			pvalue=dct["pvalue"])
 	
-	return test_sign_Result(pvalue=dct["pvalue"])
+	return test_sign_Result(lower=None, upper=None, interpolated=None, pvalue=dct["pvalue"])
 
