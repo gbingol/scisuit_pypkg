@@ -9,6 +9,11 @@
 
 
 
-EXTERN PyObject* c_stat_test_nonparam_signtest(PyObject* Obj, double md, double conflevel, const char* alternative);
+EXTERN PyObject* c_stat_nonparam_signtest(
+	PyObject* Obj, 
+	double md, 
+	bool confint,
+	double conflevel, 
+	const char* alternative);
 
 #undef EXTERN
