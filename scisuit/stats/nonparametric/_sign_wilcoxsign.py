@@ -1,4 +1,3 @@
-import math
 import numbers
 from dataclasses import dataclass
 from typing import Iterable
@@ -10,6 +9,8 @@ _pydll.c_stat_nonparam_signtest.argtypes = [py_object, c_double, c_bool, c_doubl
 _pydll.c_stat_nonparam_signtest.restype = py_object
 
 
+_pydll.c_stat_nonparam_wilcox_signedrank.argtypes = [py_object, c_double, c_bool, c_double, c_char_p]
+_pydll.c_stat_nonparam_wilcox_signedrank.restype = py_object
 
 
 
@@ -57,7 +58,12 @@ def test_sign(
 
 	assert alternative in ["two.sided", "less", "greater"], "alternative must be two.sided, less or greater"
 
-	dct =  _pydll.c_stat_nonparam_signtest(x, c_double(md), c_bool(confint), c_double(conflevel), c_char_p(alternative.encode()))
+	dct =  _pydll.c_stat_nonparam_signtest(
+		x, 
+		c_double(md), 
+		c_bool(confint), 
+		c_double(conflevel), 
+		c_char_p(alternative.encode()))
 	
 	if confint:
 		return test_sign_Result(
@@ -67,4 +73,65 @@ def test_sign(
 			pvalue=dct["pvalue"])
 	
 	return test_sign_Result(lower=None, upper=None, interpolated=None, pvalue=dct["pvalue"])
+
+
+
+
+
+""" ****************  wilcox_signedrank test *********************** """
+
+
+@dataclass
+class test_wilcox_Result:
+	acl: None|float
+	ci:None|tuple[float, float]
+	pvalue:float
+
+	def __str__(self):
+		s = "Wilcoxon Signed Rank Test \n"
+		s += f"p-value = {self.pvalue} \n"
+		if self.ci != None:
+			s += f"Achieved Conf (%) = {self.acl*100} \n"
+			s += f"CI = ({self.ci[0]}, {self.ci[1]})"
+		return s
+
+
+def test_wilcox(
+		x:Iterable, 
+		md:numbers.Real,  
+		confint=True,
+		alternative="two.sided", 
+		conflevel=0.95)->test_sign_Result:
+	"""
+	returns test_sign_Result class.  
+
+	x: Sample
+	md: Median of the population tested by the null hypothesis  
+	confint: Should compute confidence intervals?  
+	alternative: "two.sided", "less", "greater"   
+	conflevel:	Confidence level, [0,1]  
+	"""
+
+	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
+	assert isinstance(x, Iterable), "x must be Iterable"
+	assert isinstance(md, numbers.Real), "md must be real number"
+	assert isinstance(confint, bool), "confint must be bool"
+	assert isinstance(alternative, str), "alternative must be str"
+
+	assert alternative in ["two.sided", "less", "greater"], "alternative must be two.sided, less or greater"
+
+	dct =  _pydll.c_stat_nonparam_wilcox_signedrank(
+		x, 
+		c_double(md), 
+		c_bool(confint), 
+		c_double(conflevel), 
+		c_char_p(alternative.encode()))
+	
+	if confint:
+		return test_wilcox_Result(
+			acl=dct["acl"],
+			ci=(dct["ci_first"], dct["ci_second"]),
+			pvalue=dct["pvalue"])
+	
+	return test_wilcox_Result(acl=None, ci=None, pvalue=dct["pvalue"])
 
