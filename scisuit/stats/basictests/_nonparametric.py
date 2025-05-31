@@ -23,8 +23,13 @@ class test_sign_Result:
 	upper:tuple[float, float, float]
 	pvalue:float
 
-
-
+	def __str__(self):
+		s = "Sign Test \n"
+		s += f"p-value = {self.pvalue} \n"
+		s += f"CI for {self.lower[0]*100}% = ({self.lower[1]}, {self.lower[2]}) \n"
+		s += f"CI for interpolated = ({self.interpolated[0]}, {self.interpolated[1]}) \n"
+		s += f"CI for {self.upper[0]*100}% = ({self.upper[1]}, {self.upper[2]})"
+		return s
 
 
 def test_sign(
