@@ -13,6 +13,7 @@ from .basictests import cor_test
 
 from .nonparametric import test_sign, test_sign_Result
 from .nonparametric import test_wilcox, test_wilcox_Result
+from .nonparametric import test_mannwhitney, test_mannwhitney_Result
 
 from ._distributions import \
 	dbeta, pbeta, qbeta, rbeta, \
