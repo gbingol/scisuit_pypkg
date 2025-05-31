@@ -43,7 +43,7 @@ def test_sign(
 	"""
 	returns test_sign_Result class.  
 
-	x: Sample
+	x: Sample  
 	md: Median of the population tested by the null hypothesis  
 	confint: Should compute confidence intervals?  
 	alternative: "two.sided", "less", "greater"   
@@ -101,11 +101,11 @@ def test_wilcox(
 		md:numbers.Real,  
 		confint=True,
 		alternative="two.sided", 
-		conflevel=0.95)->test_sign_Result:
+		conflevel=0.95)->test_wilcox_Result:
 	"""
-	returns test_sign_Result class.  
+	returns test_wilcox_Result class.  
 
-	x: Sample
+	x: Sample  
 	md: Median of the population tested by the null hypothesis  
 	confint: Should compute confidence intervals?  
 	alternative: "two.sided", "less", "greater"   
@@ -129,8 +129,8 @@ def test_wilcox(
 	
 	if confint:
 		return test_wilcox_Result(
-			acl=dct["acl"],
-			ci=(dct["ci_first"], dct["ci_second"]),
+			acl=dct["acl"] if confint else None,
+			ci=(dct["ci_first"], dct["ci_second"]) if confint else None,
 			pvalue=dct["pvalue"])
 	
 	return test_wilcox_Result(acl=None, ci=None, pvalue=dct["pvalue"])
