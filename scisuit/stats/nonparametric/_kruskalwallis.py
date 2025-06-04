@@ -14,24 +14,28 @@ _pydll.c_stat_nonparam_kruskalwallis.restype = py_object
 
 @dataclass
 class test_kruskal_Result:
-	acl: None|float
-	ci:None|tuple[float, float]
 	pvalue:float
-	U:float
-	W:float
-	median_xy:tuple[float, float]
+	statistic: float
+	zvalues: list[float]
+	counts: list[int]
+	ranks: list[int]
+	uniqueFactors: list[str]
 
 	def __str__(self):
 		s = "Kruskal-Wallis Test \n"
-		s += f"Medians: x={self.median_xy[0]}, y={self.median_xy[1]} \n"
-		s += f"p-value = {self.pvalue} \n \n"
-		s += f"U-statistics = {self.U} \n"
-		s += f"W-statistics = {self.W} \n"
-		if self.ci != None:
-			s += f"Achieved Conf (%) = {self.acl*100} \n"
-			s += f"CI = ({self.ci[0]}, {self.ci[1]})"
-		return s
+		s += f"p-value = {self.pvalue} \n"
+		s += f"Statistic = {self.statistic} \n\n"
 
+		s += "{:<10} {:>10} {:>15} {:>15} \n".format(
+			"Factor", "z-value", "Rank", "Count")
+		
+		for i in range(len(self.uniqueFactors)):
+			s += "{:<10} {:>10.2f} {:>15.2f}  {:>15}\n".format(
+				self.uniqueFactors[i], 
+				self.zvalues[i], 
+				self.ranks[i], 
+				self.counts[i])
+		return s
 
 def test_kruskal(
 		responses:Iterable, 
@@ -43,18 +47,19 @@ def test_kruskal(
 	groups	: groups to which each response belongs
 	"""
 
-	assert isinstance(responses, Iterable), "x must be Iterable"
-	assert isinstance(groups, Iterable), "x must be Iterable"
+	assert isinstance(responses, Iterable), "responses must be Iterable"
+	assert isinstance(groups, Iterable), "groups must be Iterable"
 
-	dct =  _pydll.c_stat_nonparam_mannwhitney(groups, responses)
+	dct =  _pydll.c_stat_nonparam_kruskalwallis(responses, groups)
 	
 	return test_kruskal_Result(
-		acl=dct["acl"] if confint else None,
-		ci=(dct["ci_first"], dct["ci_second"]) if confint else None,
 		pvalue=dct["pvalue"],
-		U=dct["statistics_u"],
-		W=dct["statistics_w"],
-		median_xy=(dct["median_x"], dct["median_y"]))
+		statistic=dct["statistic"],
+		zvalues=dct["zvalues"],
+		counts=dct["counts"],
+		ranks=dct["ranks"],
+		uniqueFactors=dct["uniqueFactors"]
+		)
 	
 
  

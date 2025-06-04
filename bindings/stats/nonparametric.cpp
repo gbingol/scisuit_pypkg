@@ -1,6 +1,5 @@
 #include "nonparametric.h"
 
-
 #include <core/stats/nonparam/nonparametric.h>
 
 #include "../wrapperfuncs.hpp"
@@ -159,26 +158,26 @@ PyObject* c_stat_nonparam_mannwhitney(
 
 
  PyObject* c_stat_nonparam_kruskalwallis(PyObject* responses, PyObject* factors)
-{
+{	
 	using namespace core::stats::tests::nonparametric;
-	using core::stats::ALTERNATIVE;
 
-	auto Responses = Iterable_As1DVector(responses);
-	auto Factors = Iterable_As1DVector<std::string>(factors);	
+	auto Resp = Iterable_As1DVector(responses);
+	auto Fact = Iterable_As1DVector<std::string>(factors);	
 
 	
 	TRYBLOCK();
-
-	auto result = kruskalwallis(Responses, Factors);
+	
+	auto result = kruskalwallis(Resp, Fact);
 
 	auto Dict = PyDict_New();
 	PyDict_SetItemString(Dict, "pvalue", Py_BuildValue("d", result.pvalue));
-	PyDict_SetItemString(Dict, "zvalues", Py_BuildValue("d", List_FromVector(result.zvalues)));
-	PyDict_SetItemString(Dict, "counts", Py_BuildValue("d", List_FromVector(result.counts)));
+	PyDict_SetItemString(Dict, "statistic", Py_BuildValue("d", result.statistic));
+	
+	PyDict_SetItemString(Dict, "zvalues", List_FromVector(result.zvalues));
+	PyDict_SetItemString(Dict, "counts", List_FromVector(result.counts));
 
-	PyDict_SetItemString(Dict, "ranks", Py_BuildValue("d", List_FromVector(result.ranks)));
-	PyDict_SetItemString(Dict, "uniqueFactors", Py_BuildValue("d", List_FromVector(result.uniqueFactors)));
-	PyDict_SetItemString(Dict, "uniqueFactors", Py_BuildValue("d", result.statistic));
+	PyDict_SetItemString(Dict, "ranks", List_FromVector(result.ranks));
+	PyDict_SetItemString(Dict, "uniqueFactors", List_FromVector(result.uniqueFactors));
 
 	return Dict;
 
