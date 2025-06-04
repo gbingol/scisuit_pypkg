@@ -22,7 +22,7 @@ class test_mannwhitney_Result:
 	median_xy:tuple[float, float]
 
 	def __str__(self):
-		s = "Wilcoxon Signed Rank Test \n"
+		s = "Mann-Whitney Test \n"
 		s += f"Medians: x={self.median_xy[0]}, y={self.median_xy[1]} \n"
 		s += f"p-value = {self.pvalue} \n \n"
 		s += f"U-statistics = {self.U} \n"
