@@ -18,7 +18,7 @@ class test_kruskal_Result:
 	statistic: float
 	zvalues: list[float]
 	counts: list[int]
-	ranks: list[int]
+	ranks: list[float]
 	uniqueFactors: list[str]
 
 	def __str__(self):
