@@ -34,4 +34,9 @@ EXTERN PyObject* c_stat_nonparam_mannwhitney(
 	double conflevel, 
 	const char* alternative);
 
+
+EXTERN PyObject* c_stat_nonparam_kruskalwallis(
+	PyObject* responses, 
+	PyObject* factors);
+
 #undef EXTERN

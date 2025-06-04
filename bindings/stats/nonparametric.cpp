@@ -155,3 +155,34 @@ PyObject* c_stat_nonparam_mannwhitney(
 
 	Py_RETURN_NONE;
 }
+
+
+
+ PyObject* c_stat_nonparam_kruskalwallis(PyObject* responses, PyObject* factors)
+{
+	using namespace core::stats::tests::nonparametric;
+	using core::stats::ALTERNATIVE;
+
+	auto Responses = Iterable_As1DVector(responses);
+	auto Factors = Iterable_As1DVector<std::string>(factors);	
+
+	
+	TRYBLOCK();
+
+	auto result = kruskalwallis(Responses, Factors);
+
+	auto Dict = PyDict_New();
+	PyDict_SetItemString(Dict, "pvalue", Py_BuildValue("d", result.pvalue));
+	PyDict_SetItemString(Dict, "zvalues", Py_BuildValue("d", List_FromVector(result.zvalues)));
+	PyDict_SetItemString(Dict, "counts", Py_BuildValue("d", List_FromVector(result.counts)));
+
+	PyDict_SetItemString(Dict, "ranks", Py_BuildValue("d", List_FromVector(result.ranks)));
+	PyDict_SetItemString(Dict, "uniqueFactors", Py_BuildValue("d", List_FromVector(result.uniqueFactors)));
+	PyDict_SetItemString(Dict, "uniqueFactors", Py_BuildValue("d", result.statistic));
+
+	return Dict;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
