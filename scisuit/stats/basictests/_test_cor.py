@@ -31,7 +31,7 @@ def cor_test(
 	returns coefficient and confidence interval.  
 
 	x, y: x and y data  
-	conflevel:	Confidence level, [0,1]  
+	conflevel: Confidence level, [0,1]  
 	method: correlation method, "pearson" or "spearman"
 	"""
 
