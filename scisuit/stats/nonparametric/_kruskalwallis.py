@@ -37,6 +37,8 @@ class test_kruskal_Result:
 				self.counts[i])
 		return s
 
+
+
 def test_kruskal(
 		responses:Iterable, 
 		groups:Iterable)->test_kruskal_Result:
@@ -58,8 +60,7 @@ def test_kruskal(
 		zvalues=dct["zvalues"],
 		counts=dct["counts"],
 		ranks=dct["ranks"],
-		uniqueFactors=dct["uniqueFactors"]
-		)
+		uniqueFactors=dct["uniqueFactors"])
 	
 
  
