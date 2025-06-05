@@ -39,4 +39,10 @@ EXTERN PyObject* c_stat_nonparam_kruskalwallis(
 	PyObject* responses, 
 	PyObject* factors);
 
+
+EXTERN PyObject* c_stat_nonparam_friedman(
+	PyObject* responses, 
+	PyObject* factors,
+	PyObject* groups);
+
 #undef EXTERN

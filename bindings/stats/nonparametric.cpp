@@ -185,3 +185,40 @@ PyObject* c_stat_nonparam_mannwhitney(
 
 	Py_RETURN_NONE;
 }
+
+
+
+PyObject* c_stat_nonparam_friedman(
+	PyObject* responses, 
+	PyObject* factors,
+	PyObject* groups)
+{
+	using namespace core::stats::tests::nonparametric;
+
+	auto Resp = Iterable_As1DVector(responses);
+	auto Fact = Iterable_As1DVector<std::string>(factors);	
+	auto Group = Iterable_As1DVector<std::string>(groups);
+	
+	TRYBLOCK();
+	
+	auto result = friedman(Resp, Fact, Group);
+
+	auto Dict = PyDict_New();
+	PyDict_SetItemString(Dict, "pvalue", Py_BuildValue("d", result.pvalue));
+	PyDict_SetItemString(Dict, "statistic", Py_BuildValue("d", result.statistic));
+
+	PyDict_SetItemString(Dict, "quantile_25", List_FromVector(result.quantile_25));
+	PyDict_SetItemString(Dict, "quantile_75", List_FromVector(result.quantile_75));
+
+	PyDict_SetItemString(Dict, "counts", List_FromVector(result.counts));
+	PyDict_SetItemString(Dict, "medians", List_FromVector(result.medians));
+	
+	PyDict_SetItemString(Dict, "ranksums", List_FromVector(result.ranksums));
+	PyDict_SetItemString(Dict, "uniqueFactors", List_FromVector(result.uniqueFactors));
+
+	return Dict;
+
+	CATCHRUNTIMEEXCEPTION(nullptr);
+
+	Py_RETURN_NONE;
+}
