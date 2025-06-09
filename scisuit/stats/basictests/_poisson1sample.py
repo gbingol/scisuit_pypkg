@@ -5,8 +5,8 @@ from typing import Iterable
 from ctypes import py_object, c_double, c_char_p
 from ..._ctypeslib import pydll as _pydll
 
-_pydll.c_stat_essential_correlation.argtypes = [py_object, py_object, c_double, c_char_p]
-_pydll.c_stat_essential_correlation.restype = py_object
+_pydll.c_stat_essential_poisson1samplen.argtypes = [py_object, py_object, c_double, c_char_p]
+_pydll.c_stat_essential_poisson1sample.restype = py_object
 
 
 
@@ -35,6 +35,9 @@ class test_poisson1sample_Result:
 				s += f", z-value = {self.zvalue}"
 		return s
 
+
+
+
 def test_poisson1sample(
 		sample: Iterable[int] | None,
 		frequency: Iterable[int] | None,
@@ -57,9 +60,9 @@ def test_poisson1sample(
 	----
 	length: Length of observation (time, area, etc.)  
 	hypotest: Should perform hypothesis test
-	hyporate: Hypothesis rate
+	hyporate: Hypothesis rate  
 	conflevel: Confidence level, [0,1]  
-	method: "normal" or "exact"
+	method: "normal" or "exact"  
 	alternative: "two.sided", "less" or "greater"
 	"""
 
