@@ -61,10 +61,15 @@ def test_poisson1sample(
 		method = "normal",
 		alternative = "two.sided")->test_poisson1sample_Result:
 	"""
-	Either sample (optionally frequency) or samplesize and totaloccur must be provided.  
+	Either sample (optionally frequency) or summarized data must be provided.  
 
+	----
+	Samples known  
 	sample: Sample data  
 	frequency: (Optional) Number of occurences  
+
+	----
+	Summarized Data  
 	SampleSize: Size of the sample  
 	totaloccur: Number of total occurences (generally sample size [i] * frequency [i])
 
@@ -77,12 +82,15 @@ def test_poisson1sample(
 	alternative: "two.sided", "less" or "greater"
 	"""
 
-	if sample != None:
-		assert samplesize == None and totaloccur == None, "if sample is not None, then samplesize and totaloccur must be None"
+	SamplesKnown = sample != None
+	SummarizedData = samplesize != None and totaloccur != None
+
+	assert SamplesKnown or SummarizedData, "Either sample (and optionally frequency) or summarized data must be provided"
+
+	if SamplesKnown:
+		assert SummarizedData == False, "if sample is not None, then samplesize and totaloccur must be None"
 	
-	if samplesize != None or totaloccur != None:
-		assert samplesize != None and totaloccur != None, \
-		"If either samplesize or totaloccur is not None, then both samplesize and totaloccur cannot be None"
+	if SummarizedData:
 		assert sample == None and frequency == None, "if samplesize is not None, then sample and frequency must be None"
 
 
