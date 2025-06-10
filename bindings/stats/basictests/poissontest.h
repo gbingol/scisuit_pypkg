@@ -10,7 +10,7 @@
 
 
 
-EXTERN PyObject* c_stat_essential_poisson1samplen(
+EXTERN PyObject* c_stat_essential_poisson1sample(
 		PyObject* sample, PyObject* frequency,
 		PyObject* samplesize, PyObject* totaloccur,
 		double length = 1,
