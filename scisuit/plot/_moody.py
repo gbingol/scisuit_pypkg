@@ -39,7 +39,7 @@ def moody(
 		Re:Iterable = [1E3, 1E7],
 		friction:Iterable = [0.01, 0.09]):
 	"""
-	`Re:` Reynolds number range
+	`Re:` Reynolds number range  
 	`friction:`  Friction factor range
 	"""
 	assert isinstance(Re, Iterable), "Re must be iterable."

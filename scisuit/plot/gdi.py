@@ -283,7 +283,7 @@ def curve(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn). 
+	Draws a smooth curve between (x1, y1), (x2, y2), ..., (xn, yn).  
 	The curve is only guaranteed to pass from (x1, y1) and (xn, yn).
 
 	---
@@ -387,7 +387,7 @@ def polygon(
 		label:str = "",
 		**kwargs)->int:
 	"""
-	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn). 
+	Draws a polygon between (x1, y1), (x2, y2), ..., (xn, yn).  
 	The first and last points are automatically closed.
 
 	At least 3 points expected.
@@ -455,7 +455,7 @@ def makegroup(
 		owner:int, 
 		members:_Iterable[int])->None:
 	"""
-	sets the properties of members based on owner's properties
+	sets the properties of members based on owner's properties  
 	
 	---
 	`owner:` A gdi object whose properties will affect members' properties,   

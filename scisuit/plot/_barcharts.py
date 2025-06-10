@@ -18,9 +18,9 @@ def bar(
 		label:str|None = None,
 		**kwargs):
 	"""
-	`x:` The x coordinates of the bars or category
-	`height:` The height of the bars.
-	`width:` The width of the bars.
+	`x:` The x coordinates of the bars or category  
+	`height:` The height of the bars.  
+	`width:` The width of the bars.  
 	`bottom:` The y coordinate of the bottom side of the bars.
 	"""
 	assert isinstance(bottom, numbers.Real|_Iterable)
@@ -81,9 +81,9 @@ def barh(
 		label:str|None = None,
 		**kwargs):
 	"""
-	`y:` The y coordinates of the bars or category
-	`height:` The height of the bars.
-	`width:` The width of the bars.
+	`y:` The y coordinates of the bars or category  
+	`height:` The height of the bars.  
+	`width:` The width of the bars.  
 	`bottom:` The y coordinate of the bottom side of the bars.
 	"""
 	assert isinstance(left, numbers.Real|_Iterable)

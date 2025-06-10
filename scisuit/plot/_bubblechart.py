@@ -51,8 +51,8 @@ def bubble(
 	Plots bubble chart
 
 	## Input:
-	x, y, s:	x- and y- and size data
-	color: color
+	x, y, s: x- and y- and size data  
+	color: color  
 	label: Name (currently not in use)
 	"""
 	assert \

@@ -47,11 +47,10 @@ def quiver(
 	
 	""""
 	Plots quiver chart
-
-	## Input:
-	x, y: (x,y) location, 2D ndarray \n
-	u, v: length in x and y directions, 2D ndarray \n
-	scale: if None automatic scaling takes place otherwise xu = x + u*scale is computed
+     
+	x, y: (x,y) location, 2D ndarray  
+	u, v: length in x and y directions, 2D ndarray  
+	scale: if None automatic scaling, otherwise computes xu = x + u*scale
 	"""	
 	assert len(X)==len(Y), "X and Y must have same lengths"
 	assert len(U) == len(V), "U and V must have same lengths"
@@ -89,10 +88,9 @@ def dirfield(
 		y:_np.ndarray, 
 		slope:_np.ndarray):
 	"""
-	Plots the direction field for a given function f=dy/dx \n
-
-	## Input
-	x, y: 2D numpy array (after using meshgrid) \n
+	Plots the direction field for a given function f=dy/dx  
+     
+	x, y: 2D numpy array (after using meshgrid)  
 	slope: 2D array resulting from evaluation of f=dy/dx, first order ODE
 	"""
 

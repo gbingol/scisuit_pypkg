@@ -79,7 +79,7 @@ def hist(
 	Plots histogram
 
 	---
-	`data:`	Numeric data
+	`data:`	Numeric data  
 	`density:` density histogram if true otherwise frequency.   
 	`cumulative:` True, cumulative distribution  
 	`binmethod:` freedmandiaconis, rice, sqrt, sturges or scott   

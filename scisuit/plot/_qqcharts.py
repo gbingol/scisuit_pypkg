@@ -104,12 +104,12 @@ def qqnorm(
 		marker:str|Marker=None,
 		**kwargs):
 	"""
-	Normal Quantile-quantile chart \n
-	x-axis="Theoretical Quantiles" \n  
-	y-axis="Sample Quantiles" \n
-
+	Normal Quantile-quantile chart  
+	x-axis="Theoretical Quantiles"  
+	y-axis="Sample Quantiles"  
+    
 	## Input:
-	data: Data \n
+	data: Data  
 	show: Whether to show theoretical line or not 
 	"""
 	assert isinstance(data, _Iterable), "'data' must be iterable"
@@ -150,9 +150,8 @@ def qqplot(
 		y:_Iterable, 
 		**kwargs):
 	"""
-	Plots quantile-quantile chart using two data-sets (x,y)
-
-	## Input
+	Plots quantile-quantile chart using two data-sets (x,y)  
+  
 	x, y: Data
 	"""
 	assert isinstance(x, _Iterable), "'x' must be iterable"

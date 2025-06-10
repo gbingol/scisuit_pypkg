@@ -98,8 +98,8 @@ def layout(nrows:numbers.Integral, ncols:numbers.Integral)->None:
 	"""
 	Partitions the current chart window into nrows and ncols \n
 	(similar to a matrix with nrows and ncols) \n
-
-	`nrows:` number of rows
+     
+	`nrows:` number of rows  
 	`ncols:` number of columns
 	"""
 	assert isinstance(nrows, numbers.Integral), "nrows must be integer."
@@ -122,9 +122,9 @@ def subplot(
 	"""
 	Must be called after the window is partitioned (by layout) to select a cell from the partition. \n
 
-	`row:` row position of the cell (must be less than partition's number of rows),
-	`col:` column position of the cell (must be less than partition's number of columns),
-	`nrows:` number of rows the cell should span 
+	`row:` row position of the cell (must be less than partition's number of rows),  
+	`col:` column position of the cell (must be less than partition's number of columns),  
+	`nrows:` number of rows the cell should span  
 	`ncols:` number of columns the cell should span 
 	"""
 	assert isinstance(row, numbers.Integral), "row must be integer."
@@ -153,12 +153,12 @@ def figure():
 
 def set_figsize(width = 640, height = 480):
 	"""
-	Adjusts current figure size in pixels. \n
-	Must be called right before calling a function that 
+	Adjusts current figure size in pixels.  
+	Must be called right before calling a function that  
 	draws a chart (scatter, canvas, ...)
 
 	### Example:
-	plt.set_figsize(640, 480) \n
+	plt.set_figsize(640, 480)  
 	plt.scatter()
 	"""
 	assert width>0, "width>0 expected."
@@ -224,8 +224,8 @@ def set_xticks(
 		align="center", 
 		pos="bottom")->None:
 	"""
-	Sets the x-ticks and optionally labels
-	`align:` "center", "left"
+	Sets the x-ticks and optionally labels  
+	`align:` "center", "left"  
 	`pos:` "top", "bottom"
 	"""
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object."
@@ -249,8 +249,8 @@ def set_yticks(
 		align="center", 
 		pos="left")->None:
 	"""
-	Sets the x-ticks and optionally labels.
-	`align:` "center", "top", "bottom"
+	Sets the x-ticks and optionally labels.  
+	`align:` "center", "top", "bottom"  
 	`pos:` "left", "right"
 	"""
 	assert isinstance(ticks, _Iterable), "ticks must be Iterable object."
@@ -271,7 +271,7 @@ def set_yticks(
 
 def set_xposition(position:numbers.Real)->None:
 	"""
-	Sets x-axis position
+	Sets x-axis position  
 	`position:` A valid position within limits of y-axis
 	"""
 	assert isinstance(position, numbers.Real), "position must be Real."
@@ -291,7 +291,7 @@ def set_yposition(position:numbers.Real)->None:
 
 def xscale(value:str)->None:
 	"""
-	Sets x-axis scale
+	Sets x-axis scale  
 	`value:` "linear", "log"
 	"""
 	if not value in ["linear", "log"]:
@@ -303,7 +303,7 @@ def xscale(value:str)->None:
 
 def yscale(value:str)->None:
 	"""
-	Sets y-axis scale
+	Sets y-axis scale  
 	`value:` "linear", "log"
 	"""
 	if not value in ["linear", "log"]:
