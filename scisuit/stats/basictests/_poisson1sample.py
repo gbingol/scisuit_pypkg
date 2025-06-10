@@ -2,7 +2,7 @@ import numbers
 from dataclasses import dataclass
 from typing import Iterable
 
-from ctypes import py_object, c_double, c_char_p
+from ctypes import py_object, c_double, c_char_p, c_bool
 from ..._ctypeslib import pydll as _pydll
 
 _pydll.c_stat_essential_poisson1samplen.argtypes = [py_object, py_object, c_double, c_char_p]
@@ -66,6 +66,15 @@ def test_poisson1sample(
 	alternative: "two.sided", "less" or "greater"
 	"""
 
+	if sample != None:
+		assert samplesize == None and totaloccur == None, "if sample is not None, then samplesize and totaloccur must be None"
+	
+	if samplesize != None or totaloccur != None:
+		assert samplesize != None and totaloccur != None, \
+		"If either samplesize or totaloccur is not None, then both samplesize and totaloccur cannot be None"
+		assert sample == None and frequency == None, "if samplesize is not None, then sample and frequency must be None"
+
+
 	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
 	assert isinstance(sample, Iterable | None), "sample must be Iterable|None"
 	assert isinstance(frequency, Iterable | None), "frequency be Iterable|None"
@@ -82,7 +91,23 @@ def test_poisson1sample(
 	assert method in ["normal", "exact"], "method must be 'normal' or 'exact'"
 	assert alternative in ["two.sided", "less", "r"], "alternative must be 'two.sided', 'less' or 'greater'"
 
-	retObj =  _pydll.c_stat_essential_correlation(x, y, c_double(conflevel), c_char_p(method.encode()))
+	dct =  _pydll.c_stat_essential_poisson1samplen(
+				sample,
+	 			frequency,
+				samplesize,
+				totaloccur,
+				c_double(length),
+				c_bool(hypotest),
+				c_double(hyporate),
+				c_double(conflevel), 
+				c_char_p(method.encode()),
+				c_char_p(alternative.encode()))
 
-	return cortest_Result(coeff=retObj[0], ci=(retObj[1], retObj[2]))
+	return test_poisson1sample_Result(
+			pvalue=dct["pvalue"],
+			zvalue=dct["zvalue"],
+			ci = (dct["CI_lower"], dct["CI_upper"]),
+			mean=dct["mean"],
+			N=dct["N"],
+			TotalOccurences=dct["TotalOccurences"])
 
