@@ -10,7 +10,7 @@ using namespace core::stats::tests::poisson;
 
 
 
-PyObject* c_stat_essential_poisson1samplen(
+PyObject* c_stat_essential_poisson1sample(
 	PyObject* sample, PyObject* frequency,
 	PyObject* samplesize, PyObject* totaloccur,
 	double length,
@@ -38,7 +38,7 @@ PyObject* c_stat_essential_poisson1samplen(
 		
 		std::vector<std::size_t> FreqVec;
 		if(!Py_IsNone(frequency))
-			auto FreVec = Iterable_As1DVector<std::size_t>(frequency);
+			FreqVec = Iterable_As1DVector<std::size_t>(frequency);
 
 		Result = onesample_freq(
 					SampleVec, 
