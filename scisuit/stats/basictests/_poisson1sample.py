@@ -54,10 +54,10 @@ def test_poisson1sample(
 		frequency: Iterable[int] | None = None,
 		samplesize: int | None = None,
 		totaloccur: int | None = None,
-		length = 1,
+		length:numbers.Real = 1,
 		hypotest = False,
-		hyporate = 0.0,
-		conflevel = 0.95,
+		hyporate:numbers.Real = 0.0,
+		conflevel:float = 0.95,
 		method = "normal",
 		alternative = "two.sided")->test_poisson1sample_Result:
 	"""
@@ -94,22 +94,22 @@ def test_poisson1sample(
 		assert sample == None and frequency == None, "if samplesize is not None, then sample and frequency must be None"
 
 
-	assert conflevel>0.0 or conflevel<1.0, "conflevel must be in range (0, 1)"
+	assert isinstance(conflevel, float) and (conflevel>0.0 or conflevel<1.0), "conflevel must be in range (0, 1)"
 	assert isinstance(sample, Iterable | None), "sample must be Iterable|None"
 	assert isinstance(frequency, Iterable | None), "frequency be Iterable|None"
 	assert isinstance(samplesize, int|None), "samplesize must be int|None"
 	assert isinstance(totaloccur, int|None), "totaloccur must be int|None"
 
 
-	assert isinstance(length, float) and length>0, "length must be float and >0"
+	assert isinstance(length, numbers.Real) and length>0, "length must be Real and >0"
 	assert isinstance(hypotest, bool), "hypotest must be bool"
 	if hypotest:
-		assert isinstance(hyporate, float) and hyporate>0, "hyporate must be float and >0"
+		assert isinstance(hyporate, numbers.Real) and hyporate>0, "hyporate must be Real and >0"
 	assert isinstance(method, str), "method must be str"
 	assert isinstance(alternative, str), "alternative must be str"
 
 	assert method in ["normal", "exact"], "method must be 'normal' or 'exact'"
-	assert alternative in ["two.sided", "less", "r"], "alternative must be 'two.sided', 'less' or 'greater'"
+	assert alternative in ["two.sided", "less", "greater"], "alternative must be 'two.sided', 'less' or 'greater'"
 
 	dct =  _pydll.c_stat_essential_poisson1sample(
 				sample,
