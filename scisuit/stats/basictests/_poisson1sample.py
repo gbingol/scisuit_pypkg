@@ -50,10 +50,10 @@ class test_poisson1sample_Result:
 
 
 def test_poisson1sample(
-		sample: Iterable[int] | None,
-		frequency: Iterable[int] | None,
-		samplesize: int | None,
-		totaloccur: int | None,
+		sample: Iterable[int] | None = None,
+		frequency: Iterable[int] | None = None,
+		samplesize: int | None = None,
+		totaloccur: int | None = None,
 		length = 1,
 		hypotest = False,
 		hyporate = 0.0,
@@ -103,7 +103,8 @@ def test_poisson1sample(
 
 	assert isinstance(length, float) and length>0, "length must be float and >0"
 	assert isinstance(hypotest, bool), "hypotest must be bool"
-	assert isinstance(hyporate, float) and hyporate>0, "hyporate must be float and >0"
+	if hypotest:
+		assert isinstance(hyporate, float) and hyporate>0, "hyporate must be float and >0"
 	assert isinstance(method, str), "method must be str"
 	assert isinstance(alternative, str), "alternative must be str"
 
