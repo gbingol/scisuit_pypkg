@@ -5,7 +5,17 @@ from typing import Iterable
 from ctypes import py_object, c_double, c_char_p, c_bool
 from ..._ctypeslib import pydll as _pydll
 
-_pydll.c_stat_essential_poisson1samplen.argtypes = [py_object, py_object, c_double, c_char_p]
+_pydll.c_stat_essential_poisson1sample.argtypes = [
+							py_object, #sample
+							py_object, #frequency
+							py_object, #samplesize
+							py_object, #totaloccur
+							c_double,  #length
+							c_bool, #hypotest
+							c_double, #hyporate
+							c_double, #conflevel
+							c_char_p, #method
+							c_char_p] #alternative
 _pydll.c_stat_essential_poisson1sample.restype = py_object
 
 
@@ -15,6 +25,7 @@ _pydll.c_stat_essential_poisson1sample.restype = py_object
 @dataclass
 class test_poisson1sample_Result:
 	_method:str
+	_hypotest:bool
 	pvalue: float | None
 	zvalue: float | None
 	mean: float
@@ -28,10 +39,10 @@ class test_poisson1sample_Result:
 		s += f"Mean = {self.mean} \n"
 		s += f"CI = ({self.ci[0]}, {self.ci[1]})"
 
-		if self.pvalue != None:
+		if self._hypotest:
 			s += "\n"
 			s += f"p-value = {self.pvalue}"
-			if self.zvalue != None:
+			if self._method == "normal":
 				s += f", z-value = {self.zvalue}"
 		return s
 
@@ -91,7 +102,7 @@ def test_poisson1sample(
 	assert method in ["normal", "exact"], "method must be 'normal' or 'exact'"
 	assert alternative in ["two.sided", "less", "r"], "alternative must be 'two.sided', 'less' or 'greater'"
 
-	dct =  _pydll.c_stat_essential_poisson1samplen(
+	dct =  _pydll.c_stat_essential_poisson1sample(
 				sample,
 	 			frequency,
 				samplesize,
@@ -104,6 +115,8 @@ def test_poisson1sample(
 				c_char_p(alternative.encode()))
 
 	return test_poisson1sample_Result(
+			_method = method,
+			_hypotest = hypotest,
 			pvalue=dct["pvalue"],
 			zvalue=dct["zvalue"],
 			ci = (dct["CI_lower"], dct["CI_upper"]),
