@@ -1,6 +1,6 @@
 from scisuit.stats import test_poisson1sample, test_poisson1sample_Result
 
-def volcanoerupt():
+def particleEmit():
 	Sample = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	Freq = [57, 203, 383, 525, 532, 408, 273, 139, 45, 27, 10, 6]
 		
@@ -18,7 +18,7 @@ def volcanoerupt():
 
 
 
-def volcanoerupt_summarizeddata():
+def particleEmit_summarizeddata():
 	samplesize = 2608
 	totaloccur = 10092
 
@@ -51,11 +51,11 @@ def customercomplaints():
 				alternative="greater")
 
 
-print(volcanoerupt())
+print(particleEmit())
 
 print("\n------------\n")
 
-print(volcanoerupt_summarizeddata())
+print(particleEmit_summarizeddata())
 
 print("\n------------\n")
 
