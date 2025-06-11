@@ -24,6 +24,7 @@ _pydll.c_stat_essential_poisson1sample.restype = py_object
 
 @dataclass
 class test_poisson1sample_Result:
+	_alternative: str
 	_method:str
 	_hypotest:bool
 	pvalue: float | None
@@ -37,7 +38,10 @@ class test_poisson1sample_Result:
 		s = "One Sample Poisson Test (" + self._method + ") \n"
 		s += f"N = {self.N}, Total Occurences = {self.TotalOccurences} \n"
 		s += f"Mean = {self.mean} \n"
-		s += f"CI = ({self.ci[0]}, {self.ci[1]})"
+		if self._alternative == "two.sided":
+			s += f"CI = ({self.ci[0]}, {self.ci[1]})"
+		else:
+			s += f"CI = {max(self.ci[0],self.ci[1])}" #either one is 0.0
 
 		if self._hypotest:
 			s += "\n"
@@ -124,6 +128,7 @@ def test_poisson1sample(
 				c_char_p(alternative.encode()))
 
 	return test_poisson1sample_Result(
+			_alternative = alternative,
 			_method = method,
 			_hypotest = hypotest,
 			pvalue=dct["pvalue"],
