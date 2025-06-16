@@ -1,0 +1,1 @@
+from .chisqtest_assoc import chisq_assoc, chisq_assoc_Result
