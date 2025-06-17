@@ -1,2 +1,2 @@
-from ._chisqtest_assoc import chisq_assoc, chisq_assoc_Result
+from ._chisqtest import test_chisq, chisq_assoc_Result, chisquare_GoodnessFit_Result
 from ._tally import tally, tally_Result

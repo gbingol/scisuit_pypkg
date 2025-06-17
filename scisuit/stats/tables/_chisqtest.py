@@ -10,18 +10,38 @@ from scisuit.stats import pchisq
 @dataclass
 class chisq_assoc_Result:
 	df: int
-	ExpectedCounts:list[int]
-	RawResiduals:list[float]
-	StdResiduals:list[float]
-	AdjustResiduals:list[float]
-	ContribtoChiSq:list[float]
+	expected:list[int]
+	raw:list[float]
+	standard:list[float]
+	adjusted:list[float]
+	contrib:list[float]
 	chisq:tuple[float, float] 
 	pvalue: tuple[float, float]
 
+	def __str__(self):
+		s = "Chi-square Test \n"
+		s += f"df = {self.df}, chi-sq (Pearson, Likelihood) = {self.chisq} \n"
+		s += f"p-values(Pearson, Likelihood) = {self.pvalue}"
+
+@dataclass 
+class chisquare_GoodnessFit_Result:
+	expected:list[int]
+	contribt:list[float]
+	chisq: float
+	df: int
+	pvalue: float
+	n: int
+
+	def __str__(self):
+		s = "Chi-square Test \n"
+		s += f"df = {self.df}, chi-sq = {self.chisq} \n"
+		s += f"p-value={self.pvalue} \n"
 
 
 
-def chisq_assoc(data:list[list[int]])->chisq_assoc_Result:
+
+
+def _chisq_assoc(data:list[list[int]])->chisq_assoc_Result:
 	"""
 	Performs Chisq Test for Association  
 
@@ -77,12 +97,52 @@ def chisq_assoc(data:list[list[int]])->chisq_assoc_Result:
 	Chisq_Likelihood *= 2.0
 
 	return chisq_assoc_Result(
-		ExpectedCounts=ExpectedCounts,
-		RawResiduals=RawResiduals,
-		AdjustResiduals=AdjustResiduals,
-		StdResiduals=StdResiduals,
-		ContribtoChiSq=ContribChiSq,
+		expected=ExpectedCounts,
+		raw=RawResiduals,
+		adjusted=AdjustResiduals,
+		standard=StdResiduals,
+		contrib=ContribChiSq,
 		chisq=(Chisq_Pearson, Chisq_Likelihood),
 		df=df,
 		pvalue=(1.0-pchisq(q=Chisq_Pearson, df=df), 1.0-pchisq(q=Chisq_Likelihood, df=df))
 	)
+
+
+
+
+def test_chisq(
+		data:list[int]|list[list[int]], 
+		p:list[float] = None)->chisq_assoc_Result|chisquare_GoodnessFit_Result:
+	
+	if isinstance(data[0], list):
+		return _chisq_assoc(data)
+	
+
+	assert p != None, "probabilities cannot be None"
+	proportions = p if len(p)>0 else [1/len(e) for e in data]
+
+	Total = sum(data)
+	Chisq = 0.0
+	ExpectedCount:list[float] = []
+	ContribChiSq: list[float] = []
+	for v, i in enumerate(data):
+		Expected = proportions[i]*Total
+		rawResidual = v - Expected
+		contribChisq = rawResidual**2/Expected
+
+		Chisq += contribChisq
+			
+		ExpectedCount.append(Expected)
+		ContribChiSq.append(contribChisq)
+
+	df = len(data) - 1
+	pvalue = 1.0 - pchisq(q=Chisq, df=df)
+
+	return chisquare_GoodnessFit_Result(
+		expected=ExpectedCount,
+		contribt=ContribChiSq,
+		chisq=Chisq, 
+		df=df,
+		pvalue=pvalue,
+		n= Total)
+

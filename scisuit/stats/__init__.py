@@ -25,6 +25,10 @@ from .nonparametric import test_kruskal, test_kruskal_Result
 from .nonparametric import test_friedman, test_friedman_Result
 
 
+from .tables import tally, tally_Result
+from .tables import test_chisq, chisquare_GoodnessFit_Result, chisq_assoc_Result
+
+
 
 from ._distributions import \
 	dbeta, pbeta, qbeta, rbeta, \
