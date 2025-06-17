@@ -2,7 +2,7 @@ import numpy as np
 from math import sqrt, log
 from dataclasses import dataclass
 
-from scisuit.stats import pchisq
+from .._distributions import pchisq
 
 
 
@@ -20,8 +20,10 @@ class chisq_assoc_Result:
 
 	def __str__(self):
 		s = "Chi-square Test \n"
-		s += f"df = {self.df}, chi-sq (Pearson, Likelihood) = {self.chisq} \n"
-		s += f"p-values(Pearson, Likelihood) = {self.pvalue}"
+		s += f"df = {self.df} \n"
+		s += f"chi-sq (Pearson, Likelihood) = {[round(x, 3) for x in self.chisq]} \n"
+		s += f"p-values(Pearson, Likelihood) = {[round(x, 3) for x in self.pvalue]}"
+		return s
 
 @dataclass 
 class chisquare_GoodnessFit_Result:
@@ -34,8 +36,9 @@ class chisquare_GoodnessFit_Result:
 
 	def __str__(self):
 		s = "Chi-square Test \n"
-		s += f"df = {self.df}, chi-sq = {self.chisq} \n"
-		s += f"p-value={self.pvalue} \n"
+		s += f"df = {self.df}, chi-sq = {round(self.chisq, 3)} \n"
+		s += f"p-value={round(self.pvalue, 3)} \n"
+		return s
 
 
 
@@ -102,7 +105,7 @@ def _chisq_assoc(data:list[list[int]])->chisq_assoc_Result:
 		adjusted=AdjustResiduals,
 		standard=StdResiduals,
 		contrib=ContribChiSq,
-		chisq=(Chisq_Pearson, Chisq_Likelihood),
+		chisq=(float(Chisq_Pearson), float(Chisq_Likelihood)),
 		df=df,
 		pvalue=(1.0-pchisq(q=Chisq_Pearson, df=df), 1.0-pchisq(q=Chisq_Likelihood, df=df))
 	)
@@ -113,13 +116,21 @@ def _chisq_assoc(data:list[list[int]])->chisq_assoc_Result:
 def test_chisq(
 		data:list[int]|list[list[int]], 
 		p:list[float] = None)->chisq_assoc_Result|chisquare_GoodnessFit_Result:
-	
+	"""
+	Performs Chi-Sq Test  
+
+	data: Either 1D or 2D list of ints  
+	p: Probabilities (optional)
+
+	---
+	- If 2D list of ints are provided then p is not taken into consideration  
+	- If 1D list of ints provided and p is None, then equal probabilities will be assumed
+	"""
 	if isinstance(data[0], list):
 		return _chisq_assoc(data)
 	
-
-	assert p != None, "probabilities cannot be None"
-	proportions = p if len(p)>0 else [1/len(e) for e in data]
+	proportions = p if p != None else [1/len(e) for e in data]
+	assert len(p) == len(data), "data and p must have same lengths"
 
 	Total = sum(data)
 	Chisq = 0.0
