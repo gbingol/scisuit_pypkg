@@ -36,6 +36,7 @@ class chisquare_GoodnessFit_Result:
 
 	def __str__(self):
 		s = "Chi-square Test \n"
+		s += f"N = {self.n} \n"
 		s += f"df = {self.df}, chi-sq = {round(self.chisq, 3)} \n"
 		s += f"p-value={round(self.pvalue, 3)} \n"
 		return s
@@ -136,7 +137,7 @@ def test_chisq(
 	Chisq = 0.0
 	ExpectedCount:list[float] = []
 	ContribChiSq: list[float] = []
-	for v, i in enumerate(data):
+	for i, v in enumerate(data):
 		Expected = proportions[i]*Total
 		rawResidual = v - Expected
 		contribChisq = rawResidual**2/Expected
