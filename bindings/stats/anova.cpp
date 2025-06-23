@@ -50,11 +50,12 @@ PyObject* c_stat_test_anova_aov(PyObject* Obj)
 }
 
 
-PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
+PyObject* c_stat_test_anova_posthoc(double alpha, PyObject* Obj, const char* method)
 {
+	using namespace tests::anova;
 	TRYBLOCK()
 
-	tests::anova::aov_Result aovresult;
+	aov_Result aovresult;
 	aovresult.Averages = Iterable_As1DVector(PyDict_GetItemString(Obj, "Averages"));
 	aovresult.SampleSizes = Iterable_As1DVector(PyDict_GetItemString(Obj, "SampleSizes"));
 	aovresult.Treat_DF = PyLong_AsLong(PyDict_GetItemString(Obj, "Treat_DF"));
@@ -63,7 +64,11 @@ PyObject* c_stat_test_anova_tukey(double alpha, PyObject* Obj)
 
 	IF_PYERR(aovresult.Averages.size()==0, PyExc_RuntimeError, "Averages size is 0.")
 
-	auto Comparisons = tests::anova::tukey(alpha, aovresult);
+	std::vector<Comparison> Comparisons;
+	if(strcmp(method, "tukey") == 0)
+		Comparisons = tukey(alpha, aovresult);
+	else
+	 	Comparisons = fisher(alpha, aovresult);
 
 	IF_PYERR(Comparisons.size()==0, PyExc_RuntimeError, "No comparisons obtained.");
 
