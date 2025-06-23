@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import Iterable
 
-from ctypes import py_object, c_double
+from ctypes import py_object, c_double, c_char_p
 from ..._ctypeslib import pydll as _pydll
 
 
@@ -11,8 +11,8 @@ _pydll.c_stat_test_anova_aov.argtypes = [py_object]
 _pydll.c_stat_test_anova_aov.restype=py_object
 
 
-_pydll.c_stat_test_anova_tukey.argtypes = [c_double, py_object] #alpha and aovresults
-_pydll.c_stat_test_anova_tukey.restype=py_object
+_pydll.c_stat_test_anova_posthoc.argtypes = [c_double, py_object, c_char_p] #alpha and aovresults
+_pydll.c_stat_test_anova_posthoc.restype=py_object
 
 
 @dataclass
@@ -101,7 +101,7 @@ class ComparisonResults:
 
 
 	def __str__(self):
-		s = f"   {self._method} Test Results (alpha={self._alpha}) \n\n"
+		s = f"   {self._method.capitalize()} Test Results (alpha={self._alpha}) \n\n"
 		s += "{:<10} {:>15} {:>20} \n".format("Pairwise Diff", "i-j" ,"Interval")
 		for l in self.table:
 			s += str(l) + "\n"
@@ -110,12 +110,12 @@ class ComparisonResults:
 
 	
 
-def tukey(alpha:float, aovresult:aov_results)->ComparisonResults:
+def _posthoc(alpha:float, aovresult:aov_results, method:str)->ComparisonResults:
 	"""perform tukey test"""	
 	assert isinstance(alpha, float), "alpha must be float."
 	assert isinstance(aovresult, aov_results), "aovresult must be aov_results."
 
-	lst = _pydll.c_stat_test_anova_tukey(c_double(alpha), asdict(aovresult))
+	lst = _pydll.c_stat_test_anova_posthoc(c_double(alpha), asdict(aovresult), c_char_p(method.encode()))
 
 	TukeyTable = []
 	for v in lst:
@@ -128,4 +128,13 @@ def tukey(alpha:float, aovresult:aov_results)->ComparisonResults:
 
 		TukeyTable.append(comp)
 
-	return ComparisonResults(table=TukeyTable, _alpha=alpha, _method="Tukey")
+	return ComparisonResults(table=TukeyTable, _alpha=alpha, _method=method)
+
+
+
+def tukey(alpha:float, aovresult:aov_results)->ComparisonResults:
+	return _posthoc(alpha=alpha, aovresult=aovresult, method="tukey")
+
+
+def fisher(alpha:float, aovresult:aov_results)->ComparisonResults:
+	return _posthoc(alpha=alpha, aovresult=aovresult, method="fisher")
