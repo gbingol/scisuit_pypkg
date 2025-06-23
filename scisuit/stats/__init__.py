@@ -1,6 +1,6 @@
 from ._core import kurt, mode, moveavg, rolling, skew
 
-from .anova import aov, aov_results, tukey, Comparison, ComparisonResults 
+from .anova import aov, aov_results, tukey, fisher, Comparison, ComparisonResults 
 from .anova import aov2, aov2_results
 
 
