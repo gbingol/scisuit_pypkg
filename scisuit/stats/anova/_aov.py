@@ -79,7 +79,7 @@ def aov(*args)->aov_results:
 
 
 @dataclass
-class TukeyComparison:
+class Comparison:
 	a:int
 	b:int
 	Diff:float #differences in mean values
@@ -92,22 +92,25 @@ class TukeyComparison:
 		return "{:<10} {:>15.2f} {:>25}".format(s1, self.Diff, s2)
 
 
+
 @dataclass
-class TukeyResults:
-	r:list[TukeyComparison]
-	alpha:float
+class ComparisonResults:
+	table:list[Comparison]
+	_alpha:float
+	_method:str
+
 
 	def __str__(self):
-		s = f"   Tukey Test Results (alpha={self.alpha}) \n\n"
+		s = f"   {self._method} Test Results (alpha={self._alpha}) \n\n"
 		s += "{:<10} {:>15} {:>20} \n".format("Pairwise Diff", "i-j" ,"Interval")
-		for l in self.r:
+		for l in self.table:
 			s += str(l) + "\n"
 		return s
 
 
 	
 
-def tukey(alpha:float, aovresult:aov_results)->TukeyResults:
+def tukey(alpha:float, aovresult:aov_results)->ComparisonResults:
 	"""perform tukey test"""	
 	assert isinstance(alpha, float), "alpha must be float."
 	assert isinstance(aovresult, aov_results), "aovresult must be aov_results."
@@ -116,7 +119,7 @@ def tukey(alpha:float, aovresult:aov_results)->TukeyResults:
 
 	TukeyTable = []
 	for v in lst:
-		comp = TukeyComparison(
+		comp = Comparison(
 		a=v["a"], 
 		b = v["b"],
 		Diff=v["diff"],
@@ -125,4 +128,4 @@ def tukey(alpha:float, aovresult:aov_results)->TukeyResults:
 
 		TukeyTable.append(comp)
 
-	return TukeyResults(r=TukeyTable, alpha=alpha)
+	return ComparisonResults(table=TukeyTable, _alpha=alpha, _method="Tukey")
