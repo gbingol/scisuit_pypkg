@@ -11,4 +11,4 @@ Sample = [
 	[2,4,2,4,1,4]]
 
 result  = pca(Sample, [], outliers=False)
-print(result.eigs)
+print(result)
