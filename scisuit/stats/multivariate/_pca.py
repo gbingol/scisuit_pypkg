@@ -1,9 +1,11 @@
 import numbers
 from dataclasses import dataclass
-from typing import Iterable
+from itertools import accumulate
 
-from ctypes import py_object, c_double, c_char_p, c_bool
+from ctypes import py_object, c_bool
 from ..._ctypeslib import pydll as _pydll
+
+from ...util import to_table
 
 _pydll.c_stat_test_multivariate_pca.argtypes = [py_object, c_bool, c_bool]
 _pydll.c_stat_test_multivariate_pca.restype = py_object
@@ -33,6 +35,42 @@ class pca_Result:
 	eigs: list[EigenComp]
 	outliers: Outliers|None
 	scores: list[Score]|None
+
+	def __eigenvaluetable(self):
+		eigvals = [e.value for e in self.eigs]
+
+		Total = float(sum(eigvals))
+		proportions = [v/Total for v in eigvals]
+		cumulative = list(accumulate(proportions))
+
+		table = [
+			["Eigenvalue"] + eigvals,
+			["Proportion"] + proportions,
+			["Cumulative"] + cumulative
+		]
+
+		s = "Eigenanalysis of Correlation Matrix \n"
+		s += to_table(table, width=3, ndigits=3)
+		return s
+	
+	def __eigenvectortable(self):
+		s = "Eigenvectors \n"
+
+		data = []
+		for i, lbl in enumerate(self._labels):
+			data.append([lbl] + [e.vector[i] for e in self.eigs])
+		
+		s += to_table(data)
+		return s
+
+
+	def __str__(self):
+		s = self.__eigenvaluetable()
+		s += "\n"
+		s += self.__eigenvectortable()
+
+		return s
+		
 
 
 def pca(variables:list[list[numbers.Real]], labels:list[str] = [], outliers = True, scores = True)->pca_Result:
