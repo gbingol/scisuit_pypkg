@@ -61,7 +61,7 @@ def pca(variables:list[list[numbers.Real]], labels:list[str] = [], outliers = Tr
 		ObjOutliers = Outliers(mahalanobis=mahalanobis, reference=referenceLine)
 	
 
-	LstScores:list[Score] = None
+	LstScores:list[Score] = []
 	if scores:
 		dctScores = dct["scores"]
 		for e in dctScores:
