@@ -73,12 +73,36 @@ class NiceNumbers:
 	
 
 
-def to_table(data:list[list[str]], width = 3):
+def to_table(data:list[list[object]], width = 3, ndigits = 3)->str:
+	"""
+	Takes a 2D list of different sub-list sizes and prepares a formatted output.  
+	
+	---
+	data: A 2D list comprised of object with len function and can be converted to string  
+	width: number of characters between each column  
+	ndigits: number of decimal points. If no formatting is wished, set to `None`
+	"""
 	assert isinstance(width, int) and width>1, "width must be an integer > 1"
 	assert isinstance(data, list) and isinstance(data[0], list), "data must be 2D list"
 
+	#New List as we will modify data (it might contain sub-list of different lengths)
+	DataList = [None]*len(data)
+	
+	maxElem = 0
+	for lst in data:
+		maxElem = max(maxElem, len(lst))
+		
+	
+	for i, lst in enumerate(data):
+		DataList[i] = data[i] + (maxElem-len(lst))*[""]
+		if ndigits == None:
+			continue
+		for j, elem in enumerate(DataList[i]):
+			if isinstance(elem, float):
+				DataList[i][j] = round(elem, ndigits)
+
 	#Array comprised of only strings
-	arr_str = np.array(data, dtype=StringDType)
+	arr_str = np.array(DataList, dtype=StringDType)
 	lenfunc = np.vectorize(len)
 
 	#Array comprised of length of each string
@@ -91,10 +115,12 @@ def to_table(data:list[list[str]], width = 3):
 	strFormat = "".join(LstFormat)
 	strFormat += "\n"
 
-	return "".join([strFormat.format(*lst) for lst in data])
+	return "".join([strFormat.format(*lst) for lst in DataList])
 
 
 
 if __name__ == "__main__":
-	data = [["abc", "defgh"], ["aaaaaaaaaaa", "bcdrfer"]]
-	print(to_table(data=data, width=10))
+	data = [[12.36258966588, "defgh", "bbcd"], ["aaaaaaaaaaa", "bcdrfer"]]
+	print(to_table(data=data, width=2, ndigits=3))
+
+	print(data)
