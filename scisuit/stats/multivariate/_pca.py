@@ -67,8 +67,15 @@ def pca(variables:list[list[numbers.Real]], labels:list[str] = [], outliers = Tr
 		for e in dctScores:
 			first, second = e
 			LstScores.append(Score(firstcomp=first, secondcomp=second))
+
+	ListLabels = ["Var " + str(i+1) for i in range(len(variables))] if len(labels) == 0 else labels
+	assert len(ListLabels) == len(variables), "if provided labels length must be equal to number of variables"
 		
-	return pca_Result(eigs=LstEigs, outliers=ObjOutliers, scores=LstScores, _labels = labels)
+	return pca_Result(
+		eigs=LstEigs, 
+		outliers=ObjOutliers, 
+		scores=LstScores, 
+		_labels = ListLabels)
 
 
 		
