@@ -29,6 +29,9 @@ from .tables import tally, tally_Result
 from .tables import test_chisq, chisquare_GoodnessFit_Result, chisq_assoc_Result
 
 
+from .multivariate import pca, pca_Result
+
+
 
 from ._distributions import \
 	dbeta, pbeta, qbeta, rbeta, \
