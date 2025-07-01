@@ -1,7 +1,8 @@
 import math
 from numbers import Real
 from typing import Iterable as _Iterable
-
+import numpy as np
+from numpy.dtypes import StringDType
 
 
 def minmax(X:_Iterable)->tuple[Real]:
@@ -72,7 +73,28 @@ class NiceNumbers:
 	
 
 
+def to_table(data:list[list[str]], width = 3):
+	assert isinstance(width, int) and width>1, "width must be an integer > 1"
+	assert isinstance(data, list) and isinstance(data[0], list), "data must be 2D list"
+
+	#Array comprised of only strings
+	arr_str = np.array(data, dtype=StringDType)
+	lenfunc = np.vectorize(len)
+
+	#Array comprised of length of each string
+	arr = lenfunc(arr_str) 
+
+	#max width for each column
+	maxwidth = np.max(arr, 0) 
+
+	LstFormat = ["{:<"+str(w + width) + "} " for w in maxwidth] #{:<10}
+	strFormat = "".join(LstFormat)
+	strFormat += "\n"
+
+	return "".join([strFormat.format(*lst) for lst in data])
+
+
+
 if __name__ == "__main__":
-	n = NiceNumbers(0.5, 10.25)
-	print(n.minmax, " ", n.tickspace)
-	
+	data = [["abc", "defgh"], ["aaaaaaaaaaa", "bcdrfer"]]
+	print(to_table(data=data, width=10))
