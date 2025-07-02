@@ -12,3 +12,6 @@ from ._barcharts import bar, barh
 from ._moody import moody
 
 from ._chartelems import Marker
+
+
+from . import multivariate
