@@ -50,8 +50,9 @@ class pca_Result:
 		]
 
 		s = "Eigenanalysis of Correlation Matrix \n"
-		s += to_table(table, width=3, ndigits=3)
+		s += to_table(table)
 		return s
+	
 	
 	def __eigenvectortable(self):
 		s = "Eigenvectors \n"
