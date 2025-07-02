@@ -1,4 +1,5 @@
 from scisuit.stats import pca
+import scisuit.settings
 
 Sample = [
     [50000,72000,61000,88000,91100,45100], 
@@ -10,5 +11,6 @@ Sample = [
 	[1200,5400,1000,1100,0,22000], 
 	[2,4,2,4,1,4]]
 
+scisuit.settings.NDIGITS = 4
 result  = pca(Sample, [], outliers=False)
 print(result)
