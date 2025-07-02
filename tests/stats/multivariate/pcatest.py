@@ -1,4 +1,5 @@
 from scisuit.stats import pca
+import scisuit.plot as plt
 import scisuit.settings
 
 Sample = [
@@ -14,3 +15,8 @@ Sample = [
 scisuit.settings.NDIGITS = 4
 result  = pca(Sample, [], outliers=False)
 print(result)
+
+eigs = result.eigs
+eigenvals = [e.value for e in eigs]
+plt.multivariate.scree(eigenvals)
+plt.show()
