@@ -7,7 +7,7 @@ from .._ctypeslib import pydll as _pydll
 
 
 from ..app import App as _App
-from ..settings import START_APP_MAINLOOP
+from .. import settings
 
 
 
@@ -90,7 +90,7 @@ _pydll.c_plot_show.restype=None
 #---------------------------------------------------------------
 
 
-if START_APP_MAINLOOP:
+if settings.START_APP_MAINLOOP:
 	_app = _App()
 
 
@@ -335,5 +335,5 @@ def show(antialiasing=False)->None:
 	"""
 	_pydll.c_plot_show(_ct.c_bool(antialiasing))
 
-	if START_APP_MAINLOOP:
+	if settings.START_APP_MAINLOOP:
 		_app.mainloop()
