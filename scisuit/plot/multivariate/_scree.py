@@ -3,6 +3,11 @@ from .. import scatter, title, xlabel, ylabel, Marker
 
 
 def scree(eigvals:Iterable[float], axislabel:tuple[str, str]=("Component Number", "Eigenvalue")):
+	"""
+	Plots a scree plot  
+
+	eigvals: Eigenvalues corresponding to 
+	"""
 	xvals = [i+1 for i in range(len(eigvals))]
 
 	yvals = [v for v in eigvals]

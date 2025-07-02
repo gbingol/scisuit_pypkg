@@ -3,9 +3,23 @@ from .. import scatter, title, xlabel, ylabel, xlim, ylim
 from ..gdi import line, text
 
 
-def outlier(distances:Iterable[float], reference:float|None = None, axislabel:tuple[str, str]=("Observation", "Mahalanobis Distance")):
+def outlier(
+		distances:Iterable[float], 
+		reference:float|None = None, 
+		axislabel:tuple[str, str]=("Observation", "Mahalanobis Distance")):
+	"""
+	Plots outlier plot.  
+
+	distances: Distances for each observation (e.g. mahalanobis distance)  
+	reference: if not None, draws a reference line (this is the line outside which an observation is an outlier)
+
+	---
+	Note that this chart can be conveniently implemented using a scatter chart and gdi objects
+	"""
+
 	xvals = [i+1 for i in range(len(distances))]
 	scatter(x=xvals, y=distances)
+
 	title("Outlier Plot")
 	xlabel(axislabel[0])
 	ylabel(axislabel[1])

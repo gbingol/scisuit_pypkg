@@ -2,12 +2,17 @@ from typing import Iterable
 from .. import canvas, title, xlabel, ylabel
 from ..gdi import line, text
 
-def loading(pc1:Iterable[float], pc2:Iterable[float], labels:Iterable[str], axislabel:tuple[str, str]=("First Component", "Second Component")):
+def loading(
+		pc1:Iterable[float], 
+		pc2:Iterable[float], 
+		labels:Iterable[str], 
+		axislabel:tuple[str, str]=("First Component", "Second Component")):
 	"""
-	Plots score plot.  
-	The numbers appearing next to markers show observation numbers.  
+	Plots loading plot.  
 
-	scores: An iterable containing scores in the order of first and second components
+	pc1: First principal component vector  
+	pc2: Second principal component vector  
+	labels: Labels of variables
 	"""
 
 	assert len(pc1) == len(pc2), "Length of principal components (pc1, pc2) must be equal."
