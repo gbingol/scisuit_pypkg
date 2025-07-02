@@ -4,6 +4,8 @@ from typing import Iterable as _Iterable
 import numpy as np
 from numpy.dtypes import StringDType
 
+from . import settings
+
 
 def minmax(X:_Iterable)->tuple[Real]:
 	_min = X[0]
@@ -73,14 +75,14 @@ class NiceNumbers:
 	
 
 
-def to_table(data:list[list[object]], width = 3, ndigits = 3)->str:
+def to_table(data:list[list[object]], width = 3)->str:
 	"""
 	Takes a 2D list of different sub-list sizes and prepares a formatted output.  
+	Uses `settings.NDIGITS` for number of decimal points. If no formatting is wished, set it to `None`  
 	
 	---
 	data: A 2D list comprised of object with len function and can be converted to string  
-	width: number of characters between each column  
-	ndigits: number of decimal points. If no formatting is wished, set to `None`
+	width: number of characters between each column   
 	"""
 	assert isinstance(width, int) and width>1, "width must be an integer > 1"
 	assert isinstance(data, list) and isinstance(data[0], list), "data must be 2D list"
@@ -95,11 +97,11 @@ def to_table(data:list[list[object]], width = 3, ndigits = 3)->str:
 	
 	for i, lst in enumerate(data):
 		DataList[i] = data[i] + (maxElem-len(lst))*[""]
-		if ndigits == None:
+		if settings.NDIGITS == None:
 			continue
 		for j, elem in enumerate(DataList[i]):
 			if isinstance(elem, float):
-				DataList[i][j] = round(elem, ndigits)
+				DataList[i][j] = round(elem, settings.NDIGITS)
 
 	#Array comprised of only strings
 	arr_str = np.array(DataList, dtype=StringDType)
