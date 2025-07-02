@@ -53,4 +53,13 @@ plt.multivariate.score([(e.firstcomp, e.secondcomp) for e in scores])
 plt.figure()
 plt.multivariate.loading(pc1=eigs[0].vector, pc2=eigs[1].vector, labels=Labels)
 
+plt.figure()
+plt.multivariate.biplot(
+	scores=[(e.firstcomp, e.secondcomp) for e in scores],
+	pc1=eigs[0].vector,
+	pc2=eigs[1].vector,
+	eigvals=(eigs[0].value, eigs[1].value),
+	labels=Labels,
+	showcomponent=False)
+
 plt.show()
