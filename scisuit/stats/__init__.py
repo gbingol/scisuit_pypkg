@@ -30,7 +30,7 @@ from .tables import test_chisq, chisquare_GoodnessFit_Result, chisq_assoc_Result
 
 
 from .multivariate import pca, pca_Result
-
+from .multivariate import cronbach, cronbach_Result
 
 
 from ._distributions import \
