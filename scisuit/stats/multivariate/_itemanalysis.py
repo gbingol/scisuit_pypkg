@@ -6,6 +6,7 @@ from ctypes import py_object, c_bool
 from ..._ctypeslib import pydll as _pydll
 
 from ...util import to_table
+from ... import settings
 
 _pydll.c_stat_test_multivariate_cronbach.argtypes = [py_object, c_bool]
 _pydll.c_stat_test_multivariate_cronbach.restype = py_object
@@ -32,7 +33,7 @@ class cronbach_Result:
 
 	def __str__(self):
 		s = "Cronbach's Alpha \n"
-		s += str(self.alpha) + "\n"
+		s += str(round(self.alpha, settings.NDIGITS)) + "\n"
 		s += "\n"
 		s += self.__OmittedItems()
 
@@ -43,7 +44,7 @@ class cronbach_Result:
 def cronbach(
 		Items:list[list[numbers.Real]], 
 		labels:list[str] = [], 
-		standardize = True)->cronbach_Result:
+		standardize = False)->cronbach_Result:
 	"""
 	Computes Cronbach's Alpha  
 	---
