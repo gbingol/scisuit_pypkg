@@ -77,6 +77,7 @@ class pca_Result:
 def pca(variables:list[list[numbers.Real]], labels:list[str] = [], outliers = True, scores = True)->pca_Result:
 	"""
 	Principal Components Analysis  
+	
 	---
 	variables: The data section - each sublist is considered as a column of a table  
 	labels: The labels of the variables  
