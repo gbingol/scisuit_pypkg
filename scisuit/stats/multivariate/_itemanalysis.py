@@ -11,6 +11,12 @@ from ... import settings
 _pydll.c_stat_test_multivariate_cronbach.argtypes = [py_object, c_bool]
 _pydll.c_stat_test_multivariate_cronbach.restype = py_object
 
+_pydll.c_stat_test_multivariate_itemanal_squaredmultcorrel.argtypes = [py_object]
+_pydll.c_stat_test_multivariate_itemanal_squaredmultcorrel.restype = py_object
+
+_pydll.c_stat_test_multivariate_itemanal_adjtotalcorrel.argtypes = [py_object]
+_pydll.c_stat_test_multivariate_itemanal_adjtotalcorrel.restype = py_object
+
 
 
 @dataclass
@@ -47,6 +53,7 @@ def cronbach(
 		standardize = False)->cronbach_Result:
 	"""
 	Computes Cronbach's Alpha  
+
 	---
 	Items: The data section - each sublist is considered as a column of a table  
 	labels: The labels of the items  
@@ -61,3 +68,30 @@ def cronbach(
 		alpha=dct["alpha"], 
 		omitted=dct["omitted"], 
 		_labels = ListLabels)
+
+
+
+
+def squaredmultcorrel(Items:list[list[numbers.Real]])->list[numbers.Real]:
+	"""
+	Computes Squared Multiple Correlations for all omitted items  
+
+	Items: The data section - each sublist is considered as a column of a table  
+	
+	---
+	returns a list of omitted items in the given order with the `Items` data
+	"""
+	return _pydll.c_stat_test_multivariate_itemanal_squaredmultcorrel(Items)
+
+
+
+def adjtotalcorrel(Items:list[list[numbers.Real]])->list[numbers.Real]:
+	"""
+	Computes Item Adjusted Total Correlations for all omitted items  
+
+	Items: The data section - each sublist is considered as a column of a table  
+	
+	---
+	returns a list of omitted items in the given order with the `Items` data
+	"""
+	return _pydll.c_stat_test_multivariate_itemanal_adjtotalcorrel(Items)
